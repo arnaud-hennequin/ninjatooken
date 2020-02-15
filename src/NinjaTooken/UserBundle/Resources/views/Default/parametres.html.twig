@@ -157,7 +157,7 @@
 					</div>
 				</form>
 
-				<form action="{{ path('ninja_tooken_user_parametres_update_password') }}" {{ form_enctype(form) }} method="POST" name="editPassword" accept-charset="UTF-8" class="full">
+				<form action="{{ path('ninja_tooken_user_parametres_update_password') }}" {{ form_start(form) }} method="POST" name="editPassword" accept-charset="UTF-8" class="full">
 					<h3><i class="icon-key"></i> {{ 'compte.register.motPasse'|trans({}, 'common') }}</h3>
 					{{ form_widget(form) }}
 					<div class="row-fluid">

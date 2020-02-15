@@ -80,7 +80,7 @@
 							{% endif %}
 							</p>
 							{% if ROLE_ADMIN or (thread.isCommentable and is_granted("ROLE_USER")) %}
-							    <form action="{{ path('ninja_tooken_comment_ajouter', {forum_nom:forum.slug, thread_nom:thread.slug, page:page}) }}" {{ form_enctype(form_comment) }} method="POST" accept-charset="UTF-8" id="answer" class="full inset">
+							    <form action="{{ path('ninja_tooken_comment_ajouter', {forum_nom:forum.slug, thread_nom:thread.slug, page:page}) }}" {{ form_start(form_comment) }} method="POST" accept-charset="UTF-8" id="answer" class="full inset">
 								<hr>
 								{{ form_widget(form_comment) }}
 								<div>

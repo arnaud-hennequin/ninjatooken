@@ -118,8 +118,6 @@
 
     // Callbacks
     this.onMouseMove = this.onMouseMove.bind(this);
-    this.onDeviceOrientation = this.onDeviceOrientation.bind(this);
-    this.onOrientationTimer = this.onOrientationTimer.bind(this);
     this.onCalibrationTimer = this.onCalibrationTimer.bind(this);
     this.onAnimationFrame = this.onAnimationFrame.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
@@ -173,8 +171,6 @@
   Plugin.prototype.desktop = !navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|BB10|mobi|tablet|opera mini|nexus 7)/i);
   Plugin.prototype.vendors = [null,['-webkit-','webkit'],['-moz-','Moz'],['-o-','O'],['-ms-','ms']];
   Plugin.prototype.motionSupport = !!window.DeviceMotionEvent;
-  Plugin.prototype.orientationSupport = !!window.DeviceOrientationEvent;
-  Plugin.prototype.orientationStatus = 0;
   Plugin.prototype.transform2DSupport = Plugin.prototype.transformSupport('2D');
   Plugin.prototype.transform3DSupport = Plugin.prototype.transformSupport('3D');
 
@@ -236,16 +232,10 @@
   Plugin.prototype.enable = function() {
     if (!this.enabled) {
       this.enabled = true;
-      if (this.orientationSupport) {
-        this.portrait = null;
-        window.addEventListener('deviceorientation', this.onDeviceOrientation);
-        setTimeout(this.onOrientationTimer, this.supportDelay);
-      } else {
-        this.cx = 0;
-        this.cy = 0;
-        this.portrait = false;
-        window.addEventListener('mousemove', this.onMouseMove);
-      }
+      this.cx = 0;
+      this.cy = 0;
+      this.portrait = false;
+      window.addEventListener('mousemove', this.onMouseMove);
       window.addEventListener('resize', this.onWindowResize);
       this.raf = requestAnimationFrame(this.onAnimationFrame);
     }
@@ -254,11 +244,7 @@
   Plugin.prototype.disable = function() {
     if (this.enabled) {
       this.enabled = false;
-      if (this.orientationSupport) {
-        window.removeEventListener('deviceorientation', this.onDeviceOrientation);
-      } else {
-        window.removeEventListener('mousemove', this.onMouseMove);
-      }
+      window.removeEventListener('mousemove', this.onMouseMove);
       window.removeEventListener('resize', this.onWindowResize);
       cancelAnimationFrame(this.raf);
     }
@@ -332,14 +318,6 @@
     }
   };
 
-  Plugin.prototype.onOrientationTimer = function(event) {
-    if (this.orientationSupport && this.orientationStatus === 0) {
-      this.disable();
-      this.orientationSupport = false;
-      this.enable();
-    }
-  };
-
   Plugin.prototype.onCalibrationTimer = function(event) {
     this.calibrationFlag = true;
   };
@@ -377,38 +355,6 @@
       this.setPosition(layer, xOffset, yOffset);
     }
     this.raf = requestAnimationFrame(this.onAnimationFrame);
-  };
-
-  Plugin.prototype.onDeviceOrientation = function(event) {
-
-    // Validate environment and event properties.
-    if (!this.desktop && event.beta !== null && event.gamma !== null) {
-
-      // Set orientation status.
-      this.orientationStatus = 1;
-
-      // Extract Rotation
-      var x = (event.beta  || 0) / MAGIC_NUMBER; //  -90 :: 90
-      var y = (event.gamma || 0) / MAGIC_NUMBER; // -180 :: 180
-
-      // Detect Orientation Change
-      var portrait = window.innerHeight > window.innerWidth;
-      if (this.portrait !== portrait) {
-        this.portrait = portrait;
-        this.calibrationFlag = true;
-      }
-
-      // Set Calibration
-      if (this.calibrationFlag) {
-        this.calibrationFlag = false;
-        this.cx = x;
-        this.cy = y;
-      }
-
-      // Set Input
-      this.ix = x;
-      this.iy = y;
-    }
   };
 
   Plugin.prototype.onMouseMove = function(event) {

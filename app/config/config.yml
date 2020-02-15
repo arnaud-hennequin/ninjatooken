@@ -49,12 +49,6 @@ services:
         class: Twig_Extensions_Extension_Intl
         tags:
             - { name: twig.extension }
-    my.facebook.user:
-        class: NinjaTooken\UserBundle\Security\User\Provider\FacebookProvider
-        arguments:
-            facebook: "@fos_facebook.api"
-            userManager: "@fos_user.user_manager"
-            validator: "@validator"
 
 # Monolog
 monolog:
@@ -193,14 +187,6 @@ stof_doctrine_extensions:
     orm:
         default:
             sluggable: true
-
-fos_facebook:
-    alias:  facebook
-    app_id: %facebook_appid%
-    secret: %facebook_secret%
-    cookie: true
-    permissions: [email]
-    culture: fr_FR
 
 #gravatar
 ornicar_gravatar:

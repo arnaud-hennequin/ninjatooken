@@ -22,7 +22,7 @@
 			</div>
 		    {% endfor %}
 		{% endfor %}
-		<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_enctype(form) }} method="POST" class="full">
+		<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_start(form) }} method="POST" class="full">
 			{{ form_widget(form) }}
 			<div class="row-fluid">
 				<div class="span8 offset4">

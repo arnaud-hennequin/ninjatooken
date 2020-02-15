@@ -19,7 +19,6 @@ class AppKernel extends Kernel
 
 			new FOS\UserBundle\FOSUserBundle(),
             new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
-            new FOS\FacebookBundle\FOSFacebookBundle(),
 
 			new Sonata\CoreBundle\SonataCoreBundle(),
 			new Sonata\BlockBundle\SonataBlockBundle(),

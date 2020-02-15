@@ -116,6 +116,3 @@ _sonata_admin:
 _imagine:
     resource: .
     type:     imagine
-
-fos_facebook_channel:
-    resource: '@FOSFacebookBundle/Resources/config/routing.xml'

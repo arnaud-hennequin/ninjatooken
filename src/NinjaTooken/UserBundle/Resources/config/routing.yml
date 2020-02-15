@@ -125,15 +125,3 @@ ninja_tooken_user_captures_supprimer:
     defaults: { _controller: NinjaTookenUserBundle:Default:capturesSupprimer }
     requirements:
         id:  \d*
-
-_security_check_facebook:
-    path:   /facebook/login_check
-    defaults:  { _controller: NinjaTookenUserBundle:User:loginCheckFb }
-
-_security_login_facebook:
-    path:  /facebook/login
-    defaults: { _controller: NinjaTookenUserBundle:User:loginFb }
-
-_security_logout_facebook:
-    path:  /facebook/logout
-    defaults: { _controller: NinjaTookenUserBundle:User:logoutFb }

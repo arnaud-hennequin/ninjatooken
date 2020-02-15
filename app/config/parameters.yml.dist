@@ -11,8 +11,6 @@ parameters:
     mailer_password: null
     locale: fr
     secret: 
-    facebook_secret: 
-    facebook_appid: 
     database_path: null
     mail_contact: contact@ninjatooken.com
     mail_admin: nctstat@gmail.com

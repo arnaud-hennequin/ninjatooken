@@ -20,14 +20,6 @@ services:
         scope: request
         public: false
 
-    fos_facebook.user.login:
-        class: NinjaTooken\UserBundle\Security\User\Provider\FacebookProvider
-        arguments:
-            facebook: "@fos_facebook.api"
-            userManager: "@fos_user.user_manager"
-            validator: "@validator"
-            container: "@service_container"
-
     ninjatooken_user_listener:
         class: NinjaTooken\UserBundle\Listener\LoginListener
         arguments: ['@security.authorization_checker', '@doctrine']
