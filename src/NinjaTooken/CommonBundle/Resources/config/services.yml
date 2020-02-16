@@ -4,6 +4,6 @@ parameters:
 services:
     twigextension:
         class:     NinjaTooken\CommonBundle\Twig\TwigExtension
-        arguments: [@router]
+        arguments: ['@router']
         tags:
             - { name: twig.extension }

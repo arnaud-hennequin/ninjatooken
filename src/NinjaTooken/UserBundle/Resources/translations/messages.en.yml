@@ -95,9 +95,6 @@ parametre:
     avatar: Avatar
     modifierAvatar: Edit your avatar
     hebergement: Hosting
-    serveur:
-        nt: NinjaTooken server
-        gravatar: Gravatar
     suppression: The deletion of your account can't be undone, all your ninja's information will be lost.
 label:
     destinataire: Receiver(s)

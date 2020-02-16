@@ -69,7 +69,7 @@
 						{% if app.request.get('add') == 1 %}
 						<div class="main">
 							<h3>Nouveau message</h3>
-							<form action="{{ path(app.request.attributes.get('_route'), {'page':page}) }}?add=1" {{ form_start(form) }} method="POST" accept-charset="UTF-8" class="full">
+							<form action="{{ path(app.request.attributes.get('_route'), {'page':page}) }}?add=1" method="POST" accept-charset="UTF-8" class="full">
 								<div class="row-fluid">
 									<div class="span3 offset1"><label class="libelle required">{{ 'label.destinataire'|trans }}</label></div>
 									<div class="span8">

@@ -1,15 +1,11 @@
 {% macro getUrl(user) %}{% spaceless %}
-{% if user.useGravatar %}
-	{{ gravatar(user.email) }}
-{% else %}
-	{% if user.avatar is empty %}
-		{% if user.gender == "m" %}
-			{{ asset('bundles/ninjatookenuser/images/boyz.jpg') }}
-		{% else %}
-			{{ asset('bundles/ninjatookenuser/images/girlz.jpg') }}
-		{% endif %}
+{% if user.avatar is empty %}
+	{% if user.gender == "m" %}
+		{{ asset('bundles/ninjatookenuser/images/boyz.jpg') }}
 	{% else %}
-		{{ ('avatar/' ~ user.avatar) | apply_filter('avatar') }}
+		{{ asset('bundles/ninjatookenuser/images/girlz.jpg') }}
 	{% endif %}
+{% else %}
+	{{ ('avatar/' ~ user.avatar) | apply_filter('avatar') }}
 {% endif %}
 {% endspaceless %}{% endmacro %}

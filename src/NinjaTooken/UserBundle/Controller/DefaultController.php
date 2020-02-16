@@ -417,18 +417,6 @@ class DefaultController extends Controller
                     );
 
                     $update = true;
-                // hébergement de l'avatar
-                }elseif((int)$request->get('editAvatar') == 1){
-                    $user->setUseGravatar(
-                        $request->get('avatar') == 'gravatar'
-                    );
-
-                    $this->get('session')->getFlashBag()->add(
-                        'notice',
-                        $translator->trans('notice.hebergementModifierOk')
-                    );
-
-                    $update = true;
                 }
 
                 // permet d'enregistrer les modifications

@@ -1,10 +1,10 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: @NinjaTookenClanBundle/Resources/config/admin.yml }
-    - { resource: @NinjaTookenUserBundle/Resources/config/admin.yml }
-    - { resource: @NinjaTookenForumBundle/Resources/config/admin.yml }
-    - { resource: @NinjaTookenGameBundle/Resources/config/admin.yml }
+    - { resource: '@NinjaTookenClanBundle/Resources/config/admin.yml' }
+    - { resource: '@NinjaTookenUserBundle/Resources/config/admin.yml' }
+    - { resource: '@NinjaTookenForumBundle/Resources/config/admin.yml' }
+    - { resource: '@NinjaTookenGameBundle/Resources/config/admin.yml' }
 
 framework:
     #esi:             ~
@@ -28,12 +28,12 @@ framework:
 services:
     kernel.listener.ninjatooken_exception_listener:
         class: NinjaTooken\CommonBundle\Listener\NinjaTookenExceptionListener
-        arguments: [@templating]
+        arguments: ["@templating"]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
     markup.exercise_html_purifier:
         class: FOS\CommentBundle\Markup\HtmlPurifier
-        arguments: [ @exercise_html_purifier.full ]
+        arguments: [ "@exercise_html_purifier.full" ]
     pdo:
         class: PDO
         arguments:
@@ -81,7 +81,7 @@ assetic:
         cssrewrite: ~
         lessphp:
             file: %kernel.root_dir%/../vendor/leafo/lessphp/lessc.inc.php
-            apply_to: "\.less$"
+            apply_to: "\\.less$"
 #        closure:
 #            jar: %kernel.root_dir%/Resources/java/compiler.jar
 #        yui_css:
@@ -187,12 +187,6 @@ stof_doctrine_extensions:
     orm:
         default:
             sluggable: true
-
-#gravatar
-ornicar_gravatar:
-    rating: g
-    size: 100
-    default: mm
 
 # resize avatar
 avalanche_imagine:

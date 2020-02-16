@@ -21,7 +21,7 @@ class TwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'asset_absolute' => new \Twig_Function_Method($this, 'assetAbsolute'),
+            'asset_absolute' => new \Twig\TwigFunction('asset_absolute', [$this, 'assetAbsolute']),
         );
     }
 

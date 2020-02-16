@@ -95,9 +95,6 @@ parametre:
     avatar: Avatar
     modifierAvatar: Modifier ton avatar
     hebergement: Hébergement
-    serveur:
-        nt: Serveur NinjaTooken
-        gravatar: Gravatar
     suppression: La suppression de compte est définitive, les informations de ton ninja seront définitivement perdues.
 label:
     destinataire: Destinataire(s)

@@ -6,9 +6,9 @@ services:
         arguments: [ null, NinjaTooken\ClanBundle\Entity\Clan, null]
         calls:
             - [ setTranslationDomain, [NinjaTookenClanBundle]]
-            - [ addChild, [ @ninjatooken.forum.admin.forum ] ]
-            - [ addChild, [ @ninjatooken_clan.admin.clan_utilisateur ] ]
-            - [ addChild, [ @ninjatooken_clan.admin.clan_postulation ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.forum' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_utilisateur' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_postulation' ] ]
 
     ninjatooken_clan.admin.clan_utilisateur:
         class: NinjaTooken\ClanBundle\Admin\ClanUtilisateurAdmin

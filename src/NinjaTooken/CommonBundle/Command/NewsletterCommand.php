@@ -1,6 +1,7 @@
 <?php
 namespace NinjaTooken\CommonBundle\Command;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,9 +72,9 @@ class NewsletterCommand extends ContainerAwareCommand
                         '%autologin%' => $auto_login?$route->generate('ninja_tooken_user_autologin', array(
                             'autologin' => $auto_login,
                             '_locale' => $locale
-                        ), true):$route->generate('ninja_tooken_homepage', array(
+                        ), UrlGeneratorInterface::ABSOLUTE_URL):$route->generate('ninja_tooken_homepage', array(
                             '_locale' => $locale
-                        ), true)
+                        ), UrlGeneratorInterface::ABSOLUTE_URL)
                     ), 'common'),
                     'locale' => $locale
                 ));

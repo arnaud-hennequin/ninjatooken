@@ -105,13 +105,6 @@ class User extends BaseUser
     private $receiveAvertissement = false;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="use_gravatar", type="boolean")
-     */
-    private $useGravatar = false;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="old_usernames", type="array")
@@ -495,29 +488,6 @@ class User extends BaseUser
     public function getReceiveAvertissement()
     {
         return $this->receiveAvertissement;
-    }
-
-    /**
-     * Set use_gravatar
-     *
-     * @param boolean $useGravatar
-     * @return User
-     */
-    public function setUseGravatar($useGravatar)
-    {
-        $this->useGravatar = $useGravatar;
-
-        return $this;
-    }
-
-    /**
-     * Get use_gravatar
-     *
-     * @return boolean 
-     */
-    public function getUseGravatar()
-    {
-        return $this->useGravatar;
     }
 
     /**

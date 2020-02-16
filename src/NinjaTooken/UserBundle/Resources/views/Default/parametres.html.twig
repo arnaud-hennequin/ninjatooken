@@ -131,22 +131,7 @@
 						</div>
 						<div class="span8">
 							<img src="{{ avatar.getUrl(app.user) }}" class="pull-left" alt="">
-							{% if app.user.useGravatar %}
-							<a href="http://{{ app.request.locale }}.gravatar.com/" target="_blank" class="button small">{{ 'action.modifier'|trans }}</a>
-							{% else %}
 							<input type="file" name="avatar"><a href="{{ path('ninja_tooken_user_parametres_update_avatar') }}" class="button small">{{ 'action.modifier'|trans }}</a>
-							{% endif %}
-						</div>
-					</div>
-					<div class="row-fluid">
-						<div class="span3 offset1">
-							<label class="libelle">{{ 'parametre.hebergement'|trans }}</label>
-						</div>
-						<div class="span3">
-							<input type="radio" name="avatar" value="ninjatooken" id="input_avatar_ninjatooken"{% if app.user.useGravatar == false %} checked{% endif %}><label for="input_avatar_ninjatooken"> {{ 'parametre.serveur.nt'|trans }}</label>
-						</div>
-						<div class="span5">
-							<input type="radio" name="avatar" value="gravatar" id="input_avatar_gravatar"{% if app.user.useGravatar %} checked{% endif %}><label for="input_avatar_gravatar"> <a href="http://{{ app.request.locale }}.gravatar.com/" target="_blank">{{ 'parametre.serveur.gravatar'|trans }}</a>.</label>
 						</div>
 					</div>
 					<div class="row-fluid">
@@ -157,7 +142,7 @@
 					</div>
 				</form>
 
-				<form action="{{ path('ninja_tooken_user_parametres_update_password') }}" {{ form_start(form) }} method="POST" name="editPassword" accept-charset="UTF-8" class="full">
+				<form action="{{ path('ninja_tooken_user_parametres_update_password') }}" method="POST" name="editPassword" accept-charset="UTF-8" class="full">
 					<h3><i class="icon-key"></i> {{ 'compte.register.motPasse'|trans({}, 'common') }}</h3>
 					{{ form_widget(form) }}
 					<div class="row-fluid">

@@ -5,12 +5,12 @@ services:
             - { name: sonata.admin, manager_type: orm, group: user, label: Utilisateur }
         arguments: [null, NinjaTooken\UserBundle\Entity\User, SonataAdminBundle:CRUD]
         calls:
-            - [ addChild, [ @ninjatooken_user.admin.detection ] ]
-            - [ addChild, [ @ninjatooken_user.admin.message ] ]
-            - [ addChild, [ @ninjatooken.forum.admin.comment_user ] ]
-            - [ addChild, [ @ninjatooken_user.admin.friend ] ]
-            - [ addChild, [ @ninjatooken_user.admin.capture ] ]
-            - [ addChild, [ @ninjatooken_clan.admin.clan_proposition ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.detection' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.message' ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.comment_user' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.friend' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.capture' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_proposition' ] ]
 
     ninjatooken_user.admin.message:
         class: NinjaTooken\UserBundle\Admin\MessageAdmin
