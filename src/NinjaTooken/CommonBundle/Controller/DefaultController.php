@@ -2,6 +2,7 @@
 
 namespace NinjaTooken\CommonBundle\Controller;
 
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,8 +77,8 @@ class DefaultController extends Controller
     public function contactAction(Request $request)
     {
         if ('POST' === $request->getMethod()) {
-            $csrfProvider = $this->get('form.csrf_provider');
-            if(!$csrfProvider->isCsrfTokenValid('contact'.$request->cookies->get('PHPSESSID'), $request->request->get('_token'))) {
+            $csrfProcsrfTokenManagervider = $this->get('security.csrf.token_manager');
+            if(!$csrfTokenManager->isTokenValid(new CsrfToken('contact'.$request->cookies->get('PHPSESSID'), $request->request->get('_token')))) {
                 throw new RuntimeException('CSRF attack detected.');
             }
             $texte = trim($request->get('content'));

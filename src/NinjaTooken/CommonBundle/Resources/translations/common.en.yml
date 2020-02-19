@@ -42,7 +42,7 @@ compte:
         receiveNewsletter: I agree to receive emails from Ninja Tooken
         receiveAvertissement: I would like to be notified of new messages by email
         captcha: Captcha
-        captchaInstruction: To complete your registration, please draw the form below, following the white lines:
+        captchaInstruction: "To complete your registration, please draw the form below, following the white lines:"
         captchaError: Your browser doesn't support the 'canvas'.
     request:
         meta:

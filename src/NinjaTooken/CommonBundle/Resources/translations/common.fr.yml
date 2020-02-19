@@ -11,7 +11,7 @@ newsletter:
         Côté jeu, on a entièrement repensé la physique, et tu seras peut-être content d'apprendre que tous les ninjas peuvent à nouveau sauter sur l'eau. Il y a aussi plein d'optimisations en réseau.<br><br>
         Pour profiter dès maintenant de toutes ces améliorations, <a href="%autologin%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">suis ce lien personnel</span></a> pour te connecter directement sur ton compte.
 popup:
-    delete: Cette action est irréversible : es-tu sûr ?
+    delete: "Cette action est irréversible : es-tu sûr ?"
     confirm: Confirmer
     cancel: Annuler
 entete:
@@ -41,7 +41,7 @@ compte:
         receiveNewsletter: J'accepte de recevoir par mail les news du site
         receiveAvertissement: Je souhaite être averti par mail de l'arrivée de nouveaux messages
         captcha: Captcha
-        captchaInstruction: Pour pouvoir t'inscrire, reproduis la forme ci-dessous :
+        captchaInstruction: "Pour pouvoir t'inscrire, reproduis la forme ci-dessous :"
         captchaError: Ton navigateur ne supporte pas les 'canvas'.
     request:
         meta:

@@ -28,7 +28,7 @@ class AppKernel extends Kernel
             new Sonata\IntlBundle\SonataIntlBundle(),
 
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
-            new Avalanche\Bundle\ImagineBundle\AvalancheImagineBundle(),
+            new Liip\ImagineBundle\LiipImagineBundle(),
 
 			new Exercise\HTMLPurifierBundle\ExerciseHTMLPurifierBundle(),
             new NinjaTooken\ForumBundle\NinjaTookenForumBundle(),
@@ -53,5 +53,20 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+    }
+
+     public function getRootDir()
+    {
+        return __DIR__;
+    }
+
+    public function getCacheDir()
+    {
+        return dirname(__DIR__).'/var/cache/'.$this->getEnvironment();
+    }
+
+    public function getLogDir()
+    {
+        return dirname(__DIR__).'/var/logs';
     }
 }

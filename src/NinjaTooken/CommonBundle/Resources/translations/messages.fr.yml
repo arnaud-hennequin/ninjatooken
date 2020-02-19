@@ -18,10 +18,10 @@ description:
         guide: Le manuel du ninja est à consulter régulièrement pour survivre dans le monde sans pitié des shinobis !
         contact: Envoie un message à la team NinjaTooken, qui y répondra le plus vite possible !
         faq:
-            generale: Les réponses aux questions les plus courantes sur NinjaTooken : compte, gratuité, planning de sortie...
+            generale: "Les réponses aux questions les plus courantes sur NinjaTooken : compte, gratuité, planning de sortie..."
             technique: Les réponses aux problèmes techniques les plus fréquents. Connexion à problème, chargement, lagues, mémoire, performances...
         mention: Les mentions légales de Ninja Tooken, le FPS 3D gratuit. Ce jeu indépendant et gratuit est sans engagements !
-        reglement: Le règlement de Ninja Tooken : pour des parties fun et sans prises de tête !
+        reglement: "Le règlement de Ninja Tooken : pour des parties fun et sans prises de tête !"
         team: Ninja Tooken c'est un jeu en 3D gratuit, mais c'est aussi des infographistes 2D et 3D, des développeurs, des administateurs réseaux, des bêta testeurs...
         chercher: Rechercher simplement et rapidement !
     canvas: Ton navigateur ne supporte pas les &lt;canvas&gt;.
@@ -38,7 +38,7 @@ form:
     sujet: Sujet
     message: Message
     captcha: Captcha
-    captchaMessage: Pour pouvoir envoyer ton message, reproduis la forme ci-dessous :
+    captchaMessage: "Pour pouvoir envoyer ton message, reproduis la forme ci-dessous :"
 mail:
     desinscription:
         message: Si tu ne souhaites plus recevoir de mail de la part de NinjaTooken, 

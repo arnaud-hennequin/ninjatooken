@@ -29,7 +29,7 @@ description:
     entete: %count% ninja since %date%|]1,+Inf]%count% ninjas since %date%
     creation: the %date%
     fonde: Founded the %date%
-    perso: Perso page :
+    perso: "Perso page :"
     organisation: Clan organization
     partenaire: Partners
     membres: The members
@@ -79,10 +79,10 @@ mail:
                 <p>A recruitment proposal has been addressed by <a href="%userUrl%">%userPseudo%</a>.<br/>
                 <a href="%urlRefuser%" class="button small delete">Decline</a> or <a href="%urlAccepter%" class="button small delete">Accept</a></p>
         refuser:
-            sujet: Re : Recruitment proposal
+            sujet: "Re : Recruitment proposal"
             contenu: Declined :/
         accepter:
-            sujet: Re : Recruitment proposal
+            sujet: "Re : Recruitment proposal"
             contenu: Accepted !!
 forum:
     numThread: %count% topic|%count% topics

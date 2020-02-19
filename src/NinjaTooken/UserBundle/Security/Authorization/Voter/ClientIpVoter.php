@@ -2,15 +2,18 @@
 
 namespace NinjaTooken\UserBundle\Security\Authorization\Voter;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ClientIpVoter implements VoterInterface
 {
-    public function __construct(ContainerInterface $container, array $blacklistedIp = array())
+    protected $requestStack;
+    protected $blacklistedIp;
+
+    public function __construct(RequestStack $requestStack, array $blacklistedIp = array())
     {
-        $this->container     = $container;
+        $this->requestStack    = $requestStack;
         $this->blacklistedIp = $blacklistedIp;
     }
 
@@ -28,7 +31,7 @@ class ClientIpVoter implements VoterInterface
 
     public function vote(TokenInterface $token, $object, array $attributes)
     {
-        $request = $this->container->get('request');
+        $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getClientIp(), $this->blacklistedIp)) {
             return VoterInterface::ACCESS_DENIED;
         }

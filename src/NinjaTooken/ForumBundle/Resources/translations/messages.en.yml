@@ -15,7 +15,7 @@ keywords:
     threadList: Ninja Tooken, shinobi, ninja, topic, message, fps, online, free
 titre:
     event: The NinjaTooken's events 
-    eventDate: Event's date :
+    eventDate: "Event's date :"
     dernierMessage: Latest posts
     topic: %count% topic|]1,+Inf]%count% topics
     comment: %count% comment|]1,+Inf]%count% comments
@@ -23,9 +23,9 @@ titre:
 description:
     meta:
         event: Tournament, stream, contests, for following all the events of Ninja Tooken and live the game at 200%, it's here!
-        forum: The  NinjaTooken's forum: exchange discoveries, challenge other players, organize a party, provide your improvements, announce a bug...
+        forum: "The  NinjaTooken's forum: exchange discoveries, challenge other players, organize a party, provide your improvements, announce a bug..."
     threadList: Topics of "%forum%", it's here for your free fps ninja game.
-    event: Tournaments, streams, competitions: this is where it happens!
+    event: "Tournaments, streams, competitions: this is where it happens!"
     noEvent: There are currently no events.
     error404:
         message: This message doesn't exist!

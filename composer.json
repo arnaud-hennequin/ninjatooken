@@ -5,20 +5,24 @@
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
         "psr-4": {
-            "": "src/", "SymfonyStandard\\": "app/"
+            "NinjaTooken\\": "src/NinjaTooken"
         },
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" },
+        "files": [ "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php" ]
     },
     "repositories": [
         {
             "type":"package",
             "package": {
-                "name": "Frug/AJAX-Chat",
+                "name": "frug/ajax-chat",
                 "version":"dev-master",
                 "source": {
                     "url": "https://github.com/Frug/AJAX-Chat.git",
                     "type": "git",
-                    "reference":"0.8.6-standalone"
+                    "reference":"0.8.8-standalone"
                 }
             }
         },
@@ -36,36 +40,37 @@
         }
     ],
     "require": {
-        "php": ">=5.3.9",
-        "doctrine/doctrine-bundle": "~1.4",
-        "doctrine/orm": "^2.4.8",
-        "incenteev/composer-parameter-handler": "~2.0",
-        "sensio/distribution-bundle": "~4.0",
-        "sensio/framework-extra-bundle": "^3.0.2",
-        "symfony/monolog-bundle": "^3.0.2",
-        "symfony/swiftmailer-bundle": "~2.3,>=2.3.10",
-        "symfony/symfony": "2.8.*",
+        "php": ">=5.5.9",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/orm": "^2.5",
+        "incenteev/composer-parameter-handler": "^2.0",
+        "sensio/distribution-bundle": "^5.0.19",
+        "sensio/framework-extra-bundle": "^5.0.0",
+        "symfony/monolog-bundle": "^3.1.0",
+        "monolog/monolog": "~1",
+        "symfony/polyfill-apcu": "^1.0",
+        "symfony/swiftmailer-bundle": "^2.6.4",
+        "symfony/symfony": "3.4.*",
         "twig/twig": "^1.0||^2.0",
 
-        "sonata-project/admin-bundle": "2.*",
-        "sonata-project/doctrine-orm-admin-bundle": "2.*",
-        "sonata-project/intl-bundle": "2.*",
-        "sonata-project/user-bundle": "2.*",
-        "friendsofsymfony/user-bundle": "~1.3",
+        "sonata-project/admin-bundle": "*",
+        "sonata-project/doctrine-orm-admin-bundle": "*",
+        "sonata-project/intl-bundle": "*",
+        "sonata-project/user-bundle": "*",
 
         "stof/doctrine-extensions-bundle": "*",
 
         "stfalcon/tinymce-bundle": "1.*",
         "exercise/htmlpurifier-bundle": "*",
         "leafo/lessphp": "*",
-        "frug/ajax-chat": "*",
+        "frug/ajax-chat": "*@dev",
 
-        "avalanche123/imagine-bundle": "*",
-        "symfony/assetic-bundle": "^2.8"
+        "symfony/assetic-bundle": "^2.8",
+        "liip/imagine-bundle": "^2.3"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~3.0",
-        "symfony/phpunit-bridge": "~2.7"
+        "sensio/generator-bundle": "^3.0",
+        "symfony/phpunit-bridge": "^3.0"
     },
     "scripts": {
         "symfony-scripts": [
@@ -84,19 +89,20 @@
         ]
     },
     "config": {
-        "bin-dir": "bin"
+        "sort-packages": true
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "extra": {
         "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "var",
         "symfony-web-dir": "web",
+        "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.8-dev"
+            "dev-master": "3.4-dev"
         }
     }
 }

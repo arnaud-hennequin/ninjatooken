@@ -29,7 +29,7 @@ description:
     entete: %count% ninja depuis le %date%|]1,+Inf]%count% ninjas depuis le %date%
     creation: le %date%
     fonde: Fondé le %date%
-    perso: Page perso :
+    perso: "Page perso :"
     organisation: Organisation du clan
     partenaire: Partenaires
     membres: Les membres
@@ -79,10 +79,10 @@ mail:
                 <p>Une proposition de recrutement vient de t'être adressée par <a href="%userUrl%">%userPseudo%</a>.<br/>
                 <a href="%urlRefuser%" class="button small delete">Refuser</a> ou <a href="%urlAccepter%" class="button small delete">Accepter</a></p>
         refuser:
-            sujet: Re : Proposition de recrutement
+            sujet: "Re : Proposition de recrutement"
             contenu: Refusée :/
         accepter:
-            sujet: Re : Proposition de recrutement
+            sujet: "Re : Proposition de recrutement"
             contenu: Acceptée !!
 forum:
     numThread: %count% topic|%count% topics

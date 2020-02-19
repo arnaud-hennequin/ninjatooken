@@ -105,6 +105,13 @@ class User extends BaseUser
     private $receiveAvertissement = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="locked", type="boolean")
+     */
+    private $locked = false;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="old_usernames", type="array")
@@ -176,7 +183,7 @@ class User extends BaseUser
     /**
      * @ORM\PrePersist()
      */
-    public function prePersist()
+    public function prePersist(): void
     {
         parent::prePersist();
 
@@ -188,7 +195,7 @@ class User extends BaseUser
     /**
      * @ORM\PreUpdate()
      */
-    public function preUpdate()
+    public function preUpdate(): void
     {
         parent::preUpdate();
         if (null !== $this->file) {
@@ -488,6 +495,29 @@ class User extends BaseUser
     public function getReceiveAvertissement()
     {
         return $this->receiveAvertissement;
+    }
+
+    /**
+     * Set locked
+     *
+     * @param boolean $locked
+     * @return User
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
+
+        return $this;
+    }
+
+    /**
+     * Get locked
+     *
+     * @return boolean 
+     */
+    public function getLocked()
+    {
+        return $this->locked;
     }
 
     /**

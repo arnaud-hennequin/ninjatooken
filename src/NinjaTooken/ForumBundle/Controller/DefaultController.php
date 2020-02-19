@@ -89,7 +89,7 @@ class DefaultController extends Controller
                 $forum = $this->getDoctrine()->getManager()->getRepository('NinjaTookenForumBundle:Forum')->getForum('nouveautes')[0];
                 $thread->setForum($forum);
                 $thread->setIsEvent(true);
-                $form = $this->createForm(new EventType(), $thread);
+                $form = $this->createForm(EventType::class, $thread);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('event', array_merge(
@@ -130,7 +130,7 @@ class DefaultController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if($thread->getAuthor() == $user || $authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
-                $form = $this->createForm(new EventType(), $thread);
+                $form = $this->createForm(EventType::class, $thread);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('event', array_merge(
@@ -214,7 +214,7 @@ class DefaultController extends Controller
 
         $comments = $em->getRepository('NinjaTookenForumBundle:Comment')->getCommentsByThread($thread, $num, $page);
 
-        $form = $this->createForm(new CommentType(), new Comment());
+        $form = $this->createForm(CommentType::class, new Comment());
 
         return $this->render('NinjaTookenForumBundle:Default:thread.html.twig', array(
             'forum' => $forum,
@@ -239,7 +239,7 @@ class DefaultController extends Controller
                 $thread = new Thread();
                 $thread->setAuthor($user);
                 $thread->setForum($forum);
-                $form = $this->createForm(new ThreadType(), $thread);
+                $form = $this->createForm(ThreadType::class, $thread);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('thread', array_merge(
@@ -285,7 +285,7 @@ class DefaultController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if($this->globalRight($authorizationChecker, $user, $forum) || $thread->getAuthor() == $user){
-                $form = $this->createForm(new ThreadType(), $thread);
+                $form = $this->createForm(ThreadType::class, $thread);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('thread', array_merge(
@@ -438,7 +438,7 @@ class DefaultController extends Controller
                 $comment->setAuthor($user);
                 $comment->setThread($thread);
 
-                $form = $this->createForm(new CommentType(), $comment);
+                $form = $this->createForm(CommentType::class, $comment);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('comment', array_merge(
@@ -481,7 +481,7 @@ class DefaultController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if($this->globalRight($authorizationChecker, $user, $forum) || ($thread->getIsCommentable() && $comment->getAuthor() == $user)){
-                $form = $this->createForm(new CommentType(), $comment);
+                $form = $this->createForm(CommentType::class, $comment);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('comment', array_merge(

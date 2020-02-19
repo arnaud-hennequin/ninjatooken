@@ -6,6 +6,6 @@
 		{{ asset('bundles/ninjatookenuser/images/girlz.jpg') }}
 	{% endif %}
 {% else %}
-	{{ ('avatar/' ~ user.avatar) | apply_filter('avatar') }}
+	{{ ('avatar/' ~ user.avatar) | imagine_filter('avatar') }}
 {% endif %}
 {% endspaceless %}{% endmacro %}

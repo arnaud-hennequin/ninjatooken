@@ -109,6 +109,5 @@ _sonata_admin:
     type: sonata_admin
     prefix: /daFuckingAdmin
 
-_imagine:
-    resource: .
-    type:     imagine
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.yaml"

@@ -167,7 +167,7 @@ class DefaultController extends Controller
             $form = null;
             if($isNewMessage){
                 $message = new Message();
-                $form = $this->createForm(new MessageType(), $message);
+                $form = $this->createForm(MessageType::class, $message);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('message', array_merge(
@@ -274,7 +274,7 @@ class DefaultController extends Controller
                     $messageform->setNom('Re : '.str_replace('Re : ', '', $message->getNom()));
                     $messageform->setContent('<fieldset><legend>'.$message->getAuthor()->getUsername().'</legend>'.$message->getContent().'</fieldset><p></p>');
 
-                    $form = $this->createForm(new MessageType(), $messageform);
+                    $form = $this->createForm(MessageType::class, $messageform);
                 }
             }
 
@@ -328,8 +328,11 @@ class DefaultController extends Controller
             if($user->getDateOfBirth()==new \DateTime('0000-00-00 00:00:00'))
                 $user->setDateOfBirth(null);
 
+            $formFactory = $this->container->get('fos_user.change_password.form.factory');
+            $form = $formFactory->createForm();
+
             return $this->render('NinjaTookenUserBundle:Default:parametres.html.twig', array(
-                'form' => $this->container->get('fos_user.change_password.form')->createView()
+                'form' => $form->createView()
             ));
         }
         return $this->redirect($this->generateUrl('fos_user_security_login'));
@@ -500,7 +503,7 @@ class DefaultController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
 
-            $form = $this->container->get('fos_user.change_password.form');
+            $form = $this->container->get('fos_user.change_password.form.type');
             $formHandler = $this->container->get('fos_user.change_password.form.handler');
 
             $process = $formHandler->process($user);

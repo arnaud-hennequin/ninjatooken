@@ -18,10 +18,10 @@ description:
         guide: The ninja's manual has to be consulted regularly in order to survive in the ruthless world of shinobis!
         contact: Sends a message to the NinjaTooken team, who will respond as soon as possible!
         faq:
-            generale: Answers to common questions about NinjaTooken: account, free, date of releases...
+            generale: "Answers to common questions about NinjaTooken: account, free, date of releases..."
             technique: The answers to the most common technical problems. Connection, loading, freeze, memory performance ...
         mention: Legals of NinjaTooken, the free 3D FPS. This free game is independent and without obligations!
-        reglement: Rules in Ninja Tooken: for fun and headaches free games!
+        reglement: "Rules in Ninja Tooken: for fun and headaches free games!"
         team: NinjaTooken is a free 3D game, made with 2D and 3D graphic designers, developers, networks administators, beta testers ...
         chercher: Search quickly and easily!
     canvas: Your browser doesn't support "canvas".
@@ -38,7 +38,7 @@ form:
     sujet: Subject
     message: Message
     captcha: Captcha
-    captchaMessage: To send your message, copy the figure:
+    captchaMessage: "To send your message, copy the figure:"
 mail:
     desinscription:
         message: If you do not want to receive further email from Ninja Tooken,

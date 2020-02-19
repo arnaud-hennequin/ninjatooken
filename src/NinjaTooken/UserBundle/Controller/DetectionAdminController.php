@@ -17,7 +17,6 @@ class DetectionAdminController extends Controller
             throw new AccessDeniedException();
         }
 
-        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
         $userRepository = $em->getRepository('NinjaTookenUserBundle:User');
 

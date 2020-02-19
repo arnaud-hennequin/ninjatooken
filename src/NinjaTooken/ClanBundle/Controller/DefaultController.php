@@ -107,7 +107,7 @@ class DefaultController extends Controller
 
             if(!$user->getClan()){
                 $clan = new Clan();
-                $form = $this->createForm(new ClanType(), $clan);
+                $form = $this->createForm(ClanType::class, $clan);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('clan', array_merge(
@@ -241,7 +241,7 @@ class DefaultController extends Controller
             }
 
             if($canEdit || $authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
-                $form = $this->createForm(new ClanType(), $clan);
+                $form = $this->createForm(ClanType::class, $clan);
                 if('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('clan', array_merge(
@@ -497,7 +497,7 @@ class DefaultController extends Controller
     /**
      * @ParamConverter("utilisateur", class="NinjaTookenUserBundle:User", options={"mapping": {"user_nom":"slug"}})
      */
-    public function clanUtilisateurRecruterAjouterAction(User $utilisateur)
+    public function clanUtilisateurRecruterAjouterAction(Request $request, User $utilisateur)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -550,7 +550,7 @@ class DefaultController extends Controller
                         $translator->trans('notice.recrutement.addKo')
                     );
                 }
-                return $this->redirect($this->getRequest()->headers->get('referer'));
+                return $this->redirect($request->headers->get('referer'));
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }

@@ -4,6 +4,7 @@ namespace NinjaTooken\ChatBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -30,11 +31,11 @@ class DefaultController extends Controller
         ));
     }
 
-    public function ajaxAction()
+    public function ajaxAction(Request $request)
     {
         // Path to the chat directory:
         define('AJAX_CHAT_PATH', dirname(__FILE__).'/../AjaxChat/');
-        define('AJAX_CHAT_URL', $this->getRequest()->getBasePath().'/chat/');
+        define('AJAX_CHAT_URL', $request->getBasePath().'/chat/');
 
         // Include Class libraries:
         require(AJAX_CHAT_PATH.'lib/class/AJAXChat.php');
@@ -63,7 +64,7 @@ class DefaultController extends Controller
                 'type' => null,
                 'link' => null
             ),
-            'langDefault' => $this->getRequest()->getLocale(),
+            'langDefault' => $request->getLocale(),
             'styleDefault' => 'NinjaTooken',
             'defaultChannelName' => 'NinjaTooken',
             'forceAutoLogin' => true,

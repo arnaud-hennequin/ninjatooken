@@ -179,7 +179,7 @@ security:
 
     providers:
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username
         chainprovider:
             chain:
                 providers: [fos_userbundle]
@@ -208,7 +208,7 @@ security:
             form_login:
                 provider: fos_userbundle
                 remember_me: true
-                csrf_token_generator: form.csrf_provider
+                csrf_token_generator: security.csrf.token_manager
                 check_path: fos_user_security_check
                 login_path: fos_user_security_login
                 always_use_default_target_path: false

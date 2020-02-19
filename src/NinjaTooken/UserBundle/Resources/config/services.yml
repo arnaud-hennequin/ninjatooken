@@ -14,11 +14,10 @@ services:
         tags:
             - { name: form.type, alias: ninjatooken_user_resetting }
 
-    ninjatooken_user.form.handler.registration:
-        class: NinjaTooken\UserBundle\Form\Handler\RegistrationFormHandler
-        arguments: ['@fos_user.registration.form', '@request', '@fos_user.user_manager', '@fos_user.mailer', '@fos_user.util.token_generator']
-        scope: request
-        public: false
+    ninjatooken_user.form_handler_registration:
+        class: NinjaTooken\UserBundle\Listener\RegistrationListener
+        tags:
+            - { name: kernel.event_subscriber }
 
     ninjatooken_user_listener:
         class: NinjaTooken\UserBundle\Listener\LoginListener
@@ -28,7 +27,7 @@ services:
 
     security.access.blacklist_voter:
         class:      NinjaTooken\UserBundle\Security\Authorization\Voter\ClientIpVoter
-        arguments:  ["@service_container", %banned.ip%]
+        arguments:  ["@request_stack", %banned.ip%]
         public:     false
         tags:
             - { name: security.voter }
@@ -54,5 +53,4 @@ services:
         class: NinjaTooken\UserBundle\Admin\IpAdmin
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: Ip}
-
         arguments: [~, NinjaTooken\UserBundle\Entity\Ip, SonataAdminBundle:CRUD]
