@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {{ 'menu.generale'|trans({}, 'menu') }}{% endblock %}
+{% block description %}{{ 'description.meta.faq.generale'|trans }}{% endblock %}
+{% block keywords %}{{ 'keywords.meta.faq.generale'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">{{ 'menu.faq'|trans({}, 'menu') }}</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_faq_generale') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.generale'|trans({}, 'menu') }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<div class="row-fluid">
+					<section class="span8 main">
+                        {% for i in 1..6 %}
+                            <h3 id="q{{ i }}">{{ ('faq.question' ~ i)|trans }}</h3>
+                            <p>{{ ('faq.reponse' ~ i)|trans|raw }}</p>
+                        {% endfor %}
+					</section>
+					<aside class="span4">
+						<section>
+							<ul>
+                            {% for i in 1..6 %}
+								<li><a href="#q{{ i }}">{{ ('faq.question' ~ i)|trans }}</a></li>
+                            {% endfor %}
+							</ul>
+						</section>
+
+						{% include 'common/pubAside.html.twig' %}
+
+						{% include 'common/partenaires.html.twig' %}
+					</aside>
+				</div>
+{% endblock %}

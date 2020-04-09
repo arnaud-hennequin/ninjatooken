@@ -1,0 +1,69 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {% if thread is not defined %}{{ 'action.addTopic'|trans }}{% else %}{{ 'action.editTopic'|trans }}{% endif %}{% endblock %}
+{% block description %}{% endblock %}
+{% block keywords %}{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">{{ 'menu.communaute'|trans({}, 'menu') }}</span>
+							</span> <i class="icon-angle-right"></i>
+                            {% if forum.clan is empty %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_forum') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.forum'|trans({}, 'menu') }}</span>
+								</a> <i class="icon-angle-right"></i>
+							</span>
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_topic', {forum_nom:forum.slug}) }}" itemprop="url">
+									<span itemprop="title">{{ forum.nom }}</span>
+                            {% else %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_clans') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.clan'|trans({}, 'menu') }}</span>
+								</a> <i class="icon-angle-right"></i>
+							</span>
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_clan', {clan_nom:forum.clan.slug}) }}" itemprop="url">
+									<span itemprop="title">{% if forum.clan.tag is not empty %}[{{ forum.clan.tag }}] {% endif %}{{ forum.clan.nom }}</span>
+                            {% endif %}
+                            {% if thread is defined %}
+								</a> <i class="icon-angle-right"></i>
+							</span>
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_thread', {forum_nom:forum.slug, thread_nom:thread.slug}) }}" itemprop="url">
+									<span itemprop="title">{% if thread.isCommentable == false %}<i class="icon-lock"></i> {% endif %}{% if thread.isPostit =='1' %}<i class="icon-pushpin"></i> {% endif %}{% if date(thread.lastCommentAt) > date('-1days') %}<i class="icon-eye-open"></i> {% endif %}{{ thread.nom }}</span>
+								</a>
+							</span>
+                            {% else %}
+								</a>
+							</span>
+                            {% endif %}
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                            {% if thread is not defined %}
+								<a href="{{ path('ninja_tooken_thread_ajouter', {forum_nom:forum.slug}) }}" itemprop="url">
+									<span itemprop="title"><i class="icon-plus"></i> {{ 'action.addTopic'|trans }}</span>
+								</a>
+                            {% else %}
+								<a href="{{ path('ninja_tooken_thread_modifier', {forum_nom:forum.slug, thread_nom:thread.slug}) }}" itemprop="url">
+									<span itemprop="title"><i class="icon-pencil"></i> {{ 'action.editTopic'|trans }}</span>
+								</a>
+                            {% endif %}
+							</span>
+{% endblock %}
+
+{% block body %}
+				<section class="forum">
+				    <form action="#" method="POST" accept-charset="UTF-8" class="full">
+					{{ form_widget(form) }}
+					<div class="row-fluid">
+					    <div class="span8 offset4">
+						<input type="submit" value="{% if thread is not defined %}{{ 'action.ajouter'|trans({}, 'common') }}{% else %}{{ 'action.editer'|trans({}, 'common') }}{% endif %}" class="button">
+					    </div>
+					</div>
+				    </form>
+				</section>
+{% endblock %}

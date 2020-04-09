@@ -1,0 +1,7 @@
+ninja_tooken_chat_homepage:
+    path:  /chat/
+    controller: App\Controller\ChatController::index
+
+ninja_tooken_chat_ajax:
+    path:  /chat/ajax/
+    controller: App\Controller\ChatController::ajax

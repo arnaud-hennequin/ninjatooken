@@ -1,0 +1,45 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {{ 'menu.regle'|trans({}, 'menu') }}{% endblock %}
+{% block description %}{{ 'description.meta.reglement'|trans }}{% endblock %}
+{% block keywords %}{{ 'keywords.meta.reglement'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">{{ 'menu.manuel'|trans({}, 'menu') }}</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_reglement') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.regle'|trans({}, 'menu') }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+                <div class="row-fluid">
+					<section class="span8 main">
+						<p>{{ 'reglement.description'|trans }}</p>
+
+                        {% for i in 1..5 %}
+                        <h3>{{ ('reglement.partie' ~ i ~ '.nom')|trans }}</h3>
+                        <p>{{ ('reglement.partie' ~ i ~ '.description')|trans|raw }}</p>
+                        {% endfor %}
+
+					</section>
+					<aside class="span4">
+						<form action="{{ path('ninja_tooken_search') }}" method="post" accept-charset="utf-8" class="row-fluid">
+							<input type="text" name="q" value="{{ 'action.chercher'|trans({}, 'common') }}" class="span10">
+							<input type="submit" name="s" value="{{ 'action.ok'|trans({}, 'common') }}" class="span2">
+						</form>
+
+						{{ render(controller('App\\Controller\\ForumController::recentComments', {'max': 10, 'forum': 0})) }}
+
+						{% include 'common/pubAside.html.twig' %}
+
+						{% include 'common/partenaires.html.twig' %}
+					</aside>
+				</div>
+{% endblock %}

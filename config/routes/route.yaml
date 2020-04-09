@@ -1,0 +1,101 @@
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /%locale%/
+        permanent: true
+
+add_blocker:
+    path: /adimages/
+    controller: App\Controller\CommonController::addBlocker
+
+ninja_tooken_chat:
+    resource: "chat.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_common:
+    resource: "common.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_clan:
+    resource: "clan.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_game:
+    resource: "game.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_game_unity:
+    resource: "unity.yaml"
+    prefix:   /
+
+ninja_tooken_forum:
+    resource: "forum.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_user:
+    resource: "user.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /{_locale}/register
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+nt_inscription:
+    path: /{_locale}/inscription.php
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /%locale%/register
+        permanent: true
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /{_locale}/resetting
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+soanata_user:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    prefix: /{_locale}/daFuckingAdmin
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr

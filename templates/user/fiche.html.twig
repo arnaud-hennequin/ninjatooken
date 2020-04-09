@@ -1,0 +1,72 @@
+{% extends 'layout.html.twig' %}
+{% import "avatar.html.twig" as avatar %}
+
+{% block title %}NinjaTooken - {{ user.username }}{% endblock %}
+{% block description %}{{ user.biography|raw|striptags|slice(0,255) }}{% endblock %}
+{% block keywords %}{{ user.username }}, {{ 'keywords.meta.fiche'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_user_fiche', {user_nom:user.slug}) }}" itemprop="url">
+									<span itemprop="title">{{ user.username }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<div class="row-fluid">
+					<section class="main span8">
+						<h5>{{ 'fiche.dateInscrit'|trans({'%date%': user.createdAt|localizeddate('full', 'none', app.request.locale)}) }}</h5>
+						{{ render(controller('App\\Controller\\GameController::signature', {'user':user})) }}
+
+						{{ user.description|raw|purify('full') }}
+
+						{% if user.oldUsernames is not empty %}
+						<h3>{{ 'fiche.autrePseudo'|trans }}</h3>
+						<p>
+							{% for oldUsername in user.oldUsernames %}
+								<strong>{{ oldUsername }}</strong>{% if not loop.last %}, {% endif %}
+							{% endfor%}
+						</p>
+						{% endif %}
+
+						{% if friends is not empty %}
+						<h3>Amis</h3>
+						<p><span class="legend online"> {{ 'description.online'|trans({}, 'common') }}</span>
+						<span class="legend offline"> {{ 'description.offline'|trans({}, 'common') }}</span></p>
+
+							{% for friend in friends %}
+						<div class="membre {{ render(controller('App\\Controller\\UserController::online', {'user':friend.friend})) }} pull-left">
+							<a href="{{ path('ninja_tooken_user_fiche', {user_nom:friend.friend.slug}) }}"><img src="{{ avatar.getUrl(friend.friend) }}">{{ friend.friend.username }}</a>
+						</div>
+							{% endfor %}
+
+						<br class="clear">
+
+						{% include 'pagination.html.twig' with {
+							currentPage: page,
+							paginationPath: path('ninja_tooken_user_fiche', {user_nom: user.slug, 'page': ''}),
+							paginationAfter: '',
+							lastPage: nombrePage,
+							extremePagesLimit: 2,
+							nearbyPagesLimit: 3
+						} only %}
+						{% endif %}
+					</section>
+
+					<aside class="span4">
+						<form action="{{ path('ninja_tooken_search') }}" method="post" accept-charset="utf-8" class="row-fluid">
+							<input type="text" name="q" value="{{ 'action.chercher'|trans({}, 'common') }}" class="span10">
+							<input type="submit" name="s" value="{{ 'action.ok'|trans({}, 'common') }}" class="span2">
+						</form>
+
+						{{ render(controller('App\\Controller\\ForumController::recentComments', {'max': 10, 'forum': 0, 'user': user.id})) }}
+
+						{% include 'common/pubAside.html.twig' %}
+
+						{% include 'common/partenaires.html.twig' %}
+					</aside>
+				</div>
+{% endblock %}

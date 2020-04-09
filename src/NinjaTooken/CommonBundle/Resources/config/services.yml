@@ -1,9 +1,0 @@
-parameters:
-#    ninja_tooken_common.example.class: NinjaTooken\CommonBundle\Example
-
-services:
-    twigextension:
-        class:     NinjaTooken\CommonBundle\Twig\TwigExtension
-        arguments: ['@router']
-        tags:
-            - { name: twig.extension }

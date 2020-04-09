@@ -1,0 +1,284 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    database_driver: pdo_mysql
+    database_host: '%env(DATABASE_HOST)%'
+    database_port: '%env(DATABASE_PORT)%'
+    database_name: '%env(DATABASE_NAME)%'
+    database_user: '%env(DATABASE_USER)%'
+    database_password: '%env(DATABASE_PASSWORD)%'
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: fr
+    secret: '%env(APP_SECRET)%'
+    database_path: null
+    mail_contact: contact@ninjatooken.fr
+    mail_admin: nctstat@gmail.com
+    mail_name: no-reply
+    unity.version: 0.99985
+    unity.crypt: null
+    imgur: null
+    banned.ip: {  }
+    akismet.active: false
+    akismet.key: null
+    akismet.url: 'http://www.site.com'
+    numReponse: 20
+    paypal.donate: false
+    paypal.code: null
+    class:
+        eau: Suiton
+        vent: Futon
+        feu: Katon
+        foudre: Raiton
+        terre: Doton
+    kernel.default_locale: fr
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            - !service { class: PDO, factory: ['@database_connection', 'getWrappedConnection'] }
+            - { db_table: 'session', db_id_col: 'session_id', db_data_col: 'session_value', db_time_col: 'session_time', db_lifetime_col: 'session_lifetime' }
+            # If you get transaction issues (e.g. after login) uncomment the line below
+            # - { lock_mode: 1 }
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    kernel.listener.ninjatooken_exception_listener:
+        class: App\Listener\NinjaTookenExceptionListener
+        arguments: ["@templating"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+    markup.exercise_html_purifier:
+        class: FOS\CommentBundle\Markup\HtmlPurifier
+        arguments: [ "@exercise_html_purifier.full" ]
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    ninjatooken_clan.clan_listener:
+        class: App\Listener\ClanListener
+        tags:
+            - { name: doctrine.event_listener, event: postRemove }
+
+    ninjatooken_clan.clan_proposition_listener:
+        class: App\Listener\ClanPropositionListener
+        arguments: ["@translator"]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postRemove }
+
+    ninjatooken_clan.clan_postulation_listener:
+        class: App\Listener\ClanPostulationListener
+        arguments: ["@translator"]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postPersist }
+
+    ninjatooken_clan.clan_utilisateur_listener:
+        class: App\Listener\ClanUtilisateurListener
+        tags:
+            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: preRemove }
+            - { name: doctrine.event_listener, event: postPersist }
+
+    ninjatooken_forum.thread_listener:
+        class: App\Listener\ThreadListener
+        tags:
+            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: postPersist }
+
+    ninjatooken_forum.comment_listener:
+        class: App\Listener\CommentListener
+        arguments: ["%akismet.active%", "%akismet.key%", "%akismet.url%"]
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postRemove }
+
+    ninjatooken_game.gamedata:
+        class: App\Utils\GameData
+
+    ninjatooken_user.registration.form.type:
+        class: App\Form\Type\RegistrationFormType
+        arguments: ['%fos_user.model.user.class%']
+        tags:
+            - { name: form.type, alias: ninjatooken_user_registration }
+
+    ninjatooken_user.resetting.form.type:
+        class: App\Form\Type\ResettingFormType
+        arguments: ['%fos_user.model.user.class%']
+        tags:
+            - { name: form.type, alias: ninjatooken_user_resetting }
+
+    ninjatooken_user.form_handler_registration:
+        class: App\Listener\RegistrationListener
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ninjatooken_user_listener:
+        class: App\Listener\LoginListener
+        arguments: ['@security.authorization_checker', '@doctrine']
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }
+
+    security.access.blacklist_voter:
+        class:      App\Security\Authorization\Voter\ClientIpVoter
+        arguments:  ["@request_stack", "%banned.ip%"]
+        public:     false
+        tags:
+            - { name: security.voter }
+
+    ninjatooken_user.message_user_listener:
+        class: App\Listener\MessageUserListener
+        arguments:  ['@service_container']
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
+    ninjatooken_user.type.ip:
+        class: App\Form\Type\IpType
+        tags:
+            - { name: form.type, alias: ip }
+
+    sonata.user.admin.ip:
+        class: App\Admin\IpAdmin
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Ip}
+        arguments: [~, App\Entity\Ip, SonataAdminBundle:CRUD]
+
+
+
+## admin
+
+    ninjatooken.clan.admin.clan:
+        class: App\Admin\ClanAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: clan, label: Clan }
+        arguments: [ null, App\Entity\Clan, null]
+        calls:
+            - [ addChild, [ '@ninjatooken.forum.admin.forum' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_utilisateur' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_postulation' ] ]
+
+    ninjatooken_clan.admin.clan_utilisateur:
+        class: App\Admin\ClanUtilisateurAdmin
+        arguments: [~, App\Entity\ClanUtilisateur, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: clan, label: Membre}
+
+    ninjatooken_clan.admin.clan_postulation:
+        class: App\Admin\ClanPostulationAdmin
+        arguments: [~, App\Entity\ClanPostulation, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: clan, label: Postulation}
+
+    ninjatooken_clan.admin.clan_proposition:
+        class: App\Admin\ClanPropositionAdmin
+        arguments: [~, App\Entity\ClanProposition, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: clan, label: Proposition}
+
+    ninjatooken.forum.admin.forum:
+        class: App\Admin\ForumAdmin
+        arguments: [ null, App\Entity\Forum, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: forum, label: Forum }
+        calls:
+            - [ addChild, [ '@ninjatooken.forum.admin.thread' ] ]
+
+    ninjatooken.forum.admin.thread:
+        class: App\Admin\ThreadAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: forum, label: Topic }
+        arguments: [ null, App\Entity\Thread, null]
+        calls:
+            - [ addChild, [ '@ninjatooken.forum.admin.comment' ] ]
+
+    ninjatooken.forum.admin.comment:
+        class: App\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: forum, label: Commentaire }
+        arguments: [ null, App\Entity\Comment, null]
+
+    ninjatooken.forum.admin.comment_user:
+        class: App\Admin\CommentUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Commentaire }
+        arguments: [ null, App\Entity\Comment, null]
+
+    ninjatooken.forum.block.recent_comments:
+        class: App\Block\RecentCommentsBlockService
+        tags:
+            - { name: sonata.block }
+        arguments: ["ninjatooken.forum.block.recent_comments", '@templating', '@doctrine.orm.entity_manager']
+
+    ninjatooken_game.admin.ninja:
+        class: App\Admin\NinjaAdmin
+        arguments: [~, App\Entity\Ninja, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Ninja}
+
+    sonata.user.admin.user:
+        class: App\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: Utilisateur }
+        arguments: [null, App\Entity\User, SonataAdminBundle:CRUD]
+        calls:
+            - [ addChild, [ '@ninjatooken_user.admin.detection' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.message' ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.comment_user' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.friend' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.capture' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_proposition' ] ]
+
+    ninjatooken_user.admin.message:
+        class: App\Admin\MessageAdmin
+        arguments: [~, App\Entity\Message, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: user, label: Messagerie}
+
+    ninjatooken_user.admin.message_user:
+        class: App\Admin\MessageUserAdmin
+        arguments: [~, App\Entity\MessageUser, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: MessageUser}
+
+    ninjatooken_user.admin.friend:
+        class: App\Admin\FriendAdmin
+        arguments: [~, App\Entity\Friend, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: user, label: Ami}
+
+    ninjatooken_user.admin.capture:
+        class: App\Admin\CaptureAdmin
+        arguments: [~, App\Entity\Capture, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: user, label: Capture d'écran}
+
+    ninjatooken_user.admin.detection:
+        class: App\Admin\DetectionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: user, label: Détection multi-compte par ip }
+        arguments: [ null,  null, App\Controller\DetectionAdminController]

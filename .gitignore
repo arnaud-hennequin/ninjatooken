@@ -1,28 +1,31 @@
 /.web-server-pid
-/app/config/parameters.yml
 /build/
-/phpunit.xml
-/var/*
-!/var/cache
-/var/cache/*
-!var/cache/.gitkeep
-!/var/logs
-/var/logs/*
-!var/logs/.gitkeep
-!/var/sessions
-/var/sessions/*
-!var/sessions/.gitkeep
-!var/SymfonyRequirements.php
-/vendor/
-/web/bundles/
 spool/*
-web/pack-webmaster/*
-web/standalone/*
-/web/avatar/*
-/web/kamon/*
-/web/bundles/*
-/web/css/*
-/web/assetic/*
-/web/js/*
-/web/media/cache/*
+/public/pack-webmaster/*
+/public/standalone/*
+/public/avatar/*
+/public/kamon/*
+/public/bundles/*
+/public/css/*
+/public/assetic/*
+/public/js/*
 *.unity3d
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

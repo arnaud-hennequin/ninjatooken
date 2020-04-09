@@ -1,7 +1,0 @@
-ninja_tooken_chat_homepage:
-    path:  /chat/
-    defaults: { _controller: NinjaTookenChatBundle:Default:index }
-
-ninja_tooken_chat_ajax:
-    path:  /chat/ajax/
-    defaults: { _controller: NinjaTookenChatBundle:Default:ajax }

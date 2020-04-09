@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {{ 'menu.jouer'|trans({}, 'menu') }}{% endblock %}
+{% block description %}{{ 'description.meta.jouer'|trans }}{% endblock %}
+{% block keywords %}{{ 'keywords.meta.jouer'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_jouer') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.jouer'|trans({}, 'menu') }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<div class="row-fluid">
+					<section class="span9">
+						<div id="unityPlayer">
+							<div class="missing">
+								<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+									<img alt="Unity Web Player. Install now!" src="{{ asset('bundles/ninjatookencommon/images/getunity.png') }}" width="193" height="63" />
+								</a>
+							</div>
+						</div>
+						<script>
+						var unityLoader = "{{ asset('bundles/ninjatookengame/loader.unity3d') }}?url={{ asset('bundles/ninjatookengame/ninja-tooken-' ~ version ~ '.unity3d') }}";
+						</script>
+					</section>
+					<aside class="span3 module">
+						{% include 'common/pubAside.html.twig' %}
+					</aside>
+				</div>
+{% endblock %}

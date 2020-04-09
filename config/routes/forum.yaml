@@ -1,0 +1,81 @@
+ninja_tooken_message_old:
+    path:  /message.php
+    controller: App\Controller\ForumController::oldMessage
+
+ninja_tooken_forum_old:
+    path:  /forum.php
+    controller: App\Controller\ForumController::oldForum
+
+ninja_tooken_event:
+    path:  /event/{page}
+    controller: App\Controller\ForumController::event
+    defaults:
+        page: 1
+    requirements:
+        page:  \d*
+
+ninja_tooken_event_ajouter:
+    path:  /event/ajouter/
+    controller: App\Controller\ForumController::eventAjouter
+
+ninja_tooken_event_modifier:
+    path:  /event/{thread_nom}/modifier/
+    controller: App\Controller\ForumController::eventModifier
+
+ninja_tooken_forum:
+    path:  /forum
+    controller: App\Controller\ForumController::forum
+
+ninja_tooken_topic:
+    path:  /forum/{forum_nom}/{page}
+    controller: App\Controller\ForumController::topic
+    defaults:
+        page: 1
+    requirements:
+        page:  \d*
+
+ninja_tooken_thread_ajouter:
+    path:  /forum/{forum_nom}/ajouter/
+    controller: App\Controller\ForumController::threadAjouter
+
+ninja_tooken_thread:
+    path:  /forum/{forum_nom}/{thread_nom}/{page}
+    controller: App\Controller\ForumController::thread
+    defaults:
+        page: 1
+    requirements:
+        page:  \d*
+
+ninja_tooken_thread_modifier:
+    path:  /forum/{forum_nom}/{thread_nom}/modifier/
+    controller: App\Controller\ForumController::threadModifier
+
+ninja_tooken_thread_supprimer:
+    path:  /forum/{forum_nom}/{thread_nom}/supprimer/
+    controller: App\Controller\ForumController::threadSupprimer
+
+ninja_tooken_thread_verrouiller:
+    path:  /forum/{forum_nom}/{thread_nom}/lock/
+    controller: App\Controller\ForumController::threadVerrouiller
+
+ninja_tooken_thread_postit:
+    path:  /forum/{forum_nom}/{thread_nom}/postit/
+    controller: App\Controller\ForumController::threadPostit
+
+ninja_tooken_comment_ajouter:
+    path:  /forum/{forum_nom}/{thread_nom}/ajouter/{page}
+    controller: App\Controller\ForumController::commentAjouter
+    requirements:
+        page:  \d*
+
+ninja_tooken_comment_modifier:
+    path:  /forum/{forum_nom}/{thread_nom}/{comment_id}/modifier/{page}
+    controller: App\Controller\ForumController::commentModifier
+    requirements:
+        page:  \d*
+
+ninja_tooken_comment_supprimer:
+    path:  /forum/{forum_nom}/{thread_nom}/{comment_id}/supprimer/{page}
+    controller: App\Controller\ForumController::commentSupprimer
+    requirements:
+        page:  \d*

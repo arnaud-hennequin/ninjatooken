@@ -1,0 +1,99 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {{ 'menu.classement'|trans({}, 'menu') }}{% endblock %}
+{% block description %}{{ 'description.meta.classement'|trans }}{% endblock %}
+{% block keywords %}{{ 'keywords.meta.classement'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">{{ 'menu.jeu'|trans({}, 'menu') }}</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_game_classement') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.classement'|trans({}, 'menu') }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<div class="row-fluid">
+					<section class="span8 main">
+						<p>{{ 'description.classement'|trans({'%nombreNinja%': nombreNinja|number_format(0, '', '.'), '%experienceTotal%': experienceTotal|number_format(0, '', '.')}) }}</p>
+						<h3>{{ 'titre.ninjatooken'|trans }}</h3>
+
+						<div class="row-fluid">
+							<span class="span6">{{ 'ninjatooken.winner.utilisateur'|trans({'%urlUtilisateur%': path('ninja_tooken_user_old')})|raw }}</span>
+							<span class="span6">{{ 'ninjatooken.winner.tournoi'|trans({'%urlMessage%': path('ninja_tooken_message_old')})|raw }}</span>
+						</div>
+
+						<p><br>{{ 'ninjatooken.ancien'|trans }}</p>
+                        {% for i in 15..1 %}
+						<div class="row-fluid">
+							<span class="span6">{{ ('ninjatooken.ancienListe.winner' ~ i ~ '.utilisateur')|trans({'%urlUtilisateur%': path('ninja_tooken_user_old')})|raw }}</span>
+							<span class="span6">{{ ('ninjatooken.ancienListe.winner' ~ i ~ '.tournoi')|trans({'%urlMessage%': path('ninja_tooken_message_old')})|raw }}</span>
+						</div>
+                        {% endfor %}
+
+						<p></p>
+
+						<h3 id="classement">{{ 'menu.classement'|trans({}, 'menu') }}</h3>
+						{% if joueurs is not empty %}
+						<div class="row-fluid">
+							<span class="span2 offset4"><a href="{{ path('ninja_tooken_game_classement', {page:page}) }}?order=experience&filter={{ filter }}#classement">{% if order == "experience" %}<span class="icon-caret-down"></span> {% endif %}{{ 'filtre.classement.experience'|trans }}</a></span>
+							<span class="span2"><a href="{{ path('ninja_tooken_game_classement', {page:page}) }}?order=assassinnat&filter={{ filter }}#classement">{% if order == "assassinnat" %}<span class="icon-caret-down"></span> {% endif %}{{ 'filtre.classement.assassinat'|trans }}</a></span>
+							<span class="span2"><a href="{{ path('ninja_tooken_game_classement', {page:page}) }}?order=course&filter={{ filter }}#classement">{% if order == "course" %}<span class="icon-caret-down"></span> {% endif %}{{ 'filtre.classement.course'|trans }}</a></span>
+							<span class="span2">
+								<label class="select">
+									<select name="classe">
+										<option value="">{{ 'filtre.classement.tous'|trans }}</option>
+										{% for n,v in class %}
+										<option value="{{ n }}" class="{{ v|lower }}"{% if filter == n %} selected{% endif %}>{{ v }}</option>
+										{% endfor %}
+									</select>
+								</label>
+							</span>
+						</div>
+						{% for joueur in joueurs  %}
+						<div class="row-fluid">
+							<span class="span1">{{ loop.index + (nombre * (page-1)) }}</span>
+							<span class="span3"><a href="{{ path('ninja_tooken_user_fiche', {user_nom:joueur.user.slug}) }}" title="{{ joueur.user.username }}">{{ joueur.user.username }}</a></span>
+							<span class="span2">{{ joueur.experience|number_format(0, '', '.') }}</span>
+							<span class="span2">{{ joueur.missionAssassinnat|number_format(0, '', '.') }}</span>
+							<span class="span2">{{ joueur.missionCourse|number_format(0, '', '.') }}</span>
+							<span class="span2">{% if joueur.classe is not empty %}<span class="{{ ('class.' ~ joueur.classe)|trans({}, 'game')|lower }}">{{ ('class.' ~ joueur.classe)|trans({}, 'game') }}</span>{% endif %}</span>
+						</div>
+						{% endfor %}
+						{% include 'pagination.html.twig' with {
+							currentPage: page,
+							paginationPath: path('ninja_tooken_game_classement', {'page':''}),
+							paginationAfter: '?order=' ~ order ~ '&filter=' ~ filter ~ '#classement',
+							lastPage: nombrePage,
+							extremePagesLimit: 2,
+							nearbyPagesLimit: 3
+						} only %}
+						{% endif %}
+
+						<h3>{{ 'titre.repartition'|trans }}</h3>
+						<ul id="classe" class="pull-left">
+							{% for k,classe in classes %}
+							<li class="{{ ('class.' ~ k)|trans({}, 'game')|lower }}">{{ 'description.classe'|trans({'%classe%': ('class.' ~ k)|trans({}, 'game'), '%element%': ('element.' ~ k)|trans({}, 'game') }) }} <span class="num">{{ nombreNinja > 0 ? (classe/nombreNinja*100)|number_format(0,'','') : 0 }}</span>%</li>
+							{% endfor %}
+						</ul>
+					</section>
+					<aside class="span4">
+						<form action="{{ path('ninja_tooken_search') }}" method="post" accept-charset="utf-8" class="row-fluid">
+							<input type="text" name="q" value="{{ 'action.chercher'|trans({}, 'common') }}" class="span10">
+							<input type="submit" name="s" value="{{ 'action.ok'|trans({}, 'common') }}" class="span2">
+						</form>
+						
+						{{ render(controller('App\\Controller\\ForumController::recentComments', {'max': 10, 'forum': 0})) }}
+
+						{% include 'common/pubAside.html.twig' %}
+
+						{% include 'common/partenaires.html.twig' %}
+					</aside>
+				</div>
+{% endblock %}

@@ -1,6 +1,0 @@
-parameters:
-#    ninja_tooken_game.example.class: NinjaTooken\GameBundle\Example
-
-services:
-    ninjatooken_game.gamedata:
-        class: NinjaTooken\GameBundle\Utils\GameData

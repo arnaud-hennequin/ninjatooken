@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {{ 'menu.technique'|trans({}, 'menu') }}{% endblock %}
+{% block description %}{{ 'description.meta.faq.technique'|trans }}{% endblock %}
+{% block keywords %}{{ 'keywords.meta.faq.technique'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">{{ 'menu.faq'|trans({}, 'menu') }}</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_faq_technique') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.technique'|trans({}, 'menu') }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<div class="row-fluid">
+					<section class="span8 main">
+                        {% set urlParametre = path('ninja_tooken_user_parametres') %}
+                        {% set urlManuel = path('ninja_tooken_manuel') %}
+                        {% set urlContact = path('ninja_tooken_contact') %}
+                        {% for i in 7..14 %}
+                            <h3 id="q{{ i }}">{{ ('faq.question' ~ i)|trans }}</h3>
+                            <p>{{ ('faq.reponse' ~ i)|trans({'%urlParametre%': urlParametre, '%urlContact%': urlContact, '%urlManuel%': urlManuel})|raw }}</p>
+                        {% endfor %}
+					</section>
+					<aside class="span4">
+						<section>
+							<ul>
+                            {% for i in 7..14 %}
+								<li><a href="#q{{ i }}">{{ ('faq.question' ~ i)|trans }}</a></li>
+                            {% endfor %}
+							</ul>
+						</section>
+
+						{% include 'common/pubAside.html.twig' %}
+
+						{% include 'common/partenaires.html.twig' %}
+					</aside>
+				</div>
+{% endblock %}

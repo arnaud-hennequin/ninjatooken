@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - {{ 'menu.forum'|trans({}, 'menu') }}{% endblock %}
+{% block description %}{{ 'description.meta.forum'|trans }}{% endblock %}
+{% block keywords %}{{ 'keywords.meta.forum'|trans }}{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">{{ 'menu.communaute'|trans({}, 'menu') }}</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_forum') }}" itemprop="url">
+									<span itemprop="title">{{ 'menu.forum'|trans({}, 'menu') }}</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<section class="forum">
+				{% for forum in forums %}
+					<h4 class="pull-left"><a href="{{ path('ninja_tooken_topic', {forum_nom:forum.slug}) }}">{{ forum.nom }}</a></h4>
+					<span class="numComments"><i class="icon-comment"></i> {{ 'titre.topic'|transchoice(forum.numThreads, {}) }}</span>
+					{% if is_granted("ROLE_USER") and (forum.canUserCreateThread or is_granted("ROLE_ADMIN") or is_granted("ROLE_MODERATOR")) %}
+						<a href="{{ path('ninja_tooken_thread_ajouter', {forum_nom:forum.slug}) }}" class="button pull-right">{{ 'action.newThread'|trans }}</a>
+					{% endif %}
+					<br class="clear">
+					{% for thread in forum.threads %}
+					{% include 'forum/topicListe.html.twig' %}
+					{% endfor %}
+				{% endfor %}
+				</section>
+{% endblock %}

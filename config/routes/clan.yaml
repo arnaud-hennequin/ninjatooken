@@ -1,0 +1,64 @@
+ninja_tooken_clans:
+    path:  /clan/{page}
+    controller: App\Controller\ClanController::liste
+    defaults:
+        page: 1
+    requirements:
+        page:  \d*
+
+ninja_tooken_clan:
+    path:  /clan/{clan_nom}
+    controller: App\Controller\ClanController::clan
+
+ninja_tooken_clan_ajouter:
+    path:  /clan-ajouter
+    controller: App\Controller\ClanController::clanAjouter
+
+ninja_tooken_clan_modifier:
+    path:  /clan/{clan_nom}/modifier
+    controller: App\Controller\ClanController::clanModifier
+
+ninja_tooken_clan_supprimer:
+    path:  /clan/{clan_nom}/supprimer
+    controller: App\Controller\ClanController::clanSupprimer
+
+ninja_tooken_clan_editer_switch:
+    path:  /clan-editer-switch/{user_nom}
+    controller: App\Controller\ClanController::clanEditerSwitch
+
+ninja_tooken_clan_destituer:
+    path:  /clan-destituer/{user_nom}
+    controller: App\Controller\ClanController::clanUtilisateurSupprimer
+
+ninja_tooken_clan_destituer_shishou:
+    path:  /clan-destituer-shishou/{user_nom}
+    controller: App\Controller\ClanController::clanUtilisateurSupprimerShishou
+
+ninja_tooken_clan_recruter:
+    path:  /compte/clan
+    controller: App\Controller\ClanController::clanUtilisateurRecruter
+
+ninja_tooken_clan_recruter_accepter:
+    path:  /compte/clan/accepter/{user_nom}/{recruteur_nom}
+    controller: App\Controller\ClanController::clanUtilisateurRecruterAccepter
+
+ninja_tooken_clan_recruter_refuser:
+    path:  /compte/clan/refuser/{user_nom}/{recruteur_nom}
+    controller: App\Controller\ClanController::clanUtilisateurRecruterRefuser
+
+ninja_tooken_clan_recruter_supprimer:
+    path:  /compte/clan/{user_nom}/supprimer
+    controller: App\Controller\ClanController::clanUtilisateurRecruterSupprimer
+
+ninja_tooken_clan_recruter_ajouter:
+    path:  /compte/clan/{user_nom}
+    controller: App\Controller\ClanController::clanUtilisateurRecruterAjouter
+
+
+ninja_tooken_clan_postuler:
+    path:  /clan-postuler/{clan_nom}
+    controller: App\Controller\ClanController::clanUtilisateurPostuler
+
+ninja_tooken_clan_postuler_supprimer:
+    path:  /clan-postuler-supprimer/{clan_nom}
+    controller: App\Controller\ClanController::clanUtilisateurPostulerSupprimer

@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - Chat{% endblock %}
+{% block description %}Le chat de NinjaTooken, pour se retrouver, déconner, organiser les tournois : accessible par les membres seulement !{% endblock %}
+{% block keywords %}NinjaTooken, shinobi, ninja, chat, fps, gratuit, online, free{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">Communauté</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_chat') }}" itemprop="url">
+									<span itemprop="title">Chat</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+				<iframe src="chat/chat.html" class="chat"></iframe>
+{% endblock %}

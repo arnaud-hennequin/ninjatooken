@@ -1,0 +1,31 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}NinjaTooken - Chat{% endblock %}
+{% block description %}Le chat de NinjaTooken, pour se retrouver, déconner, organiser les tournois : accessible par les membres seulement !{% endblock %}
+{% block keywords %}NinjaTooken, shinobi, ninja, chat, fps, gratuit, online, free{% endblock %}
+
+{% block breadcrumbs1 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<span itemprop="title">Communauté</span>
+							</span>
+{% endblock %}
+
+{% block breadcrumbs2 %}
+							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+								<a href="{{ path('ninja_tooken_chat_homepage') }}" itemprop="url">
+									<span itemprop="title">Chat</span>
+								</a>
+							</span>
+{% endblock %}
+
+{% block body %}
+              {% if twitchOnline %}
+              <div class="row-fluid">
+                <div class="span12">
+                  <h2><a href="http://www.twitch.tv/{{ channelName }}" target="_blank">{{ channelTitle }} - {{ streamTitle }}</a></h2>
+                  <object type="application/x-shockwave-flash" height="378" width="620" data-ratio="0.60967741935483870967741935483871" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel={{ channelName }}" bgcolor="#000000"><param name="allowFullScreen" value="true" /><param name="allowScriptAccess" value="always" /><param name="allowNetworking" value="all" /><param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" /><param name="flashvars" value="hostname=www.twitch.tv&channel={{ channelName }}&auto_play=true&start_volume=25" /></object>
+                </div>
+              </div>
+              {% endif %}
+							<iframe src="{{ path('ninja_tooken_chat_ajax') }}" class="chat"></iframe>
+{% endblock %}
