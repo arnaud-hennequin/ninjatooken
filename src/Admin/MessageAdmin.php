@@ -2,13 +2,13 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class MessageAdmin extends Admin
+class MessageAdmin extends AbstractAdmin
 {
     protected $parentAssociationMapping = 'author';
 
@@ -20,7 +20,7 @@ class MessageAdmin extends Admin
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('nom', null, array('label' => 'Nom'))
@@ -31,7 +31,7 @@ class MessageAdmin extends Admin
     /**
      * @param ListMapper $listMapper
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('nom', null, array('label' => 'Nom'));
@@ -55,7 +55,7 @@ class MessageAdmin extends Admin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild())
             $formMapper->add('author', 'sonata_type_model_list', array(
@@ -108,7 +108,7 @@ class MessageAdmin extends Admin
     /**
      * @param ShowMapper $showMapper
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('id')

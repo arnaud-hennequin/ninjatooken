@@ -29,7 +29,7 @@
 												<span itemprop="name">{{ thread.author.username }}</span>
 											</a>
 										</span>
-										<time itemprop="datePublished" datetime="{{ thread.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': thread.dateAjout|localizeddate('full', 'none', app.request.locale), '%time%': thread.dateAjout|localizeddate('none', 'short', app.request.locale)}, 'common') }}</time><br>
+										<time itemprop="datePublished" datetime="{{ thread.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': thread.dateAjout|format_date('full', locale=app.request.locale), '%time%': thread.dateAjout|format_time('short', locale=app.request.locale)}, 'common') }}</time><br>
 										<h3 itemprop="headline">{{ thread.nom }}</h3>
 									</header>
 									<div class="content" itemprop="articleBody">

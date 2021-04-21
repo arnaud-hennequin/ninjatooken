@@ -2,39 +2,13 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 
-class DetectionAdmin extends Admin
+class DetectionAdmin extends AbstractAdmin
 {
 
-    protected function configureRoutes(RouteCollection $collection)
-    {
-        $collection->clearExcept(array('list'));
-    }
-
-    public function getBaseRouteName()
-    {
-        $matches = array('ninjatooken', 'user', 'detection');
-
-        if ($this->isChild()) { // the admin class is a child, prefix it with the parent route name
-            $this->baseRouteName = sprintf('%s_%s',
-                $this->getParent()->getBaseRouteName(),
-                $this->urlize($matches[2])
-            );
-        } else {
-
-            $this->baseRouteName = sprintf('admin_%s_%s_%s',
-                $this->urlize($matches[0]),
-                $this->urlize($matches[1]),
-                $this->urlize($matches[2])
-            );
-        }
-
-        return $this->baseRouteName;
-    }
-
-    public function getBaseRoutePattern()
+   /* function __construct()
     {
         $matches = array('ninjatooken', 'user', 'detection');
 
@@ -43,6 +17,10 @@ class DetectionAdmin extends Admin
                 $this->getParent()->getBaseRoutePattern(),
                 $this->urlize($matches[2], '-')
             );
+            $this->baseRouteName = sprintf('%s_%s',
+                $this->getParent()->getBaseRouteName(),
+                $this->urlize($matches[2])
+            );
         } else {
 
             $this->baseRoutePattern = sprintf('/%s/%s/%s',
@@ -50,8 +28,18 @@ class DetectionAdmin extends Admin
                 $this->urlize($matches[1], '-'),
                 $this->urlize($matches[2], '-')
             );
-        }
 
-        return $this->baseRoutePattern;
+            $this->baseRouteName = sprintf('admin_%s_%s_%s',
+                $this->urlize($matches[0]),
+                $this->urlize($matches[1]),
+                $this->urlize($matches[2])
+            );
+        }
+    }*/
+
+    protected function configureRoutes(RouteCollectionInterface $collection): void
+    {
+        $collection->clearExcept(array('list'));
     }
+
 }

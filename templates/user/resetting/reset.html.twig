@@ -1,4 +1,4 @@
-{% extends "::layout.html.twig" %}
+{% extends "layout.html.twig" %}
 
 {% block title %}NinjaTooken - {{ 'compte.reset.titre'|trans({}, 'common') }}{% endblock %}
 {% block description %}{{ 'compte.reset.meta.description'|trans({}, 'common') }}{% endblock %}
@@ -8,7 +8,7 @@
 
 {% block breadcrumbs2 %}
 							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-								<a href="{{ path('fos_user_resetting_request') }}" itemprop="url">
+								<a href="{{ path('ninja_tooken_user_resetting_request') }}" itemprop="url">
 									<span itemprop="title">{{ 'compte.reset.titre'|trans({}, 'common') }}</span>
 								</a>
 							</span>
@@ -18,15 +18,15 @@
 		{% for type, messages in app.session.flashBag.all %}
 		    {% for message in messages %}
 			<div class="flash-notice">
-			    {{ message|trans({}, 'FOSUserBundle') }}
+			    {{ message|trans({}, 'user') }}
 			</div>
 		    {% endfor %}
 		{% endfor %}
-		<form action="{{ path('fos_user_resetting_reset', {'token': token}) }}" {{ form_start(form) }} method="POST" class="full">
+		<form action="{{ path('ninja_tooken_user_resetting_reset', {'token': token}) }}" {{ form_start(form) }} method="POST" class="full">
 			{{ form_widget(form) }}
 			<div class="row-fluid">
 				<div class="span8 offset4">
-					<input type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'FOSUserBundle') }}" class="button">
+					<input type="submit" value="{{ 'resetting.reset.submit'|trans({}, 'user') }}" class="button">
 				</div>
 			</div>
 		</form>

@@ -2,20 +2,20 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ClanPropositionAdmin extends Admin
+class ClanPropositionAdmin extends AbstractAdmin
 {
     protected $parentAssociationMapping = 'recruteur';
 
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('dateAjout')
@@ -27,7 +27,7 @@ class ClanPropositionAdmin extends Admin
     /**
      * @param ListMapper $listMapper
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('id');
@@ -53,7 +53,7 @@ class ClanPropositionAdmin extends Admin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild())
             $formMapper->add('recruteur', 'sonata_type_model_list', array(
@@ -90,7 +90,7 @@ class ClanPropositionAdmin extends Admin
     /**
      * @param ShowMapper $showMapper
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('id')

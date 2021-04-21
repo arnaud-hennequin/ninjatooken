@@ -2,14 +2,14 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
 
-class CommentUserAdmin extends Admin
+class CommentUserAdmin extends AbstractAdmin
 {
     protected $parentAssociationMapping = 'author';
 
@@ -18,28 +18,7 @@ class CommentUserAdmin extends Admin
         '_sort_by' => 'dateAjout'
     );
 
-    public function getBaseRouteName()
-    {
-        $matches = array('ninjatooken', 'user', 'comment');
-
-        if ($this->isChild()) { // the admin class is a child, prefix it with the parent route name
-            $this->baseRouteName = sprintf('%s_%s',
-                $this->getParent()->getBaseRouteName(),
-                $this->urlize($matches[2])
-            );
-        } else {
-
-            $this->baseRouteName = sprintf('admin_%s_%s_%s',
-                $this->urlize($matches[0]),
-                $this->urlize($matches[1]),
-                $this->urlize($matches[2])
-            );
-        }
-
-        return $this->baseRouteName;
-    }
-
-    public function getBaseRoutePattern()
+    /*function __construct()
     {
         $matches = array('ninjatooken', 'user', 'comment');
 
@@ -48,6 +27,10 @@ class CommentUserAdmin extends Admin
                 $this->getParent()->getBaseRoutePattern(),
                 $this->urlize($matches[2], '-')
             );
+            $this->baseRouteName = sprintf('%s_%s',
+                $this->getParent()->getBaseRouteName(),
+                $this->urlize($matches[2])
+            );
         } else {
 
             $this->baseRoutePattern = sprintf('/%s/%s/%s',
@@ -55,13 +38,16 @@ class CommentUserAdmin extends Admin
                 $this->urlize($matches[1], '-'),
                 $this->urlize($matches[2], '-')
             );
+            $this->baseRouteName = sprintf('admin_%s_%s_%s',
+                $this->urlize($matches[0]),
+                $this->urlize($matches[1]),
+                $this->urlize($matches[2])
+            );
         }
-
-        return $this->baseRoutePattern;
-    }
+    }*/
 
     //Fields to be shown on create/edit forms
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         $admin = $formMapper->getAdmin();
         $current = $admin->getSubject();
@@ -100,7 +86,7 @@ class CommentUserAdmin extends Admin
     }
 
     //Fields to be shown on filter forms
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('body')
@@ -108,7 +94,7 @@ class CommentUserAdmin extends Admin
     }
 
     //Fields to be shown on lists
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
 
         $listMapper

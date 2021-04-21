@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Util\StringUtils;
@@ -18,8 +18,9 @@ use App\Entity\User\Capture;
 use App\Entity\User\Ip;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
+use App\Utils\GameData;
 
-class UnityController extends Controller
+class UnityController extends AbstractController
 {
     private $time;
     private $crypt;
@@ -28,7 +29,7 @@ class UnityController extends Controller
     private $gameversion;
     private $idUtilisateur;
 
-    public function update(Request $request)
+    public function update(Request $request, GameData $gameData)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -41,9 +42,9 @@ class UnityController extends Controller
             $session = $this->get('session');
             $this->phpsessid = $session->getName()."=".$session->getId();
 
-            $this->gameversion = $this->container->getParameter('unity.version');
+            $this->gameversion = $this->getParameter('unity.version');
             $this->idUtilisateur = $user->getId();
-            $this->cryptUnity = $this->container->getParameter('unity.crypt');
+            $this->cryptUnity = $this->getParameter('unity.crypt');
 
 	        $data	= '0';
 
@@ -63,7 +64,6 @@ class UnityController extends Controller
 						if($this->isCryptingOk($a.$l)){
                             $grade	= explode(":", $l);
 							if(count($grade)==2){
-                                $gameData = $this->get('ninjatooken_game.gamedata');
                                 $doc = $gameData->getDocument();
 								$max = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x')->item(99)->getAttribute('val');
 								if($ninja->getExperience() - $ninja->getGrade()*$max>$max){
@@ -517,7 +517,7 @@ class UnityController extends Controller
                     case"i":
                         $fileupload = $request->get('fileupload');
 						if($this->isCryptingOk($a)){
-                            $imgur = $this->container->getParameter('imgur');
+                            $imgur = $this->getParameter('imgur');
 							$ch = curl_init();
 							curl_setopt($ch, CURLOPT_HEADER, 0);
 							curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -684,7 +684,7 @@ class UnityController extends Controller
         return new Response("0", 200, array('Content-Type' => 'text/plain'));
     }
 
-    public function connect(Request $request)
+    public function connect(Request $request, GameData $gameData)
     {
         // initialisation
         $content = "<"."?xml version=\"1.0\" encoding=\"UTF-8\""."?><root>";
@@ -698,8 +698,8 @@ class UnityController extends Controller
         $session = $this->get('session');
         $this->phpsessid = $session->getName()."=".$session->getId();
 
-        $this->gameversion = $this->container->getParameter('unity.version');
-        $this->cryptUnity = $this->container->getParameter('unity.crypt');
+        $this->gameversion = $this->getParameter('unity.version');
+        $this->cryptUnity = $this->getParameter('unity.crypt');
         $this->idUtilisateur = 0;
 
         // variables postées
@@ -728,7 +728,7 @@ class UnityController extends Controller
                     // vérifie que le mot de passe est ok
                     if(StringUtils::equals($password, $user->getPassword() )){
                         // lance la connexion
-                        $token = new UsernamePasswordToken($user, $user->getPassword(), $this->container->getParameter('fos_user.firewall_name'), $user->getRoles());
+                        $token = new UsernamePasswordToken($user, $user->getPassword(), $this->getParameter('ninja_tooken_user.firewall_name'), $user->getRoles());
                         $this->get('security.token_storage')->setToken($token);
                         $event = new InteractiveLoginEvent($request, $token);
                         $this->get("event_dispatcher")->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $event);
@@ -738,7 +738,6 @@ class UnityController extends Controller
         }
 
         // chargement du xml des données du jeu
-        $gameData = $this->get('ninjatooken_game.gamedata');
         $doc = $gameData->getDocument();
         $xpXML = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
         $XP_LEVEL_100 = $xpXML->item($xpXML->length-2)->getAttribute('val');
@@ -821,14 +820,6 @@ class UnityController extends Controller
         $content .= implode("", $friendsUsername);
         $content .= '</friends>';
         $content .= preg_replace('/\r\n|\r|\n|\t|\s\s+/m','',$gameData->getRaw());
-
-        $facebook = $this->get('fos_facebook.api');
-        $scope = implode(',', $this->container->getParameter('fos_facebook.permissions'));
-        $facebookUri	= $facebook->getLoginUrl(array('display'=>'popup', 'scope'=> $scope, 'redirect_uri'=> $this->generateUrl('_security_check_facebook', array(), true)));
-        $facebookUriS	= $facebook->getLoginUrl(array('display'=>'page', 'scope'=> $scope, 'redirect_uri'=> $this->generateUrl('_security_check_facebook', array(), true)));
-
-        $content .= "<facebook><![CDATA[".$facebookUri."]]></facebook>";
-        $content .= "<facebookS><![CDATA[".$facebookUriS."]]></facebookS>";
         $content .= "<retour>".$retour."</retour>";
         $content .= "</root>";
 

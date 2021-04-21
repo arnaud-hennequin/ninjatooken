@@ -2,6 +2,7 @@
 
 namespace App\Entity\Clan;
 
+use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

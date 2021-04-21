@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Utils\GameData;
 use App\Entity\User\User;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
 
-class GameController extends Controller
+class GameController extends AbstractController
 {
     public function parties()
     {
@@ -18,12 +19,8 @@ class GameController extends Controller
         ));
     }
 
-    public function calculateur()
+    public function calculateur(TranslatorInterface $translator, GameData $gameData)
     {
-        $translator = $this->get('translator');
-
-        $gameData = $this->get('ninjatooken_game.gamedata');
-
         $level = 0;
         $classe = "suiton";
         // les données du joueur connecté
@@ -39,7 +36,7 @@ class GameController extends Controller
                     $gameData->setExperience($ninja->getExperience(), $ninja->getGrade());
                     $level = $gameData->getLevelActuel();
 
-                    $classeP = $this->container->getParameter('class');
+                    $classeP = $this->getParameter('class');
                     $classe = strtolower($classeP[$c]);
                 }
             }
@@ -328,7 +325,7 @@ class GameController extends Controller
         return $this->render('game/calculateur.html.twig', array(
             'capacites' => $capacites,
             'aptitudes' => $aptitudes,
-            'classes' => $this->container->getParameter('class'),
+            'classes' => $this->getParameter('class'),
             'levelUp' => $levelUp,
             'level' => $level,
             'classe' => $classe
@@ -337,7 +334,7 @@ class GameController extends Controller
 
     public function classement(Request $request, $page)
     {
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
         $order = $request->get('order');
@@ -350,7 +347,7 @@ class GameController extends Controller
 
         $total = $repo->getNumNinjas();
 
-        $classe = $this->container->getParameter('class');
+        $classe = $this->getParameter('class');
         foreach($classe as $k=>$v){
             $classeNum[$k] = $repo->getNumNinjas($k);
         }
@@ -375,13 +372,11 @@ class GameController extends Controller
         ));
     }
 
-    public function signature(User $user)
+    public function signature(User $user, GameData $gameData)
     {
         $ninja = $user->getNinja();
 
         if($ninja){
-            $gameData = $this->get('ninjatooken_game.gamedata');
-
             // l'expérience (et données associées)
             $gameData->setExperience($ninja->getExperience(), $ninja->getGrade());
 

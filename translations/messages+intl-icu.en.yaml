@@ -51,16 +51,16 @@ action:
     enregistrer: Save
     suppression: Deletion
     modifier: Edition
-    facebook: ... %bouton% with Facebook is good for me!
+    facebook: ... {bouton} with Facebook is good for me!
 titre:
     event: The NinjaTooken's events 
     eventDate: "Event's date :"
     dernierMessage: Latest posts
-    topic: "%count% topic|]1,+Inf]%count% topics"
-    comment: "%count% comment|]1,+Inf]%count% comments"
+    topic: "{count, plural, =0 {no topic} one {one topic} other {# topics}}"
+    comment: "{count, plural, =0 {no comment} one {one comment} other {# comments}}"
     dernier: last
     partieActuelle: Ongoing Games
-    ninjatooken: The \"NinjaTooken\"
+    ninjatooken: The "NinjaTooken"
     repartition: Class distributions
 keywords:
     meta:
@@ -103,20 +103,20 @@ description:
         classement: NinjaTooken's shinobi are here referenced in a great codex, allowing you to know the ranking of each!
         partie: The games currently played in Ninja Tooken are directly accessible here!
     noPartie: No games yet.
-    classement: "NinjaTooken it's %nombreNinja% players who accumulated %experienceTotal% experience points!"
-    classe: '%classe%, the art of manipulating the element %element%'
-    partie: '"%type%" game, %version% version'
-    position: "on %count% ninjas"
-    threadList: "Topics of \"%forum%\", it's here for your free fps ninja game."
+    classement: "NinjaTooken it's {nombreNinja} players who accumulated {experienceTotal} experience points!"
+    classe: '{classe}, the art of manipulating the element {element}'
+    partie: '"{type}" game, {version} version'
+    position: "on {count} ninjas"
+    threadList: "Topics of \"{forum}\", it's here for your free fps ninja game."
     event: "Tournaments, streams, competitions: this is where it happens!"
     noEvent: There are currently no events.
     canvas: Your browser doesn't support "canvas".
-    chercherTopic: '%count% topic found for "%q%"|]1,+Inf]%count% topics found for "%q%"'
-    chercherUtilisateur: '%count% user found for "%q%".|]1,+Inf]%count% users found for "%q%".'
-    chercherClan: '%count% clan found for "%q%".|]1,+Inf]%count% clans found for "%q%".'
-    entete: "%count% ninja since %date%|]1,+Inf]%count% ninjas since %date%"
-    creation: "the %date%"
-    fonde: "Founded the %date%"
+    chercherTopic: "{count, plural, =0 {no topic} one {one topic} other {# topics}} found for \"{q}\""
+    chercherUtilisateur: "{count, plural, =0 {no user} one {one user} other {# users}} found for \"{q}\""
+    chercherClan: "{count, plural, =0 {no clan} one {one clan} other {# clans}} found for \"{q}\""
+    entete: "{count, plural, =0 {no ninja} one {one ninja} other {# ninjas}} since {date}"
+    creation: "the {date}"
+    fonde: "Founded the {date}"
     perso: "Perso page :"
     organisation: Clan organization
     partenaire: Partners
@@ -127,9 +127,9 @@ description:
         message: This message doesn't exist!
         forum: This forum doesn't exist!
     recrutement:
-        clan: You are currently %rang% in <a href="%urlClan%">%nomClan%</a>.
+        clan: You are currently {rang} in <a href="{urlClan}">{nomClan}</a>.
         recrutementPossible: As such, you can offer to other players to join the protectorate of your clan ...
-        noClan: You're not part of a clan. You can apply in a <a href="%urlClan%">clan of your choice</a> and wait for recruitments proposal or you can <a href="%urlClanCreer%">create a clan</a>.
+        noClan: You're not part of a clan. You can apply in a <a href="{urlClan}">clan of your choice</a> and wait for recruitments proposal or you can <a href="{urlClanCreer}">create a clan</a>.
         ouvert: recruitments open
         ferme: recruitments closed
         liste: Recruitments you propose
@@ -186,9 +186,9 @@ notice:
     avatarModifierOk: Your avatar has been updated.
     mailConfirmationOk: A confirmation email has been sent.
     motPasseModifierOk: Your password has been changed.
-    amiAjoutOk: "%utilisateur% is now part of your friends."
-    amiBlockOk: "%utilisateur% is now blocked."
-    amiUnblockOk: "%utilisateur% is unblocked."
+    amiAjoutOk: "{utilisateur} is now part of your friends."
+    amiBlockOk: "{utilisateur} is now blocked."
+    amiUnblockOk: "{utilisateur} is unblocked."
     amiSupprimerOk: Deletion successfully done.
     amiSupprimerAllOk: Deletion successfully done.
     captureSupprimerOk: The screenshot has been removed
@@ -199,8 +199,8 @@ mail:
         nouveau:
             sujet: Recruitment proposal
             contenu: |
-                <p>A recruitment proposal has been addressed by <a href="%userUrl%">%userPseudo%</a>.<br/>
-                <a href="%urlRefuser%" class="button small delete">Decline</a> or <a href="%urlAccepter%" class="button small delete">Accept</a></p>
+                <p>A recruitment proposal has been addressed by <a href="{userUrl}">{userPseudo}</a>.<br/>
+                <a href="{urlRefuser}" class="button small delete">Decline</a> or <a href="{urlAccepter}" class="button small delete">Accept</a></p>
         refuser:
             sujet: "Re : Recruitment proposal"
             contenu: Declined :/
@@ -209,9 +209,9 @@ mail:
             contenu: Accepted !!
     desinscription:
         message: If you do not want to receive further email from Ninja Tooken,
-    newMessage: "You just received a new message from %user%:"
+    newMessage: "You just received a new message from {user}:"
 forum:
-    numThread: "%count% topic|%count% topics"
+    numThread: "{count, plural, one {one topic} other {# topics}}"
     newThread: New topic
     noThread: No topic yet.
 label:
@@ -271,12 +271,12 @@ faq:
     question7: How to change the character name, or to delete my account?
     reponse7: |
         Once your account is created, you can change up to five times your nickname (and switch between each). All nicks that you use will be listed in your profile!<br>
-        To delete your account, you just have to go to your <a href="%urlParametre%">parameters</a> and to click the button "deletion" which is at the bottom of the page. Take care, the deletion is definitive and your character cannot be given back.
+        To delete your account, you just have to go to your <a href="{urlParametre}">parameters</a> and to click the button "deletion" which is at the bottom of the page. Take care, the deletion is definitive and your character cannot be given back.
     question8: Why I have a blank page and then nothing?
     reponse8: |
         First look if you have correctly installed the plugin unity3D available <a href="http://unity3d.com/webplayer/" target="_blank">here</a> (the installation is fast and does not require to reboot the browser).<br>
         Then verify that you can indeed see the <a href="http://unity3d.com/gallery/live-demos/index.html#tropical-paradise" target="_blank">Unity3d's demo</a>.<br>
-        If yes, goes on <a href="http://www.m2h.nl/files/HWstats.html" target="_blank">this page</a>, then copy and paste the contents in the forum "<a href="%oldForum%?ID=65">Improvement and Bug</a>". Try to be precise in the description of your problem, and before posting look if somebody has already had the same problem. We shall can help you,so that you can join us in the game !<br>
+        If yes, goes on <a href="http://www.m2h.nl/files/HWstats.html" target="_blank">this page</a>, then copy and paste the contents in the forum "<a href="{oldForum}?ID=65">Improvement and Bug</a>". Try to be precise in the description of your problem, and before posting look if somebody has already had the same problem. We shall can help you,so that you can join us in the game !<br>
         Otherwise, verify that the drivers of your graphics board are indeed updated, or try to go on the game with another browser!
     question9: The game is loading then suddenly stop before 100%, What can I do?
     reponse9: |
@@ -300,7 +300,7 @@ faq:
         <ul>
             <li><span>You have not validated your user account yet: an e-mail must be sent to you containing a link of validation. Click it, and connect!</span></li>
             <li><span>If you forgot your password, you just have to click the link at the top of page "forgotten password?", a new password will be sent to you with an e-mail.</span></li>
-            <li><span>Your nickname or your password contains characters which aren't Latin (you wanted to show off by writing in Japanese?). To correct the problem, <a href="%urlContact%" title="contact us">contact us</a>!</span></li>
+            <li><span>Your nickname or your password contains characters which aren't Latin (you wanted to show off by writing in Japanese?). To correct the problem, <a href="{urlContact}" title="contact us">contact us</a>!</span></li>
             <li><span>The server is overloaded: no miracles, you have to wait!</span></li>
         </ul>
     question12: The game is lagging, what can I do ?
@@ -312,7 +312,7 @@ faq:
     question13: The game is slowing down, what can I do ?
     reponse13: |
         If the game is slowing down, you can decrease the graphic quality of the game in the menu: "options" then "graphs".<br>
-        More information is available in <a href="%urlManuel%#parametrage-video" title="parameter setting of the video and the sound">the textbook of the ninja: "parameter setting of the video and the sound"</a>.<br>
+        More information is available in <a href="{urlManuel}#parametrage-video" title="parameter setting of the video and the sound">the textbook of the ninja: "parameter setting of the video and the sound"</a>.<br>
         You can also reduce the resolution to improve system performance in "full screen".
     question14: When i'm playing, the mouse does not answer any more, what can I do?
     reponse14: |
@@ -325,7 +325,7 @@ guide:
             nom: General Description
             description: |
                 Ninja Tooken transports you into a universe where ninjas are merciless. The game’s purpose? Kill them ALL !!<br><br>
-                To begin, <a href="%urlRegister%">create your account</a>. Then, choose your ninja class: Katon (the fire), Suiton (the water), Futon (the wind), Doton (the earth), Raiton (the lightning).<br>
+                To begin, <a href="{urlRegister}">create your account</a>. Then, choose your ninja class: Katon (the fire), Suiton (the water), Futon (the wind), Doton (the earth), Raiton (the lightning).<br>
                 Then, the principle is simple: the more you kill, the more you’ll gain experience.<br>
                 These points will allow you to develop your ninja according to your class.<br><br>
                 But be careful: every element has his worst enemy. For example, if you belong to Katon, distrust especially Suitons.
@@ -639,7 +639,7 @@ guide:
                     Each classes is dominant on another one. It means that a ninja will deal more damages to an opposite class ninja.<br>
                     For example a Suiton ninja will deal 20% more damage to a Katon ninja. But the ninja Katon will also make that rate of damage to a Futon ninja. Here is a graph illustrating the ascendancies :<br>
                     <br>
-                    Do not forget that you can see the percentages of ninja of every class at the homepage bottom. Choose wisely your class according to the classes already present in the game. If there is 50% of Doton ninjas, you’d rather choose Raiton !<br>
+                    Do not forget that you can see the percentages of ninja of every class at the bottom of the classement page. Choose wisely your class according to the classes already present in the game. If there is 50% of Doton ninjas, you’d rather choose Raiton !<br>
                     <br><br>
                     As said in the introduction, each class have two specific jutsus. These jutsus are probably going to determine your class choice.
                 description2: |
@@ -680,7 +680,7 @@ guide:
             nom: Requests of Improvements and bugs
             description: |
                 You play for a long time now, and you have noticed bugs, or you have ideas to improve the game ?<br>
-                You just have to send us a message here : <a href="%urlForum%" title="improvement and bug">Forum : improvement and bugs</a>
+                You just have to send us a message here : <a href="{urlForum}" title="improvement and bug">Forum : improvement and bugs</a>
 mention:
     partie1:
         nom: Agreement of confidentiality
@@ -750,7 +750,7 @@ team:
     description: |
         Ninja Tooken, it's ninjas and shurikens, but also ...
     description1: |
-        For any questions, don't hesitate to <a href="%urlContact%" title="contact us">contact us</a>!
+        For any questions, don't hesitate to <a href="{urlContact}" title="contact us">contact us</a>!
     partie1:
         nom: 3D graphics
     partie2:
@@ -890,57 +890,57 @@ ninjatooken:
     ancien: "The ancients NinjaTooken :"
     ancienListe:
         winner15:
-            utilisateur: <a href="%urlUtilisateur%?ID=128628">Ryaxta</a>
-            tournoi: winner the <a href="%urlMessage%?ID=302936">27 of october, 2013</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=128628">Ryaxta</a>
+            tournoi: winner the <a href="{urlMessage}?ID=302936">27 of october, 2013</a>
         winner14:
             utilisateur: <a href="/en/fiche/delton">-Delton-</a>
-            tournoi: winner <a href="%urlMessage%?ID=272352">12 of may 2013</a>, and <a href="%urlMessage%?ID=290784">18 of august 2013</a></span>
+            tournoi: winner <a href="{urlMessage}?ID=272352">12 of may 2013</a>, and <a href="{urlMessage}?ID=290784">18 of august 2013</a></span>
         winner13:
-            utilisateur: <a href="%urlUtilisateur%?ID=36758">Pein-rikoudu</a>, <a href="%urlUtilisateur%?ID=66114">Horoshimaru</a> and <a href="%urlUtilisateur%?ID=107657">Suikeii</a>
-            tournoi: winners <a href="%urlMessage%?ID=245781">10 of february, 2013</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=36758">Pein-rikoudu</a>, <a href="{urlUtilisateur}?ID=66114">Horoshimaru</a> and <a href="{urlUtilisateur}?ID=107657">Suikeii</a>
+            tournoi: winners <a href="{urlMessage}?ID=245781">10 of february, 2013</a>
         winner12:
             utilisateur: Rw_light
-            tournoi: winner <a href="%urlMessage%?ID=235008">22 of december, 2012</a>
+            tournoi: winner <a href="{urlMessage}?ID=235008">22 of december, 2012</a>
         winner11:
-            utilisateur: <a href="%urlUtilisateur%?ID=36758">Pein-rikoudu</a>
-            tournoi: winner <a href="%urlMessage%?ID=217944">20 of october, 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=36758">Pein-rikoudu</a>
+            tournoi: winner <a href="{urlMessage}?ID=217944">20 of october, 2012</a>
         winner10:
-            utilisateur: <a href="%urlUtilisateur%?ID=11650">kether</a>, <a href="%urlUtilisateur%?ID=45363">Blade-Inferno</a> and <a href="%urlUtilisateur%?ID=37763">strikesword</a>
-            tournoi: winners <a href="%urlMessage%?ID=182447">8 of july, 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=11650">kether</a>, <a href="{urlUtilisateur}?ID=45363">Blade-Inferno</a> and <a href="{urlUtilisateur}?ID=37763">strikesword</a>
+            tournoi: winners <a href="{urlMessage}?ID=182447">8 of july, 2012</a>
         winner9:
-            utilisateur: <a href="%urlUtilisateur%?ID=">Fusako.Uchiha</a>
-            tournoi: winner <a href="%urlMessage%?ID=165196">5 of may, 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=">Fusako.Uchiha</a>
+            tournoi: winner <a href="{urlMessage}?ID=165196">5 of may, 2012</a>
         winner8:
-            utilisateur: <a href="%urlUtilisateur%?ID=39080">Ninjamza</a>
-            tournoi: winner <a href="%urlMessage%?ID=160075">21 of april, 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=39080">Ninjamza</a>
+            tournoi: winner <a href="{urlMessage}?ID=160075">21 of april, 2012</a>
         winner7:
-            utilisateur: <a href="%urlUtilisateur%?ID=11650">kether</a>
-            tournoi: winner <a href="%urlMessage%?ID=142474">25 of february, 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=11650">kether</a>
+            tournoi: winner <a href="{urlMessage}?ID=142474">25 of february, 2012</a>
         winner6:
-            utilisateur: <a href="%urlUtilisateur%?ID=35776">L-orbe-shuriken</a>
-            tournoi: winner <a href="%urlMessage%?ID=119260">13 of november, 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=35776">L-orbe-shuriken</a>
+            tournoi: winner <a href="{urlMessage}?ID=119260">13 of november, 2011</a>
         winner5:
             utilisateur: Yoyosam
-            tournoi: winner <a href="%urlMessage%?ID=109224">22 of october, 2011</a>
+            tournoi: winner <a href="{urlMessage}?ID=109224">22 of october, 2011</a>
         winner4:
-            utilisateur: <a href="%urlUtilisateur%?ID=46909">Rydax</a>
-            tournoi: winner <a href="%urlMessage%?ID=72948">16 of july, 2011</a>, <a href="%urlMessage%?ID=79127">13 of august, 2011</a>, and <a href="%urlMessage%?ID=93504">18 of september, 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=46909">Rydax</a>
+            tournoi: winner <a href="{urlMessage}?ID=72948">16 of july, 2011</a>, <a href="{urlMessage}?ID=79127">13 of august, 2011</a>, and <a href="{urlMessage}?ID=93504">18 of september, 2011</a>
         winner3:
-            utilisateur: <a href="%urlUtilisateur%?ID=37546">Gaara76</a>
-            tournoi: winner <a href="%urlMessage%?ID=68359">26 of june, 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=37546">Gaara76</a>
+            tournoi: winner <a href="{urlMessage}?ID=68359">26 of june, 2011</a>
         winner2:
-            utilisateur: <a href="%urlUtilisateur%?ID=24921">Mistral</a>
-            tournoi: winner <a href="%urlMessage%?ID=60173"> 14 of may, 2011</a>, <a href="%urlMessage%?ID=63228">29 of may, 2011</a>, and <a href="%urlMessage%?ID=64492">5 of june, 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=24921">Mistral</a>
+            tournoi: winner <a href="{urlMessage}?ID=60173"> 14 of may, 2011</a>, <a href="{urlMessage}?ID=63228">29 of may, 2011</a>, and <a href="{urlMessage}?ID=64492">5 of june, 2011</a>
         winner1:
             utilisateur: Zanhkraft
-            tournoi: winner <a href="%urlMessage%?ID=33451">13/14 of november, 2010</a>
+            tournoi: winner <a href="{urlMessage}?ID=33451">13/14 of november, 2010</a>
 registration:
     email:
-        subject: Welcome %username% !
+        subject: Welcome {username} !
         message: |
-            Hi %username% !<br>
+            Hi {username} !<br>
             <br>
-            To finish activating your account - please visit <a href="%confirmationUrl%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">%confirmationUrl%</span></a><br>
+            To finish activating your account - please visit <a href="{confirmationUrl}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">{confirmationUrl}</span></a><br>
             <br>
             Good game !<br>
             The NinjaTooken's Team
@@ -951,16 +951,16 @@ resetting:
     email:
         subject: Reset Password
         message: |
-            Hi %username% !<br>
+            Hi {username} !<br>
             <br>
-            To reset your password - please visit <a href="%confirmationUrl%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">%confirmationUrl%</span></a><br>
+            To reset your password - please visit <a href="{confirmationUrl}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">{confirmationUrl}</span></a><br>
             <br>
             Good game !<br>
             The NinjaTooken's Team
 ami:
-    numFriend: "%count% friend|]1,+Inf]%count% friends"
-    numDemande: "{0} No request yet|{1} One pending request|]1,+Inf]%count% pending requests"
-    numBlock: "{0} No blocked request|{1} One blocked request|]1,+Inf]%count% blocked requests"
+    numFriend: "{count, plural, =0 {no friend} one {one friend} other {# friends}}"
+    numDemande: "{count, plural, =0 { No request yet} one {One pending request} other {# pending requests}}"
+    numBlock: "{count, plural, =0 { No blocked request} one {One blocked request} other {# blocked requests}}"
     noFriend: No friends yet.
     noDemande: No requests yet.
     noBlock: No blocked requests yet.
@@ -968,7 +968,7 @@ capture:
     noCapture: No screenshots yet.
 fiche:
     autrePseudo: Other used pseudo
-    dateInscrit: Registered since %date%
+    dateInscrit: Registered since {date}
 messagerie:
     newMessage: New Message
     reception: Inbox
@@ -987,7 +987,7 @@ parametre:
         envoyer: Send a confirmation email
     dateNaissance: Date of birth
     description: Description
-    descriptionInfo: (displayed in your <a href="%urlFiche%">ninja index</a>)
+    descriptionInfo: (displayed in your <a href="{urlFiche}">ninja index</a>)
     avatar: Avatar
     modifierAvatar: Edit your avatar
     hebergement: Hosting

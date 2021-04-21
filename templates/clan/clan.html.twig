@@ -35,7 +35,7 @@
 
 						<div class="main clearfix">
 							<h3 class="clearfix">
-                                {{ 'description.fonde'|trans({'%date%': clan.dateAjout|localizeddate('medium', 'none', app.request.locale)}) }}
+                                {{ 'description.fonde'|trans({'%date%': clan.dateAjout|format_date('medium', locale=app.request.locale)}) }}
 								{% if ROLE_ADMIN or ROLE_SHISHOU %}<a href="{{ path('ninja_tooken_clan_supprimer', {clan_nom:clan.slug}) }}" class="button mini pull-right delete">{{ 'action.supprimer'|trans({}, 'common') }}</a>{% endif %}
 								{% if ROLE_ADMIN or ROLE_SHISHOU %}<a href="{{ path('ninja_tooken_clan_modifier', {clan_nom:clan.slug}) }}" class="button mini pull-right">{{ 'action.editer'|trans({}, 'common') }}</a>{% endif %}
 							</h3>
@@ -88,7 +88,7 @@
 						<hr>
 						<div class="forum">
 							<h4 class="pull-left"><a href="{{ path('ninja_tooken_topic', {forum_nom:forum.slug}) }}">{{ forum.nom }}</a></h4>
-							<span class="numComments"><i class="icon-comment"></i> {{ 'forum.numThread'|transchoice(forum.numThreads) }}</span>
+							<span class="numComments"><i class="icon-comment"></i> {{ 'forum.numThread'|trans({'count': forum.numThreads}) }}</span>
 							{% if (ROLE_CLAN and app.user.clan.canEditClan == true)  or is_granted("ROLE_ADMIN") or is_granted("ROLE_MODERATOR") %}
 								<a href="{{ path('ninja_tooken_thread_ajouter', {forum_nom:forum.slug}) }}" class="button pull-right">{{ 'forum.newThread'|trans }}</a>
 							{% endif %}

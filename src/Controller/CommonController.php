@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Component\Security\Csrf\CsrfToken;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -13,7 +13,7 @@ use App\Entity\Forum\Forum;
 use App\Entity\Clan\Clan;
 use App\Entity\User\User;
 
-class CommonController extends Controller
+class CommonController extends AbstractController
 {
     public function addBlocker()
     {
@@ -22,7 +22,7 @@ class CommonController extends Controller
 
     public function index()
     {
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $em = $this->getDoctrine()->getManager();
 
         return $this->render('common/index.html.twig', array(
@@ -88,7 +88,7 @@ class CommonController extends Controller
             $sujet = trim($request->get('sujet'));
             $email = trim($request->get('email'));
             if(!empty($texte)){
-                $emailContact = $this->container->getParameter('mail_admin');
+                $emailContact = $this->getParameter('mail_admin');
 
                 $message = \Swift_Message::newInstance()
                     ->setSubject('[NT] Contact : '.$sujet)
@@ -116,7 +116,7 @@ class CommonController extends Controller
     public function search(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $q = (string)$request->get('q');
 
         // recherche dans les threads

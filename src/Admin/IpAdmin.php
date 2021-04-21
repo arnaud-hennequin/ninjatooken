@@ -2,16 +2,16 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class IpAdmin extends Admin
+class IpAdmin extends AbstractAdmin
 {
 
-    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection)
+    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollectionInterface $collection): void
     {
         $collection
             ->remove('delete')
@@ -23,7 +23,7 @@ class IpAdmin extends Admin
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('id')
@@ -36,7 +36,7 @@ class IpAdmin extends Admin
     /**
      * @param ListMapper $listMapper
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('ip', null, array('label' => 'IP'))
@@ -48,7 +48,7 @@ class IpAdmin extends Admin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
             ->add('ip', 'ip', array(
@@ -66,7 +66,7 @@ class IpAdmin extends Admin
     /**
      * @param ShowMapper $showMapper
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('id')

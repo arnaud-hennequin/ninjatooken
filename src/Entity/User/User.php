@@ -1,12 +1,14 @@
 <?php
 namespace App\Entity\User;
 
-use Sonata\UserBundle\Entity\BaseUser;
-use Sonata\UserBundle\Model\UserInterface;
+use App\Entity\Clan\ClanUtilisateur;
+use App\Entity\Game\Ninja;
+use App\Entity\User\Group;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use FOS\UserBundle\Util\Canonicalizer;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -15,11 +17,18 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="nt_user")
  * @ORM\Entity(repositoryClass="App\Entity\User\UserRepository")
  *
- * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="fos_user.username.already_used", groups={"Registration", "Profile"})
- * @UniqueEntity(fields="emailCanonical", errorPath="email", message="fos_user.email.already_used", groups={"Registration", "Profile"})
+ * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="ninja_tooken_user.username.already_used", groups={"Registration", "Profile"})
+ * @UniqueEntity(fields="emailCanonical", errorPath="email", message="ninja_tooken_user.email.already_used", groups={"Registration", "Profile"})
  */
-class User extends BaseUser
+class User
 {
+    public const GENDER_FEMALE = 'f';
+    public const GENDER_MALE = 'm';
+    public const GENDER_UNKNOWN = 'u';
+
+    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -28,13 +37,86 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User\Group", fetch="LAZY")
-     * @ORM\JoinTable(name="nt_user_group",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     * )
+     * @var \DateTime|null
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $updatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    protected $username;
+
+    /**
+     * @ORM\Column(name="username_canonical", type="string", length=180, unique=true)
+     */
+    protected $usernameCanonical;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    protected $email;
+
+    /**
+     * @ORM\Column(name="email_canonical", type="string", length=180, unique=true)
+     */
+    protected $emailCanonical;
+
+    /**
+     * @var bool
+     */
+    protected $enabled;
+
+    /**
+     * The salt to use for hashing.
+     *
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    protected $salt;
+
+    /**
+     * Encrypted password. Must be persisted.
+     *
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    protected $password;
+
+    /**
+     * Plain password. Used for model validation. Must not be persisted.
+     *
+     */
+    protected $plainPassword;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $lastLogin;
+
+    /**
+     * Random string sent to the user email address in order to verify it.
+     *
+     * @ORM\Column(name="confirmation_token", type="string", length=180, unique=true)
+     */
+    protected $confirmationToken;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $passwordRequestedAt;
+
+    /**
+     * @var Group[]|Collection
      */
     protected $groups;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    protected $roles;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Game\Ninja", mappedBy="user", cascade={"persist", "remove"}, fetch="EAGER")
@@ -142,11 +224,43 @@ class User extends BaseUser
      */
     private $messages;
 
+    /**
+     * @var string
+     */
+    protected $twoStepVerificationCode;
+
+    /**
+     * @var \DateTime|null
+     */
+    protected $dateOfBirth;
+
+    /**
+     * @var string
+     */
+    protected $biography;
+
+    /**
+     * @var string
+     */
+    protected $gender = self::GENDER_UNKNOWN; // set the default to unknown
+
+    /**
+     * @var string
+     */
+    protected $locale;
+
+    /**
+     * @var string
+     */
+    protected $timezone;
+
+
     public function __construct()
     {
-        parent::__construct();
+        $this->enabled = false;
+        $this->roles = [];
 
-        $this->setGender(UserInterface::GENDER_MALE);
+        $this->setGender(self::GENDER_MALE);
         $this->oldUsernames = array();
         $this->oldUsernamesCanonical = "";
         $this->roles = array('ROLE_USER');
@@ -160,32 +274,21 @@ class User extends BaseUser
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function getAbsoluteAvatar()
+    /**
+     * @return string
+     */
+    public function __toString()
     {
-        return null === $this->avatar || "" === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
-    }
-
-    public function getWebAvatar()
-    {
-        return null === $this->avatar || "" === $this->avatar  ? null : $this->getUploadDir().'/'.$this->avatar;
-    }
-
-    protected function getUploadRootDir()
-    {
-        return __DIR__.'/../../../../public/'.$this->getUploadDir();
-    }
-
-    protected function getUploadDir()
-    {
-        return 'avatar';
+        return (string) $this->getUsername();
     }
 
     /**
-     * @ORM\PrePersist()
+     * Hook on pre-persist operations.
      */
     public function prePersist(): void
     {
-        parent::prePersist();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
 
         if (null !== $this->file) {
             $this->setAvatar(uniqid(mt_rand(), true).".".$this->file->guessExtension());
@@ -193,11 +296,11 @@ class User extends BaseUser
     }
 
     /**
-     * @ORM\PreUpdate()
+     * Hook on pre-update operations.
      */
     public function preUpdate(): void
     {
-        parent::preUpdate();
+        $this->updatedAt = new \DateTime();
         if (null !== $this->file) {
             $file = $this->id.'.'.$this->file->guessExtension();
 
@@ -219,6 +322,484 @@ class User extends BaseUser
             }
         }
         $this->setOldUsernamesCanonical($oldUsernamesCanonical);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->enabled,
+            $this->id,
+            $this->email,
+            $this->emailCanonical,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+
+        if (13 === count($data)) {
+            // Unserializing a User object from 1.3.x
+            unset($data[4], $data[5], $data[6], $data[9], $data[10]);
+            $data = array_values($data);
+        } elseif (11 === count($data)) {
+            // Unserializing a User from a dev version somewhere between 2.0-alpha3 and 2.0-beta1
+            unset($data[4], $data[7], $data[8]);
+            $data = array_values($data);
+        }
+
+        list(
+            $this->password,
+            $this->salt,
+            $this->usernameCanonical,
+            $this->username,
+            $this->enabled,
+            $this->id,
+            $this->email,
+            $this->emailCanonical
+        ) = $data;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsernameCanonical()
+    {
+        return $this->usernameCanonical;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmailCanonical()
+    {
+        return $this->emailCanonical;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * Gets the last login time.
+     *
+     * @return \DateTime|null
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfirmationToken()
+    {
+        return $this->confirmationToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        foreach ($this->getGroups() as $group) {
+            $roles = array_merge($roles, $group->getRoles());
+        }
+
+        // we need to make sure to have at least one role
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_values(array_unique($roles));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRole($role)
+    {
+        return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSuperAdmin()
+    {
+        return $this->hasRole(static::ROLE_SUPER_ADMIN);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeRole($role)
+    {
+        if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUsernameCanonical($usernameCanonical)
+    {
+        $this->usernameCanonical = $usernameCanonical;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEmailCanonical($emailCanonical)
+    {
+        $this->emailCanonical = $emailCanonical;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEnabled($boolean)
+    {
+        $this->enabled = (bool) $boolean;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSuperAdmin($boolean)
+    {
+        if (true === $boolean) {
+            $this->addRole(static::ROLE_SUPER_ADMIN);
+        } else {
+            $this->removeRole(static::ROLE_SUPER_ADMIN);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLastLogin(\DateTime $time = null)
+    {
+        $this->lastLogin = $time;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setConfirmationToken($confirmationToken)
+    {
+        $this->confirmationToken = $confirmationToken;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPasswordRequestedAt(\DateTime $date = null)
+    {
+        $this->passwordRequestedAt = $date;
+
+        return $this;
+    }
+
+    /**
+     * Gets the timestamp that the user requested a password reset.
+     *
+     * @return \DateTime|null
+     */
+    public function getPasswordRequestedAt()
+    {
+        return $this->passwordRequestedAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isPasswordRequestNonExpired($ttl)
+    {
+        return $this->getPasswordRequestedAt() instanceof \DateTime &&
+               $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = [];
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroups()
+    {
+        return $this->groups ?: $this->groups = new ArrayCollection();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGroupNames()
+    {
+        $names = [];
+        foreach ($this->getGroups() as $group) {
+            $names[] = $group->getName();
+        }
+
+        return $names;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasGroup($name)
+    {
+        return in_array($name, $this->getGroupNames());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addGroup(Group $group)
+    {
+        if (!$this->getGroups()->contains($group)) {
+            $this->getGroups()->add($group);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeGroup(Group $group)
+    {
+        if ($this->getGroups()->contains($group)) {
+            $this->getGroups()->removeElement($group);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEqualTo(User $user)
+    {
+        if (!$user instanceof self) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->salt !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
+    }
+    public function getAbsoluteAvatar()
+    {
+        return null === $this->avatar || "" === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
+    }
+
+    public function getWebAvatar()
+    {
+        return null === $this->avatar || "" === $this->avatar  ? null : $this->getUploadDir().'/'.$this->avatar;
+    }
+
+    protected function getUploadRootDir()
+    {
+        return __DIR__.'/../../../../public/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        return 'avatar';
     }
 
     /**
@@ -272,16 +853,6 @@ class User extends BaseUser
         if($this->tempAvatar && file_exists($this->tempAvatar)) {
             unlink($this->tempAvatar);
         }
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -566,18 +1137,6 @@ class User extends BaseUser
         return $this->old_login;
     }
 
-
-    public function serialize()
-    {
-        return serialize(array($this->facebookUid, parent::serialize()));
-    }
-
-    public function unserialize($data)
-    {
-        list($this->facebookUid, $parentData) = unserialize($data);
-        parent::unserialize($parentData);
-    }
-
     /**
      * Get the full name of the user (first + last name)
      * @return string
@@ -585,39 +1144,6 @@ class User extends BaseUser
     public function getFullName()
     {
         return $this->getFirstname() . ' ' . $this->getLastname();
-    }
-
-    /**
-     * @param Array
-     */
-    public function setFBData($fbdata)
-    {
-        if (isset($fbdata['id'])) {
-            $this->setFacebookUid($fbdata['id']);
-        }
-        if (isset($fbdata['first_name'])) {
-            $this->setFirstname($fbdata['first_name']);
-        }
-        if (isset($fbdata['last_name'])) {
-            $this->setLastname($fbdata['last_name']);
-        }
-        if (isset($fbdata['username'])) {
-            $this->setUsername($fbdata['username']);
-        }elseif (isset($fbdata['name'])) {
-            $this->setUsername($fbdata['name']);
-        }
-        if (isset($fbdata['email'])) {
-            $this->setEmail($fbdata['email']);
-        }
-        if (isset($fbdata['gender'])) {
-            $this->setGender($fbdata['gender']=="male"?UserInterface::GENDER_MAN:UserInterface::GENDER_FEMALE);
-        }
-        if(isset($fbdata["birthday"])){
-            $this->setDateOfBirth(\DateTime::createFromFormat('m/d/Y', $fbdata["birthday"]));
-        }
-		if(isset($fbdata['locale'])){
-            $this->setLocale($fbdata['locale']=="fr_FR"?"fr":"en");
-        }
     }
 
     /**
@@ -777,5 +1303,127 @@ class User extends BaseUser
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCreatedAt(?\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setUpdatedAt(?\DateTime $updatedAt = null)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setBiography($biography)
+    {
+        $this->biography = $biography;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBiography()
+    {
+        return $this->biography;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTimezone($timezone)
+    {
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTimezone()
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * Returns the gender list.
+     *
+     * @return array
+     */
+    public static function getGenderList()
+    {
+        return [
+            'gender_unknown' => self::GENDER_UNKNOWN,
+            'gender_female' => self::GENDER_FEMALE,
+            'gender_male' => self::GENDER_MALE,
+        ];
     }
 }

@@ -2,19 +2,18 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\UserBundle\Model\UserInterface;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
 use FOS\UserBundle\Model\UserManagerInterface;
 
-class UserAdmin extends Admin
+class UserAdmin extends AbstractAdmin
 {
     protected $formOptions = array(
         'validation_groups' => 'Profile'
@@ -23,7 +22,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('username', null, array('label' => 'Login'))
@@ -44,7 +43,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    protected function configureDatagridFilters(DatagridMapper $filterMapper)
+    protected function configureDatagridFilters(DatagridMapper $filterMapper): void
     {
         $filterMapper
             ->add('username', null, array('label' => 'Login'))
@@ -56,7 +55,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->with('General')
@@ -83,7 +82,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
             ->with('General')
@@ -194,7 +193,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    public function preUpdate($user)
+    public function preUpdate(object $user): void
     {
         if(!isset($this->userManager))
             return;
@@ -205,7 +204,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    public function preRemove($object=null)
+    public function preRemove(object $object=null): void
     {
         if(!isset($this->userManager))
             return;
@@ -226,7 +225,7 @@ class UserAdmin extends Admin
     /**
      * {@inheritdoc}
      */
-    public function postRemove($object=null)
+    public function postRemove(object $object=null): void
     {
         $conn = $this->modelManager->getEntityManager()->getConnection();
 

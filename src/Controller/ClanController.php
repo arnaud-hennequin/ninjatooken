@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,11 +17,11 @@ use App\Entity\User\User;
 use App\Entity\User\Message;
 use App\Entity\User\MessageUser;
 
-class ClanController extends Controller
+class ClanController extends AbstractController
 {
     public function liste(Request $request, $page = 1)
     {
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
         $em = $this->getDoctrine()->getManager();
@@ -162,7 +162,7 @@ class ClanController extends Controller
                 'form' => $form->createView()
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -204,7 +204,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -276,7 +276,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -314,7 +314,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -366,7 +366,7 @@ class ClanController extends Controller
             );
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -426,7 +426,7 @@ class ClanController extends Controller
             );
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function clanUtilisateurRecruter()
@@ -447,7 +447,7 @@ class ClanController extends Controller
                 'demandesFrom' => $clan && $clan->getDroit()<3?$repo_demande->getByClan($clan->getClan()):null
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -475,7 +475,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -538,7 +538,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -613,7 +613,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -651,7 +651,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -717,7 +717,7 @@ class ClanController extends Controller
                 'clan_nom' => $clan->getSlug()
             )));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -743,7 +743,7 @@ class ClanController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     function getRecruteur($list=array()){

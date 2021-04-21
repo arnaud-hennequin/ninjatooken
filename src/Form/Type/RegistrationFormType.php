@@ -4,7 +4,7 @@ namespace App\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
-use Sonata\UserBundle\Model\UserInterface;
+use App\Entity\User\User;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -33,7 +33,7 @@ class RegistrationFormType extends BaseType
                     'label' => 'compte.register.motPasseRepeter',
                     'label_attr' => array('class' => 'libelle')
                 ),
-                'invalid_message' => 'fos_user.password.mismatch',
+                'invalid_message' => 'ninja_tooken_user.password.mismatch',
                 'error_bubbling' => true
             ))
             ->add('email', EmailType::class, array(
@@ -43,10 +43,10 @@ class RegistrationFormType extends BaseType
             ))
             ->add('gender', ChoiceType::class, array(
                 'choices' => array(
-                    UserInterface::GENDER_MALE => 'gender_male',
-                    UserInterface::GENDER_FEMALE => 'gender_female'
+                    User::GENDER_MALE => 'gender_male',
+                    User::GENDER_FEMALE => 'gender_female'
                 ),
-                'data' => UserInterface::GENDER_MALE,
+                'data' => User::GENDER_MALE,
                 'expanded' => true,
                 'label_attr' => array('class' => 'libelle')
             ))

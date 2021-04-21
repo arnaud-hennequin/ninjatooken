@@ -1,7 +1,7 @@
-{% macro getUrl(clan) %}{% spaceless %}
+{% macro getUrl(clan) %}{% apply spaceless %}
 {% if clan.kamonUpload is empty %}
 	{{ asset(clan.kamon) }}
 {% else %}
 	{{ ('kamon/' ~ clan.kamonUpload) | imagine_filter('kamon') }}
 {% endif %}
-{% endspaceless %}{% endmacro %}
+{% endapply %}{% endmacro %}

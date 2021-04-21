@@ -1,6 +1,7 @@
 <?php
 namespace App\Entity\Forum;
 
+use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;

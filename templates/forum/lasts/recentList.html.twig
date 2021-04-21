@@ -10,7 +10,7 @@
 										<span itemprop="name">{{ last.author.username }}</span>
 									</a>
 								</span>
-								<time itemprop="startDate" datetime="{{ last.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': last.dateAjout|localizeddate('medium', 'none', app.request.locale), '%time%': last.dateAjout|localizeddate('none', 'short', app.request.locale)}, 'common') }}</time><br>
+								<time itemprop="startDate" datetime="{{ last.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': last.dateAjout|format_date('medium', locale=app.request.locale), '%time%': last.dateAjout|format_time('short', locale=app.request.locale)}, 'common') }}</time><br>
 								{% if last.slug is defined %}
 								<h5><a href="{{ path('ninja_tooken_thread', {forum_nom:last.forum.slug, thread_nom:last.slug}) }}" itemprop="replyToUrl"><span itemprop="name">{{ last.nom }}</span></a></h5>
 								{% else %}

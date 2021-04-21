@@ -62,7 +62,7 @@
 			{{ render(controller('App\\Controller\\UserController::connected', {'user': app.user})) }}
 			{% else %}
 			<p class="account">
-                        {{ 'compte.pasEncore'|trans({}, 'common') }} <a href="{{ path('fos_user_registration_register') }}">{{ 'compte.inscrire2'|trans({}, 'common') }}</a> | <a href="{{ path('fos_user_security_login') }}">{{ 'compte.compte'|trans({}, 'common') }}</a>
+                        {{ 'compte.pasEncore'|trans({}, 'common') }} <a href="{{ path('ninja_tooken_user_registration_register') }}">{{ 'compte.inscrire2'|trans({}, 'common') }}</a> | <a href="{{ path('ninja_tooken_user_security_login') }}">{{ 'compte.compte'|trans({}, 'common') }}</a>
                         </p>
 			{% endif %}
                     </div>
@@ -121,7 +121,7 @@
                     <div class="span4 presentation">
                         <h1>{{ 'entete.ninja'|trans({}, 'common') }}</h1>
                         <p>{{ 'description.ninja'|trans({}, 'common')|raw }}</p>
-                        <a href="{{ path('fos_user_registration_register') }}" class="create"><img src="{{ asset('images/create.png') }}"> {{ 'compte.inscrire'|trans({}, 'common') }}</a>
+                        <a href="{{ path('ninja_tooken_user_registration_register') }}" class="create"><img src="{{ asset('images/create.png') }}"> {{ 'compte.inscrire'|trans({}, 'common') }}</a>
                     </div>
                     <div class="span8 visible-desktop">
                         <div id="diaporama" class="diaporama">
@@ -207,25 +207,24 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ asset('js/vendor/jquery-2.0.0.min.js') }}"><\/script>')</script>
-	<script src="{{ asset('js/vendor/tinymce/jquery.tinymce.min.js') }}"></script>
-	<script src="{{ asset('js/vendor/tinymce/tinymce.min.js') }}"></script>
-    <script src="{{ asset('js/vendor/adblock_detector.js') }}"></script>
-    <script src="{{ asset('js/compiled/main.js') }}"></script>
-	<script src="{{ asset('js/vendor/bjqs-1.3.min.js') }}"></script>
-	<script src="{{ asset('js/vendor/UnityObject2.js') }}"></script>
-	<script src="{{ asset('js/vendor/jquery.tagit.js') }}"></script>
-	<script src="{{ asset('js/vendor/Chart.min.js') }}"></script>
-	<script src="{{ asset('js/vendor/jquery.bracket.min.js') }}"></script>
-	<script src="{{ asset('js/vendor/storyjs-embed.js') }}"></script>
-	<script src="{{ asset('js/vendor/jquery.motionCaptcha.0.2.js') }}"></script>
-	<script src="{{ asset('js/vendor/jquery.parallax.js') }}"></script>
-	<script src="{{ asset('js/vendor/snowstorm-min.js') }}"></script>
-	<script src="{{ asset('js/vendor/jquery.truncate.js') }}"></script>
-	<script src="{{ asset('js/src/class.js') }}"></script>
-	<script src="{{ asset('js/src/class.calculateur.js') }}"></script>
-	<script src="{{ asset('js/src/class.aptitude.js') }}"></script>
-	<script src="{{ asset('js/src/class.jutsu.js') }}"></script>
-	<script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/vendor/tinymce/jquery.tinymce.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/tinymce/tinymce.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/bjqs-1.3.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/UnityObject2.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.tagit.js') }}"></script>
+    <script src="{{ asset('js/vendor/Chart.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.bracket.min.js') }}"></script>
+    <script src="{{ asset('js/vendor/storyjs-embed.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.motionCaptcha.0.2.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.parallax.js') }}"></script>
+    <script src="{{ asset('js/vendor/snowstorm-min.js') }}"></script>
+    <script src="{{ asset('js/vendor/jquery.truncate.js') }}"></script>
+    <script src="{{ asset('js/src/class.js') }}"></script>
+    <script src="{{ asset('js/src/class.calculateur.js') }}"></script>
+    <script src="{{ asset('js/src/class.aptitude.js') }}"></script>
+    <script src="{{ asset('js/src/class.jutsu.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+
     {#<script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

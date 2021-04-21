@@ -10,7 +10,7 @@
         <blockquote>
             <a href="{{ url('admin_ninjatooken_forum_comment_edit', { 'id': comment.id }) }}" class="btn btn-default pull-right"><i class="icon-edit"></i> Éditer</a>
             <p>{{ comment.body | striptags | truncate(150) | nl2br  }}</p>
-            <small><a href="{{ url('admin_ninjatooken_user_user_edit', { 'id': comment.author.id }) }}">{{ comment.author.username }}</a> - {{ comment.dateAjout|localizeddate('long', 'short') }}</small>
+            <small><a href="{{ url('admin_ninjatooken_user_user_edit', { 'id': comment.author.id }) }}">{{ comment.author.username }}</a> - {{ comment.dateAjout|format_datetime('long', 'short') }}</small>
         </blockquote>
         {% else %}
             <strong>Pas de commentaires</strong>

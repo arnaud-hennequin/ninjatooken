@@ -1,11 +1,11 @@
-{% macro getUrl(user) %}{% spaceless %}
+{% macro getUrl(user) %}
 {% if user.avatar is empty %}
 	{% if user.gender == "m" %}
-		{{ asset('bundles/ninjatookenuser/images/boyz.jpg') }}
+		{{ asset('images/boyz.jpg') }}
 	{% else %}
-		{{ asset('bundles/ninjatookenuser/images/girlz.jpg') }}
+		{{ asset('images/girlz.jpg') }}
 	{% endif %}
 {% else %}
 	{{ ('avatar/' ~ user.avatar) | imagine_filter('avatar') }}
 {% endif %}
-{% endspaceless %}{% endmacro %}
+{% endmacro %}

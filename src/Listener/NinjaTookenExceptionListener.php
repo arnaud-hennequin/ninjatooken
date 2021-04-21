@@ -2,31 +2,31 @@
 
 namespace App\Listener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Twig\Environment;;
 
 class NinjaTookenExceptionListener{
 
-    protected $templating;
+    protected $twig;
 
-    public function __construct(EngineInterface $templating)
+    public function __construct(Environment $twig)
     {
-        $this->templating = $templating;
+        $this->twig = $twig;
     }
 
-    public function onKernelException(GetResponseForExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event)
     {
 
-        $exception =  $event->getException();
+        $exception =  $event->getThrowable();
 
         $code = 500;
         if (method_exists($exception, 'getStatusCode'))
             $code = $exception->getStatusCode();
 
         // personnalise notre objet réponse pour afficher les détails de notre exception
-        $response = new Response($this->templating->render('::exception.html.twig',array(
+        $response = new Response($this->twig->render('exception.html.twig',array(
                 'status_code' => $code,
                 'status_text' => isset(Response::$statusTexts[$code]) ? Response::$statusTexts[$code] : '',
                 'exception' => $exception,

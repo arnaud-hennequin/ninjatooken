@@ -1,4 +1,4 @@
-{% spaceless %}
+{% apply spaceless %}
 {% if lastPage > 1 %}
 {% set begin = currentPage - nearbyPagesLimit %}
 {% set decalage = 0 %}
@@ -17,8 +17,10 @@
 <div class="pagination">
 	<ul>
 		{% if begin > 1 %}
-			{% for i in range(1, extremePagesLimit) if ( i < currentPage - nearbyPagesLimit and i!=begin ) %}
+			{% for i in range(1, extremePagesLimit) %}
+				{% if ( i < currentPage - nearbyPagesLimit and i!=begin ) %}
 		<li><a href="{{ paginationPath }}{{ i }}{{ paginationAfter }}">{{ i }}</a></li>
+				{% endif %}
 			{% endfor %}
 			{% if extremePagesLimit + 1 < begin %}
 		<li class="disabled"><a href="#">...</a></li>
@@ -33,11 +35,13 @@
 			{% if  lastPage - extremePagesLimit > end %}
 		<li class="disabled"><a href="#">...</a></li>
 			{% endif %}
-			{% for i in range(lastPage - extremePagesLimit+1, lastPage) if ( i > currentPage + nearbyPagesLimit and i!=end ) %}
+			{% for i in range(lastPage - extremePagesLimit+1, lastPage) %}
+				{% if ( i > currentPage + nearbyPagesLimit and i!=end ) %}
 		<li><a href="{{ paginationPath }}{{ i }}{{ paginationAfter }}">{{ i }}</a></li>
+				{% endif %}
 			{% endfor %}
 		{% endif %}
 	</ul>
 </div>
 {% endif %}
-{% endspaceless %}
+{% endapply %}

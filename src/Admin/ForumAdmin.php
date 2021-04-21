@@ -2,7 +2,7 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
-class ForumAdmin extends Admin
+class ForumAdmin extends AbstractAdmin
 {
     protected $parentAssociationMapping = 'clan';
 
@@ -21,7 +21,7 @@ class ForumAdmin extends Admin
     );
 
     //Fields to be shown on create/edit forms
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
             ->add('nom', 'text', array(
@@ -48,7 +48,7 @@ class ForumAdmin extends Admin
     }
 
     //Fields to be shown on filter forms
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('nom')
@@ -56,7 +56,7 @@ class ForumAdmin extends Admin
     }
 
     //Fields to be shown on lists
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('nom')

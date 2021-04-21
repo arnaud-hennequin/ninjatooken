@@ -49,17 +49,17 @@
 						<article itemscope itemtype="http://schema.org/Article">
 							{{ render(controller('App\\Controller\\GameController::signature', {'user':thread.author})) }}
 							<header>
-								<time itemprop="datePublished" datetime="{{ thread.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': thread.dateAjout|localizeddate('full', 'none', app.request.locale), '%time%': thread.dateAjout|localizeddate('none', 'short', app.request.locale)}, 'common') }}</time>
+								<time itemprop="datePublished" datetime="{{ thread.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': thread.dateAjout|format_date('full', locale=app.request.locale), '%time%': thread.dateAjout|format_time('short', locale=app.request.locale)}, 'common') }}</time>
 							</header>
 							<div class="content clearfix" itemprop="articleBody">
 								{{ thread.body|raw|purify('full') }}
 								{% if thread.isEvent and (thread.dateEventStart is not null or thread.dateEventEnd is not null) %}
 								<p><br><strong>{{ 'titre.eventDate'|trans }}
 									{% if thread.dateEventStart is not null %}
-										{{ thread.dateEventStart|localizeddate('full', 'none', app.request.locale) }}
+										{{ thread.dateEventStart|format_date('full', locale=app.request.locale) }}
 									{% endif %}
 									{% if thread.dateEventEnd is not null %}
-										- {{ thread.dateEventEnd|localizeddate('full', 'none', app.request.locale) }}
+										- {{ thread.dateEventEnd|format_date('full', locale=app.request.locale) }}
 									{% endif %}
 								</strong></p>
 								{% endif %}
@@ -91,7 +91,7 @@
 							{% if thread.numComments > 0 %}
 							<hr>
 							<section>
-								<span class="comments">{{ 'titre.comment'|transchoice(thread.numComments) }}</span>
+								<span class="comments">{{ 'titre.comment'|trans({'count': thread.numComments}) }}</span>
 								{% include 'pagination.html.twig' with {
 									currentPage: page,
 									paginationPath: path('ninja_tooken_thread', {forum_nom: forum.slug, thread_nom:thread.slug, 'page': ''}),
@@ -105,7 +105,7 @@
 									<link itemprop="url" href="#c{{ loop.index }}">
 									{{ render(controller('App\\Controller\\GameController::signature', {'user':comment.author})) }}
 									<header>
-										<time itemprop="commentTime" datetime="{{ comment.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': comment.dateAjout|localizeddate('full', 'none', app.request.locale), '%time%': comment.dateAjout|localizeddate('none', 'short', app.request.locale)}, 'common') }}</time>
+										<time itemprop="commentTime" datetime="{{ comment.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': comment.dateAjout|format_date('full', locale=app.request.locale), '%time%': comment.dateAjout|format_time('short', locale=app.request.locale)}, 'common') }}</time>
 									</header>
 									<div class="content clearfix" itemprop="commentText">
 										{{ comment.body|raw|purify('full') }}

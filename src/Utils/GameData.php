@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use \DOMDocument;
 
 class GameData
@@ -17,9 +18,10 @@ class GameData
 
     private $domExperience;
 
-    public function __construct()
+    public function __construct(ParameterBagInterface $parameterBag)
     {
-        $this->xml = file_get_contents(dirname(__FILE__).'/../Resources/public/xml/game.xml');
+        $file = $parameterBag->get('kernel.project_dir') . '/public/xml/game.xml';
+        $this->xml = file_get_contents($file);
         $this->document = new DOMDocument();
         $this->document->loadXml('<root>'.$this->xml.'</root>' );
 

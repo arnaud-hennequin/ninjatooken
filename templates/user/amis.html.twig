@@ -22,9 +22,9 @@
 {% block body %}
 				<section class="main">
 					<h3>
-						<a href="{{ path('ninja_tooken_user_amis', {page:1}) }}"{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis' %} class="actif"{% endif %}><i class="icon-heart"></i> {{ 'ami.numFriend'|transchoice(numFriends) }}</a> - 
-						<a href="{{ path('ninja_tooken_user_amis_demande', {page:1}) }}"{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis_demande' %} class="actif"{% endif %}><i class="icon-heart-empty"></i> {{ 'ami.numDemande'|transchoice(numDemande) }} - 
-						<a href="{{ path('ninja_tooken_user_amis_blocked', {page:1}) }}"{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis_blocked' %} class="actif"{% endif %}><i class="icon-frown"></i> {{ 'ami.numBlock'|transchoice(numBlocked) }}</a>
+						<a href="{{ path('ninja_tooken_user_amis', {page:1}) }}"{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis' %} class="actif"{% endif %}><i class="icon-heart"></i> {{ 'ami.numFriend'|trans({'count': numFriends}) }}</a> - 
+						<a href="{{ path('ninja_tooken_user_amis_demande', {page:1}) }}"{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis_demande' %} class="actif"{% endif %}><i class="icon-heart-empty"></i> {{ 'ami.numDemande'|trans({'count': numDemande}) }} - 
+						<a href="{{ path('ninja_tooken_user_amis_blocked', {page:1}) }}"{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis_blocked' %} class="actif"{% endif %}><i class="icon-frown"></i> {{ 'ami.numBlock'|trans({'count': numBlocked}) }}</a>
 					</h3>
 					{% if app.request.attributes.get('_route')=='ninja_tooken_user_amis' %}
 						<p><span class="legend online"> {{ 'description.online'|trans({},'common') }}</span>

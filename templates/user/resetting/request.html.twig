@@ -1,4 +1,4 @@
-{% extends "::layout.html.twig" %}
+{% extends "layout.html.twig" %}
 
 {% block title %}NinjaTooken - {{ 'compte.request.titre'|trans({}, 'common') }}{% endblock %}
 {% block description %}{{ 'compte.request.meta.description'|trans({}, 'common') }}{% endblock %}
@@ -9,7 +9,7 @@
 
 {% block breadcrumbs2 %}
 							<span itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-								<a href="{{ path('fos_user_resetting_request') }}" itemprop="url">
+								<a href="{{ path('ninja_tooken_user_resetting_request') }}" itemprop="url">
 									<span itemprop="title">{{ 'compte.request.titre'|trans({}, 'common') }}</span>
 								</a>
 							</span>
@@ -19,17 +19,17 @@
         {% for type, messages in app.session.flashBag.all %}
             {% for message in messages %}
                 <div class="flash-notice">
-                    {{ message|trans({}, 'FOSUserBundle') }}
+                    {{ message|trans({}, 'user') }}
                 </div>
             {% endfor %}
         {% endfor %}
-	<form action="{{ path('fos_user_resetting_send_email') }}" method="POST" accept-charset="UTF-8" class="full">
+	<form action="{{ path('ninja_tooken_user_resetting_send_email') }}" method="POST" accept-charset="UTF-8" class="full">
 		{% if invalid_username is defined %}
-		<p class="flash-notice">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</p>
+		<p class="flash-notice">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'user') }}</p>
 		{% endif %}
 		<div class="row-fluid">
 			<div class="span3 offset1">
-				<label class="libelle required" for="username">{{ 'resetting.request.username'|trans({}, 'FOSUserBundle') }}</label>
+				<label class="libelle required" for="username">{{ 'resetting.request.username'|trans({}, 'user') }}</label>
 			</div>
 			<div class="span8">
 				<p class="note">{{ 'compte.request.resume'|trans({}, 'common') }}</p>
@@ -39,7 +39,7 @@
 		<div class="row-fluid">
 			<div class="span8 offset4">
 				<input type="submit" value="{{ 'compte.request.reinitialiser'|trans({}, 'common') }}" class="button">
-				<p>{{ 'compte.request.noCompte'|trans({}, 'common') }} <a href="{{ path('fos_user_registration_register') }}">{{ 'compte.request.inscrisToi'|trans({}, 'common') }}</a> !</p>
+				<p>{{ 'compte.request.noCompte'|trans({}, 'common') }} <a href="{{ path('ninja_tooken_user_registration_register') }}">{{ 'compte.request.inscrisToi'|trans({}, 'common') }}</a> !</p>
 			</div>
 		</div>
 	</form>

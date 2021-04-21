@@ -7,6 +7,41 @@ ninja_tooken_user_find:
     controller: App\Controller\UserController::userFind
     methods: [GET]
 
+ninja_tooken_user_registration_register:
+    path:  /register
+    controller: App\Controller\UserController::register
+    methods: [GET]
+
+ninja_tooken_user_security_login:
+    path:  /login
+    controller: App\Controller\UserController::login
+    methods: [GET, POST]
+
+ninja_tooken_user_security_check:
+    path:  /login
+    controller: App\Controller\UserController::check
+    methods: [POST]
+
+ninja_tooken_user_resetting_request:
+    path: /request
+    controller: App\Controller\ResettingController::request
+    methods: [GET]
+
+ninja_tooken_user_resetting_send_email:
+    path: /send-email
+    controller: App\Controller\ResettingController::sendEmail
+    methods: [POST]
+
+ninja_tooken_user_resetting_check_email:
+    path: /check-email
+    controller: App\Controller\ResettingController::checkEmail
+    methods: [GET]
+
+ninja_tooken_user_resetting_reset:
+    path: /reset/{token}
+    controller: App\Controller\ResettingController::reset
+    methods: [GET, POST]
+
 ninja_tooken_user_autologin:
     path:  /auto/{autologin}
     controller: App\Controller\UserController::autologin
@@ -45,7 +80,7 @@ ninja_tooken_user_parametres:
     path:  /compte/parametres
     controller: App\Controller\UserController::parametres
 
-fos_user_profile_show:
+ninja_tooken_user_profile_show:
     path:  /compte/parametres
     controller: App\Controller\UserController::parametres
 

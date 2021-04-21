@@ -1,6 +1,6 @@
 newsletter:
     newsite: |
-        Hi %username%,<br><br>
+        Hi {username},<br><br>
         Ninja Tooken just made the one giant leap of its history and is happy to announce the new version of its website!<br>
         In this brand new gem, you'll find, amongst other wicked things :<br> 
         &bull; a new clan management system with more display features and a cool ranking system,<br>
@@ -10,7 +10,7 @@ newsletter:
         Also, just so you can benefit from an even better performance, we decided to host the website on a dedicated server.<br><br>
         Now, don't think we forgot the gameplay : you'll find completely redesigned physics too, and maybe you'll be happy to know that every ninja can jump on water again. We hope you'll notice the many optimizations on network games.
         <br><br>
-        To play now and discover all these improvements, <a href="%autologin%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">follow this personal link</span></a> that will log you directly to your account.
+        To play now and discover all these improvements, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">follow this personal link</span></a> that will log you directly to your account.
 popup:
     delete: Are you sure?
     confirm: Confirm
@@ -68,7 +68,7 @@ compte:
         motPasseReset: Reset your password
         noCompte: You don't have an account yet?
 description:
-    datetime: "%date% at %time%"
+    datetime: "{date} at {time}"
     suite: Read more
     partenaire: Partners
     ninja: |
@@ -214,5 +214,5 @@ game:
         temps: "Last ##s."
         distance: "Can be launched up to ##m."
         chakra: "Costs ## chakra points"
-    course: '{0,1}race|]1,+Inf]races'
-    assassinat: '{0,1}murder|]1,+Inf]murders'
+    course: "{count, plural, =0 {no race} one {one race} other {# races}}"
+    assassinat: "{count, plural, =0 {no murder} one {one murder} other {# murders}}"

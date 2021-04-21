@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ use App\Entity\Forum\Forum;
 use App\Entity\Forum\Thread;
 use App\Entity\Forum\Comment;
 
-class ForumController extends Controller
+class ForumController extends AbstractController
 {
     public function oldMessage(Request $request)
     {
@@ -58,14 +58,13 @@ class ForumController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
         $threads = $em->getRepository(Thread::class)->getEvents($num, $page);
         $forum = null;
         if(!empty($threads)){
-            $firstT = current($threads->getIterator());
-            $forum = $firstT->getForum();
+            $forum = $threads->getIterator()->current()->getForum();
         }
 
         return $this->render('forum/event.html.twig', array(
@@ -116,7 +115,7 @@ class ForumController extends Controller
                 ));
             }
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -161,7 +160,7 @@ class ForumController extends Controller
                 ));
             }
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function forum()
@@ -188,7 +187,7 @@ class ForumController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
         $threads = $em->getRepository(Thread::class)->getThreads($forum, $num, $page);
@@ -208,7 +207,7 @@ class ForumController extends Controller
     public function thread(Forum $forum, Thread $thread, $page)
     {
         $em = $this->getDoctrine()->getManager();
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
         $comments = $em->getRepository(Comment::class)->getCommentsByThread($thread, $num, $page);
@@ -270,7 +269,7 @@ class ForumController extends Controller
                 ));
             }
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -317,7 +316,7 @@ class ForumController extends Controller
                 ));
             }
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -520,7 +519,7 @@ class ForumController extends Controller
                 'page' => $page
             )));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**

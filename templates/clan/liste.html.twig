@@ -44,7 +44,7 @@
 									<header>
 										<img src="{{ kamon.getUrl(clan) }}" class="pull-left clan" alt="">
 										<h3><a href="{{ path('ninja_tooken_clan', {clan_nom:clan.slug}) }}">{% if clan.tag is not empty %}[{{ clan.tag }}] {% endif %}{{ clan.nom }}</a><br>
-										<span>{{ 'description.entete'|transchoice(clan.membres.count, {'%date%': clan.dateAjout|localizeddate('medium', 'none', app.request.locale)}) }}</span></h3>
+										<span>{{ 'description.entete'|trans({'count': clan.membres.count, '%date%': clan.dateAjout|format_date('medium', locale=app.request.locale)}) }}</span></h3>
 										{% if clan.isRecruting %}<span class="actif">{{ 'description.recrutement.ouvert'|trans }}</span>{% else %}<span>{{ 'description.recrutement.ferme'|trans }}</span>{% endif %}
 									</header>
 									<div class="content">
@@ -85,7 +85,7 @@
 									<img src="{{ kamon.getUrl(clan) }}" class="pull-left clan" alt="">
 									<a href="{{ path('ninja_tooken_clan', {clan_nom:clan.slug}) }}">{% if clan.tag is not empty %}[{{ clan.tag }}] {% endif %}{{ clan.nom }}</a>
 								</span>
-								<time datetime="{{ clan.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.creation'|trans({'%date%': clan.dateAjout|localizeddate('medium', 'none', app.request.locale)}) }}</time><br>
+								<time datetime="{{ clan.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.creation'|trans({'%date%': clan.dateAjout|format_date('medium', locale=app.request.locale)}) }}</time><br>
 								<h5><a href="{{ path('ninja_tooken_clan', {clan_nom:clan.slug}) }}">{{ clan.description|raw|striptags|slice(0, 50) }}</a></h5>
 							</div>
 							{% endfor %}

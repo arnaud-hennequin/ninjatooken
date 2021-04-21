@@ -2,26 +2,40 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use App\Form\Type\MessageType;
+use App\Form\RegistrationFormType;
 use App\Entity\User\User;
 use App\Entity\User\Friend;
 use App\Entity\User\Capture;
 use App\Entity\User\Message;
 use App\Entity\User\MessageUser;
 use App\Entity\Clan\ClanProposition;
+use App\Utils\GameData;
 
-class UserController extends Controller
+class UserController extends AbstractController
 {
+    private $tokenManager;
+
+    public function __construct(CsrfTokenManagerInterface $tokenManager = null)
+    {
+        $this->tokenManager = $tokenManager;
+    }
 
     public function oldUser(Request $request)
     {
@@ -39,7 +53,94 @@ class UserController extends Controller
         )));
     }
 
-    public function connected(User $user)
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('ninja_tooken_homepage');
+        }
+
+        return $this->render('user/registration/register.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+/*
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        // if ($this->getUser()) {
+        //     return $this->redirectToRoute('target_path');
+        // }
+
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+*/
+
+    public function login(Request $request)
+    {
+        /** @var $session Session */
+        $session = $request->getSession();
+
+        $authErrorKey = Security::AUTHENTICATION_ERROR;
+        $lastUsernameKey = Security::LAST_USERNAME;
+
+        // get the error if any (works with forward and redirect -- see below)
+        if ($request->attributes->has($authErrorKey)) {
+            $error = $request->attributes->get($authErrorKey);
+        } elseif (null !== $session && $session->has($authErrorKey)) {
+            $error = $session->get($authErrorKey);
+            $session->remove($authErrorKey);
+        } else {
+            $error = null;
+        }
+
+        if (!$error instanceof AuthenticationException) {
+            $error = null; // The value does not come from the security component.
+        }
+
+        // last username entered by the user
+        $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
+
+        $csrfToken = $this->tokenManager
+            ? $this->tokenManager->getToken('authenticate')->getValue()
+            : null;
+
+        return $this->render('user/security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'csrf_token' => $csrfToken,
+        ]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     */
+    public function logout()
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    public function connected(User $user, GameData $gameData)
     {
         $em = $this->getDoctrine()->getManager();
         $repo_message = $em->getRepository(Message::class);
@@ -51,8 +152,6 @@ class UserController extends Controller
 
         $ninja = $user->getNinja();
         if($ninja){
-            $gameData = $this->get('ninjatooken_game.gamedata');
-
             // l'expérience (et données associées)
             $gameData->setExperience($ninja->getExperience(), $ninja->getGrade());
 
@@ -73,7 +172,7 @@ class UserController extends Controller
                     // si l'utilisateur a déjà été connecté avant le dernier garbage collector
                     if($user->getUpdatedAt()===null || (new \DateTime())->getTimestamp() - $user->getUpdatedAt()->getTimestamp() > ini_get('session.gc_maxlifetime')){
                         // lance la connexion
-                        $token = new UsernamePasswordToken($user, $user->getPassword(), $this->container->getParameter('fos_user.firewall_name'), $user->getRoles());
+                        $token = new UsernamePasswordToken($user, $user->getPassword(), $this->getParameter('ninja_tooken_user.firewall_name'), $user->getRoles());
                         $this->get('security.token_storage')->setToken($token);
                         $event = new InteractiveLoginEvent($request, $token);
                         $this->get("event_dispatcher")->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $event);
@@ -119,7 +218,7 @@ class UserController extends Controller
     public function fiche(User $user, $page = 1)
     {
         // amis
-        $num = $this->container->getParameter('numReponse');
+        $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
         
@@ -151,7 +250,7 @@ class UserController extends Controller
         if($authorizationChecker->isGranted('ROLE_USER') ){
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
-            $num = $this->container->getParameter('numReponse');
+            $num = $this->getParameter('numReponse');
             $page = max(1, $page);
             $id = 0;
 
@@ -297,7 +396,7 @@ class UserController extends Controller
                 )
             );
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function userFind(Request $request)
@@ -329,14 +428,14 @@ class UserController extends Controller
             if($user->getDateOfBirth()==new \DateTime('0000-00-00 00:00:00'))
                 $user->setDateOfBirth(null);
 
-            $formFactory = $this->container->get('fos_user.change_password.form.factory');
+            $formFactory = $this->container->get('ninja_tooken_user.change_password.form.factory');
             $form = $formFactory->createForm();
 
             return $this->render('user/parametres.html.twig', array(
                 'form' => $form->createView()
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function parametresUpdate(Request $request)
@@ -352,7 +451,7 @@ class UserController extends Controller
                 $update = false;
                 // paramètres de compte
                 if((int)$request->get('editAccount') == 1){
-                    $userManager = $this->container->get('fos_user.user_manager');
+                    $userManager = $this->container->get('ninja_tooken_user.user_manager');
 
                     // modification de pseudo
                     $oldPseudo = $user->getOldUsernames();
@@ -393,7 +492,7 @@ class UserController extends Controller
                         if($oEmail != $email){
                             if(!$userManager->findUserByEmail($email)){
                                 if (null === $user->getConfirmationToken()) {
-                                    $user->setConfirmationToken($this->get('fos_user.util.token_generator')->generateToken());
+                                    $user->setConfirmationToken($this->get('ninja_tooken_user.util.token_generator')->generateToken());
                                 }
                                 $user->setEmail($email);
                             }else{
@@ -432,7 +531,7 @@ class UserController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function parametresUpdateAvatar(Request $request)
@@ -472,7 +571,7 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function parametresConfirmMail()
@@ -484,7 +583,7 @@ class UserController extends Controller
             $confirmation = $user->getConfirmationToken();
             if(isset($confirmation) && !empty($confirmation)){
 
-                $this->container->get('fos_user.mailer')->sendConfirmationEmailMessage($user);
+                $this->container->get('ninja_tooken_user.mailer')->sendConfirmationEmailMessage($user);
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
@@ -494,7 +593,7 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function parametresUpdatePassword(Request $request)
@@ -504,8 +603,8 @@ class UserController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
 
-            $form = $this->container->get('fos_user.change_password.form.type');
-            $formHandler = $this->container->get('fos_user.change_password.form.handler');
+            $form = $this->container->get('ninja_tooken_user.change_password.form.type');
+            $formHandler = $this->container->get('ninja_tooken_user.change_password.form.handler');
 
             $process = $formHandler->process($user);
             if ($process) {
@@ -518,7 +617,7 @@ class UserController extends Controller
 
                 $newPassword = "";
                 $user->setPlainPassword($newPassword);
-                $this->container->get('fos_user.user_manager')->updateUser($user);
+                $this->container->get('ninja_tooken_user.user_manager')->updateUser($user);
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
@@ -528,7 +627,7 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function parametresDeleteAccount()
@@ -551,7 +650,7 @@ class UserController extends Controller
             $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_forum.comment_listener'));
 
             // supprime l'utilisateur
-            $this->container->get('fos_user.user_manager')->deleteUser($user);
+            $this->container->get('ninja_tooken_user.user_manager')->deleteUser($user);
 
             // recalcul les nombres de réponses d'un thread
             $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = c.num");
@@ -565,14 +664,14 @@ class UserController extends Controller
 
             return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function amis($page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $num = $this->container->getParameter('numReponse');
+            $num = $this->getParameter('numReponse');
             $page = max(1, $page);
 
             $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -591,14 +690,14 @@ class UserController extends Controller
                 'nombrePage' => ceil($numFriends/$num)
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function amisDemande($page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $num = $this->container->getParameter('numReponse');
+            $num = $this->getParameter('numReponse');
             $page = max(1, $page);
 
             $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -616,14 +715,14 @@ class UserController extends Controller
                 'nombrePage' => ceil(count($demandes)/$num)
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function amisBlocked($page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $num = $this->container->getParameter('numReponse');
+            $num = $this->getParameter('numReponse');
             $page = max(1, $page);
 
             $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -641,7 +740,7 @@ class UserController extends Controller
                 'nombrePage' => ceil(count($blocked)/$num)
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -667,7 +766,7 @@ class UserController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -693,7 +792,7 @@ class UserController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -719,7 +818,7 @@ class UserController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -744,7 +843,7 @@ class UserController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function amisBlockedSupprimer()
@@ -763,7 +862,7 @@ class UserController extends Controller
             );
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function amisDemandeSupprimer()
@@ -782,14 +881,14 @@ class UserController extends Controller
             );
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function captures($page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $num = $this->container->getParameter('numReponse');
+            $num = $this->getParameter('numReponse');
             $page = max(1, $page);
 
             $captures = $this->getDoctrine()->getManager()
@@ -802,7 +901,7 @@ class UserController extends Controller
                 'nombrePage' => ceil(count($captures)/$num)
             ));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     /**
@@ -815,7 +914,7 @@ class UserController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
             if($capture->getUser() == $user){
                 // supprime d'imgur
-                $imgur = $this->container->getParameter('imgur');
+                $imgur = $this->getParameter('imgur');
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_HEADER, 0);
                 curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -839,7 +938,7 @@ class UserController extends Controller
             }
             return $this->redirect($this->generateUrl('ninja_tooken_user_captures'));
         }
-        return $this->redirect($this->generateUrl('fos_user_security_login'));
+        return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function online(User $user){

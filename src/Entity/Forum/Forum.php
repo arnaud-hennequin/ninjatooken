@@ -2,6 +2,7 @@
 
 namespace App\Entity\Forum;
 
+use App\Entity\Clan\Clan;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 

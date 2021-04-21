@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-class ChatController extends Controller
+class ChatController extends AbstractController
 {
+
     public function index()
     {
         $channelName = 'ninjatooken';
@@ -17,7 +18,7 @@ class ChatController extends Controller
         $twitchOnline = false;
         $channelTitle = '';
         $streamTitle = '';
-        if ($json_array['stream'] != NULL) {
+        if ($json_array && $json_array['stream'] != NULL) {
             $channelTitle = $json_array['stream']['channel']['display_name'];
             $streamTitle = $json_array['stream']['channel']['status'];
             $twitchOnline = true;
@@ -34,7 +35,8 @@ class ChatController extends Controller
     public function ajax(Request $request)
     {
         // Path to the chat directory:
-        define('AJAX_CHAT_PATH', dirname(__FILE__).'/../AjaxChat/');
+        $root = $this->getParameter('kernel.project_dir');
+        define('AJAX_CHAT_PATH', $root.'/vendor/frug/ajax-chat/chat/');
         define('AJAX_CHAT_URL', $request->getBasePath().'/chat/');
 
         // Include Class libraries:
@@ -57,10 +59,10 @@ class ChatController extends Controller
         // paramètres à surcharger
         $params = array(
             'dbConnection' => array(
-                'host' => $this->container->getParameter('database_host'),
-                'user' => $this->container->getParameter('database_user'),
-                'pass' => $this->container->getParameter('database_password'),
-                'name' => $this->container->getParameter('database_name'),
+                'host' => $this->getParameter('database_host'),
+                'user' => $this->getParameter('database_user'),
+                'pass' => $this->getParameter('database_password'),
+                'name' => $this->getParameter('database_name'),
                 'type' => null,
                 'link' => null
             ),
@@ -75,7 +77,7 @@ class ChatController extends Controller
             'contentType' => 'text/html',
             'styleAvailable' => array('NinjaTooken','beige','black','grey','Oxygen','Lithium','Sulfur','Cobalt','Mercury','Uranium','Plum','prosilver','subblack2','subSilver','Core','MyBB','vBulletin'),
             'logoutData' => $this->generateUrl('ninja_tooken_homepage'),
-            'loginData' => $this->generateUrl('fos_user_security_login'),
+            'loginData' => $this->generateUrl('ninja_tooken_user_security_login'),
             'logsPurgeLogs' => true,
             'logsPurgeTimeDiff' => 60
         );

@@ -1,6 +1,6 @@
 newsletter:
     newsite: |
-        Salut %username%,<br><br>
+        Salut {username},<br><br>
         NinjaTooken vient de faire un grand pas dans son histoire, avec la nouvelle version de son site !<br>
         Sur cette merveille toute neuve, tu trouveras, entre autres :<br>
         &bull; un nouveau système de gestion des clans avec plus d'options d'affichage et des supers grades,<br>
@@ -9,7 +9,7 @@ newsletter:
         &bull; un affichage amélioré de l'intégralité des pages pour un confort de visionnage optimal sur pc mais aussi tablette et smartphone, et bien plus encore !<br>
         Et pour toujours plus de performances, le tout est hébergé sur un serveur dédié.<br><br>
         Côté jeu, on a entièrement repensé la physique, et tu seras peut-être content d'apprendre que tous les ninjas peuvent à nouveau sauter sur l'eau. Il y a aussi plein d'optimisations en réseau.<br><br>
-        Pour profiter dès maintenant de toutes ces améliorations, <a href="%autologin%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">suis ce lien personnel</span></a> pour te connecter directement sur ton compte.
+        Pour profiter dès maintenant de toutes ces améliorations, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">suis ce lien personnel</span></a> pour te connecter directement sur ton compte.
 popup:
     delete: "Cette action est irréversible : es-tu sûr ?"
     confirm: Confirmer
@@ -67,7 +67,7 @@ compte:
         motPasseReset: Réinitialises-le
         noCompte: Tu n'as pas encore de compte ?
 description:
-    datetime: "le %date% à %time%"
+    datetime: "le {date} à {time}"
     suite: Lire la suite
     partenaire: Partenaires
     ninja: |
@@ -218,5 +218,5 @@ game:
         temps: "Dure ##s."
         distance: "Peut être lancé jusqu'à ##m."
         chakra: "Coûte ## points de chakra"
-    course: '{0,1}course|]1,+Inf]courses'
-    assassinat: '{0,1}assassinat|]1,+Inf]assassinats'
+    course: "{count, plural, =0 {aucune course} one {une course} other {# courses}}"
+    assassinat: "{count, plural, =0 {aucun assassinat} one {un assassinat} other {# assassinats}}"

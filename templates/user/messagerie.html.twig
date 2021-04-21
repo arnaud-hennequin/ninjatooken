@@ -38,7 +38,7 @@
 									{% elseif dateActu|date("m/d/Y") == "yesterday"|date("m/d/Y") %}
 								<h4>{{ 'messagerie.hier'|trans }}</h4>
 									{% else %}
-								<h4>{{ dateActu|localizeddate('full', 'none', app.request.locale) }}</h4>
+								<h4>{{ dateActu|format_date('full', locale=app.request.locale) }}</h4>
 									{% endif %}
 								{% endif %}
 								{% set new = false %}
@@ -47,7 +47,7 @@
 								{% endif %}
 								<div class="messagerie">
 									<a href="{{ path(app.request.attributes.get('_route'), {'page':page}) }}?id={{ message.id }}&del=1" class="pull-right"><i class="icon-trash"></i></a>
-									<p><a href="{{ path(app.request.attributes.get('_route'), {'page':page}) }}?id={{ message.id }}"{% if id == message.id %} class="actif"{% endif %}>{% if new %}<i class="icon-eye-open"></i>{% endif %} {{ message.dateAjout|localizeddate('none', 'short', app.request.locale) }} <strong>{{ message.nom }}</strong></a></p>
+									<p><a href="{{ path(app.request.attributes.get('_route'), {'page':page}) }}?id={{ message.id }}"{% if id == message.id %} class="actif"{% endif %}>{% if new %}<i class="icon-eye-open"></i>{% endif %} {{ message.dateAjout|format_date('short', locale=app.request.locale) }} <strong>{{ message.nom }}</strong></a></p>
 									<p>{{ 'messagerie.de'|trans }} <a href="{{ path('ninja_tooken_user_fiche', {user_nom:message.author.slug}) }}">{{ message.author.username }}</a>
 									{{ 'messagerie.a'|trans }} {% for receiver in message.receivers %}<a href="{{ path('ninja_tooken_user_fiche', {user_nom:receiver.destinataire.slug}) }}">{{ receiver.destinataire.username }}</a>{% if not loop.last %},{% endif %}{% endfor %}</p>
 								</div>
@@ -94,7 +94,7 @@
 											<span itemprop="name">{{ currentmessage.author.username }}</span>
 										</a>
 									</span>
-									<time itemprop="datePublished" datetime="{{ currentmessage.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': currentmessage.dateAjout|localizeddate('full', 'none', app.request.locale), '%time%': currentmessage.dateAjout|localizeddate('none', 'short', app.request.locale)}, 'common') }}</h3>
+									<time itemprop="datePublished" datetime="{{ currentmessage.dateAjout|date("Y-m-d\\TH:i:sP") }}">{{ 'description.datetime'|trans({'%date%': currentmessage.dateAjout|format_date('full', locale=app.request.locale), '%time%': currentmessage.dateAjout|format_time('short', locale=app.request.locale)}, 'common') }}</h3>
 								</header>
 								<div class="content" itemprop="articleBody">
 									{{ currentmessage.content|raw|purify('full') }}

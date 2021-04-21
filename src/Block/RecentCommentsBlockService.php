@@ -3,38 +3,37 @@
 namespace App\Block;
 
 use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\BaseBlockService;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\ORM\EntityManager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use App\Entity\Forum\Comment;
 
-class RecentCommentsBlockService extends BaseBlockService
+class RecentCommentsBlockService extends AbstractBlockService
 {
 
     private $em;
     
     /**
-     * @param string               $name
-     * @param EngineInterface      $templating
+     * @var Environment
      */
-    public function __construct($name, EngineInterface $templating, EntityManager $entityManager)
+    public function __construct(Environment $twig, EntityManager $entityManager)
     {
         $this->em = $entityManager;
 
-        parent::__construct($name, $templating);
+        parent::__construct($twig);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $criteria = array(
             'mode' => $blockContext->getSetting('mode')

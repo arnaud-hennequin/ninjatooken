@@ -20,7 +20,7 @@
 
 					{% if threads is not empty %}
 					    <br class="clear">
-						<p>{{ 'description.chercherTopic'|transchoice(threads|length, {'%q%': app.request.get('q')}) }}</p>
+						<p>{{ 'description.chercherTopic'|trans({'count': threads|length, '%q%': app.request.get('q')}) }}</p>
 						{% for thread in threads %}
 						{% include 'forum/topicListe.html.twig' %}
 						{% endfor %}
@@ -28,7 +28,7 @@
 
                     {% if users is not empty %}
                         <br class="clear">
-                        <p>{{ 'description.chercherUtilisateur'|transchoice(users|length, {'%q%': app.request.get('q')}) }}</p>
+                        <p>{{ 'description.chercherUtilisateur'|trans({'count': users|length, '%q%': app.request.get('q')}) }}</p>
                         {% for user in users %}
                         <div class="row-fluid topic">
                             <div class="span6">
@@ -45,7 +45,7 @@
                             {% else %}
                             <div class="offset2 span4">
                             {% endif %}
-                                {{ 'fiche.dateInscrit'|trans({'%date%': user.createdAt|localizeddate('full', 'none', app.request.locale)}) }}
+                                {{ 'fiche.dateInscrit'|trans({'%date%': user.createdAt|format_date('full', locale=app.request.locale)}) }}
                             </div>
                         </div>
                         {% endfor %}
@@ -53,14 +53,14 @@
 
 					{% if clans is not empty %}
                         <br class="clear">
-					    <p>{{ 'description.chercherClan'|transchoice(clans|length, {'%q%': app.request.get('q')}) }}</p>
+					    <p>{{ 'description.chercherClan'|trans({'count': clans|length, '%q%': app.request.get('q')}) }}</p>
 						{% for clan in clans %}
 						<div class="row-fluid topic">
 							<div class="span6">
 								<h5><a href="{{ path('ninja_tooken_clan', {clan_nom:clan.slug}) }}">{% if clan.tag is not empty %}[{{ clan.tag }}] {% endif %}{{ clan.nom }}</a></h5>
 							</div>
 							<div class="span3">
-								<span>{{ 'description.entete'|transchoice(clan.membres.count, {'%date%': clan.dateAjout|localizeddate('medium', 'none', app.request.locale)}) }}</span>
+								<span>{{ 'description.entete'|trans({'count': clan.membres.count, '%date%': clan.dateAjout|format_date('medium', locale=app.request.locale)}) }}</span>
 							</div>
 							<div class="span3">
 								{% if clan.isRecruting %}<span class="actif">{{ 'description.recrutement.ouvert'|trans }}</span>{% else %}<span>{{ 'description.recrutement.ferme'|trans }}</span>{% endif %}

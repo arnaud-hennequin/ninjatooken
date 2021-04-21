@@ -1,22 +1,22 @@
 {# suppression de divs #}
 {% block form_widget_compound %}
-{% spaceless %}
+{% apply spaceless %}
 	{% if form.parent is empty %}
 	    {{ form_errors(form) }}
 	{% endif %}
 	{{ block('form_rows') }}
 	{{ form_rest(form) }}
-{% endspaceless %}
+{% endapply %}
 {% endblock form_widget_compound %}
 
 {% block form_widget_simple %}
-{% spaceless %}
+{% apply spaceless %}
     {% set type = type|default('text') %}
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {% if type == "file" %}
         <a href="#" class="button mini">{{ 'action.choisir'|trans({}, 'common') }}</a>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock form_widget_simple %}
 
 {# ré-organisation boostrap #}
@@ -34,17 +34,17 @@
 
 {# suppression de divs #}
 {% block choice_widget_expanded %}
-{% spaceless %}
+{% apply spaceless %}
     {% for child in form %}
 	{{ form_widget(child) }}
 	{{ form_label(child) }}
     {% endfor %}
-{% endspaceless %}
+{% endapply %}
 {% endblock choice_widget_expanded %}
 
 {# kamon #}
 {% block choice_widget_collapsed %}
-{% spaceless %}
+{% apply spaceless %}
     {% if id=='clan_kamon' %}
     <div class="kamon">
     {% for group_label, choice in choices %}
@@ -70,19 +70,19 @@
         </select>
     </label>&nbsp;
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock choice_widget_collapsed %}
 
 {# wysiwyg tinymce #}
 {% block textarea_widget %}
-{% spaceless %}
+{% apply spaceless %}
     <div class="textarea" {{ block('widget_attributes') }}>{{ value|raw|purify('full') }}</div>
-{% endspaceless %}
+{% endapply %}
 {% endblock textarea_widget %}
 
 {# erreurs #}
 {% block form_errors %}
-{% spaceless %}
+{% apply spaceless %}
     {% if errors|length > 0 %}
     <div class="flash-notice"><ul>
         {% for error in errors %}
@@ -90,5 +90,5 @@
         {% endfor %}
     </ul></div>
     {% endif %}
-{% endspaceless %}
+{% endapply %}
 {% endblock form_errors %}

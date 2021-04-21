@@ -30,13 +30,13 @@
 					{% endif %}
 					<script>
 					var _local = "{{ app.request.locale }}";
-					var embed_path = "{{ asset('bundles/ninjatookencommon/js/vendor/') }}";
+					var embed_path = "{{ asset('js/vendor/') }}";
 					var _timeline = {"timeline":{
 						"headline":"{{ 'titre.event'|trans|escape('js') }}",
 						"type":"default",
 						"text":"{{ 'description.event'|trans|escape('js') }}",
 						"startDate":"{{ firstDate|date("Y,m,d") }}",
-						"date": [{% for thread in threads %}{% spaceless %}
+						"date": [{% for thread in threads %}{% apply spaceless %}
 							{% set first = thread.dateAjout|date("Y,m,d") %}
 							{% set second = '' %}
 							{% if thread.dateEventStart %}
@@ -58,7 +58,7 @@
 									"caption":""
 								}
 							},
-						{% endspaceless %}{% endfor %}]
+						{% endapply %}{% endfor %}]
 					}};
 					</script>
 					{% for thread in threads %}

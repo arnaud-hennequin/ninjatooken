@@ -51,7 +51,7 @@ action:
     enregistrer: Enregistrer
     suppression: Suppression
     modifier: Modifier
-    facebook: "... je préfère ma %bouton% Facebook !"
+    facebook: "... je préfère ma {bouton} Facebook !"
 keywords:
     meta:
         index: NinjaTooken, shinobi, ninja, fps, gratuit, online, free
@@ -77,11 +77,11 @@ titre:
     event: Les events NinjaTooken
     eventDate: "Date de l'event :"
     dernierMessage: Derniers messages
-    topic: "%count% topic|]1,+Inf]%count% topics"
-    comment: "%count% commentaire|]1,+Inf]%count% commentaires"
+    topic: "{count, plural, =0 {aucun topic} one {un topic} other {# topics}}"
+    comment: "{count, plural, =0 {aucun commentaire} one {un commentaire} other {# commentaires}}"
     dernier: dernier
     partieActuelle: Parties en cours
-    ninjatooken: Les \"NinjaTooken\"
+    ninjatooken: Les "NinjaTooken"
     repartition: Répartitions par classe
 description:
     meta:
@@ -103,20 +103,20 @@ description:
         classement: Les shinobis de NinjaTooken sont ici référencés dans un grand codex vous permettant de connaitre la position de chacun !
         partie: Les parties actuellement jouées dans NinjaTooken sont directement accessible ici !
     noPartie: Pas de partie pour l'instant.
-    classement: NinjaTooken c'est %nombreNinja% joueurs ayant cumulés %experienceTotal% points d'expériences !
-    classe: "%classe%, l'art de manipuler l'élément %element%"
-    partie: 'Partie "%type%", version %version%'
-    position: "sur %count% ninjas"
-    threadList: Les topics de "%forum%", c'est ici pour votre jeu fps de ninja gratuit.
+    classement: NinjaTooken c'est {nombreNinja} joueurs ayant cumulés {experienceTotal} points d'expériences !
+    classe: "{classe}, l'art de manipuler l'élément {element}"
+    partie: 'Partie "{type}", version {version}'
+    position: "sur {count} ninjas"
+    threadList: Les topics de "{forum}", c'est ici pour votre jeu fps de ninja gratuit.
     event: "Tournoi, streams, concours : c'est ici que ça se passe !"
     noEvent: Il n'y a pas encore d'évènements.
     canvas: Ton navigateur ne supporte pas les &lt;canvas&gt;.
-    chercherTopic: '%count% topic trouvé pour "%q%"|]1,+Inf]%count% topics trouvés pour "%q%"'
-    chercherUtilisateur: '%count% utilisateur trouvé pour "%q%".|]1,+Inf]%count% utilisateurs trouvés pour "%q%".'
-    chercherClan: '%count% clan trouvé pour "%q%".|]1,+Inf]%count% clans trouvés pour "%q%".'
-    entete: '%count% ninja depuis le %date%|]1,+Inf]%count% ninjas depuis le %date%'
-    creation: 'le %date%'
-    fonde: 'Fondé le %date%'
+    chercherTopic: "{count, plural, =0 {aucun topic trouvé} one {un topic trouvé} other {# topics trouvés}} pour \"{q}\""
+    chercherUtilisateur: "{count, plural, =0 {aucun utilisateur trouvé} one {un utilisateur trouvé} other {# utilisateurs trouvés}} pour \"{q}\""
+    chercherClan: "{count, plural, =0 {aucun clan trouvé} one {un clan trouvé} other {# clans trouvés}} pour \"{q}\""
+    entete: "{count, plural, =0 {aucun ninja} one {un ninja} other {# ninjas}} depuis le {date}"
+    creation: 'le {date}'
+    fonde: 'Fondé le {date}'
     perso: "Page perso :"
     organisation: Organisation du clan
     partenaire: Partenaires
@@ -127,8 +127,8 @@ description:
         message: Ce message n'existe pas !
         forum: Ce forum n'existe pas !
     recrutement:
-        clan: Tu es actuellement %rang% du clan <a href="%urlClan%">%nomClan%</a>.
-        noClan: Tu n'es d'en aucun clan. Tu peux postuler dans le <a href="%urlClan%">clan de ton choix</a> et attendre des propositions de recrutement, ou <a href="%urlClanCreer%">créer ton clan</a>.
+        clan: Tu es actuellement {rang} du clan <a href="{urlClan}">{nomClan}</a>.
+        noClan: Tu n'es d'en aucun clan. Tu peux postuler dans le <a href="{urlClan}">clan de ton choix</a> et attendre des propositions de recrutement, ou <a href="{urlClanCreer}">créer ton clan</a>.
         recrutementPossible: A ce titre, tu peux proposer à d'autres joueurs d'intégrer le clan sous ton protectorat...
         ouvert: recrutements ouverts
         ferme: recrutements fermés
@@ -186,9 +186,9 @@ notice:
     avatarModifierOk: Ton avatar a bien été mis à jour.
     mailConfirmationOk: Un mail de confirmation vient d'être envoyé.
     motPasseModifierOk: Ton mot de passe a correctement été modifié.
-    amiAjoutOk: "%utilisateur% fait désormais partie de tes amis."
-    amiBlockOk: "%utilisateur% est désormais bloqué."
-    amiUnblockOk: "%utilisateur% est débloqué."
+    amiAjoutOk: "{utilisateur} fait désormais partie de tes amis."
+    amiBlockOk: "{utilisateur} est désormais bloqué."
+    amiUnblockOk: "{utilisateur} est débloqué."
     amiSupprimerOk: Suppression correctement effectuée.
     amiSupprimerAllOk: Suppressions correctement effectuées.
     captureSupprimerOk: La capture a bien été supprimée.
@@ -199,8 +199,8 @@ mail:
         nouveau:
             sujet: Proposition de recrutement
             contenu: |
-                <p>Une proposition de recrutement vient de t'être adressée par <a href="%userUrl%">%userPseudo%</a>.<br/>
-                <a href="%urlRefuser%" class="button small delete">Refuser</a> ou <a href="%urlAccepter%" class="button small delete">Accepter</a></p>
+                <p>Une proposition de recrutement vient de t'être adressée par <a href="{userUrl}">{userPseudo}</a>.<br/>
+                <a href="{urlRefuser}" class="button small delete">Refuser</a> ou <a href="{urlAccepter}" class="button small delete">Accepter</a></p>
         refuser:
             sujet: "Re : Proposition de recrutement"
             contenu: Refusée :/
@@ -209,9 +209,9 @@ mail:
             contenu: Acceptée !!
     desinscription:
         message: Si tu ne souhaites plus recevoir de mail de la part de NinjaTooken, 
-    newMessage: "Tu viens de recevoir un nouveau message de la part de %utilisateur% :"
+    newMessage: "Tu viens de recevoir un nouveau message de la part de {utilisateur} :"
 forum:
-    numThread: "%count% topic|%count% topics"
+    numThread: "{count, plural, one {un topic} other {# topics}}"
     newThread: Nouveau topic
     noThread: Pas de topic pour le moment.
 label:
@@ -273,12 +273,12 @@ faq:
     question7: Comment faire pour changer de pseudo, ou supprimer mon compte ?
     reponse7: |
         Une fois ton compte créé, tu pourra changer jusqu'à cinq fois ton pseudo (et alterner entre chaque). Tous les pseudos que tu utilises seront listés dans ta fiche !<br>
-        Pour supprimer ton compte, il te suffit d'aller dans tes <a href="%urlParametre%" class="paramDelete">paramètres</a> et de cliquer sur le bouton "suppression" qui s'y trouve, en bas de page. Attention, la suppression est définitive et ton personnage ne pourra être récupéré.
+        Pour supprimer ton compte, il te suffit d'aller dans tes <a href="{urlParametre}" class="paramDelete">paramètres</a> et de cliquer sur le bouton "suppression" qui s'y trouve, en bas de page. Attention, la suppression est définitive et ton personnage ne pourra être récupéré.
     question8: Pourquoi j'ai une page blanche et puis rien ?
     reponse8: |
         Déjà regarde si tu as bien installé le plugin unity3D <a href="http://unity3d.com/webplayer/" target="_blank">disponible ici</a> (l'installation est rapide et ne nécessite pas de relancer son navigateur).<br>
         Ensuite vérifie que tu peux bien voir la <a href="http://unity3d.com/gallery/live-demos/index.html#tropical-paradise" target="_blank">démo Unity3d</a>.<br>
-        Si oui, va sur <a href="http://www.m2h.nl/files/HWstats.html" target="_blank">cette page</a>, copie et colle le contenu affiché dans le forum "<a href="%oldForum%?ID=65">Amélioration et Bug</a>". Essaie d'être assez précis dans la description de ton problème, et avant de poster regarde si quelqu'un n'a pas déjà eu le même problème. Nous t'aiderons au mieux pour que tu puisses nous rejoindre dans le jeu !<br>
+        Si oui, va sur <a href="http://www.m2h.nl/files/HWstats.html" target="_blank">cette page</a>, copie et colle le contenu affiché dans le forum "<a href="{oldForum}?ID=65">Amélioration et Bug</a>". Essaie d'être assez précis dans la description de ton problème, et avant de poster regarde si quelqu'un n'a pas déjà eu le même problème. Nous t'aiderons au mieux pour que tu puisses nous rejoindre dans le jeu !<br>
         Sinon, vérifie que les drivers de ta carte graphique sont bien à jour... et encore plus simplement, essaies d'aller sur le jeu avec un autre navigateur !
     question9: Le jeu se charge puis se bloque avant 100%, je fais quoi ?
     reponse9: |
@@ -301,7 +301,7 @@ faq:
         <ul>
             <li><span>tu n'as pas encore validé ton compte utilisateur : un mail a dû t'être envoyé comportant un lien de validation. Clique dessus, et connectes toi !</span></li>
             <li><span>si tu as oublié ton mot de passe, il te suffit de cliquer sur le lien en haut de page "mot de passe oublié ?", un nouveau mot de passe te sera envoyé par mail</span></li>
-            <li><span>ton pseudo ou ton mot de passe comporte des caractères non latin (tu as voulu faire le malin en écrivant en japonais?). Pour corriger le problème, <a href="%urlContact%" alt="nous contacter" title="nous-contacter">contacts-nous</a> !</span></li>
+            <li><span>ton pseudo ou ton mot de passe comporte des caractères non latin (tu as voulu faire le malin en écrivant en japonais?). Pour corriger le problème, <a href="{urlContact}" alt="nous contacter" title="nous-contacter">contacts-nous</a> !</span></li>
             <li><span>le serveur est surchargé : pas de miracles, il te faut patienter!</span></li>
         </ul>
     question12: Le jeu lague chez moi, c'est normal ?
@@ -313,7 +313,7 @@ faq:
     question13: Le jeu ram, je fais quoi ?
     reponse13: |
         Si le jeu ram (ralentissements), tu peux aller diminuer la qualité graphique du jeu dans le menu : "options" puis "graphiques".<br>
-        Plus d'informations sont disponibles dans le <a href="%urlManuel%#parametrage-video" title="Paramétrage de la vidéo et du son">manuel du ninja : "Paramétrage de la vidéo et du son"</a>.<br>
+        Plus d'informations sont disponibles dans le <a href="{urlManuel}#parametrage-video" title="Paramétrage de la vidéo et du son">manuel du ninja : "Paramétrage de la vidéo et du son"</a>.<br>
         Tu peux également diminuer la résolution système pour améliorer les performances en mode "plein écran".
     question14: Une fois en jeu, la souris ne répond plus, que faire ?
     reponse14: |
@@ -326,7 +326,7 @@ guide:
             nom: Description Générale
             description: |
                 Ninja Tooken te transporte dans un univers très japonisant où les ninjas sont sans pitié. Le but du jeu ? Tous les killer !<br><br>
-                Pour commencer, <a href="%urlRegister%">créé ton compte</a>. Puis, choisis la classe de ton ninja : Katon (le feu), Suiton (l'eau), Futon (le vent), Doton (la terre), Raiton (la foudre).<br>
+                Pour commencer, <a href="{urlRegister}">créé ton compte</a>. Puis, choisis la classe de ton ninja : Katon (le feu), Suiton (l'eau), Futon (le vent), Doton (la terre), Raiton (la foudre).<br>
                 Ensuite, le principe est simple : plus tu killes, plus tu gagnes des points d'expérience.<br>
                 Ces points te permettront de faire évoluer ton ninja selon ta classe.<br><br>
                 Mais attention chaque élément a son ennemi juré. Par exemple, si tu appartiens à Katon, méfie-toi surtout de Suiton.
@@ -638,7 +638,7 @@ guide:
                     Chacune des 5 cinqs classes est prédominante sur une autre. Cela signifie qu'un ninja d'une classe prédominante sur une autre infligera plus de dégât à un ninja de cette classe.<br>
                     Par exemple un ninja Suiton infligera 20% de dégâts de plus des dommages habituels à un ninja Katon. Mais le ninja Katon fera de même sur un ninja Futon. Voici un graphique illustrant la boucle des prédominances :<br>
                     <br>
-                    N'oublie pas que tu peux voir les pourcentages de ninja de chaque classe en bas de la <a href="{{ path('ninja_tooken_game_classement') }}">page classement</a>. Choisis intelligemment ta classe en fonction des classes présentes dans le jeu (si il y a 50% de ninjas dotons, choisis plutôt raiton !)<br>
+                    N'oublie pas que tu peux voir les pourcentages de ninja de chaque classe en bas de la page classement. Choisis intelligemment ta classe en fonction des classes présentes dans le jeu (si il y a 50% de ninjas dotons, choisis plutôt raiton !)<br>
                     <br>
                     <br>
                     Comme dit en introduction, chaque classe possède deux jutsus qui lui sont propres. Ces jutsus vont probablement déterminer ton choix de classe.
@@ -677,7 +677,7 @@ guide:
             nom: Demandes d'Améliorations et bugs
             description: |
                 Tu joues depuis un certain temps maintenant, et tu as remarqué des bugs, ou tu veux partager tes idées pour améliorer le jeu ?<br>
-                Pour cela, il suffit de nous envoyer un message ici : <a href="%urlForum%" title="Améliorations et bugs">Forum : Amélioration et bugs</a>
+                Pour cela, il suffit de nous envoyer un message ici : <a href="{urlForum}" title="Améliorations et bugs">Forum : Amélioration et bugs</a>
 mention:
     partie1:
         nom: Accord de confidentialités
@@ -748,7 +748,7 @@ team:
     description: |
         Ninja Tooken, c'est des ninjas et des shurikens, mais c'est aussi...
     description1: |
-        Pour toutes questions, n'hésitez pas à <a href="%urlContact%" title="nous contacter">nous contacter</a> !
+        Pour toutes questions, n'hésitez pas à <a href="{urlContact}" title="nous contacter">nous contacter</a> !
     partie1:
         nom: Infographie 3D
     partie2:
@@ -888,57 +888,57 @@ ninjatooken:
     ancien: Les anciens NinjaTooken :
     ancienListe:
         winner15:
-            utilisateur: <a href="%urlUtilisateur%?ID=128628">Ryaxta</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=302936">27 octobre 2013</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=128628">Ryaxta</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=302936">27 octobre 2013</a>
         winner14:
             utilisateur: <a href="/fr/fiche/delton">-Delton-</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=272352">12 mai 2013</a>, et <a href="%urlMessage%?ID=290784">18 août 2013</a></span>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=272352">12 mai 2013</a>, et <a href="{urlMessage}?ID=290784">18 août 2013</a></span>
         winner13:
-            utilisateur: <a href="%urlUtilisateur%?ID=36758">Pein-rikoudu</a>, <a href="%urlUtilisateur%?ID=66114">Horoshimaru</a> et <a href="%urlUtilisateur%?ID=107657">Suikeii</a>
-            tournoi: vainqueurs le <a href="%urlMessage%?ID=245781">10 février 2013</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=36758">Pein-rikoudu</a>, <a href="{urlUtilisateur}?ID=66114">Horoshimaru</a> et <a href="{urlUtilisateur}?ID=107657">Suikeii</a>
+            tournoi: vainqueurs le <a href="{urlMessage}?ID=245781">10 février 2013</a>
         winner12:
             utilisateur: Rw_light
-            tournoi: vainqueur le <a href="%urlMessage%?ID=235008">22 décembre 2012</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=235008">22 décembre 2012</a>
         winner11:
-            utilisateur: <a href="%urlUtilisateur%?ID=36758">Pein-rikoudu</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=217944">20 octobre 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=36758">Pein-rikoudu</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=217944">20 octobre 2012</a>
         winner10:
-            utilisateur: <a href="%urlUtilisateur%?ID=11650">kether</a>, <a href="%urlUtilisateur%?ID=45363">Blade-Inferno</a> et <a href="%urlUtilisateur%?ID=37763">strikesword</a>
-            tournoi: vainqueurs le <a href="%urlMessage%?ID=182447">8 juillet 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=11650">kether</a>, <a href="{urlUtilisateur}?ID=45363">Blade-Inferno</a> et <a href="{urlUtilisateur}?ID=37763">strikesword</a>
+            tournoi: vainqueurs le <a href="{urlMessage}?ID=182447">8 juillet 2012</a>
         winner9:
-            utilisateur: <a href="%urlUtilisateur%?ID=">Fusako.Uchiha</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=165196">5 Mai 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=">Fusako.Uchiha</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=165196">5 Mai 2012</a>
         winner8:
-            utilisateur: <a href="%urlUtilisateur%?ID=39080">Ninjamza</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=160075">21 avril 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=39080">Ninjamza</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=160075">21 avril 2012</a>
         winner7:
-            utilisateur: <a href="%urlUtilisateur%?ID=11650">kether</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=142474">25 février 2012</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=11650">kether</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=142474">25 février 2012</a>
         winner6:
-            utilisateur: <a href="%urlUtilisateur%?ID=35776">L-orbe-shuriken</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=119260">13 novembre 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=35776">L-orbe-shuriken</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=119260">13 novembre 2011</a>
         winner5:
             utilisateur: Yoyosam
-            tournoi: vainqueur le <a href="%urlMessage%?ID=109224">22 octobre 2011</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=109224">22 octobre 2011</a>
         winner4:
-            utilisateur: <a href="%urlUtilisateur%?ID=46909">Rydax</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=72948">16 juillet 2011</a>, <a href="%urlMessage%?ID=79127">13 août 2011</a>, et <a href="%urlMessage%?ID=93504">18 septembre 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=46909">Rydax</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=72948">16 juillet 2011</a>, <a href="{urlMessage}?ID=79127">13 août 2011</a>, et <a href="{urlMessage}?ID=93504">18 septembre 2011</a>
         winner3:
-            utilisateur: <a href="%urlUtilisateur%?ID=37546">Gaara76</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=68359">26 juin 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=37546">Gaara76</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=68359">26 juin 2011</a>
         winner2:
-            utilisateur: <a href="%urlUtilisateur%?ID=24921">Mistral</a>
-            tournoi: vainqueur le <a href="%urlMessage%?ID=60173"> 14 mai 2011</a>, <a href="%urlMessage%?ID=63228">29 mai 2011</a>, et <a href="%urlMessage%?ID=64492">5 juin 2011</a>
+            utilisateur: <a href="{urlUtilisateur}?ID=24921">Mistral</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=60173"> 14 mai 2011</a>, <a href="{urlMessage}?ID=63228">29 mai 2011</a>, et <a href="{urlMessage}?ID=64492">5 juin 2011</a>
         winner1:
             utilisateur: Zanhkraft
-            tournoi: vainqueur le <a href="%urlMessage%?ID=33451">organisé le 13/14 novembre 2010</a>
+            tournoi: vainqueur le <a href="{urlMessage}?ID=33451">organisé le 13/14 novembre 2010</a>
 registration:
     email:
-        subject: Bienvenue %username% !
+        subject: Bienvenue {username} !
         message: |
-            Salut %username% !<br>
+            Salut {username} !<br>
             <br>
-            Pour valider ton adresse email, merci de te rendre sur <a href="%confirmationUrl%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">%confirmationUrl%</span></a><br>
+            Pour valider ton adresse email, merci de te rendre sur <a href="{confirmationUrl}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">{confirmationUrl}</span></a><br>
             <br>
             Bon jeu !<br>
             L'équipe NinjaTooken.
@@ -949,16 +949,16 @@ resetting:
     email:
         subject: Réinitialisation de ton mot de passe
         message: |
-            Salut %username% !<br>
+            Salut {username} !<br>
             <br>
-            Pour réinitialiser ton mot de passe, merci de te rendre sur <a href="%confirmationUrl%" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">%confirmationUrl%</span></a><br>
+            Pour réinitialiser ton mot de passe, merci de te rendre sur <a href="{confirmationUrl}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">{confirmationUrl}</span></a><br>
             <br>
             Bon jeu !<br>
             L'équipe NinjaTooken.
 ami:
-    numFriend: "%count% ami|]1,+Inf]%count% amis"
-    numDemande: "{0} Pas de demandes en cours|{1} Une demande en cours|]1,+Inf]%count% demandes en cours"
-    numBlock: "{0} Pas de demandes bloquées|{1} Une demande bloquée|]1,+Inf]%count% demandes bloquées"
+    numFriend: "{count, plural, =0 {pas d'ami} one {un ami} other {# amis}}"
+    numDemande: "{count, plural, =0 { Pas de demandes en cours} one {Une demande en cours} other {# demandes en cours}}"
+    numBlock: "{count, plural, =0 { Pas de demande bloquée} one {Une demande bloquée} other {# demandes bloquées}}"
     noFriend: Pas encore d'amis.
     noDemande: Pas encore de demandes
     noBlock: Pas de demandes bloquées pour l'instant.
@@ -966,7 +966,7 @@ capture:
     noCapture: Pas de captures pour l'instant.
 fiche:
     autrePseudo: Autre pseudo utilisé
-    dateInscrit: Inscrit depuis le %date%
+    dateInscrit: Inscrit depuis le {date}
 messagerie:
     newMessage: Nouveau Message
     reception: Réception
@@ -985,7 +985,7 @@ parametre:
         envoyer: Envoyer un mail de confirmation
     dateNaissance: Date de naissance
     description: Description
-    descriptionInfo: (affichée dans la <a href="%urlFiche%">fiche ninja</a>)
+    descriptionInfo: (affichée dans la <a href="{urlFiche}">fiche ninja</a>)
     avatar: Avatar
     modifierAvatar: Modifier ton avatar
     hebergement: Hébergement

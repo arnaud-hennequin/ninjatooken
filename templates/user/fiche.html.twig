@@ -18,7 +18,7 @@
 {% block body %}
 				<div class="row-fluid">
 					<section class="main span8">
-						<h5>{{ 'fiche.dateInscrit'|trans({'%date%': user.createdAt|localizeddate('full', 'none', app.request.locale)}) }}</h5>
+						<h5>{{ 'fiche.dateInscrit'|trans({'%date%': user.createdAt|format_date('full', locale=app.request.locale)}) }}</h5>
 						{{ render(controller('App\\Controller\\GameController::signature', {'user':user})) }}
 
 						{{ user.description|raw|purify('full') }}

@@ -68,7 +68,6 @@ services:
 
     kernel.listener.ninjatooken_exception_listener:
         class: App\Listener\NinjaTookenExceptionListener
-        arguments: ["@templating"]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
     markup.exercise_html_purifier:
@@ -123,20 +122,15 @@ services:
 
     ninjatooken_user.registration.form.type:
         class: App\Form\Type\RegistrationFormType
-        arguments: ['%fos_user.model.user.class%']
+        arguments: [App\Entity\User\User]
         tags:
             - { name: form.type, alias: ninjatooken_user_registration }
 
     ninjatooken_user.resetting.form.type:
         class: App\Form\Type\ResettingFormType
-        arguments: ['%fos_user.model.user.class%']
+        arguments: [App\Entity\User\User]
         tags:
             - { name: form.type, alias: ninjatooken_user_resetting }
-
-    ninjatooken_user.form_handler_registration:
-        class: App\Listener\RegistrationListener
-        tags:
-            - { name: kernel.event_subscriber }
 
     ninjatooken_user_listener:
         class: App\Listener\LoginListener
@@ -166,7 +160,7 @@ services:
         class: App\Admin\IpAdmin
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: Ip}
-        arguments: [~, App\Entity\Ip, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\Ip, SonataAdminBundle:CRUD]
 
 
 
@@ -178,9 +172,9 @@ services:
             - { name: sonata.admin, manager_type: orm, group: clan, label: Clan }
         arguments: [ null, App\Entity\Clan, null]
         calls:
-            - [ addChild, [ '@ninjatooken.forum.admin.forum' ] ]
-            - [ addChild, [ '@ninjatooken_clan.admin.clan_utilisateur' ] ]
-            - [ addChild, [ '@ninjatooken_clan.admin.clan_postulation' ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.forum', 'ForumAdmin' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_utilisateur', 'ClanUtilisateurAdmin' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_postulation', 'ClanPostulationAdmin' ] ]
 
     ninjatooken_clan.admin.clan_utilisateur:
         class: App\Admin\ClanUtilisateurAdmin
@@ -206,7 +200,7 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: forum, label: Forum }
         calls:
-            - [ addChild, [ '@ninjatooken.forum.admin.thread' ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.thread', 'ThreadAdmin' ] ]
 
     ninjatooken.forum.admin.thread:
         class: App\Admin\ThreadAdmin
@@ -214,7 +208,7 @@ services:
             - { name: sonata.admin, manager_type: orm, group: forum, label: Topic }
         arguments: [ null, App\Entity\Thread, null]
         calls:
-            - [ addChild, [ '@ninjatooken.forum.admin.comment' ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.comment', 'CommentAdmin' ] ]
 
     ninjatooken.forum.admin.comment:
         class: App\Admin\CommentAdmin
@@ -232,7 +226,7 @@ services:
         class: App\Block\RecentCommentsBlockService
         tags:
             - { name: sonata.block }
-        arguments: ["ninjatooken.forum.block.recent_comments", '@templating', '@doctrine.orm.entity_manager']
+        arguments: ['@twig', '@doctrine.orm.entity_manager']
 
     ninjatooken_game.admin.ninja:
         class: App\Admin\NinjaAdmin
@@ -244,14 +238,14 @@ services:
         class: App\Admin\UserAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: user, label: Utilisateur }
-        arguments: [null, App\Entity\User, SonataAdminBundle:CRUD]
+        arguments: [null, App\Entity\User\User, SonataAdminBundle:CRUD]
         calls:
-            - [ addChild, [ '@ninjatooken_user.admin.detection' ] ]
-            - [ addChild, [ '@ninjatooken_user.admin.message' ] ]
-            - [ addChild, [ '@ninjatooken.forum.admin.comment_user' ] ]
-            - [ addChild, [ '@ninjatooken_user.admin.friend' ] ]
-            - [ addChild, [ '@ninjatooken_user.admin.capture' ] ]
-            - [ addChild, [ '@ninjatooken_clan.admin.clan_proposition' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.detection', 'DetectionAdmin' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.message', 'MessageAdmin' ] ]
+            - [ addChild, [ '@ninjatooken.forum.admin.comment_user', 'CommentUserAdmin' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.friend', 'FriendAdmin' ] ]
+            - [ addChild, [ '@ninjatooken_user.admin.capture', 'CaptureAdmin' ] ]
+            - [ addChild, [ '@ninjatooken_clan.admin.clan_proposition', 'ClanPropositionAdmin' ] ]
 
     ninjatooken_user.admin.message:
         class: App\Admin\MessageAdmin
@@ -281,4 +275,4 @@ services:
         class: App\Admin\DetectionAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: user, label: Détection multi-compte par ip }
-        arguments: [ null,  null, App\Controller\DetectionAdminController]
+        arguments: [ null,  App\Entity\User\User, App\Controller\DetectionAdminController]
