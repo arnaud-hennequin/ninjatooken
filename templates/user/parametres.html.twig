@@ -83,7 +83,7 @@
 							<label class="select">
 								<select name="mois">
 								{% for i in range(1, 12) %}
-									<option value="{{ i }}"{% if i==app.user.dateOfBirth|date("m") %} selected{% endif %}>{{ date('2013-' ~ i ~ '-01')|format_date(locale=app.request.locale, format='LLLL') }}</option>
+									<option value="{{ i }}"{% if i==app.user.dateOfBirth|date("m") %} selected{% endif %}>{{ date('2013-' ~ i ~ '-01')|format_date(locale=app.request.locale, pattern='LLLL') }}</option>
 								{% endfor %}
 								</select>
 							</label>

@@ -49,7 +49,7 @@ services:
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
-            - !service { class: PDO, factory: ['@database_connection', 'getWrappedConnection'] }
+            - '%env(DATABASE_URL)%'
             - { db_table: 'session', db_id_col: 'session_id', db_data_col: 'session_value', db_time_col: 'session_time', db_lifetime_col: 'session_lifetime' }
             # If you get transaction issues (e.g. after login) uncomment the line below
             # - { lock_mode: 1 }
@@ -70,9 +70,6 @@ services:
         class: App\Listener\NinjaTookenExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
-    markup.exercise_html_purifier:
-        class: FOS\CommentBundle\Markup\HtmlPurifier
-        arguments: [ "@exercise_html_purifier.full" ]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -119,18 +116,6 @@ services:
 
     ninjatooken_game.gamedata:
         class: App\Utils\GameData
-
-    ninjatooken_user.registration.form.type:
-        class: App\Form\Type\RegistrationFormType
-        arguments: [App\Entity\User\User]
-        tags:
-            - { name: form.type, alias: ninjatooken_user_registration }
-
-    ninjatooken_user.resetting.form.type:
-        class: App\Form\Type\ResettingFormType
-        arguments: [App\Entity\User\User]
-        tags:
-            - { name: form.type, alias: ninjatooken_user_resetting }
 
     ninjatooken_user_listener:
         class: App\Listener\LoginListener

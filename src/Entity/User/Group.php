@@ -21,11 +21,15 @@ class Group
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
      */
     protected $name;
 
     /**
      * @var array
+     *
+     * @ORM\Column(type="array")
      */
     protected $roles;
 

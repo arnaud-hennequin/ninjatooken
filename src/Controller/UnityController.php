@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Entity\User\User;
 use App\Entity\User\Friend;
 use App\Entity\User\Message;
@@ -29,7 +30,7 @@ class UnityController extends AbstractController
     private $gameversion;
     private $idUtilisateur;
 
-    public function update(Request $request, GameData $gameData)
+    public function update(Request $request, TranslatorInterface $translator, GameData $gameData)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -493,7 +494,6 @@ class UnityController extends AbstractController
                                     $em->persist($friend);
 
                                     // créé le message
-                                    $translator = $this->get('translator');
                                     $message = new Message();
                                     $message->setAuthor($user);
                                     $message->setNom($translator->trans('nouvelAmi.title'));

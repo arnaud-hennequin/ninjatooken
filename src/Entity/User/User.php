@@ -10,17 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="nt_user")
  * @ORM\Entity(repositoryClass="App\Entity\User\UserRepository")
+ * @ORM\HasLifecycleCallbacks
  *
  * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="ninja_tooken_user.username.already_used", groups={"Registration", "Profile"})
  * @UniqueEntity(fields="emailCanonical", errorPath="email", message="ninja_tooken_user.email.already_used", groups={"Registration", "Profile"})
  */
-class User
+class User implements UserInterface
 {
     public const GENDER_FEMALE = 'f';
     public const GENDER_MALE = 'm';
@@ -38,50 +38,56 @@ class User
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
      */
     protected $updatedAt;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     protected $username;
 
     /**
-     * @ORM\Column(name="username_canonical", type="string", length=180, unique=true)
+     * @ORM\Column(name="username_canonical", type="string", length=255, unique=true)
      */
     protected $usernameCanonical;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     protected $email;
 
     /**
-     * @ORM\Column(name="email_canonical", type="string", length=180, unique=true)
+     * @ORM\Column(name="email_canonical", type="string", length=255, unique=true)
      */
     protected $emailCanonical;
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="enabled", type="boolean")
      */
     protected $enabled;
 
     /**
      * The salt to use for hashing.
      *
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     protected $salt;
 
     /**
      * Encrypted password. Must be persisted.
      *
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255)
      */
     protected $password;
 
@@ -93,18 +99,22 @@ class User
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
     protected $lastLogin;
 
     /**
      * Random string sent to the user email address in order to verify it.
      *
-     * @ORM\Column(name="confirmation_token", type="string", length=180, unique=true)
+     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
     protected $confirmationToken;
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
      */
     protected $passwordRequestedAt;
 
@@ -114,7 +124,7 @@ class User
     protected $groups;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="array")
      */
     protected $roles;
 
@@ -231,32 +241,43 @@ class User
 
     /**
      * @var \DateTime|null
+     *
+     * @ORM\Column(name="date_of_birth", type="datetime", nullable=true)
      */
     protected $dateOfBirth;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="biography", type="string", length=255, nullable=true)
      */
     protected $biography;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=1, nullable=true)
      */
     protected $gender = self::GENDER_UNKNOWN; // set the default to unknown
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="locale", type="string", length=8, nullable=true)
      */
     protected $locale;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="timezone", type="string", length=64, nullable=true)
      */
     protected $timezone;
 
 
     public function __construct()
     {
+        $this->salt = "";
         $this->enabled = false;
         $this->roles = [];
 
@@ -282,8 +303,22 @@ class User
         return (string) $this->getUsername();
     }
 
+    private function canonicalize($string)
+    {
+        if (null === $string) {
+            return;
+        }
+
+        $encoding = mb_detect_encoding($string);
+        $result = $encoding
+            ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
+            : mb_convert_case($string, MB_CASE_LOWER);
+
+        return $result;
+    }
+
     /**
-     * Hook on pre-persist operations.
+     * @ORM\PrePersist
      */
     public function prePersist(): void
     {
@@ -293,10 +328,13 @@ class User
         if (null !== $this->file) {
             $this->setAvatar(uniqid(mt_rand(), true).".".$this->file->guessExtension());
         }
+
+        $this->setUsernameCanonical($this->canonicalize($this->getUsername()));
+        $this->setEmailCanonical($this->canonicalize($this->getEmail()));
     }
 
     /**
-     * Hook on pre-update operations.
+     * @ORM\PreUpdate
      */
     public function preUpdate(): void
     {
@@ -1425,5 +1463,22 @@ class User
             'gender_female' => self::GENDER_FEMALE,
             'gender_male' => self::GENDER_MALE,
         ];
+    }
+
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function getDateOfBirth(): ?\DateTimeInterface
+    {
+        return $this->dateOfBirth;
+    }
+
+    public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): self
+    {
+        $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
     }
 }

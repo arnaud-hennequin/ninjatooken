@@ -1,14 +1,3 @@
-root:
-    path: /
-    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
-    defaults:
-        path: /%locale%/
-        permanent: true
-
-add_blocker:
-    path: /adimages/
-    controller: App\Controller\CommonController::addBlocker
-
 ninja_tooken_chat:
     resource: "chat.yaml"
     prefix:   /{_locale}/
@@ -41,10 +30,6 @@ ninja_tooken_game:
     defaults:
         _locale: fr
 
-ninja_tooken_game_unity:
-    resource: "unity.yaml"
-    prefix:   /
-
 ninja_tooken_forum:
     resource: "forum.yaml"
     prefix:   /{_locale}/
@@ -60,3 +45,15 @@ ninja_tooken_user:
         _locale: en|fr
     defaults:
         _locale: fr
+
+ninja_tooken_user_resetting:
+    resource: "user_resetting.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_game_unity:
+    resource: "unity.yaml"
+    prefix:   /

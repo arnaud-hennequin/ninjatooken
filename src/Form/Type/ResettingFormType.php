@@ -3,11 +3,11 @@
 namespace App\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use FOS\UserBundle\Form\Type\ResettingFormType as BaseType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class ResettingFormType extends BaseType
+class ResettingFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

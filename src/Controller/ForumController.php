@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\Type\ThreadType;
@@ -16,7 +17,7 @@ use App\Entity\Forum\Comment;
 
 class ForumController extends AbstractController
 {
-    public function oldMessage(Request $request)
+    public function oldMessage(Request $request, TranslatorInterface $translator)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -28,7 +29,7 @@ class ForumController extends AbstractController
         }
 
         if(!$thread){
-            throw new NotFoundHttpException($this->get('translator')->trans('description.error404.message'));
+            throw new NotFoundHttpException($translator->trans('description.error404.message'));
         }
 
         return $this->redirect($this->generateUrl('ninja_tooken_thread', array(
@@ -38,14 +39,14 @@ class ForumController extends AbstractController
         )));
     }
 
-    public function oldForum(Request $request)
+    public function oldForum(Request $request, TranslatorInterface $translator)
     {
         $em = $this->getDoctrine()->getManager();
 
         $forum = $em->getRepository('App\Entity\Forum\Forum')->findOneBy(array('old_id' => (int)$request->get('ID')));
 
         if(!$forum){
-            throw new NotFoundHttpException($this->get('translator')->trans('description.error404.forum'));
+            throw new NotFoundHttpException($translator->trans('description.error404.forum'));
         }
 
         return $this->redirect($this->generateUrl('ninja_tooken_topic', array(
@@ -75,7 +76,7 @@ class ForumController extends AbstractController
         ));
     }
 
-    public function eventAjouter(Request $request)
+    public function eventAjouter(Request $request, TranslatorInterface $translator)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -95,7 +96,7 @@ class ForumController extends AbstractController
                         array('body' => $request->get('event_body'))
                     ));
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
 
                     if ($form->isValid()) {
                         $em = $this->getDoctrine()->getManager();
@@ -104,7 +105,7 @@ class ForumController extends AbstractController
 
                         $this->get('session')->getFlashBag()->add(
                             'notice',
-                            $this->get('translator')->trans('notice.topic.ajoutOk')
+                            $translator->trans('notice.topic.ajoutOk')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_event'));
@@ -121,7 +122,7 @@ class ForumController extends AbstractController
     /**
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function eventModifier(Request $request, Thread $thread)
+    public function eventModifier(Request $request, TranslatorInterface $translator, Thread $thread)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -136,7 +137,7 @@ class ForumController extends AbstractController
                         array('body' => $request->get('event_body'))
                     ));
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
 
                     if ($form->isValid()) {
                         $em = $this->getDoctrine()->getManager();
@@ -145,7 +146,7 @@ class ForumController extends AbstractController
 
                         $this->get('session')->getFlashBag()->add(
                             'notice',
-                            $this->get('translator')->trans('notice.topic.editOk')
+                            $translator->trans('notice.topic.editOk')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_thread', array(
@@ -227,7 +228,7 @@ class ForumController extends AbstractController
     /**
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      */
-    public function threadAjouter(Request $request, Forum $forum)
+    public function threadAjouter(Request $request, TranslatorInterface $translator, Forum $forum)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -245,7 +246,7 @@ class ForumController extends AbstractController
                         array('body' => $request->get('thread_body'))
                     ));
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
 
                     if ($form->isValid()) {
                         $em = $this->getDoctrine()->getManager();
@@ -254,7 +255,7 @@ class ForumController extends AbstractController
 
                         $this->get('session')->getFlashBag()->add(
                             'notice',
-                            $this->get('translator')->trans('notice.topic.ajoutOk')
+                            $translator->trans('notice.topic.ajoutOk')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_thread', array(
@@ -276,7 +277,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadModifier(Request $request, Forum $forum, Thread $thread)
+    public function threadModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -291,7 +292,7 @@ class ForumController extends AbstractController
                         array('body' => $request->get('thread_body'))
                     ));
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
 
                     if ($form->isValid()) {
                         $em = $this->getDoctrine()->getManager();
@@ -300,7 +301,7 @@ class ForumController extends AbstractController
 
                         $this->get('session')->getFlashBag()->add(
                             'notice',
-                            $this->get('translator')->trans('notice.topic.editOk')
+                            $translator->trans('notice.topic.editOk')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_thread', array(
@@ -323,7 +324,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadVerrouiller(Forum $forum, Thread $thread)
+    public function threadVerrouiller(TranslatorInterface $translator, Forum $forum, Thread $thread)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -339,7 +340,7 @@ class ForumController extends AbstractController
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                    $thread->getIsCommentable()?$this->get('translator')->trans('notice.topic.deverrouilleOk'):$this->get('translator')->trans('notice.topic.verrouilleOk')
+                    $thread->getIsCommentable()?$translator->trans('notice.topic.deverrouilleOk'):$translator->trans('notice.topic.verrouilleOk')
                 );
             }
         }
@@ -353,7 +354,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadPostit(Forum $forum, Thread $thread)
+    public function threadPostit(TranslatorInterface $translator, Forum $forum, Thread $thread)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -369,7 +370,7 @@ class ForumController extends AbstractController
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                    $thread->getIsPostit()?$this->get('translator')->trans('notice.topic.postitOk'):$this->get('translator')->trans('notice.topic.unpostitOk')
+                    $thread->getIsPostit()?$translator->trans('notice.topic.postitOk'):$translator->trans('notice.topic.unpostitOk')
                 );
             }
         }
@@ -383,7 +384,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadSupprimer(Forum $forum, Thread $thread)
+    public function threadSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -398,7 +399,7 @@ class ForumController extends AbstractController
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                    $this->get('translator')->trans('notice.topic.deleteOk')
+                    $translator->trans('notice.topic.deleteOk')
                 );
 
                 if(!$forum->getClan()){
@@ -424,7 +425,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function commentAjouter(Request $request, Forum $forum, Thread $thread, $page)
+    public function commentAjouter(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, $page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
@@ -444,7 +445,7 @@ class ForumController extends AbstractController
                         array('body' => $request->get('comment_body'))
                     ));
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
 
                     if ($form->isValid()) {
                         $em = $this->getDoctrine()->getManager();
@@ -453,7 +454,7 @@ class ForumController extends AbstractController
 
                         $this->get('session')->getFlashBag()->add(
                             'notice',
-                            $this->get('translator')->trans('notice.comment.ajoutOk')
+                            $translator->trans('notice.comment.ajoutOk')
                         );
                     }
                 }
@@ -471,7 +472,7 @@ class ForumController extends AbstractController
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      * @ParamConverter("comment", class="App\Entity\Forum\Comment", options={"mapping": {"comment_id":"id"}})
      */
-    public function commentModifier(Request $request, Forum $forum, Thread $thread, Comment $comment, $page)
+    public function commentModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, $page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
@@ -487,7 +488,7 @@ class ForumController extends AbstractController
                         array('body' => $request->get('comment_body'))
                     ));
 
-                    $form->bind($request);
+                    $form->handleRequest($request);
 
                     if ($form->isValid()) {
                         $em = $this->getDoctrine()->getManager();
@@ -496,7 +497,7 @@ class ForumController extends AbstractController
 
                         $this->get('session')->getFlashBag()->add(
                             'notice',
-                            $this->get('translator')->trans('notice.comment.editOk')
+                            $translator->trans('notice.comment.editOk')
                         );
                         return $this->redirect($this->generateUrl('ninja_tooken_thread', array(
                             'forum_nom' => $forum->getSlug(),
@@ -525,9 +526,9 @@ class ForumController extends AbstractController
     /**
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     * @ParamConverter("comment", class="App\Entity\Forum\Threadt", options={"mapping": {"comment_id":"id"}})
+     * @ParamConverter("comment", class="App\Entity\Forum\Comment", options={"mapping": {"comment_id":"id"}})
      */
-    public function commentSupprimer(Request $request, Forum $forum, Thread $thread, Comment $comment, $page)
+    public function commentSupprimer(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, $page)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
@@ -541,7 +542,7 @@ class ForumController extends AbstractController
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                     $this->get('translator')->trans('notice.comment.deleteOk')
+                     $translator->trans('notice.comment.deleteOk')
                 );
             }
         }

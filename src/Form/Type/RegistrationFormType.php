@@ -3,16 +3,16 @@
 namespace App\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
-use App\Entity\User\User;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use App\Entity\User\User;
 
-class RegistrationFormType extends BaseType
+class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -43,15 +43,15 @@ class RegistrationFormType extends BaseType
             ))
             ->add('gender', ChoiceType::class, array(
                 'choices' => array(
-                    User::GENDER_MALE => 'gender_male',
-                    User::GENDER_FEMALE => 'gender_female'
+                    'gender_male' => User::GENDER_MALE,
+                    'gender_female' => User::GENDER_FEMALE
                 ),
                 'data' => User::GENDER_MALE,
                 'expanded' => true,
                 'label_attr' => array('class' => 'libelle')
             ))
             ->add('locale', ChoiceType::class, array(
-                'choices' => array('fr' => 'Français', 'en' => 'English'),
+                'choices' => array('Français' => 'fr', 'English' => 'en'),
                 'data' => 'fr',
                 'expanded' => true,
                 'label_attr' => array('class' => 'libelle')
@@ -70,13 +70,7 @@ class RegistrationFormType extends BaseType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            "data_class" => "App\Entity\User\User",
-            "validation_groups" => array("Registration")
+            "data_class" => "App\Entity\User\User"
         ));
-    }
-
-    public function getName()
-    {
-        return 'ninjatooken_user_registration';
     }
 }

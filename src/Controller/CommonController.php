@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -77,7 +78,7 @@ class CommonController extends AbstractController
         return $this->render('common/mentionsLegales.html.twig');
     }
 
-    public function contact(Request $request)
+    public function contact(Request $request, TranslatorInterface $translator)
     {
         if ('POST' === $request->getMethod()) {
             $csrfProcsrfTokenManagervider = $this->get('security.csrf.token_manager');
@@ -105,7 +106,7 @@ class CommonController extends AbstractController
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
-                    $this->get('translator')->trans('notice.contact')
+                    $translator->trans('notice.contact')
                 );
             }
         }

@@ -10,7 +10,11 @@ ninja_tooken_user_find:
 ninja_tooken_user_registration_register:
     path:  /register
     controller: App\Controller\UserController::register
-    methods: [GET]
+    methods: [GET, POST]
+
+ninja_tooken_user_security_logout:
+    path:  /logout
+    methods: GET
 
 ninja_tooken_user_security_login:
     path:  /login
@@ -18,29 +22,9 @@ ninja_tooken_user_security_login:
     methods: [GET, POST]
 
 ninja_tooken_user_security_check:
-    path:  /login
+    path:  /login-check
     controller: App\Controller\UserController::check
     methods: [POST]
-
-ninja_tooken_user_resetting_request:
-    path: /request
-    controller: App\Controller\ResettingController::request
-    methods: [GET]
-
-ninja_tooken_user_resetting_send_email:
-    path: /send-email
-    controller: App\Controller\ResettingController::sendEmail
-    methods: [POST]
-
-ninja_tooken_user_resetting_check_email:
-    path: /check-email
-    controller: App\Controller\ResettingController::checkEmail
-    methods: [GET]
-
-ninja_tooken_user_resetting_reset:
-    path: /reset/{token}
-    controller: App\Controller\ResettingController::reset
-    methods: [GET, POST]
 
 ninja_tooken_user_autologin:
     path:  /auto/{autologin}

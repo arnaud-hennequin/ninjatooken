@@ -17,7 +17,6 @@ security:
                 property: username
 
     encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
         App\Entity\User\User:
             algorithm: auto
 
@@ -202,6 +201,7 @@ security:
             logout:
                 path: ninja_tooken_user_security_logout
                 target: ninja_tooken_homepage
+            lazy: true
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false

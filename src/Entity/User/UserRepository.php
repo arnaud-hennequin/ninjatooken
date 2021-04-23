@@ -3,7 +3,6 @@ namespace App\Entity\User;
  
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use FOS\UserBundle\Util\Canonicalizer;
  
 class UserRepository extends EntityRepository
 {
@@ -14,11 +13,8 @@ class UserRepository extends EntityRepository
             ->setParameter('enabled', true);
 
         if(!empty($pseudo)){
-            $canonicalizer = new Canonicalizer();
-            $pseudoCanonical = $canonicalizer->canonicalize($pseudo);
-
             $query->andWhere('u.oldUsernamesCanonical LIKE :pseudo')
-                ->setParameter('pseudo', ','.$pseudoCanonical.',');
+                ->setParameter('pseudo', ','.$pseudo.',');
         }
 
         if(!empty($id)){
