@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Ninja
  *
  * @ORM\Table(name="nt_ninja")
- * @ORM\Entity(repositoryClass="App\Entity\Game\NinjaRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\NinjaRepository")
  */
 class Ninja
 {

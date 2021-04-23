@@ -78,10 +78,10 @@ class CommonController extends AbstractController
         return $this->render('common/mentionsLegales.html.twig');
     }
 
-    public function contact(Request $request, TranslatorInterface $translator)
+    public function contact(Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer)
     {
         if ('POST' === $request->getMethod()) {
-            $csrfProcsrfTokenManagervider = $this->get('security.csrf.token_manager');
+            $csrfTokenManager = $this->get('security.csrf.token_manager');
             if(!$csrfTokenManager->isTokenValid(new CsrfToken('contact'.$request->cookies->get('PHPSESSID'), $request->request->get('_token')))) {
                 throw new RuntimeException('CSRF attack detected.');
             }
@@ -91,8 +91,7 @@ class CommonController extends AbstractController
             if(!empty($texte)){
                 $emailContact = $this->getParameter('mail_admin');
 
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('[NT] Contact : '.$sujet)
+                $message = (new \Swift_Message('[NT] Contact : '.$sujet))
                     ->setFrom($email)
                     ->setTo($emailContact)
                     ->setContentType("text/html")
@@ -102,7 +101,7 @@ class CommonController extends AbstractController
                         'locale' => 'fr'
                     )));
 
-                $this->get('mailer')->send($message);
+                $mailer->send($message);
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',

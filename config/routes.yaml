@@ -14,3 +14,63 @@ root:
 add_blocker:
     path: /adimages/
     controller: App\Controller\CommonController::addBlocker
+
+ninja_tooken_user:
+    resource: "routes/user.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_chat:
+    resource: "routes/chat.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_common:
+    resource: "routes/common.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_clan:
+    resource: "routes/clan.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_game:
+    resource: "routes/game.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_forum:
+    resource: "routes/forum.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_user_resetting:
+    resource: "routes/user_resetting.yaml"
+    prefix:   /{_locale}/
+    requirements:
+        _locale: en|fr
+    defaults:
+        _locale: fr
+
+ninja_tooken_game_unity:
+    resource: "routes/unity.yaml"
+    prefix:   /

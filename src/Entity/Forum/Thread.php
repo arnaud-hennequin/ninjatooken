@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity
  * @ORM\Table(name="nt_thread")
- * @ORM\Entity(repositoryClass="App\Entity\Forum\ThreadRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ThreadRepository")
  */
 class Thread
 {

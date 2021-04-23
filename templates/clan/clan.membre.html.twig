@@ -1,3 +1,4 @@
+{% import "avatar.html.twig" as avatar %}
 <a href="{{ path('ninja_tooken_user_fiche', {user_nom:recruteur.membre.slug}) }}" class="pull-left">
     <img src="{{ avatar.getUrl(recruteur.membre) }}" class="pull-left">
     {{ recruteur.membre.username }}<br>

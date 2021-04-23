@@ -60,7 +60,7 @@ class ClanType extends AbstractType
                 'label_attr' => array('class' => 'libelle'),
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array(true => 'label.oui', false => 'label.non')
+                'choices'  => array('label.oui' => true, 'label.non' => false)
             ));
     }
 

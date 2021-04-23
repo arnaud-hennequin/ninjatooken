@@ -9,10 +9,12 @@ use App\Entity\User\MessageUser;
 class MessageUserListener
 {
     protected $container;
+    protected $mailer;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, \Swift_Mailer $mailer)
     {
         $this->container = $container;
+        $this->mailer = $mailer;
     }
 
     // message d'avertissement
@@ -32,8 +34,7 @@ class MessageUserListener
                     $message = $entity->getMessage();
                     $user = $message->getAuthor();
 
-                    $swiftMessage = \Swift_Message::newInstance()
-                        ->setSubject('[NT] nouveau message de la part de '.$user->getUsername())
+                    $swiftMessage = (new \Swift_Message('[NT] nouveau message de la part de '.$user->getUsername()))
                         ->setFrom(array($this->container->getParameter('mail_contact') => $this->container->getParameter('mail_name')))
                         ->setTo($destinataire->getEmail())
                         ->setContentType("text/html")
@@ -43,7 +44,7 @@ class MessageUserListener
                             'locale' => $destinataire->getLocale()
                         )));
 
-                    $this->container->get('mailer')->send($swiftMessage);
+                    $this->mailer->send($swiftMessage);
                 }
             }
         }

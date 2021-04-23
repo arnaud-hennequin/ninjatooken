@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Capture
  *
  * @ORM\Table(name="nt_capture")
- * @ORM\Entity(repositoryClass="App\Entity\User\CaptureRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\CaptureRepository")
  */
 class Capture
 {

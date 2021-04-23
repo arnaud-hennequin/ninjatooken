@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ClanProposition
  *
  * @ORM\Table(name="nt_clanproposition")
- * @ORM\Entity(repositoryClass="App\Entity\Clan\ClanPropositionRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ClanPropositionRepository")
  */
 class ClanProposition
 {

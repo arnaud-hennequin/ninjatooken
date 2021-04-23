@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Table(name="nt_user")
- * @ORM\Entity(repositoryClass="App\Entity\User\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks
  *
  * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="ninja_tooken_user.username.already_used", groups={"Registration", "Profile"})
@@ -303,7 +303,7 @@ class User implements UserInterface
         return (string) $this->getUsername();
     }
 
-    private function canonicalize($string)
+    public static function canonicalize($string)
     {
         if (null === $string) {
             return;
@@ -329,8 +329,8 @@ class User implements UserInterface
             $this->setAvatar(uniqid(mt_rand(), true).".".$this->file->guessExtension());
         }
 
-        $this->setUsernameCanonical($this->canonicalize($this->getUsername()));
-        $this->setEmailCanonical($this->canonicalize($this->getEmail()));
+        $this->setUsernameCanonical(self::canonicalize($this->getUsername()));
+        $this->setEmailCanonical(self::canonicalize($this->getEmail()));
     }
 
     /**
@@ -350,13 +350,12 @@ class User implements UserInterface
         }
 
         // met à jour les anciens pseudos
-        $canonicalizer = new Canonicalizer();
         $oldUsernamesCanonical = '';
         $oldUsernames = $this->getOldUsernames();
         if(!empty($oldUsernames)){
             $oldUsernamesCanonical .= ',';
             foreach($oldUsernames as $oldUsername){
-                $oldUsernamesCanonical .= $canonicalizer->canonicalize($oldUsername).',';
+                $oldUsernamesCanonical .= self::canonicalize($oldUsername).',';
             }
         }
         $this->setOldUsernamesCanonical($oldUsernamesCanonical);

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Lobby
  *
  * @ORM\Table(name="nt_lobby")
- * @ORM\Entity(repositoryClass="App\Entity\Game\LobbyRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\LobbyRepository")
  */
 class Lobby
 {

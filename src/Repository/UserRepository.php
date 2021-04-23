@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\User;
+use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -22,6 +22,121 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function findUserByOldPseudo($pseudo = "", $id = 0)
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.enabled = :enabled')
+            ->setParameter('enabled', true);
+
+        if(!empty($pseudo)){
+            $query->andWhere('u.oldUsernamesCanonical LIKE :pseudo')
+                ->setParameter('pseudo', ','.$pseudo.',');
+        }
+
+        if(!empty($id)){
+            $query->andWhere('u.id <> :id')
+                ->setParameter('id', $id);
+        }
+        $query->setMaxResults(1);
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
+
+    public function searchUser($q = "", $num = 10, $allData = true)
+    {
+        $query = $this->createQueryBuilder('u');
+
+        if(!$allData)
+            $query->select('u.username as text, u.id');
+
+        $query->where('u.locked = :locked')
+            ->setParameter('locked', false);
+
+        if(!empty($q)){
+            $query->andWhere('u.username LIKE :q')
+                ->setParameter('q', $q.'%');
+        }
+
+        $query->orderBy('u.username', 'ASC')
+            ->setFirstResult(0)
+            ->setMaxResults($num);
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function getMultiAccount($ip = "", $username = ""){
+
+        if(empty($ip) && empty($username))
+            return array();
+
+        $ips = array();
+        if(!empty($username)){
+            $query = $this
+                ->createQueryBuilder('u')
+                ->select('ip.ip')
+                ->join('u.ips', 'ip');
+
+            if(!empty($ip)){
+                $query
+                    ->andWhere('ip.ip = :ip')
+                    ->setParameter('ip', $ip);
+            }
+
+            if(!empty($username)){
+                $query
+                    ->andWhere('u.username = :username')
+                    ->setParameter('username', $username);
+            }
+
+            $ips = $query->getQuery()->getResult();
+            if(count($ips)>0)
+                $ips = array_values($ips[0]);
+            else
+                $ips = array($ip);
+        }else
+            $ips = array($ip);
+
+
+        $query = $this->createQueryBuilder('u')
+            ->join('u.ips', 'ip')
+            ->where('ip.ip IN(:ips)')
+            ->setParameter('ips', $ips)
+            ->orderBy('u.username', 'ASC')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
+
+
+        return $query->getQuery()->getResult();
+    }
+
+    public function getMultiAccountByUser($user = null){
+
+        if(isset($user)){
+            $query = $this
+                ->createQueryBuilder('u')
+                ->select('ip.ip')
+                ->join('u.ips', 'ip')
+                ->andWhere('u = :user')
+                ->setParameter('user', $user);
+
+            $ips = $query->getQuery()->getResult();
+            if(!empty($ips)){
+                $ips = array_values($ips[0]);
+
+                $query = $this->createQueryBuilder('u')
+                    ->join('u.ips', 'ip')
+                    ->where('ip.ip IN(:ips)')
+                    ->setParameter('ips', $ips)
+                    ->orderBy('u.username', 'ASC')
+                    ->setFirstResult(0)
+                    ->setMaxResults(20);
+
+                return $query->getQuery()->getResult();
+            }
+        }
+        return array();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -36,32 +151,34 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * Find user by his email
+     */
+    public function findUserByEmail($email)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findUserBy(['emailCanonical' => User::canonicalize($email)]);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?User
+    /**
+     * Find user by his username
+     */
+    public function findUserByUsername($username)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $this->findUserBy(['usernameCanonical' => User::canonicalize($username)]);
     }
-    */
+
+    /**
+     * Find user by his email or username
+     */
+    public function findUserByUsernameOrEmail($usernameOrEmail)
+    {
+        if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
+            $user = $this->findUserByEmail($usernameOrEmail);
+            if (null !== $user) {
+                return $user;
+            }
+        }
+
+        return $this->findUserByUsername($usernameOrEmail);
+    }
 }

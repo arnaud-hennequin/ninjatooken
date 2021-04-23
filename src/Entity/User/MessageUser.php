@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * MessageUser
  *
  * @ORM\Table(name="nt_messageuser")
- * @ORM\Entity(repositoryClass="App\Entity\User\MessageUserRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MessageUserRepository")
  */
 class MessageUser
 {

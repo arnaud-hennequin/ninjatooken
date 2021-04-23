@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Friend
  *
  * @ORM\Table(name="nt_friend")
- * @ORM\Entity(repositoryClass="App\Entity\User\FriendRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\FriendRepository")
  */
 class Friend
 {

@@ -80,8 +80,7 @@ class NewsletterCommand extends ContainerAwareCommand
                 ));
 
                 // envoi les messages
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('[Ninjatooken] nouveau message de la part de '.$username)
+                $message = (new \Swift_Message('[Ninjatooken] nouveau message de la part de '.$username))
                     ->setFrom($from)
                     ->setTo($email)
                     ->setContentType("text/html")

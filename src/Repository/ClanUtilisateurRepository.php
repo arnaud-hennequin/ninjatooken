@@ -1,5 +1,5 @@
 <?php
-namespace App\Entity\Clan;
+namespace App\Repository;
  
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Clan\Clan;

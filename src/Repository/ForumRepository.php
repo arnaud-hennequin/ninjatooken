@@ -1,5 +1,5 @@
 <?php
-namespace App\Entity\Forum;
+namespace App\Repository;
  
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Forum\Forum;

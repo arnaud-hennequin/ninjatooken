@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Message
  *
  * @ORM\Table(name="nt_message")
- * @ORM\Entity(repositoryClass="App\Entity\User\MessageRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  */
 class Message
 {

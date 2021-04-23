@@ -1,4 +1,4 @@
-{% extends '::mail.html.twig' %}
+{% extends 'mail.html.twig' %}
 
 {% block content %}
 <em>{{ 'mail.newMessage'|trans({'%utilisateur%': user.username}) }}</em><br>

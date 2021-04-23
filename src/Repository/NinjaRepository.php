@@ -1,5 +1,5 @@
 <?php
-namespace App\Entity\Game;
+namespace App\Repository;
  
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Game\Ninja;

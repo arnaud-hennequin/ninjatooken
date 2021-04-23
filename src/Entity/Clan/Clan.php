@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="nt_clan")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity(repositoryClass="App\Entity\Clan\ClanRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\ClanRepository")
  */
 class Clan
 {
@@ -587,7 +587,7 @@ class Clan
     }
 
     /**
-     * Set avatar
+     * Set kamonUpload
      *
      * @param string $kamonUpload
      * @return Clan
