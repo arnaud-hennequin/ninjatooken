@@ -6,6 +6,6 @@
 		{{ asset('images/girlz.jpg') }}
 	{% endif %}
 {% else %}
-	{{ ('avatar/' ~ user.avatar) | imagine_filter('avatar') }}
+	{{ asset('avatar/' ~ user.avatar) | imagine_filter('avatar') }}
 {% endif %}
 {% endmacro %}

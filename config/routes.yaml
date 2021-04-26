@@ -25,11 +25,6 @@ ninja_tooken_user:
 
 ninja_tooken_chat:
     resource: "routes/chat.yaml"
-    prefix:   /{_locale}/
-    requirements:
-        _locale: en|fr
-    defaults:
-        _locale: fr
 
 ninja_tooken_common:
     resource: "routes/common.yaml"

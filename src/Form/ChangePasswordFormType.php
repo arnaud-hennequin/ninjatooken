@@ -17,6 +17,7 @@ class ChangePasswordFormType extends AbstractType
         $builder
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
+                'options' => ['attr' => ['minlength' => '6', 'maxLength' => '4096']],
                 'first_options' => [
                     'constraints' => [
                         new NotBlank([

@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use App\Entity\Forum\Comment;
@@ -92,13 +92,13 @@ class RecentCommentsBlockService extends AbstractBlockService
     /**
      * {@inheritdoc}
      */
-    public function setDefaultSettings(OptionsResolverInterface $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'number'     => 5,
             'mode'       => 'public',
             'title'      => 'Recent Comments',
             'template'   => 'forum/block/recent_comments.html.twig'
-        ));
+        ]);
     }
 }

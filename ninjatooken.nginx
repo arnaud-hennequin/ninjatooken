@@ -6,6 +6,10 @@ server {
     fastcgi_buffers 16 16k; 
     fastcgi_buffer_size 32k;
 
+    location ~ ^/media/cache/resolve/ {
+        try_files $uri /index.php$is_args$args;
+    }
+
     location ~* \.(jpg|jpeg|gif|css|png|js|ico|html|eof|woff|ttf)$ {
         if (-f $request_filename) {
             expires 30d;
@@ -22,7 +26,7 @@ server {
     # In production, don't include this and don't deploy config.php
     location ~ ^/config\.php(/|$) {
 
-        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
         # When you are using symlinks to link the document root to the
@@ -41,7 +45,7 @@ server {
     }
     # PROD
     location ~ ^/index\.php(/|$) {
-        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
         # When you are using symlinks to link the document root to the

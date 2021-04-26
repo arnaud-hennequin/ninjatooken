@@ -7,13 +7,13 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use App\Entity\Clan\ClanProposition;
 use App\Entity\User\Message;
 use App\Entity\User\MessageUser;
-use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Contracts\Translation\TranslatorInterface;
  
 class ClanPropositionListener
 {
     protected $translator;
 
-    public function __construct(DataCollectorTranslator $translator)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }

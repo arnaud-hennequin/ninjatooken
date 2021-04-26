@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\HttpFoundation\Request;
@@ -533,7 +534,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function parametresUpdateAvatar(Request $request, TranslatorInterface $translator)
+    public function parametresUpdateAvatar(Request $request, TranslatorInterface $translator, ParameterBagInterface $params)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
@@ -550,7 +551,7 @@ class UserController extends AbstractController
                         $user->setFile($file);
                         $userWebAvatar = $user->getWebAvatar();
                         if (isset($userWebAvatar) && !empty($userWebAvatar)) {
-                            $cachedImage = dirname(__FILE__).'/../../../../public/cache/avatar/'.$userWebAvatar;
+                            $cachedImage = $params->get('kernel.project_dir') . '/public/cache/avatar/' . $userWebAvatar;
                             if (file_exists($cachedImage)) {
                                 unlink($cachedImage);
                             }
@@ -627,7 +628,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function parametresDeleteAccount()
+    public function parametresDeleteAccount(\App\Listener\ClanPropositionListener $clanPropositionListener, \App\Listener\ThreadListener $threadListener, \App\Listener\CommentListener $commentListener)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
@@ -639,26 +640,30 @@ class UserController extends AbstractController
 
             // enlève les évènement sur clan_proposition
             // on évite d'envoyer des messages qui seront supprimés
-            $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_clan.clan_proposition_listener'));
+            $evm->removeEventListener(array('postRemove'), $clanPropositionListener);
 
             // enlève les évènement sur thread et comment
             // tout sera remis à plat à la fin
-            $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_forum.thread_listener'));
-            $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_forum.comment_listener'));
+            $evm->removeEventListener(array('postRemove'), $threadListener);
+            $evm->removeEventListener(array('postRemove'), $commentListener);
 
             // supprime l'utilisateur
             $em->remove($user);
             $em->flush();
 
             // recalcul les nombres de réponses d'un thread
-            $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = c.num");
+            $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = isnull(c.num, 0)");
             // recalcul les nombres de réponses d'un forum
-            $conn->executeUpdate("UPDATE nt_forum as f LEFT JOIN (SELECT COUNT(nt_thread.id) as num, forum_id FROM nt_thread GROUP BY forum_id) t ON t.forum_id=f.id SET f.num_threads = t.num");
+            $conn->executeUpdate("UPDATE nt_forum as f LEFT JOIN (SELECT COUNT(nt_thread.id) as num, forum_id FROM nt_thread GROUP BY forum_id) t ON t.forum_id=f.id SET f.num_threads = isnull(t.num, 0)");
 
             // ré-affecte les derniers commentaires
             $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT MAX(date_ajout) as lastAt, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.last_comment_at = c.lastAt");
             $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT author_id as lastBy, thread_id, date_ajout FROM nt_comment as ct) c ON c.thread_id=t.id and c.date_ajout=t.last_comment_at SET t.lastCommentBy_id = c.lastBy");
             $conn->executeUpdate("UPDATE nt_thread as t SET t.last_comment_at=t.date_ajout WHERE t.last_comment_at IS NULL");
+
+            // supprime l'utilisateur de la session
+            $session = new \Symfony\Component\HttpFoundation\Session\Session();
+            $session->invalidate();
 
             return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
         }

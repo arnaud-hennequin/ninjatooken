@@ -831,7 +831,7 @@ class User implements UserInterface
 
     protected function getUploadRootDir()
     {
-        return __DIR__.'/../../../../public/'.$this->getUploadDir();
+        return __DIR__.'/../../../public/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()

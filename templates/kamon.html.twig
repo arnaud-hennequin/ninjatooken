@@ -2,6 +2,6 @@
 {% if clan.kamonUpload is empty %}
 	{{ asset(clan.kamon) }}
 {% else %}
-	{{ ('kamon/' ~ clan.kamonUpload) | imagine_filter('kamon') }}
+	{{ asset('kamon/' ~ clan.kamonUpload) | imagine_filter('kamon') }}
 {% endif %}
 {% endapply %}{% endmacro %}

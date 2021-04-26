@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Clan\Clan;
@@ -83,7 +84,7 @@ class ClanController extends AbstractController
         ));
     }
 
-    public function clanAjouter(Request $request, TranslatorInterface $translator)
+    public function clanAjouter(Request $request, TranslatorInterface $translator, ParameterBagInterface $params)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
 
@@ -112,7 +113,7 @@ class ClanController extends AbstractController
                             $extension = strtolower($file->guessExtension());
                             if (in_array($extension, array('jpeg','jpg','png','gif'))) {
                                 $clan->setFile($file);
-                                $cachedImage = dirname(__FILE__).'/../../../../public/cache/kamon/'.$clan->getWebKamonUpload();
+                                $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clan->getWebKamonUpload();
                                 if (file_exists($cachedImage)) {
                                     unlink($cachedImage);
                                 }
@@ -212,7 +213,7 @@ class ClanController extends AbstractController
     /**
      * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
      */
-    public function clanModifier(Request $request, TranslatorInterface $translator, Clan $clan)
+    public function clanModifier(Request $request, TranslatorInterface $translator, ParameterBagInterface $params, Clan $clan)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
@@ -250,7 +251,7 @@ class ClanController extends AbstractController
                             if (in_array($extension, array('jpeg','jpg','png','gif'))) {
                                 $clan->setFile($file);
                                 if (isset($clanWebKamon) && !empty($clanWebKamon)) {
-                                    $cachedImage = dirname(__FILE__).'/../../../../public/cache/kamon/'.$clanWebKamon;
+                                    $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clanWebKamon;
                                     if (file_exists($cachedImage)) {
                                         unlink($cachedImage);
                                     }
@@ -285,7 +286,7 @@ class ClanController extends AbstractController
     /**
      * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
      */
-    public function clanSupprimer(TranslatorInterface $translator, Clan $clan)
+    public function clanSupprimer(TranslatorInterface $translator, \App\Listener\ClanPropositionListener $clanUtilisateurListener, Clan $clan)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
@@ -305,7 +306,7 @@ class ClanController extends AbstractController
                 // enlève les évènement sur clan_utilisateur
                 // on cherche à tous les supprimer et pas à ré-agencer la structure
                 $evm = $em->getEventManager();
-                $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_clan.clan_utilisateur_listener'));
+                $evm->removeEventListener(array('postRemove'), $clanUtilisateurListener);
 
                 $em->remove($clan);
                 $em->flush();
@@ -323,7 +324,7 @@ class ClanController extends AbstractController
     /**
      * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
      */
-    public function clanUtilisateurSupprimer(TranslatorInterface $translator, User $utilisateur)
+    public function clanUtilisateurSupprimer(TranslatorInterface $translator, \App\Listener\ClanPropositionListener $clanPropositionListener, \App\Listener\ClanPropositionListener $clanUtilisateurListener, User $utilisateur)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
@@ -341,11 +342,11 @@ class ClanController extends AbstractController
 
                     $membres = $clan->getMembres()->count() - 1;
                     if ($membres==0) {
-                        $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_clan.clan_utilisateur_listener'));
+                        $evm->removeEventListener(array('postRemove'), $clanUtilisateurListener);
                         $em->remove($clan);
                     }else{
                         // enlève les évènement sur clan_proposition
-                        $evm->removeEventListener(array('postRemove'), $this->get('ninjatooken_clan.clan_proposition_listener'));
+                        $evm->removeEventListener(array('postRemove'), $clanPropositionListener);
                         $em->remove($clanutilisateur);
                     }
                     $em->flush();

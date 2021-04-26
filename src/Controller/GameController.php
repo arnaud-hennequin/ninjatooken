@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Utils\GameData;
 use App\Entity\User\User;
 use App\Entity\Game\Lobby;
@@ -19,7 +19,7 @@ class GameController extends AbstractController
         ));
     }
 
-    public function calculateur(DataCollectorTranslator $translator, GameData $gameData)
+    public function calculateur(TranslatorInterface $translator, GameData $gameData)
     {
         $level = 0;
         $classe = "suiton";

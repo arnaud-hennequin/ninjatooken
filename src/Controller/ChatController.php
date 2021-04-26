@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use App\Utils\Chat;
 
 class ChatController extends AbstractController
 {
@@ -34,32 +35,10 @@ class ChatController extends AbstractController
 
     public function ajax(Request $request)
     {
-        // Path to the chat directory:
-        $root = $this->getParameter('kernel.project_dir');
-        define('AJAX_CHAT_PATH', $root.'/vendor/frug/ajax-chat/chat/');
-        define('AJAX_CHAT_URL', $request->getBasePath().'/chat/');
-
-        // Include Class libraries:
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChat.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatDataBase.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLDataBase.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLQuery.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLiDataBase.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLiQuery.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatEncoding.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatString.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatFileSystem.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatHTTPHeader.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatLanguage.php');
-        require(AJAX_CHAT_PATH.'lib/class/AJAXChatTemplate.php');
-        require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChat.php');
-        require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatShoutBox.php');
-        require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatInterface.php');
-
         // paramètres à surcharger
         $params = array(
             'dbConnection' => array(
-                'host' => $this->getParameter('database_host'),
+                'host' => $this->getParameter('database_host').':'.$this->getParameter('database_port'),
                 'user' => $this->getParameter('database_user'),
                 'pass' => $this->getParameter('database_password'),
                 'name' => $this->getParameter('database_name'),
@@ -70,7 +49,7 @@ class ChatController extends AbstractController
             'styleDefault' => 'NinjaTooken',
             'defaultChannelName' => 'NinjaTooken',
             'forceAutoLogin' => true,
-            'allowGuestLogins' => false,
+            'allowGuestLogins' => true,
             'chatBotName' => 'NinjaTooken',
             'userNameMaxLength' => 32,
             'defaultBanTime' => 10,
@@ -83,21 +62,21 @@ class ChatController extends AbstractController
         );
 
         // utilisateur à passer
-        $userData = array();
+        $userData = [];
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
             $user = $this->get('security.token_storage')->getToken()->getUser();
-            $userData = array(
+            $userData = [
                 'userID' => $user->getId(),
                 'userName' => $user->getUsername(),
                 'userRole' => $user->getRoles()
-            );
+            ];
         }
 
         // exécute le script et récupère le contenu
         // permet de pouvoir surcharger CustomAJAXChat avec le contexte Symfony
         ob_start();
-        $ajaxChat = new \CustomAJAXChat($params, $userData);
+        $ajaxChat = new Chat($params, $userData);
         $chat = ob_get_contents();
         ob_end_clean();
 

@@ -81,14 +81,12 @@ services:
 
     ninjatooken_clan.clan_proposition_listener:
         class: App\Listener\ClanPropositionListener
-        arguments: ["@translator"]
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postRemove }
 
     ninjatooken_clan.clan_postulation_listener:
         class: App\Listener\ClanPostulationListener
-        arguments: ["@translator"]
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postPersist }
@@ -145,7 +143,7 @@ services:
         class: App\Admin\IpAdmin
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: Ip}
-        arguments: [~, App\Entity\User\Ip, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\Ip, ~]
 
 
 
@@ -155,7 +153,7 @@ services:
         class: App\Admin\ClanAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: clan, label: Clan }
-        arguments: [ null, App\Entity\Clan, null]
+        arguments: [ ~, App\Entity\Clan\Clan, ~]
         calls:
             - [ addChild, [ '@ninjatooken.forum.admin.forum', 'ForumAdmin' ] ]
             - [ addChild, [ '@ninjatooken_clan.admin.clan_utilisateur', 'ClanUtilisateurAdmin' ] ]
@@ -163,25 +161,25 @@ services:
 
     ninjatooken_clan.admin.clan_utilisateur:
         class: App\Admin\ClanUtilisateurAdmin
-        arguments: [~, App\Entity\ClanUtilisateur, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\Clan\ClanUtilisateur, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: clan, label: Membre}
 
     ninjatooken_clan.admin.clan_postulation:
         class: App\Admin\ClanPostulationAdmin
-        arguments: [~, App\Entity\ClanPostulation, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\Clan\ClanPostulation, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: clan, label: Postulation}
 
     ninjatooken_clan.admin.clan_proposition:
         class: App\Admin\ClanPropositionAdmin
-        arguments: [~, App\Entity\ClanProposition, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\Clan\ClanProposition, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: clan, label: Proposition}
 
     ninjatooken.forum.admin.forum:
         class: App\Admin\ForumAdmin
-        arguments: [ null, App\Entity\Forum, SonataAdminBundle:CRUD]
+        arguments: [ ~, App\Entity\Forum\Forum, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: forum, label: Forum }
         calls:
@@ -191,7 +189,7 @@ services:
         class: App\Admin\ThreadAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: forum, label: Topic }
-        arguments: [ null, App\Entity\Thread, null]
+        arguments: [ ~, App\Entity\Forum\Thread, ~]
         calls:
             - [ addChild, [ '@ninjatooken.forum.admin.comment', 'CommentAdmin' ] ]
 
@@ -199,13 +197,13 @@ services:
         class: App\Admin\CommentAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: forum, label: Commentaire }
-        arguments: [ null, App\Entity\Comment, null]
+        arguments: [ ~, App\Entity\Forum\Comment, ~]
 
     ninjatooken.forum.admin.comment_user:
         class: App\Admin\CommentUserAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Commentaire }
-        arguments: [ null, App\Entity\Comment, null]
+        arguments: [ ~, App\Entity\Forum\Comment, ~]
 
     ninjatooken.forum.block.recent_comments:
         class: App\Block\RecentCommentsBlockService
@@ -215,7 +213,7 @@ services:
 
     ninjatooken_game.admin.ninja:
         class: App\Admin\NinjaAdmin
-        arguments: [~, App\Entity\Ninja, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\Game\Ninja, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: Ninja}
 
@@ -223,7 +221,7 @@ services:
         class: App\Admin\UserAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: user, label: Utilisateur }
-        arguments: [null, App\Entity\User\User, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\User, ~]
         calls:
             - [ addChild, [ '@ninjatooken_user.admin.detection', 'DetectionAdmin' ] ]
             - [ addChild, [ '@ninjatooken_user.admin.message', 'MessageAdmin' ] ]
@@ -234,25 +232,25 @@ services:
 
     ninjatooken_user.admin.message:
         class: App\Admin\MessageAdmin
-        arguments: [~, App\Entity\Message, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\Message, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: user, label: Messagerie}
 
     ninjatooken_user.admin.message_user:
         class: App\Admin\MessageUserAdmin
-        arguments: [~, App\Entity\MessageUser, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\MessageUser, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: MessageUser}
 
     ninjatooken_user.admin.friend:
         class: App\Admin\FriendAdmin
-        arguments: [~, App\Entity\Friend, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\Friend, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: user, label: Ami}
 
     ninjatooken_user.admin.capture:
         class: App\Admin\CaptureAdmin
-        arguments: [~, App\Entity\Capture, SonataAdminBundle:CRUD]
+        arguments: [~, App\Entity\User\Capture, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: user, label: Capture d'écran}
 
@@ -260,4 +258,4 @@ services:
         class: App\Admin\DetectionAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: user, label: Détection multi-compte par ip }
-        arguments: [ null,  App\Entity\User\User, App\Controller\DetectionAdminController]
+        arguments: [ ~,  App\Entity\User\User, App\Controller\DetectionAdminController]
