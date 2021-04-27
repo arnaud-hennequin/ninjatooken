@@ -139,123 +139,123 @@ services:
         tags:
             - { name: form.type, alias: ip }
 
-    sonata.user.admin.ip:
-        class: App\Admin\IpAdmin
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: admin, label: Ip}
-        arguments: [~, App\Entity\User\Ip, ~]
-
 
 
 ## admin
 
-    ninjatooken.clan.admin.clan:
-        class: App\Admin\ClanAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: clan, label: Clan }
-        arguments: [ ~, App\Entity\Clan\Clan, ~]
-        calls:
-            - [ addChild, [ '@ninjatooken.forum.admin.forum', 'ForumAdmin' ] ]
-            - [ addChild, [ '@ninjatooken_clan.admin.clan_utilisateur', 'ClanUtilisateurAdmin' ] ]
-            - [ addChild, [ '@ninjatooken_clan.admin.clan_postulation', 'ClanPostulationAdmin' ] ]
-
-    ninjatooken_clan.admin.clan_utilisateur:
-        class: App\Admin\ClanUtilisateurAdmin
-        arguments: [~, App\Entity\Clan\ClanUtilisateur, ~]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: clan, label: Membre}
-
-    ninjatooken_clan.admin.clan_postulation:
-        class: App\Admin\ClanPostulationAdmin
-        arguments: [~, App\Entity\Clan\ClanPostulation, ~]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: clan, label: Postulation}
-
-    ninjatooken_clan.admin.clan_proposition:
-        class: App\Admin\ClanPropositionAdmin
-        arguments: [~, App\Entity\Clan\ClanProposition, ~]
-        tags:
-            - {name: sonata.admin, manager_type: orm, group: clan, label: Proposition}
-
-    ninjatooken.forum.admin.forum:
-        class: App\Admin\ForumAdmin
-        arguments: [ ~, App\Entity\Forum\Forum, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: forum, label: Forum }
-        calls:
-            - [ addChild, [ '@ninjatooken.forum.admin.thread', 'ThreadAdmin' ] ]
-
-    ninjatooken.forum.admin.thread:
-        class: App\Admin\ThreadAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: forum, label: Topic }
-        arguments: [ ~, App\Entity\Forum\Thread, ~]
-        calls:
-            - [ addChild, [ '@ninjatooken.forum.admin.comment', 'CommentAdmin' ] ]
-
-    ninjatooken.forum.admin.comment:
-        class: App\Admin\CommentAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: forum, label: Commentaire }
-        arguments: [ ~, App\Entity\Forum\Comment, ~]
-
-    ninjatooken.forum.admin.comment_user:
-        class: App\Admin\CommentUserAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Commentaire }
-        arguments: [ ~, App\Entity\Forum\Comment, ~]
-
-    ninjatooken.forum.block.recent_comments:
+    block.recent_comments:
         class: App\Block\RecentCommentsBlockService
         tags:
             - { name: sonata.block }
         arguments: ['@twig', '@doctrine.orm.entity_manager']
 
-    ninjatooken_game.admin.ninja:
+    admin.clan:
+        class: App\Admin\ClanAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: clan, label: Clan }
+        arguments: [ ~, App\Entity\Clan\Clan, ~]
+        calls:
+            - [ addChild, [ '@admin.forum', 'clan' ] ]
+            - [ addChild, [ '@admin.clan_utilisateur', 'clan' ] ]
+            - [ addChild, [ '@admin.clan_postulation', 'clan' ] ]
+
+    admin.clan_utilisateur:
+        class: App\Admin\ClanUtilisateurAdmin
+        arguments: [~, App\Entity\Clan\ClanUtilisateur, ~]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: clan, label: Membre}
+
+    admin.clan_postulation:
+        class: App\Admin\ClanPostulationAdmin
+        arguments: [~, App\Entity\Clan\ClanPostulation, ~]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: clan, label: Postulation}
+
+    admin.clan_proposition:
+        class: App\Admin\ClanPropositionAdmin
+        arguments: [~, App\Entity\Clan\ClanProposition, ~]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: clan, label: Proposition}
+
+    admin.forum:
+        class: App\Admin\ForumAdmin
+        arguments: [ ~, App\Entity\Forum\Forum, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: forum, label: Forum }
+        calls:
+            - [ addChild, [ '@admin.thread', 'forum' ] ]
+
+    admin.thread:
+        class: App\Admin\ThreadAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: forum, label: Topic }
+        arguments: [ ~, App\Entity\Forum\Thread, ~]
+        calls:
+            - [ addChild, [ '@admin.comment', 'thread' ] ]
+
+    admin.comment:
+        class: App\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: forum, label: Commentaire, default: true }
+        arguments: [ ~, App\Entity\Forum\Comment, ~]
+
+    admin.comment_user:
+        class: App\Admin\CommentUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Commentaire }
+        arguments: [ ~, App\Entity\Forum\Comment, ~]
+
+    admin.ninja:
         class: App\Admin\NinjaAdmin
         arguments: [~, App\Entity\Game\Ninja, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: Ninja}
 
-    sonata.user.admin.user:
+    admin.user:
         class: App\Admin\UserAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: user, label: Utilisateur }
+            - { name: sonata.admin, manager_type: orm, group: user, label: Utilisateur, default: true }
         arguments: [~, App\Entity\User\User, ~]
         calls:
-            - [ addChild, [ '@ninjatooken_user.admin.detection', 'DetectionAdmin' ] ]
-            - [ addChild, [ '@ninjatooken_user.admin.message', 'MessageAdmin' ] ]
-            - [ addChild, [ '@ninjatooken.forum.admin.comment_user', 'CommentUserAdmin' ] ]
-            - [ addChild, [ '@ninjatooken_user.admin.friend', 'FriendAdmin' ] ]
-            - [ addChild, [ '@ninjatooken_user.admin.capture', 'CaptureAdmin' ] ]
-            - [ addChild, [ '@ninjatooken_clan.admin.clan_proposition', 'ClanPropositionAdmin' ] ]
+            - [ addChild, [ '@admin.detection', 'user' ] ]
+            - [ addChild, [ '@admin.message', 'author' ] ]
+            - [ addChild, [ '@admin.comment_user', 'author' ] ]
+            - [ addChild, [ '@admin.friend', 'user' ] ]
+            - [ addChild, [ '@admin.capture', 'user' ] ]
+            - [ addChild, [ '@admin.clan_proposition', 'recruteur' ] ]
 
-    ninjatooken_user.admin.message:
+    admin.message:
         class: App\Admin\MessageAdmin
         arguments: [~, App\Entity\User\Message, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: user, label: Messagerie}
 
-    ninjatooken_user.admin.message_user:
+    admin.message_user:
         class: App\Admin\MessageUserAdmin
         arguments: [~, App\Entity\User\MessageUser, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: admin, label: MessageUser}
 
-    ninjatooken_user.admin.friend:
+    admin.friend:
         class: App\Admin\FriendAdmin
         arguments: [~, App\Entity\User\Friend, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: user, label: Ami}
 
-    ninjatooken_user.admin.capture:
+    admin.capture:
         class: App\Admin\CaptureAdmin
         arguments: [~, App\Entity\User\Capture, ~]
         tags:
             - {name: sonata.admin, manager_type: orm, group: user, label: Capture d'écran}
 
-    ninjatooken_user.admin.detection:
+    admin.ip:
+        class: App\Admin\IpAdmin
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Ip, default: true}
+        arguments: [~, App\Entity\User\Ip, ~]
+
+    admin.detection:
         class: App\Admin\DetectionAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: user, label: Détection multi-compte par ip }
-        arguments: [ ~,  App\Entity\User\User, App\Controller\DetectionAdminController]
+        arguments: [ ~,  App\Entity\User\Ip, App\Controller\DetectionAdminController]

@@ -7,11 +7,15 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class MessageAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'author';
-
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'dateAjout'
@@ -58,7 +62,7 @@ class MessageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild())
-            $formMapper->add('author', 'sonata_type_model_list', array(
+            $formMapper->add('author', ModelListType::class, array(
                 'label'         => 'Auteur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
@@ -66,39 +70,35 @@ class MessageAdmin extends AbstractAdmin
             ));
 
         $formMapper
-            ->add('nom', 'text', array(
+            ->add('nom', TextType::class, array(
                 'label' => 'Nom'
             ))
-            ->add('content', 'textarea', array(
+            ->add('content', TextareaType::class, array(
                 'label' => 'Contenu',
                 'attr' => array(
                     'class' => 'tinymce',
                     'tinymce'=>'{"theme":"simple"}'
                 )
             ))
-            ->add('old_id', 'text', array(
+            ->add('old_id', TextType::class, array(
                 'required' => false,
                 'label' => 'Ancien identifiant'
             ))
-            ->add('hasDeleted', 'choice', array(
+            ->add('hasDeleted', ChoiceType::class, array(
                 'label' => 'Supprimé ?',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
-            ->add('receivers', 'sonata_type_collection', array(
-                'type_options' => array('delete' => false, 'read_only' => true),
+            ->add('receivers', CollectionType::class, array(
+                'type_options' => array('delete' => false),
                 'by_reference' => false,
                 'label' => 'Destinataires'
             ), array(
                 'edit' => 'inline',
                 'inline' => 'table'
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'required' => false,
                 'label' => 'Créé le'
             ))

@@ -6,7 +6,8 @@ spool/*
 /public/avatar/*
 /public/kamon/*
 /public/bundles/*
-/public/css/*
+/public/css/main.css
+/public/css/bootstrap-editable.css
 /public/js/*
 *.unity3d
 ###> liip/imagine-bundle ###

@@ -7,11 +7,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ClanUtilisateurAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'clan';
-
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -56,7 +57,7 @@ class ClanUtilisateurAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild()){
-            $formMapper->add('clan', 'sonata_type_model_list', array(
+            $formMapper->add('clan', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Clan',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
@@ -66,37 +67,33 @@ class ClanUtilisateurAdmin extends AbstractAdmin
         }
 
         $formMapper
-            ->add('recruteur', 'sonata_type_model_list', array(
+            ->add('recruteur', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Utilisateur',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
             ), array(
                 'placeholder' => 'Pas de recruteur'
             ))
-            ->add('membre', 'sonata_type_model_list', array(
+            ->add('membre', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Utilisateur',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
             ), array(
                 'placeholder' => 'Pas de membre'
             ))
-            ->add('droit', 'choice', array(
+            ->add('droit', ChoiceType::class, array(
                 'label' => 'Droit',
                 'multiple' => false,
                 'expanded' => false,
                 'choices'  => array('Shishō', 'Taishō', 'Jōnin', 'Chūnin')
             ))
-            ->add('canEditClan', 'choice', array(
+            ->add('canEditClan', ChoiceType::class, array(
                 'label' => 'Peut éditer le clan',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'label' => 'Date de recrutement'
             ))
         ;

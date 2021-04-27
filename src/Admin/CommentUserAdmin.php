@@ -8,17 +8,20 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 class CommentUserAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'author';
 
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'dateAjout'
     );
 
-    /*function __construct()
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $matches = array('ninjatooken', 'user', 'comment');
 
@@ -44,7 +47,7 @@ class CommentUserAdmin extends AbstractAdmin
                 $this->urlize($matches[2])
             );
         }
-    }*/
+    }
 
     //Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $formMapper): void
@@ -54,7 +57,7 @@ class CommentUserAdmin extends AbstractAdmin
 
         $formMapper
             ->with('General')
-            ->add('thread', 'sonata_type_model_list', array(
+            ->add('thread', ModelListType::class, array(
                 'btn_add'       => 'Add thread',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
@@ -63,7 +66,7 @@ class CommentUserAdmin extends AbstractAdmin
             ));
 
         if(!$this->isChild())
-            $formMapper->add('author', 'sonata_type_model_list', array(
+            $formMapper->add('author', ModelListType::class, array(
                     'btn_add'       => 'Add author',
                     'btn_list'      => 'List',
                     'btn_delete'    => false,
@@ -72,14 +75,14 @@ class CommentUserAdmin extends AbstractAdmin
                 ));
 
         $formMapper
-                ->add('body', 'textarea', array(
+                ->add('body', TextareaType::class, array(
                     'label' => 'Contenu',
                     'attr' => array(
                         'class' => 'tinymce',
                         'tinymce'=>'{"theme":"simple"}'
                     )
                 ))
-                ->add('dateAjout', 'datetime', array(
+                ->add('dateAjout', DateTimeType::class, array(
                     'label' => 'Date de création'
                 ))
         ;

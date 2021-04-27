@@ -7,11 +7,11 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ClanPostulationAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'clan';
-
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -56,7 +56,7 @@ class ClanPostulationAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild())
-            $formMapper->add('clan', 'sonata_type_model_list', array(
+            $formMapper->add('clan', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Clan',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
@@ -65,17 +65,17 @@ class ClanPostulationAdmin extends AbstractAdmin
             ));
 
         $formMapper
-            ->add('postulant', 'sonata_type_model_list', array(
+            ->add('postulant', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Utilisateur',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
             ), array(
                 'placeholder' => 'Pas de postulant'
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'label' => 'Ajouté le'
             ))
-            ->add('dateChangementEtat', 'datetime', array(
+            ->add('dateChangementEtat', DateTimeType::class, array(
                 'label' => 'Modifié le'
             ))
             ->add('etat')

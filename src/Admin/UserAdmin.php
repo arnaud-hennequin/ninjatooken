@@ -10,6 +10,15 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Sonata\AdminBundle\Form\Type\AdminType;
 
 class UserAdmin extends AbstractAdmin
 {
@@ -30,12 +39,6 @@ class UserAdmin extends AbstractAdmin
             ->add('locked', null, array('editable' => true, 'label' => 'Verrouillé'))
             ->add('createdAt', null, array('label' => 'Créé le'))
         ;
-
-        if ($this->isGranted('ROLE_ALLOWED_TO_SWITCH')) {
-            $listMapper
-                ->add('impersonating', 'string', array('template' => 'SonataUserBundle:Admin:Field/impersonating.html.twig'))
-            ;
-        }
     }
 
     /**
@@ -65,13 +68,12 @@ class UserAdmin extends AbstractAdmin
                 ->add('gender')
                 ->add('locale')
                 ->add('timezone')
-                ->add('facebookUid')
             ->end()
             ->with('Ninja')
                 ->add('ninja')
             ->end()
             ->with('Security')
-                ->add('token')
+                ->add('confirmationToken')
                 ->add('autologin')
             ->end()
         ;
@@ -84,54 +86,42 @@ class UserAdmin extends AbstractAdmin
     {
         $formMapper
             ->with('General')
-                ->add('username', 'text', array(
+                ->add('username', TextType::class, array(
                     'label' => 'Login'
                 ))
-                ->add('oldUsernames', 'collection', array(
+                ->add('oldUsernames', CollectionType::class, array(
                     'required' => false,
-                    'type'   => 'text',
+                    'entry_type'   => TextType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'label' => 'Autres logins'
                 ))
-                ->add('email', 'email', array(
+                ->add('email', EmailType::class, array(
                     'label' => 'Email'
                 ))
-                ->add('receiveNewsletter', 'choice', array(
+                ->add('receiveNewsletter', ChoiceType::class, array(
                     'label' => 'Newsletter',
                     'multiple' => false,
                     'expanded' => true,
                     'choices'  => array('Oui' => true, 'Non' => false),
-                    'choice_value' => function($choice){
-                        return $choice;
-                    },
-                    'choices_as_values' => true
+                    'help' => 'L\'utilisateur accepte de recevoir des newsletter'
                 ))
-                ->setHelps(array(
-                    'receiveNewsletter' => 'L\'utilisateur accepte de recevoir des newsletter',
-                ))
-                ->add('receiveAvertissement', 'choice', array(
+                ->add('receiveAvertissement', ChoiceType::class, array(
                     'label' => 'Avertissements',
                     'multiple' => false,
                     'expanded' => true,
                     'choices'  => array('Oui' => true, 'Non' => false),
-                    'choice_value' => function($choice){
-                        return $choice;
-                    },
-                    'choices_as_values' => true
+                    'help' => 'L\'utilisateur accepte de recevoir des avertissements par mail à chaque nouveau message qu\'il reçoit'
                 ))
-                ->setHelps(array(
-                    'receiveAvertissement' => 'L\'utilisateur accepte de recevoir des avertissements par mail à chaque nouveau message qu\'il reçoit',
-                ))
-                ->add('plainPassword', 'text', array(
+                ->add('plainPassword', TextType::class, array(
                     'required' => false,
                     'label' => 'Mot de passe'
                 ))
-                ->add('dateOfBirth', 'birthday', array(
+                ->add('dateOfBirth', BirthdayType::class, array(
                     'required' => false,
                     'label' => 'Date de naissance'
                  ))
-                ->add('description', 'textarea', array(
+                ->add('description', TextareaType::class, array(
                     'required' => false,
                     'label' => 'Description',
                     'attr' => array(
@@ -139,51 +129,30 @@ class UserAdmin extends AbstractAdmin
                         'tinymce'=>'{"theme":"simple"}'
                     )
                 ))
-                ->add('gender', 'choice', array(
+                ->add('gender', ChoiceType::class, array(
                     'choices' => array('male' => 'm', 'female' => 'f'),
-                    'choices_as_values' => true,
                     'required' => false,
                     'translation_domain' => $this->getTranslationDomain(),
                     'label' => 'Sexe'
                 ))
-                ->add('locale', 'locale', array(
+                ->add('locale', LocaleType::class, array(
                     'required' => false,
                     'label' => 'Langue'
                  ))
-                ->add('timezone', 'timezone', array(
+                ->add('timezone', TimezoneType::class, array(
                     'required' => false,
                     'label' => 'Fuseau horaire'
                  ))
-                ->add('facebookUid', 'text', array(
-                    'required' => false,
-                    'label' => 'Id Facebook'
-                ))
             ->end()
             ->with('Ninja')
-                ->add('ninja', 'sonata_type_admin', array('label' => false), array('edit' => 'inline'))
+                ->add('ninja', AdminType::class, array('label' => false), array('edit' => 'inline'))
             ->end()
         ;
 
-        if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
-            $formMapper
-                ->with('Management')
-                    ->add('realRoles', 'sonata_security_roles', array(
-                        'expanded' => true,
-                        'multiple' => true,
-                        'required' => false
-                    ))
-                    ->add('locked', null, array('required' => false))
-                    ->add('expired', null, array('required' => false))
-                    ->add('enabled', null, array('required' => false))
-                    ->add('credentialsExpired', null, array('required' => false))
-                ->end()
-            ;
-        }
-
         $formMapper
             ->with('Sécurité')
-                ->add('token', 'text', array('required' => false))
-                ->add('autologin', 'text', array('required' => false))
+                ->add('confirmationToken', TextType::class, array('required' => false))
+                ->add('autologin', TextType::class, array('required' => false))
             ->end()
         ;
     }
@@ -228,9 +197,9 @@ class UserAdmin extends AbstractAdmin
         $conn = $this->modelManager->getEntityManager()->getConnection();
 
         // recalcul les nombres de réponses d'un thread
-        $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = c.num");
+        $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = isnull(c.num, 0)");
         // recalcul les nombres de réponses d'un forum
-        $conn->executeUpdate("UPDATE nt_forum as f LEFT JOIN (SELECT COUNT(nt_thread.id) as num, forum_id FROM nt_thread GROUP BY forum_id) t ON t.forum_id=f.id SET f.num_threads = t.num");
+        $conn->executeUpdate("UPDATE nt_forum as f LEFT JOIN (SELECT COUNT(nt_thread.id) as num, forum_id FROM nt_thread GROUP BY forum_id) t ON t.forum_id=f.id SET f.num_threads = isnull(t.num, 0)");
 
         // ré-affecte les derniers commentaires
         $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT MAX(date_ajout) as lastAt, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.last_comment_at = c.lastAt");
@@ -241,48 +210,48 @@ class UserAdmin extends AbstractAdmin
     /**
     * {@inheritdoc}
     */
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-
         $id = $admin->getRequest()->get('id');
+
         $menu->addChild(
             'Utilisateur',
-            array('uri' => $admin->generateUrl('edit', array('id' => $id)))
+            $admin->generateMenuUrl('edit', array('id' => $id))
         );
 
         $menu->addChild(
             'Détection multi-compte par ip',
-            array('uri' => $admin->generateUrl('ninjatooken_user.admin.detection.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.detection.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Messages - messagerie',
-            array('uri' => $admin->generateUrl('ninjatooken_user.admin.message.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.message.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Commentaires - forum',
-            array('uri' => $admin->generateUrl('ninjatooken.forum.admin.comment_user.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.comment_user.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Amis',
-            array('uri' => $admin->generateUrl('ninjatooken_user.admin.friend.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.friend.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Captures',
-            array('uri' => $admin->generateUrl('ninjatooken_user.admin.capture.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.capture.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Recrutements',
-            array('uri' => $admin->generateUrl('ninjatooken_clan.admin.clan_proposition.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.clan_proposition.list', array('id' => $id))
         );
 
     }

@@ -10,6 +10,12 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use     Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ClanAdmin extends AbstractAdmin
 {
@@ -25,22 +31,22 @@ class ClanAdmin extends AbstractAdmin
         $current = $admin->getSubject();
 
         $formMapper
-            ->add('nom', 'text', array(
+            ->add('nom', TextType::class, array(
                 'label' => 'Nom'
             ))
-            ->add('tag', 'text', array(
+            ->add('tag', TextType::class, array(
                 'label' => 'Tag',
                 'required' => false
             ))
-            ->add('old_id', 'integer', array(
+            ->add('old_id', IntegerType::class, array(
                 'label' => 'Ancien identifiant',
                 'required' => false
             ))
-            ->add('accroche', 'text', array(
+            ->add('accroche', TextType::class, array(
                 'label' => 'Accroche',
                 'required' => false
             ))
-            ->add('description', 'textarea', array(
+            ->add('description', TextareaType::class, array(
                 'label' => 'Description',
                 'required' => false,
                 'attr' => array(
@@ -48,35 +54,27 @@ class ClanAdmin extends AbstractAdmin
                     'tinymce'=>'{"theme":"simple"}'
                 )
             ))
-            ->add('url', 'url', array(
+            ->add('url', UrlType::class, array(
                 'label' => 'Url perso',
                 'required' => false
             ))
-            ->add('kamon', 'text', array(
+            ->add('kamon', TextType::class, array(
                 'label' => 'Kamon'
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'label' => 'Date de création'
             ))
-            ->add('online', 'choice', array(
+            ->add('online', ChoiceType::class, array(
                 'label' => 'Afficher le clan',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
-            ->add('isRecruting', 'choice', array(
+            ->add('isRecruting', ChoiceType::class, array(
                 'label' => 'Le clan recrute',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
         ;
     }
@@ -104,33 +102,33 @@ class ClanAdmin extends AbstractAdmin
     /**
     * {@inheritdoc}
     */
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-
         $id = $admin->getRequest()->get('id');
+
         $menu->addChild(
             'Clan',
-            array('uri' => $admin->generateUrl('edit', array('id' => $id)))
+            $admin->generateMenuUrl('edit', array('id' => $id))
         );
 
         $menu->addChild(
             'Forums',
-            array('uri' => $admin->generateUrl('ninjatooken.forum.admin.forum.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.forum.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Membres',
-            array('uri' => $admin->generateUrl('ninjatooken_clan.admin.clan_utilisateur.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.clan_utilisateur.list', array('id' => $id))
         );
 
         $menu->addChild(
             'Postulations',
-            array('uri' => $admin->generateUrl('ninjatooken_clan.admin.clan_postulation.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.clan_postulation.list', array('id' => $id))
         );
 
     }

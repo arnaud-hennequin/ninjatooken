@@ -7,11 +7,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class ClanPropositionAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'recruteur';
-
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -56,7 +57,7 @@ class ClanPropositionAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild())
-            $formMapper->add('recruteur', 'sonata_type_model_list', array(
+            $formMapper->add('recruteur', ModelListType::class, array(
                 'label'         => 'Recruteur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
@@ -64,21 +65,21 @@ class ClanPropositionAdmin extends AbstractAdmin
             ));
 
         $formMapper
-            ->add('postulant', 'sonata_type_model_list', array(
+            ->add('postulant', ModelListType::class, array(
                 'label'         => 'Postulant',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
                 'btn_delete'    => false
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'required' => false,
                 'label' => 'Créé le'
             ))
-            ->add('dateChangementEtat', 'datetime', array(
+            ->add('dateChangementEtat', DateTimeType::class, array(
                 'required' => false,
                 'label' => 'Modifié le'
             ))
-            ->add('etat', 'choice', array(
+            ->add('etat', ChoiceType::class, array(
                 'label' => 'État',
                 'multiple' => false,
                 'expanded' => false,

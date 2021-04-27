@@ -9,11 +9,16 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ThreadAdmin extends AbstractAdmin
 {
-
-    protected $parentAssociationMapping = 'forum';
 
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
@@ -28,12 +33,12 @@ class ThreadAdmin extends AbstractAdmin
 
         $formMapper
             ->with('General')
-                ->add('nom', 'text', array(
+                ->add('nom', TextType::class, array(
                     'label' => 'Nom'
                 ));
 
         if(!$this->isChild())
-            $formMapper->add('forum', 'sonata_type_model_list', array(
+            $formMapper->add('forum', ModelListType::class, array(
                     'btn_add'       => 'Add forum',
                     'btn_list'      => 'List',
                     'btn_delete'    => false,
@@ -42,67 +47,55 @@ class ThreadAdmin extends AbstractAdmin
                 ));
 
         $formMapper
-                ->add('author', 'sonata_type_model_list', array(
+                ->add('author', ModelListType::class, array(
                     'btn_add'       => 'Add author',
                     'btn_list'      => 'List',
                     'btn_delete'    => false,
                 ), array(
                     'placeholder' => 'No author selected'
                 ))
-                ->add('body', 'textarea', array(
+                ->add('body', TextareaType::class, array(
                     'label' => 'Contenu',
                     'attr' => array(
                         'class' => 'tinymce',
                         'tinymce'=>'{"theme":"simple"}'
                     )
                 ))
-                ->add('old_id', 'integer', array(
+                ->add('old_id', IntegerType::class, array(
                     'label' => 'Ancien identifiant',
                     'required' => false
                 ))
-                ->add('isPostit', 'choice', array(
+                ->add('isPostit', ChoiceType::class, array(
                     'label' => 'Afficher en postit',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices'  => array('Oui' => true, 'Non' => false),
-                    'choice_value' => function($choice){
-                        return $choice;
-                    },
-                    'choices_as_values' => true
+                    'choices'  => array('Oui' => true, 'Non' => false)
                 ))
-                ->add('isCommentable', 'choice', array(
+                ->add('isCommentable', ChoiceType::class, array(
                     'label' => 'Verrouillé',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices'  => array('Oui' => true, 'Non' => false),
-                    'choice_value' => function($choice){
-                        return $choice;
-                    },
-                    'choices_as_values' => true
+                    'choices'  => array('Oui' => true, 'Non' => false)
                 ))
-                ->add('isEvent', 'choice', array(
+                ->add('isEvent', ChoiceType::class, array(
                     'label' => 'Event',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices'  => array('Oui' => true, 'Non' => false),
-                    'choice_value' => function($choice){
-                        return $choice;
-                    },
-                    'choices_as_values' => true
+                    'choices'  => array('Oui' => true, 'Non' => false)
                 ))
-                ->add('dateEventStart', 'datetime', array(
+                ->add('dateEventStart', DateTimeType::class, array(
                     'label' => 'Début de l\'event',
                     'required' => false
                 ))
-                ->add('dateEventEnd', 'datetime', array(
+                ->add('dateEventEnd', DateTimeType::class, array(
                     'label' => 'Fin de l\'event',
                     'required' => false
                 ))
-                ->add('urlVideo', 'url', array(
+                ->add('urlVideo', UrlType::class, array(
                     'label' => 'url de la vidéo',
                     'required' => false
                 ))
-                ->add('dateAjout', 'datetime', array(
+                ->add('dateAjout', DateTimeType::class, array(
                     'label' => 'Date de création'
                 ))
         ;
@@ -137,23 +130,23 @@ class ThreadAdmin extends AbstractAdmin
     /**
     * {@inheritdoc}
     */
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-
         $id = $admin->getRequest()->get('id');
+
         $menu->addChild(
             'Topic',
-            array('uri' => $admin->generateUrl('edit', array('id' => $id)))
+            $admin->generateMenuUrl('edit', array('id' => $id))
         );
 
         $menu->addChild(
             'Commentaires',
-            array('uri' => $admin->generateUrl('ninjatooken.forum.admin.comment.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.comment.list', array('id' => $id))
         );
 
     }

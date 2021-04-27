@@ -7,11 +7,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class CaptureAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'user';
-
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -67,7 +68,7 @@ class CaptureAdmin extends AbstractAdmin
         }
 
         if(!$this->isChild())
-            $formMapper->add('user', 'sonata_type_model_list', array(
+            $formMapper->add('user', ModelListType::class, array(
                 'label'         => 'Utilisateur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
@@ -75,22 +76,18 @@ class CaptureAdmin extends AbstractAdmin
             ));
 
         $formMapper
-            ->add('url', 'text', array(
-                'label' => 'Url'
+            ->add('url', TextType::class, array(
+                'label' => 'Url',
+                'help' => (!empty($url)?'<img src="'.$url.'" class="thumbnail"/>':'').''
             ))
-            ->setHelps(array(
-                'url' => (!empty($url)?'<img src="'.$url.'" class="thumbnail"/>':'').'',
+            ->add('urlTmb', TextType::class, array(
+                'label' => 'Url de la vignette',
+                'help' => (!empty($thumb)?'<img src="'.$thumb.'" class="thumbnail"/>':'').''
             ))
-            ->add('urlTmb', 'text', array(
-                'label' => 'Url de la vignette'
-            ))
-            ->setHelps(array(
-                'urlTmb' => (!empty($thumb)?'<img src="'.$thumb.'" class="thumbnail"/>':'').'',
-            ))
-            ->add('deleteHash', 'text', array(
+            ->add('deleteHash', TextType::class, array(
                 'label' => 'Hash de suppression'
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'required' => false,
                 'label' => 'Créé le'
             ))

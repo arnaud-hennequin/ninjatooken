@@ -10,11 +10,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ForumAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'clan';
-
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'dateAjout'
@@ -24,24 +26,24 @@ class ForumAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('nom', 'text', array(
+            ->add('nom', TextType::class, array(
                 'label' => 'Nom'
             ))
-            ->add('clan', 'sonata_type_model_list', array(
+            ->add('clan', ModelListType::class, array(
                 'btn_add'       => 'Add Clan',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
             ), array(
                 'placeholder' => 'No clan selected'
             ))
-            ->add('old_id', 'integer', array(
+            ->add('old_id', IntegerType::class, array(
                 'label' => 'Ancien identifiant',
                 'required' => false
             ))
-            ->add('ordre', 'integer', array(
+            ->add('ordre', IntegerType::class, array(
                 'label' => 'Position'
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'label' => 'Date de création'
             ))
         ;
@@ -69,23 +71,23 @@ class ForumAdmin extends AbstractAdmin
     /**
     * {@inheritdoc}
     */
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-
         $id = $admin->getRequest()->get('id');
+
         $menu->addChild(
             'Forum',
-            array('uri' => $admin->generateUrl('edit', array('id' => $id)))
+            $admin->generateMenuUrl('edit', array('id' => $id))
         );
 
         $menu->addChild(
             'Topics',
-            array('uri' => $admin->generateUrl('ninjatooken.forum.admin.thread.list', array('id' => $id)))
+            $admin->generateMenuUrl('admin.thread.list', array('id' => $id))
         );
 
     }

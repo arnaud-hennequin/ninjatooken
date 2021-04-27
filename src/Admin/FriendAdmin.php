@@ -7,11 +7,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class FriendAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'user';
-
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -54,7 +55,7 @@ class FriendAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if(!$this->isChild())
-            $formMapper->add('user', 'sonata_type_model_list', array(
+            $formMapper->add('user', ModelListType::class, array(
                 'label'         => 'Utilisateur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
@@ -62,33 +63,25 @@ class FriendAdmin extends AbstractAdmin
             ));
 
         $formMapper
-            ->add('friend', 'sonata_type_model_list', array(
+            ->add('friend', ModelListType::class, array(
                 'label'         => 'Ami',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
                 'btn_delete'    => false
             ))
-            ->add('isBlocked', 'choice', array(
+            ->add('isBlocked', ChoiceType::class, array(
                 'label' => 'Bloqué ?',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
-            ->add('isConfirmed', 'choice', array(
+            ->add('isConfirmed', ChoiceType::class, array(
                 'label' => 'Confirmé ?',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
-            ->add('dateAjout', 'datetime', array(
+            ->add('dateAjout', DateTimeType::class, array(
                 'required' => false,
                 'label' => 'Créé le'
             ))

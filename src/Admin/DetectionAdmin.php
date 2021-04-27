@@ -8,8 +8,10 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 class DetectionAdmin extends AbstractAdmin
 {
 
-   /* function __construct()
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+        $collection->clearExcept(array('list'));
+
         $matches = array('ninjatooken', 'user', 'detection');
 
         if ($this->isChild()) { // the admin class is a child, prefix it with the parent route name
@@ -35,11 +37,7 @@ class DetectionAdmin extends AbstractAdmin
                 $this->urlize($matches[2])
             );
         }
-    }*/
 
-    protected function configureRoutes(RouteCollectionInterface $collection): void
-    {
-        $collection->clearExcept(array('list'));
     }
 
 }

@@ -7,11 +7,13 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 class IpAdmin extends AbstractAdmin
 {
 
-    protected function configureRoutes(\Sonata\AdminBundle\Route\RouteCollectionInterface $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection
             ->remove('delete')
@@ -54,10 +56,10 @@ class IpAdmin extends AbstractAdmin
             ->add('ip', 'ip', array(
                 'label' => 'IP'
             ))
-            ->add('createdAt', 'datetime', array(
+            ->add('createdAt', DateTimeType::class, array(
                 'label' => 'Créé le'
             ))
-            ->add('updatedAt', 'datetime', array(
+            ->add('updatedAt', DateTimeType::class, array(
                 'label' => 'Mis à jour le'
             ))
         ;

@@ -7,6 +7,9 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class MessageUserAdmin extends AbstractAdmin
 {
@@ -49,25 +52,21 @@ class MessageUserAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('destinataire', 'sonata_type_model_list', array(
+            ->add('destinataire', ModelListType::class, array(
                 'label'         => 'Destinataire',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
                 'btn_delete'    => false
             ))
-            ->add('dateRead', 'datetime', array(
+            ->add('dateRead', DateTimeType::class, array(
                 'required' => false,
                 'label' => 'Lu le'
             ))
-            ->add('hasDeleted', 'choice', array(
+            ->add('hasDeleted', ChoiceType::class, array(
                 'label' => 'Supprimé ?',
                 'multiple' => false,
                 'expanded' => true,
-                'choices'  => array('Oui' => true, 'Non' => false),
-                'choice_value' => function($choice){
-                    return $choice;
-                },
-                'choices_as_values' => true
+                'choices'  => array('Oui' => true, 'Non' => false)
             ))
         ;
     }

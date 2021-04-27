@@ -8,11 +8,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Doctrine\ORM\EntityRepository;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class CommentAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'thread';
-
     protected $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'dateAjout'
@@ -28,7 +29,7 @@ class CommentAdmin extends AbstractAdmin
             ->with('General');
 
         if(!$this->isChild())
-            $formMapper->add('thread', 'sonata_type_model_list', array(
+            $formMapper->add('thread', ModelListType::class, array(
                     'btn_add'       => 'Add thread',
                     'btn_list'      => 'List',
                     'btn_delete'    => false,
@@ -37,21 +38,21 @@ class CommentAdmin extends AbstractAdmin
                 ));
 
         $formMapper
-                ->add('author', 'sonata_type_model_list', array(
+                ->add('author', ModelListType::class, array(
                     'btn_add'       => 'Add author',
                     'btn_list'      => 'List',
                     'btn_delete'    => false,
                 ), array(
                     'placeholder' => 'No author selected'
                 ))
-                ->add('body', 'textarea', array(
+                ->add('body', TextareaType::class, array(
                     'label' => 'Contenu',
                     'attr' => array(
                         'class' => 'tinymce',
                         'tinymce'=>'{"theme":"simple"}'
                     )
                 ))
-                ->add('dateAjout', 'datetime', array(
+                ->add('dateAjout', DateTimeType::class, array(
                     'label' => 'Date de création'
                 ))
         ;

@@ -24,15 +24,15 @@ class DetectionAdminController extends Controller
         $showForm = true;
 
         $users = array();
-        if ($this->admin->isChild()){
+        if ($this->admin->isChild()) {
             $user = $this->admin->getParent()->getObject($request->get($this->admin->getParent()->getIdParameter()));
             $users = $userRepository->getMultiAccountByUser($user);
             $showForm = false;
-        }else{
+        } else {
             if ($this->getRestMethod() == 'POST') {
 
                 $ip = $request->get('ip');
-                if(!empty($ip))
+                if (!empty($ip))
                     $ip = ip2long($ip);
 
                 $username = $request->get('username');

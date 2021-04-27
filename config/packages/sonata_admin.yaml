@@ -7,12 +7,6 @@ sonata_admin:
     html5_validate: false
     confirm_exit: false
     use_select2: false
-  templates:
-    layout: '@SonataAdmin/standard_layout.html.twig'
-    ajax: '@SonataAdmin/ajax_layout.html.twig'
-    list: '@SonataAdmin/CRUD/list.html.twig'
-    show: '@SonataAdmin/CRUD/show.html.twig'
-    edit: '@SonataAdmin/CRUD/edit.html.twig'
   dashboard:
     blocks:
       - position: left
@@ -25,7 +19,7 @@ sonata_admin:
             toutes les actions de suppressions et de modifications sont
             définitives.</p></div>
       - position: right
-        type: ninjatooken.forum.block.recent_comments
+        type: block.recent_comments
         settings:
           title: Commentaires récents
           number: 10
@@ -37,6 +31,23 @@ sonata_admin:
         label: Clans
       forum:
         label: Forums
+  assets:
+    stylesheets:
+      - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
+      - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
+      - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
+      - bundles/sonataadmin/vendor/admin-lte/dist/css/AdminLTE.min.css
+      - bundles/sonataadmin/vendor/iCheck/skins/square/blue.css
+      - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
+      - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
+      - bundles/sonatacore/vendor/select2/select2.css
+      - bundles/sonatacore/vendor/select2-bootstrap-css/select2-bootstrap.min.css
+      - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+      - bundles/sonataadmin/css/styles.css
+      - bundles/sonataadmin/css/layout.css
+      - bundles/sonataadmin/css/tree.css
+      - bundles/sonatacore/css/flashmessage.css
+      - css/admin.css
 sonata_block:
   default_contexts:
     - cms
@@ -47,39 +58,50 @@ sonata_block:
     sonata.block.service.text: null
     sonata.block.service.action: null
     sonata.block.service.rss: null
-    ninjatooken.forum.block.recent_comments: null
+    block.recent_comments: null
 sonata_doctrine_orm_admin:
-  entity_manager: null
-  templates:
-    form:
-      - '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig'
-    filter:
-      - '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'
-    types:
-      list:
-        array: '@SonataAdmin/CRUD/list_array.html.twig'
-        boolean: '@SonataAdmin/CRUD/list_boolean.html.twig'
-        date: '@SonataAdmin/CRUD/list_date.html.twig'
-        time: '@SonataAdmin/CRUD/list_time.html.twig'
-        datetime: '@SonataAdmin/CRUD/list_datetime.html.twig'
-        text: '@SonataAdmin/CRUD/base_list_field.html.twig'
-        trans: '@SonataAdmin/CRUD/list_trans.html.twig'
-        string: '@SonataAdmin/CRUD/base_list_field.html.twig'
-        smallint: '@SonataAdmin/CRUD/base_list_field.html.twig'
-        bigint: '@SonataAdmin/CRUD/base_list_field.html.twig'
-        integer: '@SonataAdmin/CRUD/base_list_field.html.twig'
-        decimal: '@SonataAdmin/CRUD/base_list_field.html.twig'
-        identifier: '@SonataAdmin/CRUD/base_list_field.html.twig'
-      show:
-        array: '@SonataAdmin/CRUD/show_array.html.twig'
-        boolean: '@SonataAdmin/CRUD/show_boolean.html.twig'
-        date: '@SonataAdmin/CRUD/show_date.html.twig'
-        time: '@SonataAdmin/CRUD/show_time.html.twig'
-        datetime: '@SonataAdmin/CRUD/show_datetime.html.twig'
-        text: '@SonataAdmin/CRUD/base_show_field.html.twig'
-        trans: '@SonataAdmin/CRUD/show_trans.html.twig'
-        string: '@SonataAdmin/CRUD/base_show_field.html.twig'
-        smallint: '@SonataAdmin/CRUD/base_show_field.html.twig'
-        bigint: '@SonataAdmin/CRUD/base_show_field.html.twig'
-        integer: '@SonataAdmin/CRUD/base_show_field.html.twig'
-        decimal: '@SonataAdmin/CRUD/base_show_field.html.twig'
+    entity_manager: ~
+    audit:
+        force: true
+    templates:
+        form:
+            - "@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig"
+        filter:
+            - "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig"
+        types:
+            list:
+                array:      "@SonataAdmin/CRUD/list_array.html.twig"
+                boolean:    "@SonataAdmin/CRUD/list_boolean.html.twig"
+                date:       "@SonataAdmin/CRUD/list_date.html.twig"
+                time:       "@SonataAdmin/CRUD/list_time.html.twig"
+                datetime:   "@SonataAdmin/CRUD/list_datetime.html.twig"
+                text:       "@SonataAdmin/CRUD/base_list_field.html.twig"
+                trans:      "@SonataAdmin/CRUD/list_trans.html.twig"
+                string:     "@SonataAdmin/CRUD/base_list_field.html.twig"
+                smallint:   "@SonataAdmin/CRUD/base_list_field.html.twig"
+                bigint:     "@SonataAdmin/CRUD/base_list_field.html.twig"
+                integer:    "@SonataAdmin/CRUD/base_list_field.html.twig"
+                decimal:    "@SonataAdmin/CRUD/base_list_field.html.twig"
+                identifier: "@SonataAdmin/CRUD/base_list_field.html.twig"
+                currency:   "@SonataAdmin/CRUD/list_currency.html.twig"
+                percent:    "@SonataAdmin/CRUD/list_percent.html.twig"
+                choice:     "@SonataAdmin/CRUD/list_choice.html.twig"
+                url:        "@SonataAdmin/CRUD/list_url.html.twig"
+
+            show:
+                array:      "@SonataAdmin/CRUD/show_array.html.twig"
+                boolean:    "@SonataAdmin/CRUD/show_boolean.html.twig"
+                date:       "@SonataAdmin/CRUD/show_date.html.twig"
+                time:       "@SonataAdmin/CRUD/show_time.html.twig"
+                datetime:   "@SonataAdmin/CRUD/show_datetime.html.twig"
+                text:       "@SonataAdmin/CRUD/base_show_field.html.twig"
+                trans:      "@SonataAdmin/CRUD/show_trans.html.twig"
+                string:     "@SonataAdmin/CRUD/base_show_field.html.twig"
+                smallint:   "@SonataAdmin/CRUD/base_show_field.html.twig"
+                bigint:     "@SonataAdmin/CRUD/base_show_field.html.twig"
+                integer:    "@SonataAdmin/CRUD/base_show_field.html.twig"
+                decimal:    "@SonataAdmin/CRUD/base_show_field.html.twig"
+                currency:   "@SonataAdmin/CRUD/base_currency.html.twig"
+                percent:    "@SonataAdmin/CRUD/base_percent.html.twig"
+                choice:     "@SonataAdmin/CRUD/show_choice.html.twig"
+                url:        "@SonataAdmin/CRUD/show_url.html.twig"

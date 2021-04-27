@@ -7,6 +7,8 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class NinjaAdmin extends AbstractAdmin
 {
@@ -121,121 +123,121 @@ class NinjaAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('aptitudeForce', 'integer', array(
+            ->add('aptitudeForce', IntegerType::class, array(
                 'label' => 'Force'
             ))
-            ->add('aptitudeVitesse', 'integer', array(
+            ->add('aptitudeVitesse', IntegerType::class, array(
                 'label' => 'Vitesse'
             ))
-            ->add('aptitudeVie', 'integer', array(
+            ->add('aptitudeVie', IntegerType::class, array(
                 'label' => 'Vie'
             ))
-            ->add('aptitudeChakra', 'integer', array(
+            ->add('aptitudeChakra', IntegerType::class, array(
                 'label' => 'Chakra'
             ))
-            ->add('jutsuBoule', 'integer', array(
+            ->add('jutsuBoule', IntegerType::class, array(
                 'label' => 'Boule d\'énergie'
             ))
-            ->add('jutsuDoubleSaut', 'integer', array(
+            ->add('jutsuDoubleSaut', IntegerType::class, array(
                 'label' => 'Double saut'
             ))
-            ->add('jutsuBouclier', 'integer', array(
+            ->add('jutsuBouclier', IntegerType::class, array(
                 'label' => 'Bouclier d\'énergie'
             ))
-            ->add('jutsuMarcherMur', 'integer', array(
+            ->add('jutsuMarcherMur', IntegerType::class, array(
                 'label' => 'Marcher sur les murs'
             ))
-            ->add('jutsuDeflagration', 'integer', array(
+            ->add('jutsuDeflagration', IntegerType::class, array(
                 'label' => 'Déflagration'
             ))
-            ->add('jutsuMarcherEau', 'integer', array(
+            ->add('jutsuMarcherEau', IntegerType::class, array(
                 'label' => 'Marcher sur l\'eau'
             ))
-            ->add('jutsuMetamorphose', 'integer', array(
+            ->add('jutsuMetamorphose', IntegerType::class, array(
                 'label' => 'Changer en rocher'
             ))
-            ->add('jutsuMultishoot', 'integer', array(
+            ->add('jutsuMultishoot', IntegerType::class, array(
                 'label' => 'Multishoot'
             ))
-            ->add('jutsuInvisibilite', 'integer', array(
+            ->add('jutsuInvisibilite', IntegerType::class, array(
                 'label' => 'Invisibilité'
             ))
-            ->add('jutsuResistanceExplosion', 'integer', array(
+            ->add('jutsuResistanceExplosion', IntegerType::class, array(
                 'label' => 'Résistance aux explosions'
             ))
-            ->add('jutsuPhoenix', 'integer', array(
+            ->add('jutsuPhoenix', IntegerType::class, array(
                 'label' => 'Pheonix'
             ))
-            ->add('jutsuVague', 'integer', array(
+            ->add('jutsuVague', IntegerType::class, array(
                 'label' => 'Tsunami'
             ))
-            ->add('jutsuPieux', 'integer', array(
+            ->add('jutsuPieux', IntegerType::class, array(
                 'label' => 'Pieux'
             ))
-            ->add('jutsuTeleportation', 'integer', array(
+            ->add('jutsuTeleportation', IntegerType::class, array(
                 'label' => 'Téléportation'
             ))
-            ->add('jutsuTornade', 'integer', array(
+            ->add('jutsuTornade', IntegerType::class, array(
                 'label' => 'Tornade'
             ))
-            ->add('jutsuKusanagi', 'integer', array(
+            ->add('jutsuKusanagi', IntegerType::class, array(
                 'label' => 'Kusanagi'
             ))
-            ->add('jutsuAcierRenforce', 'integer', array(
+            ->add('jutsuAcierRenforce', IntegerType::class, array(
                 'label' => 'Acier renforcé'
             ))
-            ->add('jutsuChakraVie', 'integer', array(
+            ->add('jutsuChakraVie', IntegerType::class, array(
                 'label' => 'Chakra de vie'
             ))
-            ->add('jutsuFujin', 'integer', array(
+            ->add('jutsuFujin', IntegerType::class, array(
                 'label' => 'Fujin'
             ))
-            ->add('jutsuRaijin', 'integer', array(
+            ->add('jutsuRaijin', IntegerType::class, array(
                 'label' => 'Raijin'
             ))
-            ->add('jutsuSarutahiko', 'integer', array(
+            ->add('jutsuSarutahiko', IntegerType::class, array(
                 'label' => 'Sarutahiko'
             ))
-            ->add('jutsuSusanoo', 'integer', array(
+            ->add('jutsuSusanoo', IntegerType::class, array(
                 'label' => 'Susanoo'
             ))
-            ->add('jutsuKagutsuchi', 'integer', array(
+            ->add('jutsuKagutsuchi', IntegerType::class, array(
                 'label' => 'Kagutsuchi'
             ))
-            ->add('grade', 'integer', array(
+            ->add('grade', IntegerType::class, array(
                 'label' => 'Dan'
             ))
-            ->add('experience', 'integer', array(
+            ->add('experience', IntegerType::class, array(
                 'label' => 'Expérience'
             ))
-            ->add('classe', 'text', array(
+            ->add('classe', TextType::class, array(
                 'label' => 'Classe'
             ))
-            ->add('masque', 'integer', array(
+            ->add('masque', IntegerType::class, array(
                 'label' => 'Masque'
             ))
-            ->add('masqueCouleur', 'integer', array(
+            ->add('masqueCouleur', IntegerType::class, array(
                 'label' => 'Couleur de masque'
             ))
-            ->add('masqueDetail', 'integer', array(
+            ->add('masqueDetail', IntegerType::class, array(
                 'label' => 'Détail de masque'
             ))
-            ->add('costume', 'integer', array(
+            ->add('costume', IntegerType::class, array(
                 'label' => 'Costume'
             ))
-            ->add('costumeCouleur', 'integer', array(
+            ->add('costumeCouleur', IntegerType::class, array(
                 'label' => 'Couleur de costume'
             ))
-            ->add('costumeDetail', 'integer', array(
+            ->add('costumeDetail', IntegerType::class, array(
                 'label' => 'Détail de costume'
             ))
-            ->add('missionAssassinnat', 'integer', array(
+            ->add('missionAssassinnat', IntegerType::class, array(
                 'label' => 'Assassinnat'
             ))
-            ->add('missionCourse', 'integer', array(
+            ->add('missionCourse', IntegerType::class, array(
                 'label' => 'Course'
             ))
-            ->add('accomplissement', 'text', array(
+            ->add('accomplissement', TextType::class, array(
                 'label' => 'Accomplissement'
             ))
         ;

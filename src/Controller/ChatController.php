@@ -62,7 +62,6 @@ class ChatController extends AbstractController
         );
 
         // utilisateur à passer
-        $userData = [];
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
             $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -71,6 +70,8 @@ class ChatController extends AbstractController
                 'userName' => $user->getUsername(),
                 'userRole' => $user->getRoles()
             ];
+        } else {
+            $userData = [];
         }
 
         // exécute le script et récupère le contenu

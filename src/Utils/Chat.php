@@ -242,21 +242,102 @@ class Chat extends \CustomAJAXChat
     public function getValidLoginUserData()
     {
         if (!empty($this->_userData)) {
-            // SOXSOXSOX VEUT PAS ÊTRE MODO SUR LE CHAT
-            if ($userData['userID'] == 425) {
+            if ($this->_userData['userID'] == 425) {// SOXSOXSOX VEUT PAS ÊTRE MODO SUR LE CHAT
                 $userRole   = AJAX_CHAT_USER;
-            } else if (in_array('ROLE_ADMIN', $this->userData['userRole']) || in_array('ROLE_SUPER_ADMIN', $this->userData['userRole'])) {
+            } else if (in_array('ROLE_ADMIN', $this->_userData['userRole']) || in_array('ROLE_SUPER_ADMIN', $this->_userData['userRole'])) {
                 $userRole   = AJAX_CHAT_ADMIN;
-            } else if (in_array('ROLE_MODERATOR', $this->userData['userRole']) || $userData['userID']==22405) {
+            } else if (in_array('ROLE_MODERATOR', $this->_userData['userRole']) || $this->_userData['userID']==22405) {
                 $userRole   = AJAX_CHAT_MODERATOR;
             } else {
                 $userRole   = AJAX_CHAT_USER;
             }
 
-            $userData['userRole']   = $userRole;
+            $userData = $this->_userData;
+            $userData['userRole'] = $userRole;
 
-            return $this->_userData;
+            return $userData;
         }
         return $this->getGuestUser();
+    }
+
+    function &getChannels() {
+        if($this->_channels === null) {
+            $this->_channels = $this->getAllChannels();
+        }
+        return $this->_channels;
+    }
+
+    function &getAllChannels() {
+        if($this->_allChannels === null) {
+            // Get all existing channels:
+            $customChannels = $this->getCustomChannels();
+            
+            $defaultChannelFound = false;
+            
+            foreach($customChannels as $key=>$value) {
+                $forumName = $this->trimChannelName($value);
+                
+                $this->_allChannels[$forumName] = $key;
+                
+                if($key == $this->getConfig('defaultChannelID')) {
+                    $defaultChannelFound = true;
+                }
+            }
+            
+            if(!$defaultChannelFound) {
+                // Add the default channel as first array element to the channel list:
+                $this->_allChannels = array_merge(
+                    array(
+                        $this->trimChannelName($this->getConfig('defaultChannelName'))=>$this->getConfig('defaultChannelID')
+                    ),
+                    $this->_allChannels
+                );
+            }
+        }
+        return $this->_allChannels;
+    }
+
+    function &getCustomUsers()
+    {
+        $users = [
+            [
+                'userRole' => AJAX_CHAT_GUEST,
+                'userName' => null,
+                'password' => null,
+                'channels' => [0]
+            ]
+        ];
+        return $users;
+    }
+
+    function &getCustomChannels()
+    {
+        $channels = ['NinjaTooken'];
+        return $channels;
+    }
+
+
+    function parseCustomCommands($text, $textParts) {
+        switch($textParts[0]) {
+            // Away from keyboard message:
+            case '/afk':
+                $this->setUserName('/afk '.$this->getUserName());
+                $this->updateOnlineList();
+                $this->addInfoMessage($this->getUserName(), 'userName');
+                $this->setSessionVar('AwayFromKeyboard', true);
+                return true;
+            default:
+                   return false;
+        }
+    }
+
+    function onNewMessage($text) {
+        if($this->getSessionVar('AwayFromKeyboard')) {
+            $this->setUserName($this->subString($this->getUserName(), 5));
+            $this->updateOnlineList();
+            $this->addInfoMessage($this->getUserName(), 'userName');
+            $this->setSessionVar('AwayFromKeyboard', false);
+        }
+        return true;
     }
 }
