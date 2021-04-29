@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use App\Form\Type\MessageType;
 use App\Form\Type\RegistrationFormType;
@@ -82,21 +84,6 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-/*
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-*/
 
     public function login(Request $request)
     {
@@ -163,7 +150,7 @@ class UserController extends AbstractController
         return $this->render('user/connected.html.twig', array('user' => $user));
     }
 
-    public function autologin(Request $request, TranslatorInterface $translator, $autologin)
+    public function autologin(Request $request, TranslatorInterface $translator, TokenStorageInterface $tokenStorage, EventDispatcherInterface $eventDispatcher, $autologin)
     {
         if (!empty($autologin)) {
             $authorizationChecker = $this->get('security.authorization_checker');
@@ -174,10 +161,10 @@ class UserController extends AbstractController
                     // si l'utilisateur a déjà été connecté avant le dernier garbage collector
                     if ($user->getUpdatedAt()===null || (new \DateTime())->getTimestamp() - $user->getUpdatedAt()->getTimestamp() > ini_get('session.gc_maxlifetime')) {
                         // lance la connexion
-                        $token = new UsernamePasswordToken($user, $user->getPassword(), $this->getParameter('ninja_tooken_user.firewall_name'), $user->getRoles());
-                        $this->get('security.token_storage')->setToken($token);
+                        $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
+                        $tokenStorage->setToken($token);
                         $event = new InteractiveLoginEvent($request, $token);
-                        $this->get("event_dispatcher")->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $event);
+                        $eventDispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
                     }
                 } else {
                     $this->get('session')->getFlashBag()->add(

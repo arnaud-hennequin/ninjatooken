@@ -1,7 +1,7 @@
 ninja_tooken_game_unity_update:
-    path:  /bundles/ninjatookengame/xml/game/update.php
-    controller: App\Controller\UnityController:::update
+    path:  /unity/xml/game/update
+    controller: App\Controller\UnityController::update
 
 ninja_tooken_game_unity_connect:
-    path:  /bundles/ninjatookengame/xml/game/connect.php
-    controller: App\Controller\UnityController:::connect
+    path:  /unity/xml/game/connect
+    controller: App\Controller\UnityController::connect

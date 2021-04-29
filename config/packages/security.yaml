@@ -206,6 +206,7 @@ security:
                 secret:   '%kernel.secret%'
                 lifetime: 31536000 # 365 days in seconds
                 path:     /
+                remember_me_parameter: _remember_me
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
