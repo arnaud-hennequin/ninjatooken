@@ -6,10 +6,12 @@ spool/*
 /public/avatar/*
 /public/kamon/*
 /public/bundles/*
+/public/cache/*
 /public/css/main.css
 /public/css/bootstrap-editable.css
 /public/js/*
 *.unity3d
+*.zip
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###

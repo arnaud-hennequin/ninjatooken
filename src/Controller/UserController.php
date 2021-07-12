@@ -932,12 +932,15 @@ class UserController extends AbstractController
     }
 
     public function online(User $user) {
-        $conn = $this->container->get('database_connection');
-        //vérifie sur le chat
-        $statement  = $conn->executeQuery('SELECT userID FROM ajax_chat_online WHERE userID = ? AND  dateTime > DATE_SUB(NOW(), INTERVAL 10 MINUTE)', array($user->getId()));
+        $em = $this->getDoctrine()->getManager();
+        $statement = $em->getConnection()->prepare('SELECT userID FROM ajax_chat_online WHERE userID = :userID AND  dateTime > DATE_SUB(NOW(), INTERVAL 10 MINUTE);');
+        $statement->bindValue('userID', $user->getId());
+        $statement->execute();
         if (!$statement->fetch()) {
             // vérifie en jeu
-            $statement  = $conn->executeQuery('SELECT user_id FROM nt_lobby_user WHERE user_id = ?', array($user->getId()));
+            $statement = $em->getConnection()->prepare('SELECT user_id FROM nt_lobby_user WHERE user_id = :userID;');
+            $statement->bindValue('userID', $user->getId());
+            $statement->execute();
             if ($statement->fetch()) {
                 return new Response("online");
             }
