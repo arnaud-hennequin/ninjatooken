@@ -216,3 +216,14 @@ game:
         chakra: "Costs ## chakra points"
     course: "{count, plural, =0 {no race} one {one race} other {# races}}"
     assassinat: "{count, plural, =0 {no murder} one {one murder} other {# murders}}"
+gameDownload:
+    nom: "Download and play !"
+    description: |
+        If you played the game some years ago, you surely expect to see it been shown right here.<br>
+        But yeah, <a href='https://unity3d.com/webplayer%20' target='_blank'>Unity doesn't support the web player anymore</a> (and it's not a recent issue).<br>
+        As the game is working on the last Unity version (2021), it requires a WebGL's export and adapting the code of the game...<br>
+        I lack spare time for this, so I suggest you to download and execute the game on your favorite OS (those are standalones, no installation required):<br>
+        <ul>
+            <li><a href="/windows.zip" target="_blank">Windows</a></li>
+            <li><a href="/mac.zip" target="_blank">MacOS</a></li>
+        </ul>

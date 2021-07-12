@@ -49,8 +49,8 @@
 								<label class="select">
 									<select name="classe">
 										<option value="">{{ 'filtre.classement.tous'|trans }}</option>
-										{% for n,v in class %}
-										<option value="{{ n }}" class="{{ v|lower }}"{% if filter == n %} selected{% endif %}>{{ v }}</option>
+										{% for n,v in classes %}
+										<option value="{{ n }}" class="{{ v|lower }}"{% if filter == n %} selected{% endif %}>{{ ('class.' ~ n)|trans({}, 'game')|lower }}</option>
 										{% endfor %}
 									</select>
 								</label>

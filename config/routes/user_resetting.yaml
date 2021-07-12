@@ -14,6 +14,6 @@ ninja_tooken_user_resetting_check_email:
     methods: [GET]
 
 ninja_tooken_user_resetting_reset:
-    path: /reset/{token}
+    path: /reset/{token?}
     controller: App\Controller\ResetPasswordController::reset
     methods: [GET, POST]

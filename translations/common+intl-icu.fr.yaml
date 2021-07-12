@@ -220,3 +220,14 @@ game:
         chakra: "Coûte ## points de chakra"
     course: "{count, plural, =0 {aucune course} one {une course} other {# courses}}"
     assassinat: "{count, plural, =0 {aucun assassinat} one {un assassinat} other {# assassinats}}"
+gameDownload:
+    nom: "Télécharges et joues !"
+    description: |
+        Si tu as joué au jeu il y a quelques années, tu t'attendais surement à voir le jeu s'afficher directement dans cette page.<br>
+        Mais voilà, <a href='https://unity3d.com/webplayer%20' target='_blank'>Unity ne supporte plus le lecteur web</a>, et ce depuis quelques années maintenant.<br>
+        Comme le jeu fonctionne désormais sur la dernière mouture d'Unity (2021), il faudrait faire un export WebGL et adapter le code du jeu...<br>
+        Le temps me manque pour cela, je t'invite donc à télécharger et exécuter le jeu sur ton système d'exploitation préféré (pas d'installation requise):<br>
+        <h1><ul>
+            <li><a href="/windows.zip" target="_blank">Windows</a></li>
+            <li><a href="/mac.zip" target="_blank">MacOS</a></li>
+        </ul></h1>

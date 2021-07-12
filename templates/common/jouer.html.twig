@@ -15,21 +15,22 @@
 {% endblock %}
 
 {% block body %}
-				<div class="row-fluid">
-					<section class="span9">
-						<div id="unityPlayer">
-							<div class="missing">
-								<a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
-									<img alt="Unity Web Player. Install now!" src="{{ asset('images/getunity.png') }}" width="193" height="63" />
-								</a>
-							</div>
-						</div>
-						<script>
-						var unityLoader = "{{ asset('loader.unity3d') }}?url={{ asset('ninja-tooken-' ~ version ~ '.unity3d') }}";
-						</script>
+                <div class="row-fluid">
+					<section class="span8 main">
+						<h3>{{ 'gameDownload.nom'|trans({}, 'common') }}</h3>
+                        <p>{{ ('gameDownload.description')|trans({}, 'common')|raw }}</p>
 					</section>
-					<aside class="span3 module">
+					<aside class="span4">
+						<form action="{{ path('ninja_tooken_search') }}" method="post" accept-charset="utf-8" class="row-fluid">
+							<input type="text" name="q" value="{{ 'action.chercher'|trans({}, 'common') }}" class="span10">
+							<input type="submit" name="s" value="{{ 'action.ok'|trans({}, 'common') }}" class="span2">
+						</form>
+
+						{{ render(controller('App\\Controller\\ForumController::recentComments', {'max': 10, 'forum': 0})) }}
+
 						{% include 'common/pubAside.html.twig' %}
+
+						{% include 'common/partenaires.html.twig' %}
 					</aside>
 				</div>
 {% endblock %}
