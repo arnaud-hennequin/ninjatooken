@@ -23,7 +23,7 @@
                 </div>
             {% endfor %}
         {% endfor %}
-	<form action="{{ path('ninja_tooken_user_resetting_send_email') }}" method="POST" accept-charset="UTF-8" class="full">
+	<form method="POST" accept-charset="UTF-8" class="full">
 		{% if invalid_username is defined %}
 		<p class="flash-notice">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'user') }}</p>
 		{% endif %}
@@ -33,9 +33,10 @@
 			</div>
 			<div class="span8">
 				<p class="note">{{ 'compte.request.resume'|trans({}, 'common') }}</p>
-				<input type="text" id="username" name="username" required="required" />
+				<input type="text" id="username" name="reset_password_request_form[email]" required="required" />
 			</div>
 		</div>
+		{{ form_row(form._token) }}
 		<div class="row-fluid">
 			<div class="span8 offset4">
 				<input type="submit" value="{{ 'compte.request.reinitialiser'|trans({}, 'common') }}" class="button">

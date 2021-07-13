@@ -47,7 +47,7 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        return $this->render('user/resetting/reset.html.twig', [
+        return $this->render('user/resetting/request.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -104,13 +104,7 @@ class ResetPasswordController extends AbstractController
             // A password reset token should be used only once, remove it.
             $this->resetPasswordHelper->removeResetRequest($token);
 
-            // Encode the plain password, and set it.
-            $encodedPassword = $passwordEncoder->encodePassword(
-                $user,
-                $form->get('plainPassword')->getData()
-            );
-
-            $user->setPassword($encodedPassword);
+            $user->setPassword($passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData()));
             $this->getDoctrine()->getManager()->flush();
 
             // The session is cleaned up after the password has been changed.
@@ -120,7 +114,7 @@ class ResetPasswordController extends AbstractController
         }
 
         return $this->render('user/resetting/reset.html.twig', [
-            'resetForm' => $form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -141,17 +135,16 @@ class ResetPasswordController extends AbstractController
             // If you want to tell the user why a reset email was not sent, uncomment
             // the lines below and change the redirect to 'app_forgot_password_request'.
             // Caution: This may reveal if a user is registered or not.
-            //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     'There was a problem handling your password reset request - %s',
-            //     $e->getReason()
-            // ));
+            $this->addFlash('reset_password_error', sprintf(
+                'There was a problem handling your password reset request - %s',
+                $e->getReason()
+            ));
 
             return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('noreply@ninjatooken.com', 'NinjaTooken'))
+            ->from(new Address('noreply@ninjatooken.fr', 'NinjaTooken'))
             ->to($user->getEmail())
             ->subject('Your password reset request')
             ->htmlTemplate('user/resetting/email.html.twig')
