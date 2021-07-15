@@ -10,6 +10,7 @@ parameters:
     database_name: '%env(DATABASE_NAME)%'
     database_user: '%env(DATABASE_USER)%'
     database_password: '%env(DATABASE_PASSWORD)%'
+    base_host: '%env(BASE_HOST)%'
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null
@@ -18,15 +19,15 @@ parameters:
     secret: '%env(APP_SECRET)%'
     database_path: null
     mail_contact: contact@ninjatooken.fr
-    mail_admin: nctstat@gmail.com
+    mail_admin: arhennequin@gmail.com
     mail_name: no-reply
     unity.version: '1.30000'
     unity.crypt: '%env(UNITY_KEY)%'
     imgur: null
     banned.ip: {  }
-    akismet.active: false
-    akismet.key: null
-    akismet.url: 'http://www.site.com'
+    akismet.active: '%env(AKISMET_ACTIVE)%'
+    akismet.key: '%env(AKISMET_KEY)%'
+    akismet.url: "http://%base_host%"
     numReponse: 20
     paypal.donate: false
     paypal.code: null

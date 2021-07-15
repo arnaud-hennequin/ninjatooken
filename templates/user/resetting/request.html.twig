@@ -23,6 +23,7 @@
                 </div>
             {% endfor %}
         {% endfor %}
+	{{ form_errors(form) }}
 	<form method="POST" accept-charset="UTF-8" class="full">
 		{% if invalid_username is defined %}
 		<p class="flash-notice">{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'user') }}</p>
