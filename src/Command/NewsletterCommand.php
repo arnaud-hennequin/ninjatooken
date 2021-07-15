@@ -65,7 +65,7 @@ class NewsletterCommand extends ContainerAwareCommand
                 // construit le contenu
                 $translator->setLocale($locale);
                 $body = $template->render(array(
-                    'email' => $email,
+                    'mail' => $email,
                     'username' => $username,
                     'message' => $translator->trans('newsletter.newsite', array(
                         '%username%' => $username,

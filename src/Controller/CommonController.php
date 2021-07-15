@@ -97,7 +97,7 @@ class CommonController extends AbstractController
                     ->setContentType("text/html")
                     ->setBody($this->renderView('common/contactEmail.html.twig', array(
                         'texte' => $texte,
-                        'email' => $email,
+                        'mail' => $email,
                         'locale' => 'fr'
                     )));
 

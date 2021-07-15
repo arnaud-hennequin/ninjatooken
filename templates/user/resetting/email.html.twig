@@ -1,5 +1,8 @@
 {% extends 'mail.html.twig' %}
 
 {% block content %}
-{{ 'resetting.email.message'|trans({'%expire%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle'),'%confirmationUrl%': url('ninja_tooken_user_resetting_reset', {token: resetToken.token})})|raw }}
+{{ 'resetting.email.message'|trans({
+        '%expire%': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle'),
+        '%confirmationUrl%': url('ninja_tooken_user_resetting_reset', {_locale: locale, token: resetToken.token})
+    })|raw }}
 {% endblock %}

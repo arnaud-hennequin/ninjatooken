@@ -1,6 +1,6 @@
 {% extends 'mail.html.twig' %}
 
 {% block content %}
-                {{ email }}<br/>
+                {{ mail }}<br/>
                 {{ texte|raw|purify('full') }}
 {% endblock %}

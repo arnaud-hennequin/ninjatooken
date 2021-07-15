@@ -156,6 +156,7 @@ class ResetPasswordController extends AbstractController
                 ->htmlTemplate('user/resetting/email.html.twig')
                 ->context([
                     'resetToken' => $resetToken,
+                    'locale' => $user->getLocale()??"fr"
                 ])
             ;
 
