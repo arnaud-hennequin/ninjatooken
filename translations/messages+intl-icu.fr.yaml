@@ -952,7 +952,7 @@ resetting:
             Salut !<br>
             <br>
             Pour réinitialiser ton mot de passe, merci de te rendre sur <a href="{confirmationUrl}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">{confirmationUrl}</span></a><br>
-            Ce lien expirera dans %expire%.<br>
+            Ce lien expirera dans {expire}.<br>
             <br>
             Bon jeu !<br>
             L'équipe NinjaTooken.

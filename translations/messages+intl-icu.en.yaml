@@ -954,7 +954,7 @@ resetting:
             Hi !<br>
             <br>
             To reset your password - please visit <a href="{confirmationUrl}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">{confirmationUrl}</span></a><br>
-            This link will expire in %expire%.<br>
+            This link will expire in {expire}.<br>
             <br>
             Good game !<br>
             The NinjaTooken's Team
