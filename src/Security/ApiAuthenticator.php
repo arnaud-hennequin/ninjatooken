@@ -23,11 +23,13 @@ class ApiAuthenticator extends AbstractAuthenticator
      */
     public function supports(Request $request): ?bool
     {
-        return $request->request->has('login') && $request->request->has('pwd');
+        return ($request->request->has('login') && $request->request->has('pwd')) || !empty($request->get("visiteur"));
     }
 
     public function authenticate(Request $request): PassportInterface
     {
+        $request->getSession()->set('visit', !empty($request->get("visiteur")));
+
         $username = $request->get('login', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $username);

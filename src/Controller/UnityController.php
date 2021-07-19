@@ -36,14 +36,15 @@ class UnityController extends AbstractController
 
     public function update(Request $request, TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage, GameData $gameData)
     {
-        if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        $session = $this->get('session');
+
+        if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $tokenStorage->getToken()->getUser();
             $em = $this->getDoctrine()->getManager();
 
             $this->time = preg_replace('/[^0-9]/i','',(string)$request->get('time'));
             $this->crypt = $request->headers->get('X-COMMON');
 
-            $session = $this->get('session');
             $this->phpsessid = $session->getName()."=".$session->getId();
 
             $this->gameversion = $this->getParameter('unity.version');
@@ -696,7 +697,7 @@ class UnityController extends AbstractController
             $response->headers->set('Notice', $session->getName()."=".$session->getId());
             return $response;
         }
-        return new Response("0", 200, array('Content-Type' => 'text/plain'));
+        return new Response(!empty($session->get('visit')) ? "1":"0", 200, array('Content-Type' => 'text/plain'));
     }
 
     public function connect(Request $request, AuthorizationCheckerInterface $authorizationChecker, Packages $assetsManager, CacheManager $cacheManager, TokenStorageInterface $tokenStorage, GameData $gameData)
