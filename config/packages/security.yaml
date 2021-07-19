@@ -196,7 +196,7 @@ security:
                 target: ninja_tooken_homepage
         main:
             context: user
-            pattern: .*
+            pattern: /^(?!unity).*$
             custom_authenticator: App\Security\LoginFormAuthenticator
             logout:
                 path: ninja_tooken_user_security_logout
@@ -209,6 +209,11 @@ security:
                 domain:   ~
                 always_remember_me: false
                 remember_me_parameter: _remember_me
+        api:
+            context: user
+            pattern: /unity/(.*)
+            lazy: true
+            custom_authenticator: App\Security\ApiAuthenticator
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false

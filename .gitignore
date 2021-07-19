@@ -7,7 +7,6 @@ spool/*
 /public/kamon/*
 /public/bundles/*
 /public/cache/*
-/public/js/*
 *.unity3d
 *.zip
 ###> liip/imagine-bundle ###

@@ -14,7 +14,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Entity\User\User;
 use App\Entity\User\Friend;
@@ -51,7 +50,7 @@ class UnityController extends AbstractController
             $this->idUtilisateur = $user->getId();
             $this->cryptUnity = $this->getParameter('unity.crypt');
 
-	        $data	= '0';
+            $data    = '0';
 
             $a = $request->get('a');
             if (!empty($a)) {
@@ -66,14 +65,14 @@ class UnityController extends AbstractController
                     // mise à jour du grade
                     case"g":
                         $l = $request->get('l');
-						if ($this->isCryptingOk($a.$l)) {
-                            $grade	= explode(":", $l);
-							if (count($grade)==2) {
+                        if ($this->isCryptingOk($a.$l)) {
+                            $grade    = explode(":", $l);
+                            if (count($grade) == 2) {
                                 $doc = $gameData->getDocument();
-								$max = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x')->item(99)->getAttribute('val');
-								if ($ninja->getExperience() - $ninja->getGrade()*$max>$max) {
-									$gr = intval($grade[0]);
-									if ($gr==$ninja->getGrade()+1) {
+                                $max = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x')->item(99)->getAttribute('val');
+                                if ($ninja->getExperience() - $ninja->getGrade() * $max > $max) {
+                                    $gr = intval($grade[0]);
+                                    if ($gr == $ninja->getGrade()+1) {
                                         $ninja->setGrade($gr);
                                         $ninja->setAptitudeForce(0);
                                         $ninja->setAptitudeVitesse(0);
@@ -107,27 +106,31 @@ class UnityController extends AbstractController
                                         $em->flush();
 
                                         $data = $gr;
-                                    }else
+                                    }else {
                                         $data = $ninja->getGrade();
-                                }else
+                                    }
+                                }else {
                                     $data = $ninja->getGrade();
-                            }else
+                                }
+                            }else {
                                 $data = $ninja->getGrade();
-                        }else
+                            }
+                        }else {
                             $data = $ninja->getGrade();
+                        }
                         break;
                     // mise à jour du compteur de mission
                     case"m":
                         $t = $request->get('t');
-						if ($this->isCryptingOk($a.$t)) {
-                            if ($t=="a") {
+                        if ($this->isCryptingOk($a.$t)) {
+                            if ($t == "a") {
                                 $ninja->setMissionAssassinnat($ninja->getMissionAssassinnat() + 1);
 
                                 $em->persist($ninja);
                                 $em->flush();
 
                                 $data = $ninja->getMissionAssassinnat();
-                            }elseif ($t=="c") {
+                            } else if ($t=="c") {
                                 $ninja->setMissionCourse($ninja->getMissionCourse() + 1);
 
                                 $em->persist($ninja);
@@ -140,20 +143,20 @@ class UnityController extends AbstractController
                     // mise à jour des achievements
                     case"a":
                         $l = $request->get('l');
-						if ($this->isCryptingOk($a.$l)) {
+                        if ($this->isCryptingOk($a.$l)) {
                             $ninja->setAccomplissement($l);
 
                             $em->persist($ninja);
                             $em->flush();
-							$data	= '1';
-						}
+                            $data    = '1';
+                        }
                         break;
                     // mise à jour de la skin
                     case"s":
                         $l = $request->get('l');
-						if ($this->isCryptingOk($a.$l)) {
-							$skins	= explode(":", $l);
-							if (count($skins)==6) {
+                        if ($this->isCryptingOk($a.$l)) {
+                            $skins    = explode(":", $l);
+                            if (count($skins) == 6) {
                                 $ninja->setMasque($skins[0]);
                                 $ninja->setMasqueCouleur($skins[1]);
                                 $ninja->setMasqueDetail($skins[2]);
@@ -163,36 +166,34 @@ class UnityController extends AbstractController
 
                                 $em->persist($ninja);
                                 $em->flush();
-                                $data	= '1';
-							}
-						}
+                                $data    = '1';
+                            }
+                        }
                         break;
                     // mise à jour de la classe
                     case"c":
                         $c = $request->get('c');
                         $classe = $ninja->getClasse();
                         if (empty($classe)) {
-						    //if ($this->isCryptingOk($a.$c)) {
-                                $convert	= array(
-                                    "355"	=> "feu",
-                                    "356"	=> "eau",
-                                    "357"	=> "terre",
-                                    "358"	=> "foudre",
-                                    "359"	=> "vent"
-                                );
-                                $ninja->setClasse($convert[$c]);
+                            $convert    = array(
+                                "355"    => "feu",
+                                "356"    => "eau",
+                                "357"    => "terre",
+                                "358"    => "foudre",
+                                "359"    => "vent"
+                            );
+                            $ninja->setClasse($convert[$c]);
 
-                                $em->persist($ninja);
-                                $em->flush();
-                                $data	= '1';
-                            //}
+                            $em->persist($ninja);
+                            $em->flush();
+                            $data    = '1';
                         }
                         break;
                     // mise à jour de l'expérience
                     case"e":
                         $e = (int)$request->get('e');
                         $data = $ninja->getExperience();
-						if ($this->isCryptingOk($data.$a.$e)) {
+                        if ($this->isCryptingOk($data.$a.$e)) {
                             $ninja->setExperience($data+$e);
 
                             $em->persist($ninja);
@@ -203,97 +204,98 @@ class UnityController extends AbstractController
                     // mise à jour des niveaux
                     case"l":
                         $l = $request->get('l');
-						if ($this->isCryptingOk($a.$l)) {
-							$levels	= explode(":", $l);
-							if (count($levels)==27) {
+                        if ($this->isCryptingOk($a.$l)) {
+                            $levels    = explode(":", $l);
+                            if (count($levels) == 27) {
                                 $doc = $gameData->getDocument();
-								$levelUp	= $doc->getElementsByTagName('levelUp')->item(0);
-								$capaciteV	= $levelUp->getElementsByTagName('capacite')->item(0)->getAttribute('val');
-								$capaciteD	= $levelUp->getElementsByTagName('capacite')->item(0)->getAttribute('depart');
-								$aptitudeV	= $levelUp->getElementsByTagName('aptitude')->item(0)->getAttribute('val');
-								$aptitudeD	= $levelUp->getElementsByTagName('aptitude')->item(0)->getAttribute('depart');
+                                $levelUp    = $doc->getElementsByTagName('levelUp')->item(0);
+                                $capaciteV    = $levelUp->getElementsByTagName('capacite')->item(0)->getAttribute('val');
+                                $capaciteD    = $levelUp->getElementsByTagName('capacite')->item(0)->getAttribute('depart');
+                                $aptitudeV    = $levelUp->getElementsByTagName('aptitude')->item(0)->getAttribute('val');
+                                $aptitudeD    = $levelUp->getElementsByTagName('aptitude')->item(0)->getAttribute('depart');
 
-								$experience	= $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
-								$k			= 0;
-								foreach ($experience as $exp) {
-									if ($exp->getAttribute('val')>$ninja->getExperience())
-										break;
-									$k++;
-								}
-								$capaciteMax	= ($capaciteD+$k*$capaciteV);
-								$aptitudeMax	= ($aptitudeD+$k*$aptitudeV);
+                                $experience    = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
+                                $k            = 0;
+                                foreach ($experience as $exp) {
+                                    if ($exp->getAttribute('val')>$ninja->getExperience()) {
+                                        break;
+                                    }
+                                    $k++;
+                                }
+                                $capaciteMax    = ($capaciteD+$k*$capaciteV);
+                                $aptitudeMax    = ($aptitudeD+$k*$aptitudeV);
 
-								$capaciteDem	= $levels[0]+$levels[1]+$levels[2]+$levels[3];
-								$aptitudeDem	= $levels[4]+$levels[5]+$levels[6]+$levels[7]+$levels[8]+$levels[9]+$levels[10]+$levels[11]+$levels[12]+$levels[13]+$levels[14]+$levels[15]+$levels[16]+$levels[17]+$levels[18]+$levels[19]+$levels[20]+$levels[21];
+                                $capaciteDem    = $levels[0]+$levels[1]+$levels[2]+$levels[3];
+                                $aptitudeDem    = $levels[4]+$levels[5]+$levels[6]+$levels[7]+$levels[8]+$levels[9]+$levels[10]+$levels[11]+$levels[12]+$levels[13]+$levels[14]+$levels[15]+$levels[16]+$levels[17]+$levels[18]+$levels[19]+$levels[20]+$levels[21];
 
-                                if ($capaciteMax>=$capaciteDem && $aptitudeMax>=$aptitudeDem) {
-									$classe	= $ninja->getClasse();
-									if ($classe=="terre") {
-										$levels[9]	= 0;
-										$levels[11]	= 0;
-										$levels[12]	= 0;
-										$levels[13]	= 0;
-										$levels[14]	= 0;
-										$levels[15]	= 0;
-										$levels[17]	= 0;
-										$levels[18]	= 0;
-										$levels[22]	= 0;
-										$levels[23]	= 0;
-										$levels[25]	= 0;
-										$levels[26]	= 0;
-									}elseif ($classe=="eau") {
-										$levels[10]	= 0;
-										$levels[11]	= 0;
-										$levels[12]	= 0;
-										$levels[13]	= 0;
-										$levels[14]	= 0;
-										$levels[16]	= 0;
-										$levels[17]	= 0;
-										$levels[18]	= 0;
-										$levels[22]	= 0;
-										$levels[23]	= 0;
-										$levels[24]	= 0;
-										$levels[26]	= 0;
-									}elseif ($classe=="feu") {
-										$levels[9]	= 0;
-										$levels[10]	= 0;
-										$levels[11]	= 0;
-										$levels[12]	= 0;
-										$levels[15]	= 0;
-										$levels[16]	= 0;
-										$levels[17]	= 0;
-										$levels[18]	= 0;
-										$levels[22]	= 0;
-										$levels[23]	= 0;
-										$levels[24]	= 0;
-										$levels[25]	= 0;
-									}elseif ($classe=="foudre") {
-										$levels[9]	= 0;
-										$levels[10]	= 0;
-										$levels[12]	= 0;
-										$levels[13]	= 0;
-										$levels[14]	= 0;
-										$levels[15]	= 0;
-										$levels[16]	= 0;
-										$levels[18]	= 0;
-										$levels[22]	= 0;
-										$levels[24]	= 0;
-										$levels[25]	= 0;
-										$levels[26]	= 0;
-									}elseif ($classe=="vent") {
-										$levels[9]	= 0;
-										$levels[10]	= 0;
-										$levels[11]	= 0;
-										$levels[13]	= 0;
-										$levels[14]	= 0;
-										$levels[15]	= 0;
-										$levels[16]	= 0;
-										$levels[17]	= 0;
-										$levels[23]	= 0;
-										$levels[24]	= 0;
-										$levels[25]	= 0;
-										$levels[26]	= 0;
-									}
+                                if ($capaciteMax >= $capaciteDem && $aptitudeMax >= $aptitudeDem) {
+                                    $classe    = $ninja->getClasse();
+                                    if ($classe=="terre") {
+                                        $levels[9]    = 0;
+                                        $levels[11]    = 0;
+                                        $levels[12]    = 0;
+                                        $levels[13]    = 0;
+                                        $levels[14]    = 0;
+                                        $levels[15]    = 0;
+                                        $levels[17]    = 0;
+                                        $levels[18]    = 0;
+                                        $levels[22]    = 0;
+                                        $levels[23]    = 0;
+                                        $levels[25]    = 0;
+                                        $levels[26]    = 0;
+                                    } else if ($classe == "eau") {
+                                        $levels[10]    = 0;
+                                        $levels[11]    = 0;
+                                        $levels[12]    = 0;
+                                        $levels[13]    = 0;
+                                        $levels[14]    = 0;
+                                        $levels[16]    = 0;
+                                        $levels[17]    = 0;
+                                        $levels[18]    = 0;
+                                        $levels[22]    = 0;
+                                        $levels[23]    = 0;
+                                        $levels[24]    = 0;
+                                        $levels[26]    = 0;
+                                    } else if ($classe == "feu") {
+                                        $levels[9]    = 0;
+                                        $levels[10]    = 0;
+                                        $levels[11]    = 0;
+                                        $levels[12]    = 0;
+                                        $levels[15]    = 0;
+                                        $levels[16]    = 0;
+                                        $levels[17]    = 0;
+                                        $levels[18]    = 0;
+                                        $levels[22]    = 0;
+                                        $levels[23]    = 0;
+                                        $levels[24]    = 0;
+                                        $levels[25]    = 0;
+                                    } else if ($classe == "foudre") {
+                                        $levels[9]    = 0;
+                                        $levels[10]    = 0;
+                                        $levels[12]    = 0;
+                                        $levels[13]    = 0;
+                                        $levels[14]    = 0;
+                                        $levels[15]    = 0;
+                                        $levels[16]    = 0;
+                                        $levels[18]    = 0;
+                                        $levels[22]    = 0;
+                                        $levels[24]    = 0;
+                                        $levels[25]    = 0;
+                                        $levels[26]    = 0;
+                                    } else if ($classe == "vent") {
+                                        $levels[9]    = 0;
+                                        $levels[10]    = 0;
+                                        $levels[11]    = 0;
+                                        $levels[13]    = 0;
+                                        $levels[14]    = 0;
+                                        $levels[15]    = 0;
+                                        $levels[16]    = 0;
+                                        $levels[17]    = 0;
+                                        $levels[23]    = 0;
+                                        $levels[24]    = 0;
+                                        $levels[25]    = 0;
+                                        $levels[26]    = 0;
+                                    }
                                     $ninja->setAptitudeForce($levels[0]);
                                     $ninja->setAptitudeVitesse($levels[1]);
                                     $ninja->setAptitudeVie($levels[2]);
@@ -325,18 +327,18 @@ class UnityController extends AbstractController
                                     $em->persist($ninja);
                                     $em->flush();
                                     $data = '1';
-								}
-							}
-						}
+                                }
+                            }
+                        }
                         break;
                     // check le cheat
                     case"t":
                         $t = $request->get('t');
                         $l = $request->get('l');
                         $userCheck = null;
-						if ($this->isCryptingOk($a.$t.$l)) {
-                            $levels	= explode(":", $t);
-                            if (count($levels)==28) {
+                        if ($this->isCryptingOk($a.$t.$l)) {
+                            $levels    = explode(":", $t);
+                            if (count($levels) == 28) {
                                 $userCheck = $em->getRepository(User::class)->findOneBy(array('id' => (int)$l));
                                 if ($userCheck) {
                                     $ninjaCheck = $userCheck->getNinja();
@@ -345,28 +347,31 @@ class UnityController extends AbstractController
                                         $doc = $gameData->getDocument();
 
                                         // l'expérience (et données associées)
-                                        $experience	= $ninjaCheck->getExperience();
+                                        $experience    = $ninjaCheck->getExperience();
                                         // le grade
-                                        $dan		= $ninjaCheck->getGrade();
-                                        $niveau		= 0;
-                                        $xpXML		= $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
-                                        $k			= 0;
-                                        $xp			= $experience-$dan*$xpXML->item($xpXML->length-2)->getAttribute('val');
+                                        $dan        = $ninjaCheck->getGrade();
+                                        $niveau        = 0;
+                                        $xpXML        = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
+                                        $k            = 0;
+                                        $xp            = $experience-$dan*$xpXML->item($xpXML->length-2)->getAttribute('val');
                                         foreach ($xpXML as $exp) {
-                                            if ($exp->getAttribute('val')<=$xp)
+                                            if ($exp->getAttribute('val') <= $xp) {
                                                 $k++;
-                                            else
+                                            } else {
                                                 break;
+                                            }
                                         }
-                                        $niveau		= $xpXML->item($k>0?$k-1:0)->getAttribute('niveau');
+                                        $niveau        = $xpXML->item($k>0?$k-1:0)->getAttribute('niveau');
 
                                         // évite d'enregistrer la valeur en bdd
                                         $force      = $ninjaCheck->getAptitudeForce();
                                         $marcherMur = $ninjaCheck->getJutsuMarcherMur();
                                         $vitesse    = $ninjaCheck->getAptitudeVitesse();
-                                        if ($ninjaCheck->getMissionAssassinnat()>=25)
+
+                                        if ($ninjaCheck->getMissionAssassinnat() >= 25) {
                                             $force += 5;
-                                        if ($ninjaCheck->getMissionCourse()>=40) {
+                                        }
+                                        if ($ninjaCheck->getMissionCourse() >= 40) {
                                             $marcherMur += 5;
                                             $vitesse += 5;
                                         }
@@ -399,16 +404,19 @@ class UnityController extends AbstractController
                                             $ninjaCheck->getJutsuSusanoo() == $levels[25] &&
                                             $ninjaCheck->getJutsuKagutsuchi() == $levels[26] &&
                                             $niveau == $levels[27]
-                                        )
-                                            $data	= '1';
+                                        ) {
+                                            $data    = '1';
+                                        }
                                     }
                                 // peut être un visiteur : on laisse ouvert pour les petits niveaux
-                                }else{
-                                    $num	= 0;
-                                    foreach($levels as $v)
-                                        $num	+= $v;
-                                    if ($num<35)
-                                        $data	= '1';
+                                } else {
+                                    $num    = 0;
+                                    foreach ($levels as $v) {
+                                        $num    += $v;
+                                    }
+                                    if ($num<35) {
+                                        $data    = '1';
+                                    }
                                 }
                             }
                         }
@@ -451,7 +459,7 @@ class UnityController extends AbstractController
                             }*/
 
                             // enregistre dans le lobby
-                            if ($data=='1') {
+                            if ($data == '1') {
                                 $lobby = $em->getRepository(Lobby::class)
                                     ->createQueryBuilder('l')
                                     ->where(':user MEMBER OF l.users')
@@ -459,6 +467,7 @@ class UnityController extends AbstractController
                                     ->setMaxResults(1)
                                     ->getQuery()
                                     ->getOneOrNullResult();
+
                                 if ($lobby) {
                                     $lobby->setDateUpdate(new \DateTime());
                                     $lobby->addUser($userCheck);
@@ -470,24 +479,26 @@ class UnityController extends AbstractController
                         break;
                     // apparition du yokai
                     case"y":
-						if ($this->isCryptingOk($a)) {
-                            $step			= 15;// toutes les n minutes (fixe)
-                            $dateApparition	= time()-7200;
-                            // vacance noel
-                            if (date("YmdHi")>="201212211800" && date("YmdHi")<="201212261200")
-                                $dateApparition	= time() + ($step-date("i")%$step)*60 - date("s");
+                        if ($this->isCryptingOk($a)) {
+                            $step            = 15;// toutes les n minutes (fixe)
+                            $dateApparition    = time()-7200;
 
-                            $data	= date("Y-m-d H:i:s")."|".date("Y-m-d H:i:s", $dateApparition);
+                            // vacance noel
+                            if (date("YmdHi")>="201212211800" && date("YmdHi")<="201212261200") {
+                                $dateApparition    = time() + ($step-date("i")%$step)*60 - date("s");
+                            }
+
+                            $data    = date("Y-m-d H:i:s")."|".date("Y-m-d H:i:s", $dateApparition);
                         }
                         break;
                     // ajoute un amis
                     case"f":
                         $l = $request->get('l');
-						if ($this->isCryptingOk($a.$l)) {
+                        if ($this->isCryptingOk($a.$l)) {
                             $userFriend = $em->getRepository(User::class)->findOneBy(array('username' => base64_decode($l)));
-							if ($userFriend) {
+                            if ($userFriend) {
                                 $already = $em->getRepository(Friend::class)->findOneBy(array('user' => $user, 'friend' => $userFriend));
-								if (!$already) {
+                                if (!$already) {
                                     // créé la liaison
                                     $friend = new Friend();
                                     $friend->setUser($userFriend);
@@ -510,39 +521,39 @@ class UnityController extends AbstractController
                                     $em->persist($messageUser);
 
                                     $em->flush();
-								}
-								$data	= "1";
-							}
-						}
+                                }
+                                $data    = "1";
+                            }
+                        }
                         break;
                     // upload vers imgur
                     case"i":
                         $fileupload = $request->get('fileupload');
-						if ($this->isCryptingOk($a)) {
+                        if ($this->isCryptingOk($a)) {
                             $imgur = $this->getParameter('imgur');
-							$ch = curl_init();
-							curl_setopt($ch, CURLOPT_HEADER, 0);
-							curl_setopt($ch, CURLOPT_VERBOSE, 0);
-							curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-							curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-							curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-							curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
-							curl_setopt($ch, CURLOPT_URL, "https://api.imgur.com/3/upload.xml");
-							curl_setopt($ch, CURLOPT_POST, true);
-							curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Client-ID '.$imgur) );
-							curl_setopt($ch, CURLOPT_POSTFIELDS, array(
-								"image"			=> $fileupload,
-								"type"			=> "base64",
-								"name"			=> "screenshot.jpg"
-							));
-							if ($retour = curl_exec($ch)) {
-								$xml	= @simplexml_load_string($retour);
-								if ($xml) {
-									// récupérer les chemins
-									try{
-										if ($xml['success']=="1" && $xml['status']=="200") {
-											$url		= (string)$xml->link;
-											$deleteHash	= (string)$xml->deletehash;
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_HEADER, 0);
+                            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+                            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
+                            curl_setopt($ch, CURLOPT_URL, "https://api.imgur.com/3/upload.xml");
+                            curl_setopt($ch, CURLOPT_POST, true);
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Client-ID '.$imgur) );
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, array(
+                                "image"            => $fileupload,
+                                "type"            => "base64",
+                                "name"            => "screenshot.jpg"
+                            ));
+                            if ($retour = curl_exec($ch)) {
+                                $xml    = @simplexml_load_string($retour);
+                                if ($xml) {
+                                    // récupérer les chemins
+                                    try{
+                                        if ($xml['success']=="1" && $xml['status']=="200") {
+                                            $url        = (string)$xml->link;
+                                            $deleteHash    = (string)$xml->deletehash;
 
                                             $capture = new Capture();
                                             $capture->setUser($user);
@@ -552,12 +563,12 @@ class UnityController extends AbstractController
 
                                             $em->persist($capture);
                                             $em->flush();
-											$data	= "1";
-										}
-									}catch(Exception $e){}
-								}
-							}
-						}
+                                            $data    = "1";
+                                        }
+                                    }catch(Exception $e){}
+                                }
+                            }
+                        }
                         break;
                     // mise à jour du lobby
                     case"lu":
@@ -568,11 +579,11 @@ class UnityController extends AbstractController
                         $version = $request->get('version');
                         $players = $request->get('players');
                         $pwd = $request->get('pwd');
-						if ($this->isCryptingOk($a.$partie.$maxPlayer.$carte.$jeu.$version.$players.$pwd)) {
+                        if ($this->isCryptingOk($a.$partie.$maxPlayer.$carte.$jeu.$version.$players.$pwd)) {
 
-							$partie		= intval($partie);
-							if (!empty($partie)) {
-								$players = explode("-", $players);
+                            $partie        = intval($partie);
+                            if (!empty($partie)) {
+                                $players = explode("-", $players);
                                 $users = array();
                                 if (count($players)>0) {
                                     $userRepository = $em->getRepository(User::class);
@@ -587,17 +598,18 @@ class UnityController extends AbstractController
                                 $lobby = $em->getRepository(Lobby::class)->findOneBy(array('partie' => $partie));
                                 if ($lobby) {
                                     // met à jour
-								    if (count($users)>0) {
+                                    if (count($users) > 0) {
                                         $lobby->clearUsers();
                                         foreach($users as $userPlayer) {
                                             $lobby->addUser($userPlayer);
                                         }
                                         $lobby->setDateUpdate(new \DateTime());
                                         $em->persist($lobby);
-                                    }else
+                                    } else {
                                         $em->remove($lobby);
+                                    }
                                     $em->flush();
-                                }elseif (count($users)>0) {
+                                } else if (count($users) > 0) {
                                     $lobby = new Lobby();
                                     $lobby->setCarte(intval($carte));
                                     $lobby->setPartie($partie);
@@ -606,20 +618,20 @@ class UnityController extends AbstractController
                                     $lobby->setVersion((float)$version);
                                     $lobby->setPrivee($pwd);
                                     $lobby->setDateUpdate(new \DateTime());
-                                    foreach($users as $userPlayer) {
+                                    foreach ($users as $userPlayer) {
                                         $lobby->addUser($userPlayer);
                                     }
                                     $em->persist($lobby);
                                     $em->flush();
                                 }
 
-								$data	= '1';
-							}
-						}
+                                $data    = '1';
+                            }
+                        }
                         break;
                     // suppression du lobby
                     case"ld":
-						if ($this->isCryptingOk($a)) {
+                        if ($this->isCryptingOk($a)) {
                             $lobby = $em->getRepository(Lobby::class)
                                 ->createQueryBuilder('l')
                                 ->where(':user MEMBER OF l.users')
@@ -631,18 +643,19 @@ class UnityController extends AbstractController
                                 $lobby->setDateUpdate(new \DateTime());
                                 $lobby->removeUser($user);
 
-                                if (count($lobby->getUsers())==0)
+                                if (count($lobby->getUsers()) == 0) {
                                     $em->remove($lobby);
-                                else
+                                } else {
                                     $em->persist($lobby);
+                                }
                                 $em->flush();
                             }
-                            $data	= '1';
+                            $data    = '1';
                         }
                         break;
                     // amis dans le lobby
                     case"lf":
-						if ($this->isCryptingOk($a)) {
+                        if ($this->isCryptingOk($a)) {
                             $lobbyRepository = $em->getRepository(Lobby::class);
 
                             // fait le ménage dans les lobby
@@ -686,7 +699,7 @@ class UnityController extends AbstractController
         return new Response("0", 200, array('Content-Type' => 'text/plain'));
     }
 
-    public function connect(Request $request, UserPasswordEncoderInterface $passwordEncoder, Packages $assetsManager, CacheManager $cacheManager, TokenStorageInterface $tokenStorage, EventDispatcherInterface $eventDispatcher, GameData $gameData)
+    public function connect(Request $request, AuthorizationCheckerInterface $authorizationChecker, Packages $assetsManager, CacheManager $cacheManager, TokenStorageInterface $tokenStorage, GameData $gameData)
     {
         // initialisation
         $content = "<"."?xml version=\"1.0\" encoding=\"UTF-8\""."?><root>";
@@ -711,25 +724,11 @@ class UnityController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
 
-        $maxid	= $em->getRepository(User::class)
+        $maxid    = $em->getRepository(User::class)
             ->createQueryBuilder('u')
             ->select('MAX(u.id)')
             ->getQuery()
             ->getSingleScalarResult();
-
-        $authorizationChecker = $this->get('security.authorization_checker');
-        // tentative de connexion
-        if (!empty($login) && !empty($pwd) && $this->isCryptingOk($login.$pwd.$visiteur)) {
-            // récupère l'utilisateur par le login et vérifie que le mot de passe est ok
-            $user = $em->getRepository(User::class)->findOneBy(array('username' => $login));
-            if ($user && $passwordEncoder->isPasswordValid($user, $pwd)) {
-                // lance la connexion
-                $token = new UsernamePasswordToken($user, $user->getPassword(), 'main', $user->getRoles());
-                $tokenStorage->setToken($token);
-                $event = new InteractiveLoginEvent($request, $token);
-                $eventDispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
-            }
-        }
 
         // chargement du xml des données du jeu
         $doc = $gameData->getDocument();
@@ -744,12 +743,14 @@ class UnityController extends AbstractController
             // l'avatar
             $avatar = $user->getAvatar();
             if (empty($avatar)) {
-                if ($user->getGender()=='m')
+                if ($user->getGender()=='m') {
                     $avatar = $assetsManager->getUrl('bundles/ninjatookenuser/images/boyz.jpg');
-                else
+                } else {
                     $avatar = $assetsManager->getUrl('bundles/ninjatookenuser/images/girlz.jpg');
-            }else
+                }
+            } else {
                 $avatar = $cacheManager->getBrowserPath('avatar/'.$avatar, 'avatar');
+            }
 
             $content .= '<login avatar="'.$avatar.'" id="'.$user->getId().'" maxid="'.$maxid.'"><![CDATA['.$user->getUsername()."]]></login>";
 
@@ -767,7 +768,7 @@ class UnityController extends AbstractController
                         $em->remove($l);
                     $em->flush();
                 }
-            }else{
+            } else {
                 // on créé l'entité "ninja"
                 $ninja = new Ninja();
                 $ninja->setUser($user);
@@ -776,7 +777,7 @@ class UnityController extends AbstractController
                 $em->flush();
             }
             // calcul l'age
-            $age	= "10";
+            $age    = "10";
             $dateBirth = $user->getDateOfBirth();
             if ($dateBirth && $dateBirth!=new \DateTime('0000-00-00 00:00:00'))
                 $age = $dateBirth->diff(new \DateTime())->format('%y');
@@ -799,17 +800,16 @@ class UnityController extends AbstractController
             $friends = $em->getRepository(Friend::class)->getFriends($user, 100, 0);
             if ($friends) {
                 foreach($friends as $friend) {
-                    $friendsUsername[]	= '<t><![CDATA['.$friend->getFriend()->getUsername().']]></t>';
+                    $friendsUsername[]    = '<t><![CDATA['.$friend->getFriend()->getUsername().']]></t>';
                 }
             }
-            $retour	= '1';
-        }else{
-            if (!empty($visiteur)) {
-                $content .= '<login avatar="" id="'.($maxid+date("Hms")).'" maxid="'.$maxid.'"><![CDATA[Visiteur_'.date("Hms").']]></login>';
-                $content .= '<params force="4" vitesse="3" vie="0" chakra="0" experience="'.$XP_LEVEL_100.'" grade="0" bouleElementaire="0" doubleSaut="0" bouclierElementaire="0" marcherMur="0" deflagrationElementaire="0" marcherViteEau="0" changerObjet="0" multishoot="0" invisibleman="0" resistanceExplosion="0" phoenix="0" vague="0" pieux="0" tornade="0" teleportation="0" kusanagi="0" acierRenforce="0" chakraVie="0" kamiRaijin="0" kamiSarutahiko="0" kamiFujin="0" kamiSusanoo="0" kamiKagutsuchi="0" classe="" masque="0" couleurMasque="0" detailMasque="0" costume="0" couleurCostume="0" detailCostume="0" assassinnat="0" course="0" langue="'.$request->getLocale().'" accomplissement="0000000000000000000000000" age="10" sexe="H" roles="ROLE_USER" clan=""/>';
-                $retour	= '1';
-            }
+            $retour    = '1';
+        } else if (!empty($visiteur)) {
+            $content .= '<login avatar="" id="'.($maxid+date("Hms")).'" maxid="'.$maxid.'"><![CDATA[Visiteur_'.date("Hms").']]></login>';
+            $content .= '<params force="4" vitesse="3" vie="0" chakra="0" experience="'.$XP_LEVEL_100.'" grade="0" bouleElementaire="0" doubleSaut="0" bouclierElementaire="0" marcherMur="0" deflagrationElementaire="0" marcherViteEau="0" changerObjet="0" multishoot="0" invisibleman="0" resistanceExplosion="0" phoenix="0" vague="0" pieux="0" tornade="0" teleportation="0" kusanagi="0" acierRenforce="0" chakraVie="0" kamiRaijin="0" kamiSarutahiko="0" kamiFujin="0" kamiSusanoo="0" kamiKagutsuchi="0" classe="" masque="0" couleurMasque="0" detailMasque="0" costume="0" couleurCostume="0" detailCostume="0" assassinnat="0" course="0" langue="'.$request->getLocale().'" accomplissement="0000000000000000000000000" age="10" sexe="H" roles="ROLE_USER" clan=""/>';
+            $retour    = '1';
         }
+
         $content .= '<friends>';
         $content .= implode("", $friendsUsername);
         $content .= '</friends>';
@@ -823,10 +823,10 @@ class UnityController extends AbstractController
         return $response;
     }
 
-	// fonction de cryptage
-	private function isCryptingOk($val="") {
-		return $this->crypt == hash("sha256", $this->cryptUnity.$this->phpsessid.$this->time.$val.$this->idUtilisateur.$this->phpsessid.$this->gameversion, false);
-	}
+    // fonction de cryptage
+    private function isCryptingOk($val="") {
+        return $this->crypt == hash("sha256", $this->cryptUnity.$this->phpsessid.$this->time.$val.$this->idUtilisateur.$this->phpsessid.$this->gameversion, false);
+    }
 
     // récupère les données xml
     private function getDataContent() {
