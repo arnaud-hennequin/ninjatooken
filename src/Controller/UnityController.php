@@ -718,8 +718,6 @@ class UnityController extends AbstractController
         $this->idUtilisateur = 0;
 
         // variables postées
-        $login = $request->get('login');
-        $pwd = $request->get('pwd');
         $visiteur = $request->get('visiteur');
 
         $em = $this->getDoctrine()->getManager();

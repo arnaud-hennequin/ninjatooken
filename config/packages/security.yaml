@@ -187,21 +187,14 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT
 
     firewalls:
-        admin:
-            context: user
-            pattern: /daFuckingAdmin(.*)
-            custom_authenticator: App\Security\LoginFormAuthenticator
-            logout:
-                path: ninja_tooken_user_security_logout
-                target: ninja_tooken_homepage
         api:
-            context: user
-            pattern: /unity/(.*)
+            pattern: ^/unity/
             lazy: true
             custom_authenticator: App\Security\ApiAuthenticator
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
         main:
-            context: user
-            pattern: .*$
             custom_authenticator: App\Security\LoginFormAuthenticator
             logout:
                 path: ninja_tooken_user_security_logout
@@ -214,9 +207,6 @@ security:
                 domain:   ~
                 always_remember_me: false
                 remember_me_parameter: _remember_me
-        dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
