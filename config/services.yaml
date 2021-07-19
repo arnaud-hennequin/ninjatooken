@@ -21,7 +21,7 @@ parameters:
     mail_contact: contact@ninjatooken.fr
     mail_admin: arhennequin@gmail.com
     mail_name: no-reply
-    unity.version: '1.30000'
+    unity.version: '%env(UNITY_VERSION)%'
     unity.crypt: '%env(UNITY_KEY)%'
     imgur: null
     banned.ip: {  }
