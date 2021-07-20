@@ -92,7 +92,7 @@ class CommonController extends AbstractController
                 $emailContact = $this->getParameter('mail_admin');
 
                 $message = (new \Swift_Message('[NT] Contact : '.$sujet))
-                    ->setFrom([$this->container->getParameter('mail_contact') => $this->container->getParameter('mail_name')])
+                    ->setFrom([$this->getParameter('mail_contact') => $this->getParameter('mail_name')])
                     ->setTo($emailContact)
                     ->setReplyTo($email)
                     ->setContentType("text/html")
