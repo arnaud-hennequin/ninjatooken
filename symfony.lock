@@ -129,6 +129,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.39"
     },
+    "ifsnop/mysqldump-php": {
+        "version": "v2.9"
+    },
     "imagine/imagine": {
         "version": "1.2.3"
     },
