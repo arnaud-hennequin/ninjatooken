@@ -37,7 +37,9 @@ class CommonController extends AbstractController
 
     public function jouer()
     {
-        $response = $this->render('common/jouer.html.twig');
+        $response = $this->render('common/jouer.html.twig', [
+            'gameversion' => $this->getParameter('unity.version')
+        ]);
         $response->setSharedMaxAge(600);
         
         return $response;

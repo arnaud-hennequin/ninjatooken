@@ -3,6 +3,7 @@
 namespace App\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\Forum\Comment;
 use App\Utils\Akismet;
  
@@ -11,12 +12,15 @@ class CommentListener
     protected $akismetActive;
     protected $akismetKey;
     protected $akismetUrl;
+    protected $requestStack;
 
-    public function __construct($akismetActive = false, $akismetKey = "", $akismetUrl = "")
+    public function __construct($akismetActive = false, $akismetKey = "", $akismetUrl = "", RequestStack $requestStack)
     {
         $this->akismetActive = $akismetActive;
         $this->akismetKey = $akismetKey;
         $this->akismetUrl = $akismetUrl;
+
+        $this->requestStack = $requestStack;
     }
 
     // vérification akismet du commentaire
@@ -31,6 +35,7 @@ class CommentListener
             if($this->akismetActive){
                 if($entity->getThread() !== null && $entity->getAuthor() !== null)
                 {
+                    $request = $this->requestStack->getCurrentRequest();
                     $akismet = new Akismet();
                     $akismet->setUserAgent('rzeka.net/1.0.0 | Akismet/1.0.0');
                     $akismet->keyCheck(
@@ -39,10 +44,10 @@ class CommentListener
                     );
                     // on check qu'il ne s'agit pas d'un spam
                     if(!$akismet->check(array(
-                        'permalink' => $this->request->getUri(),
-                        'user_ip' => $this->request->getClientIp(),
-                        'user_agent' => $this->request->server->get('HTTP_USER_AGENT'),
-                        'referrer' => $this->request->server->get('HTTP_REFERER'),
+                        'permalink' => $request->getUri(),
+                        'user_ip' => $request->getClientIp(),
+                        'user_agent' => $request->server->get('HTTP_USER_AGENT'),
+                        'referrer' => $request->server->get('HTTP_REFERER'),
                         'comment_type' => 'comment',
                         'comment_author' => $entity->getAuthor()->getUsername(),
                         'comment_author_email' => $entity->getAuthor()->getEmail(),

@@ -227,7 +227,16 @@ gameDownload:
         Mais voilà, <a href='https://unity3d.com/webplayer%20' target='_blank'>Unity ne supporte plus le lecteur web</a>, et ce depuis quelques années maintenant.<br>
         Comme le jeu fonctionne désormais sur la dernière mouture d'Unity (2021), il faudrait faire un export WebGL et adapter le code du jeu...<br>
         Le temps me manque pour cela, je t'invite donc à télécharger et exécuter le jeu sur ton système d'exploitation préféré (pas d'installation requise):<br>
-        <h1><ul>
-            <li><a href="/windows.zip" target="_blank">Windows</a></li>
-            <li><a href="/mac.zip" target="_blank">MacOS</a></li>
-        </ul></h1>
+        <h1>Version actuelle : {version}</h1>
+        <ul>
+            <li><h1><a href="/windows{version}.zip" target="_blank">Windows</a></h1></li>
+            <li>
+                <h1><a href="/mac{version}.zip" target="_blank">MacOS</a></h1>
+                Pour la version mac, il est possible que le jeu ne se lance pas. Il faut alors ouvrir le terminal puis :<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<code>cd &lt;CHEMIN_VERS_L_APP&gt;/ninjatooken.app/Contents/MacOS/</code><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<code>chmod +x ninjatooken.app</code><br>
+                si ce chmod ne suffit pas à rendre le jeu exécutable :<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<code>sudo chmod -R 755</code><br>
+                Il est possible malgré tout que même si le jeu est bien exécutable, la version diffère trop et qu'il ne soit pas possible de le lancer... je n'ai pas de solution pour le moment :/
+                </li>
+        </ul>

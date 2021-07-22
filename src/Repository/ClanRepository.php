@@ -26,18 +26,18 @@ class ClanRepository extends EntityRepository
             ->distinct(true);
 
         // par date d'ajout
-        if($order == "date"){
+        if ($order == "date") {
            $query->addOrderBy('c.dateAjout', 'DESC');
         // par nombre de ninja
-        }elseif($order == "ninja"){
+        } else if ($order == "ninja") {
             $query->addOrderBy('num', 'DESC');
         // par composition
-        }elseif($order == "composition"){
+        } else if ($order == "composition") {
             $query->leftJoin('App\Entity\Game\Ninja', 'n', 'WITH', 'n.user = cu.membre')
                 ->addSelect('AVG(n.experience)*COUNT(cu) as avgxp')
                 ->addOrderBy('avgxp', 'DESC');
         // par moyenne d'expérience
-        }elseif($order == "experience"){
+        } else if ($order == "experience") {
             $query->leftJoin('App\Entity\Game\Ninja', 'n', 'WITH', 'n.user = cu.membre')
                 ->addSelect('AVG(n.experience) as avgxp')
                 ->addOrderBy('avgxp', 'DESC');

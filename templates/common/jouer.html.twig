@@ -18,7 +18,7 @@
                 <div class="row-fluid">
 					<section class="span8 main">
 						<h3>{{ 'gameDownload.nom'|trans({}, 'common') }}</h3>
-                        <p>{{ ('gameDownload.description')|trans({}, 'common')|raw }}</p>
+                        <p>{{ ('gameDownload.description')|trans({'%version%':gameversion}, 'common')|raw }}</p>
 					</section>
 					<aside class="span4">
 						<form action="{{ path('ninja_tooken_search') }}" method="post" accept-charset="utf-8" class="row-fluid">

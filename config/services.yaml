@@ -107,7 +107,7 @@ services:
 
     ninjatooken_forum.comment_listener:
         class: App\Listener\CommentListener
-        arguments: ["%akismet.active%", "%akismet.key%", "%akismet.url%"]
+        arguments: ["%akismet.active%", "%akismet.key%", "%akismet.url%", "@request_stack"]
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: postPersist }
