@@ -470,10 +470,12 @@ class UnityController extends AbstractController
                                     ->getOneOrNullResult();
 
                                 if ($lobby) {
-                                    $lobby->setDateUpdate(new \DateTime());
-                                    $lobby->addUser($userCheck);
-                                    $em->persist($lobby);
-                                    $em->flush();
+                                    try {
+                                        $lobby->setDateUpdate(new \DateTime());
+                                        $lobby->addUser($userCheck);
+                                        $em->persist($lobby);
+                                        $em->flush();
+                                    } catch (\Exception $e) {/*avoid error*/}
                                 }
                             }
                         }
