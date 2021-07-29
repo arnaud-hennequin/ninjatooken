@@ -175,7 +175,7 @@ class ClanController extends AbstractController
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-            $this->get('security.token_storage')->getToken()->getUser();
+            $user = $this->get('security.token_storage')->getToken()->getUser();
 
             // vérification des droits utilisateurs
             $isShisho = false;
