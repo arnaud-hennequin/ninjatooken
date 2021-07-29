@@ -4,6 +4,7 @@ namespace App\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use App\Entity\Clan\ClanProposition;
+use App\Entity\Clan\Clan;
  
 class ClanListener
 {

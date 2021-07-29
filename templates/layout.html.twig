@@ -41,7 +41,7 @@
     </head>
     <body>
         <p class="chromeframe">{{ 'description.navigateur'|trans({}, 'common')|raw }}</p>
-        <p class="informationframe">{{ 'description.addBlockeur'|trans({}, 'common') }}</p>
+        {#<p class="informationframe">{{ 'description.addBlockeur'|trans({}, 'common') }}</p>#}
 
         <div class="top">
             <div class="container">
@@ -196,7 +196,7 @@
 
         <div class="content">
             <div class="container">
-                <div class="pub">
+                {#<div class="pub">
                     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
                     <!-- horizontal -->
                     <ins class="adsbygoogle"
@@ -208,7 +208,7 @@
                     <script>
                          (adsbygoogle = window.adsbygoogle || []).push({});
                     </script>
-                </div>
+                </div>#}
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="flash-notice">
                     {{ flashMessage }}

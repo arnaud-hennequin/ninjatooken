@@ -97,7 +97,7 @@ class Clan
     /**
      * @var string
      *
-     * @ORM\Column(name="kamon", type="string", length=255)
+     * @ORM\Column(name="kamon", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     private $kamon;
