@@ -70,7 +70,7 @@
 		{% endif %}
 		</div>
 		<div class="nfo right span6" itemprop="award">
-			<strong>{{ user.ninja.missionCourse }}</strong> {{ 'game.course'|trans({'count': user.ninja.missionCourse}, 'common') }}<strong> / {{ user.ninja.missionAssassinnat }}</strong> {{ 'game.assassinat'|trans({'count': user.ninja.missionAssassinnat}, 'common') }}
+			{{ 'game.course'|trans({'count': user.ninja.missionCourse}, 'common') }}<strong> / </strong> {{ 'game.assassinat'|trans({'count': user.ninja.missionAssassinnat}, 'common') }}
 		</div>
 	</div>
 	{% endif %}
