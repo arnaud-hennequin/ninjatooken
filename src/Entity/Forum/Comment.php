@@ -23,7 +23,7 @@ class Comment
      * Thread of this comment
      *
      * @var Thread
-     * @ORM\ManyToOne(targetEntity="App\Entity\Forum\Thread", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Forum\Thread", fetch="LAZY")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $thread;
@@ -48,7 +48,7 @@ class Comment
     /**
     * Author of the comment
     *
-    * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
+    * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
     * @var User
     */

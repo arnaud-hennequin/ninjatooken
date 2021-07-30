@@ -2,6 +2,7 @@
 namespace App\Entity\User;
 
 use App\Entity\Clan\ClanUtilisateur;
+use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
 use App\Entity\User\Group;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -274,6 +275,19 @@ class User implements UserInterface
      */
     protected $timezone;
 
+    /**
+     * lobby
+     *
+     * @var Lobby
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Game\Lobby")
+     * @ORM\JoinTable(name="nt_lobby_user",
+     *      inverseJoinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id", onDelete="cascade")},
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")}
+     * )
+     */
+    private $lobbies;
+
 
     public function __construct()
     {
@@ -293,6 +307,7 @@ class User implements UserInterface
         $this->recruts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->ips = new \Doctrine\Common\Collections\ArrayCollection();
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lobbies = new ArrayCollection();
     }
 
     /**
@@ -1477,6 +1492,30 @@ class User implements UserInterface
     public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lobby[]
+     */
+    public function getLobbies(): Collection
+    {
+        return $this->lobbies;
+    }
+
+    public function addLobby(Lobby $lobby): self
+    {
+        if (!$this->lobbies->contains($lobby)) {
+            $this->lobbies[] = $lobby;
+        }
+
+        return $this;
+    }
+
+    public function removeLobby(Lobby $lobby): self
+    {
+        $this->lobbies->removeElement($lobby);
 
         return $this;
     }

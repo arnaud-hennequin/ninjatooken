@@ -65,6 +65,7 @@ class NinjaRepository extends EntityRepository
 
     public function getClassement($experience = 0)
     {
+        return "-";// TODO :: deactivate / time consumer
         $query = $this->createQueryBuilder('a')
             ->select('COUNT(a)')
             ->leftJoin('App\Entity\User\User', 'u', 'WITH', 'a.user = u.id')

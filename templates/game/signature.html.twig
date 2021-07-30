@@ -27,7 +27,7 @@
 					<div class="barre"><div class="complete" style="width:{{ '%.2f'|format(user.ratio) }}%"></div></div>
 				</div>
 				<div class="nfo right span5">
-					<strong>{{ user.classement }}°</strong> {{ 'description.position'|trans({'%count%': user.total}) }}
+					{#<strong>{{ user.classement }}°</strong> {{ 'description.position'|trans({'%count%': user.total}) }}#}
 				</div>
 			</div>
 			{% if user.level<=45 %}<i class="jutsu protection"></i>{% endif %}

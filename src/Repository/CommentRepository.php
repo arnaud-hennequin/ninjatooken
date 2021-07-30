@@ -13,7 +13,12 @@ class CommentRepository extends EntityRepository
         $page = max(1, $page);
 
         $query = $this->createQueryBuilder('c')
+            ->select(['c', 'a', 'n', 'clu', 'cl'])
             ->where('c.thread = :thread')
+            ->leftJoin('c.author', 'a')
+            ->leftJoin('a.ninja', 'n')
+            ->leftJoin('a.clan', 'clu')
+            ->leftJoin('clu.clan', 'cl')
             ->setParameter('thread', $thread)
             ->addOrderBy('c.dateAjout', 'DESC')
             ->getQuery();

@@ -118,7 +118,7 @@ class Thread
     /**
     * Author of the comment
     *
-    * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
+    * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
     * @var User
     */
