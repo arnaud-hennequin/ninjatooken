@@ -315,13 +315,13 @@
                 <x niveau="100" degat="0" rayon="0a0" chakra="0" distance="0a0" />
             </phoenix>
             <vague niveau="45" limit="356">
-                <x niveau="0" degat="80" temps="0a6" chakra="85" distance="10a0" />
-                <x niveau="1" degat="15" temps="0a18" chakra="17" distance="3a0" />
-                <x niveau="4" degat="13" temps="0a13" chakra="12" distance="1a0" />
-                <x niveau="8" degat="10" temps="0a08" chakra="8" distance="1a0" />
-                <x niveau="12" degat="5" temps="0a05" chakra="6" distance="0a5" />
-                <x niveau="16" degat="2" temps="0a04" chakra="4" distance="0a3" />
-                <x niveau="30" degat="1" temps="0a01" chakra="2" distance="0a2" />
+                <x niveau="0" degat="82" temps="0a6" chakra="85" distance="10a0" />
+                <x niveau="1" degat="16" temps="0a18" chakra="17" distance="3a0" />
+                <x niveau="4" degat="14" temps="0a13" chakra="12" distance="1a0" />
+                <x niveau="8" degat="11" temps="0a08" chakra="8" distance="1a0" />
+                <x niveau="12" degat="6" temps="0a05" chakra="6" distance="0a5" />
+                <x niveau="16" degat="3" temps="0a04" chakra="4" distance="0a3" />
+                <x niveau="30" degat="2" temps="0a01" chakra="2" distance="0a2" />
                 <x niveau="100" degat="0" temps="0a0" chakra="0" distance="0a0" />
             </vague>
             <pieux niveau="45" limit="357">
