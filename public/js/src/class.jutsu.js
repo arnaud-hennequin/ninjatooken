@@ -20,16 +20,6 @@ var Jutsu = Class.extend({
 	toggle: function(){
 		this.element.toggle(this.isLimitOk());
 	},
-	toggleOptions: function(dispo){
-		var actuel = this.getLevel();
-		this.selectOptions.each(function(){
-			var _this = $(this);
-			if(parseInt(_this.val()) > actuel+dispo)
-				_this.attr('disabled', 'disabled');
-			else
-				_this.removeAttr('disabled');
-		});
-	},
 	isLimitOk: function(){
 		return (this.limitClass == "" || this.limitClass == this.calculateur.classe) && this.limitLvl<=this.calculateur.level;
 	},

@@ -114,24 +114,11 @@ var Calculateur = Class.extend({
 		this.totalJutsus.text(this.ptsJutsu - this.getTotalJutsus()); 
 		// met à jour le total des aptitudes
 		this.totalAptitudes.text(this.ptsAptitude - this.getTotalAptitudes());
-
-		// met à jour les options disponibles
-		this.toggleOptions();
 	},
 	toggleJutsus: function(){
 		for(var i=0;i<this.jutsus.length;i++){
 			this.jutsus[i].toggle();
 		}
 		this.update();
-	},
-	toggleOptions: function(){
-		var dispo = this.ptsJutsu - this.getTotalJutsus();
-		for(var i=0;i<this.jutsus.length;i++){
-			this.jutsus[i].toggleOptions(dispo);
-		}
-		dispo = this.ptsAptitude - this.getTotalAptitudes();
-		for(var i=0;i<this.aptitudes.length;i++){
-			this.aptitudes[i].toggleOptions(dispo);
-		}
 	}
 });

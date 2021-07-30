@@ -12,16 +12,6 @@ var Aptitude = Class.extend({
 
 		this.initSelect();
 	},
-	toggleOptions: function(dispo){
-		var actuel = this.getLevel();
-		this.selectOptions.each(function(){
-			var _this = $(this);
-			if(parseInt(_this.val()) > actuel+dispo)
-				_this.attr('disabled', 'disabled');
-			else
-				_this.removeAttr('disabled');
-		});
-	},
 	getLevel: function(){
 		return parseInt(this.select.find('option:selected').val());
 	},

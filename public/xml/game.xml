@@ -172,9 +172,9 @@
                 <x niveau="100" val="0a0" />
             </vitesse>
             <vie>
-                <x niveau="0" val="82" />
-                <x niveau="1" val="7" />
-                <x niveau="25" val="4" />
+                <x niveau="0" val="84" />
+                <x niveau="1" val="8" />
+                <x niveau="25" val="5" />
                 <x niveau="50" val="1" />
                 <x niveau="100" val="0" />
             </vie>
@@ -209,11 +209,11 @@
             </doubleSaut>
             <bouclierElementaire niveau="10" limit="">
                 <x niveau="0" reduction="0a07" chakra="10" last="5a0" />
-                <x niveau="1" reduction="0a04" chakra="2" last="1a0" />
-                <x niveau="4" reduction="0a03" chakra="1" last="1a0" />
-                <x niveau="8" reduction="0a02" chakra="1" last="0a5" />
+                <x niveau="1" reduction="0a035" chakra="2" last="1a0" />
+                <x niveau="4" reduction="0a015" chakra="1" last="1a0" />
+                <x niveau="8" reduction="0a012" chakra="1" last="0a5" />
                 <x niveau="12" reduction="0a01" chakra="1" last="0a5" />
-                <x niveau="16" reduction="0a005" chakra="1" last="0a5" />
+                <x niveau="16" reduction="0a006" chakra="1" last="0a5" />
                 <x niveau="30" reduction="0a0" chakra="0" last="0a0" />
                 <x niveau="100" reduction="0a0" chakra="0" last="0a0" />
             </bouclierElementaire>
@@ -255,13 +255,13 @@
                 <x niveau="100" last="0a0" chakra="0" />
 			</chakraVie>
             <resistanceExplosion niveau="20" limit="355">
-                <x niveau="0" reduction="0a2" last="5a0"  />
-                <x niveau="1" reduction="0a05" last="3a0" />
-                <x niveau="4" reduction="0a03" last="2a0" />
-                <x niveau="8" reduction="0a02" last="1a5" />
-                <x niveau="12" reduction="0a01" last="1a0" />
+                <x niveau="0" reduction="0a1" last="5a0"  />
+                <x niveau="1" reduction="0a02" last="3a0" />
+                <x niveau="4" reduction="0a01" last="2a0" />
+                <x niveau="8" reduction="0a007" last="1a5" />
+                <x niveau="12" reduction="0a006" last="1a0" />
                 <x niveau="16" reduction="0a005" last="0a5" />
-                <x niveau="30" reduction="0a001" last="0a1" />
+                <x niveau="30" reduction="0a004" last="0a1" />
                 <x niveau="100" reduction="0a0" last="0a0" />
             </resistanceExplosion>
             <marcherViteEau niveau="20" limit="356">
@@ -354,8 +354,8 @@
                 <x niveau="100" degat="0" temps="0a0" distance="0a0" chakra="0" />
             </tornade>
 			<kusanagi niveau="50" limit="">
-				<x niveau="0" degat="40" last="0a05" chakra="13"/>
-				<x niveau="1" degat="11" last="0a015" chakra="5"/>
+				<x niveau="0" degat="40" last="0a05" chakra="10"/>
+				<x niveau="1" degat="12" last="0a015" chakra="4"/>
 				<x niveau="4" degat="7" last="0a01" chakra="3"/>
 				<x niveau="8" degat="5" last="0a007" chakra="2"/>
 				<x niveau="12" degat="3" last="0a005" chakra="1"/>
@@ -364,53 +364,53 @@
 				<x niveau="100" degat="0" last="0a0" chakra="0"/>
 			</kusanagi>
 			<kamiRaijin niveau="60" limit="358">
-				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="85"/>
-				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="17"/>
-				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="12"/>
-				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="8"/>
-				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="6"/>
-				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="4"/>
-				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="2"/>
+				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
+				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
+				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
+				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
+				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
+				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
+				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
 				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
 			</kamiRaijin>
 			<kamiSarutahiko niveau="60" limit="357">
-				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="85"/>
-				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="17"/>
-				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="12"/>
-				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="8"/>
-				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="6"/>
-				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="4"/>
-				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="2"/>
+				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
+				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
+				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
+				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
+				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
+				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
+				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
 				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
 			</kamiSarutahiko>
 			<kamiFujin niveau="60" limit="359">
-				<x niveau="0" temps="7a0" rayon="18a0" distance="15a0" chakra="85"/>
-				<x niveau="1" temps="2a0" rayon="3a5" distance="3a5" chakra="17"/>
-				<x niveau="4" temps="2a0" rayon="2a3" distance="2a0" chakra="12"/>
-				<x niveau="8" temps="1a0" rayon="1a6" distance="1a0" chakra="8"/>
-				<x niveau="12" temps="1a0" rayon="0a7" distance="0a5" chakra="6"/>
-				<x niveau="16" temps="0a5" rayon="0a4" distance="0a3" chakra="4"/>
-				<x niveau="30" temps="0a5" rayon="0a2" distance="0a2" chakra="2"/>
+				<x niveau="0" temps="7a0" rayon="18a0" distance="15a0" chakra="35"/>
+				<x niveau="1" temps="2a0" rayon="3a5" distance="4a0" chakra="11"/>
+				<x niveau="4" temps="2a0" rayon="2a3" distance="3a0" chakra="8"/>
+				<x niveau="8" temps="1a0" rayon="1a6" distance="2a3" chakra="7"/>
+				<x niveau="12" temps="1a0" rayon="0a7" distance="1a0" chakra="4"/>
+				<x niveau="16" temps="0a5" rayon="0a4" distance="0a6" chakra="2"/>
+				<x niveau="30" temps="0a5" rayon="0a2" distance="0a2" chakra="1"/>
 				<x niveau="100" temps="0a0" rayon="0a0" distance="0a0" chakra="0"/>
 			</kamiFujin>
 			<kamiSusanoo niveau="60" limit="356">
-				<x niveau="0" effect="1" rayon="7a0" temps="7a0" distance="15a0" chakra="85"/>
-				<x niveau="1" effect="1" rayon="1a5" temps="2a0" distance="3a5" chakra="17"/>
-				<x niveau="4" effect="1" rayon="1a0" temps="2a0" distance="2a0" chakra="12"/>
-				<x niveau="8" effect="1" rayon="0a5" temps="1a0" distance="1a0" chakra="8"/>
-				<x niveau="12" effect="1" rayon="0a3" temps="1a0" distance="0a5" chakra="6"/>
-				<x niveau="16" effect="1" rayon="0a1" temps="0a5" distance="0a3" chakra="4"/>
-				<x niveau="30" effect="1" rayon="0a0" temps="0a5" distance="0a2" chakra="2"/>
-				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
+				<x niveau="0" effect="1" rayon="7a0" temps="5a0" distance="15a0" chakra="85" />
+				<x niveau="1" effect="1" rayon="1a5" temps="1a8" distance="3a5" chakra="17" />
+				<x niveau="4" effect="1" rayon="1a0" temps="1a0" distance="2a0" chakra="12" />
+				<x niveau="8" effect="1" rayon="0a5" temps="0a8" distance="1a0" chakra="8" />
+				<x niveau="12" effect="1" rayon="0a3" temps="0a6" distance="0a5" chakra="6" />
+				<x niveau="16" effect="1" rayon="0a1" temps="0a4" distance="0a3" chakra="4" />
+				<x niveau="30" effect="1" rayon="0a0" temps="0a2" distance="0a2" chakra="2" />
+				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0" />
 			</kamiSusanoo>
 			<kamiKagutsuchi niveau="60" limit="355">
-				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="85"/>
-				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="17"/>
-				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="12"/>
-				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="8"/>
-				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="6"/>
-				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="4"/>
-				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="2"/>
+				<x niveau="0" effect="0a4" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
+				<x niveau="1" effect="0a2" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
+				<x niveau="4" effect="0a1" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
+				<x niveau="8" effect="0a05" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
+				<x niveau="12" effect="0a02" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
+				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
+				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
 				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
 			</kamiKagutsuchi>
         </aptitude>
