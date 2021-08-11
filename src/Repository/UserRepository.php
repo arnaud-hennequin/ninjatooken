@@ -156,7 +156,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findUserByEmail($email)
     {
-        return $this->findUserBy(['emailCanonical' => User::canonicalize($email)]);
+        return $this->findBy(['emailCanonical' => User::canonicalize($email)]);
     }
 
     /**
@@ -164,7 +164,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findUserByUsername($username)
     {
-        return $this->findUserBy(['usernameCanonical' => User::canonicalize($username)]);
+        return $this->findBy(['usernameCanonical' => User::canonicalize($username)]);
     }
 
     /**

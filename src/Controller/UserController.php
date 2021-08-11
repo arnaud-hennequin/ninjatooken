@@ -58,12 +58,34 @@ class UserController extends AbstractController
         )));
     }
 
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request, TranslatorInterface $translator, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+
+            // user already exists
+            if ($entityManager->getRepository(User::class)->findBy(['emailCanonical' => $user->getEmailCanonical()])) {
+                $this->get('session')->getFlashBag()->add(
+                    'notice',
+                    $translator->trans('notice.mailModifierKo')
+                );
+                return $this->render('user/registration/register.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+            if ($entityManager->getRepository(User::class)->findBy(['usernameCanonical' => $user->getUsernameCanonical()])) {
+                $this->get('session')->getFlashBag()->add(
+                    'notice',
+                    $translator->trans('notice.pseudoUtilise')
+                );
+                return $this->render('user/registration/register.html.twig', [
+                    'form' => $form->createView(),
+                ]);
+            }
+
             // encode the plain password
             $user->setPassword(
                 $passwordEncoder->encodePassword(

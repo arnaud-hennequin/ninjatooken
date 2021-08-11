@@ -343,9 +343,6 @@ class User implements UserInterface
         if (null !== $this->file) {
             $this->setAvatar(uniqid(mt_rand(), true).".".$this->file->guessExtension());
         }
-
-        $this->setUsernameCanonical(self::canonicalize($this->getUsername()));
-        $this->setEmailCanonical(self::canonicalize($this->getEmail()));
     }
 
     /**
@@ -466,6 +463,8 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        $this->setUsernameCanonical(self::canonicalize($username));
 
         return $this;
     }
@@ -637,6 +636,8 @@ class User implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+
+        $this->setEmailCanonical(self::canonicalize($email));
 
         return $this;
     }
