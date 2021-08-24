@@ -502,7 +502,8 @@ Tu peux désormais utiliser ##JUTSUS##. L'activation ce fait depuis "Mon Ninja" 
 		<t><![CDATA[Lorsque cette option est activée, plus aucun bonus n'est disponible]]></t>
 		<t><![CDATA[Cascade HD]]></t>
 		<t><![CDATA[Un château en bordure d'une cascade (haute définition - 70Mo à télécharger...)]]></t>
-		<t><![CDATA[Mode hardcore : Les ninjas réapparaissent avec 1 point de vie et/ou les caisses n'apparaissent pas.]]></t><!--466-->
+		<t><![CDATA[Mode hardcore : Les ninjas réapparaissent avec 1 point de vie et/ou les caisses n'apparaissent pas.]]></t>
+		<t><![CDATA[Une nouvelle version du jeu est disponible, pour pouvoir continuer à jouer normalement, il est fortement conseillé de la télécharger]]></t><!--467-->
 	</textes>
 	<accomplissements>
 		<ac name="Kitutu lvl 1"><![CDATA[Tuer 3 ninjas d'affilé]]></ac>

@@ -690,6 +690,7 @@ class UnityController extends AbstractController
 
                             $response = new Response($content, 200, array('Content-Type' => 'text/xml'));
                             $response->headers->set('Notice', $session->getName()."=".$session->getId());
+                            $response->headers->set('X-GAMEVERSION', $this->gameversion);
                             return $response;
                         }
                         break;
@@ -697,8 +698,10 @@ class UnityController extends AbstractController
             }
             $response = new Response($data, 200, array('Content-Type' => 'text/plain'));
             $response->headers->set('Notice', $session->getName()."=".$session->getId());
+            $response->headers->set('X-GAMEVERSION', $this->gameversion);
             return $response;
         }
+
         return new Response(!empty($session->get('visit')) ? "1":"0", 200, array('Content-Type' => 'text/plain'));
     }
 
@@ -807,7 +810,7 @@ class UnityController extends AbstractController
             $retour    = '1';
         } else if (!empty($visiteur)) {
             $content .= '<login avatar="" id="'.($maxid+date("Hms")).'" maxid="'.$maxid.'"><![CDATA[Visiteur_'.date("Hms").']]></login>';
-            $content .= '<params force="4" vitesse="3" vie="0" chakra="0" experience="'.$XP_LEVEL_100.'" grade="0" bouleElementaire="0" doubleSaut="0" bouclierElementaire="0" marcherMur="0" deflagrationElementaire="0" marcherViteEau="0" changerObjet="0" multishoot="0" invisibleman="0" resistanceExplosion="0" phoenix="0" vague="0" pieux="0" tornade="0" teleportation="0" kusanagi="0" acierRenforce="0" chakraVie="0" kamiRaijin="0" kamiSarutahiko="0" kamiFujin="0" kamiSusanoo="0" kamiKagutsuchi="0" classe="" masque="0" couleurMasque="0" detailMasque="0" costume="0" couleurCostume="0" detailCostume="0" assassinnat="0" course="0" langue="'.$request->getLocale().'" accomplissement="0000000000000000000000000" age="10" sexe="H" roles="ROLE_USER" clan=""/>';
+            $content .= '<params force="50" vitesse="50" vie="50" chakra="55" experience="'.$XP_LEVEL_100.'" grade="0" bouleElementaire="0" doubleSaut="30" bouclierElementaire="30" marcherMur="10" deflagrationElementaire="10" marcherViteEau="0" changerObjet="0" multishoot="0" invisibleman="0" resistanceExplosion="0" phoenix="0" vague="0" pieux="0" tornade="0" teleportation="0" kusanagi="0" acierRenforce="0" chakraVie="0" kamiRaijin="0" kamiSarutahiko="0" kamiFujin="0" kamiSusanoo="0" kamiKagutsuchi="0" classe="" masque="0" couleurMasque="0" detailMasque="0" costume="0" couleurCostume="0" detailCostume="0" assassinnat="0" course="0" langue="'.$request->getLocale().'" accomplissement="0000000000000000000000000" age="10" sexe="H" roles="ROLE_USER" clan=""/>';
             $retour    = '1';
         }
 
@@ -820,6 +823,7 @@ class UnityController extends AbstractController
 
         $response = new Response($content, 200, array('Content-Type' => 'text/xml'));
         $response->headers->set('Notice', $this->phpsessid);
+        $response->headers->set('X-GAMEVERSION', $this->gameversion);
 
         return $response;
     }
