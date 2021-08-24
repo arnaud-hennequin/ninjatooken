@@ -29,62 +29,9 @@ class ChatController extends AbstractController
             'twitchOnline' => $twitchOnline,
             'channelTitle' => $channelTitle,
             'streamTitle' => $streamTitle,
-            'channelName' => $channelName
+            'channelName' => $channelName,
+            'discordServerId' => $this->getParameter('discord')['serverId'],
+            'discordChannelId' => $this->getParameter('discord')['channelId']
         ));
-    }
-
-    public function ajax(Request $request)
-    {
-        // paramètres à surcharger
-        $params = array(
-            'dbConnection' => array(
-                'host' => $this->getParameter('database_host').':'.$this->getParameter('database_port'),
-                'user' => $this->getParameter('database_user'),
-                'pass' => $this->getParameter('database_password'),
-                'name' => $this->getParameter('database_name'),
-                'type' => null,
-                'link' => null
-            ),
-            'langDefault' => $request->getLocale(),
-            'styleDefault' => 'NinjaTooken',
-            'defaultChannelName' => 'NinjaTooken',
-            'forceAutoLogin' => true,
-            'allowGuestLogins' => true,
-            'chatBotName' => 'NinjaTooken',
-            'userNameMaxLength' => 32,
-            'defaultBanTime' => 10,
-            'contentType' => 'text/html',
-            'styleAvailable' => array('NinjaTooken','beige','black','grey','Oxygen','Lithium','Sulfur','Cobalt','Mercury','Uranium','Plum','prosilver','subblack2','subSilver','Core','MyBB','vBulletin'),
-            'logoutData' => $this->generateUrl('ninja_tooken_homepage'),
-            'loginData' => $this->generateUrl('ninja_tooken_user_security_login'),
-            'logsPurgeLogs' => true,
-            'logsPurgeTimeDiff' => 60
-        );
-
-        // utilisateur à passer
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-            $userData = [
-                'userID' => $user->getId(),
-                'userName' => $user->getUsername(),
-                'userRole' => $user->getRoles()
-            ];
-        } else {
-            $userData = [];
-        }
-
-        // exécute le script et récupère le contenu
-        // permet de pouvoir surcharger CustomAJAXChat avec le contexte Symfony
-        ob_start();
-        $ajaxChat = new Chat($params, $userData);
-        $chat = ob_get_contents();
-        ob_end_clean();
-
-        $response = new Response();
-        $response->setContent($chat);
-        $response->setStatusCode(200);
-        $response->headers->set('Content-Type', 'text/html');
-        return $response;
     }
 }

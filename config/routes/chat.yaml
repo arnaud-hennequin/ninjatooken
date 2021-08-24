@@ -5,7 +5,3 @@ ninja_tooken_chat_homepage:
         _locale: en|fr
     defaults:
         _locale: fr
-
-ninja_tooken_chat_ajax:
-    path:  /chat/ajax/
-    controller: App\Controller\ChatController::ajax

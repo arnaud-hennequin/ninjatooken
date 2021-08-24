@@ -27,5 +27,7 @@
                 </div>
               </div>
               {% endif %}
-							<iframe src="{{ path('ninja_tooken_chat_ajax') }}" class="chat"></iframe>
+							<widgetbot server="{{ discordServerId }}" channel="{{ discordChannelId }}" width="100%" height="600"></widgetbot>
+							<script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+
 {% endblock %}

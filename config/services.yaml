@@ -38,6 +38,9 @@ parameters:
         foudre: Raiton
         terre: Doton
     kernel.default_locale: fr
+    discord:
+        serverId: '%env(DISCORD_SERVER_ID)%'
+        channelId: '%env(DISCORD_CHANNEL_ID)%'
 
 services:
     # default configuration for services in *this* file
