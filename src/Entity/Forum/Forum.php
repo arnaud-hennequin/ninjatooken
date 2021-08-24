@@ -4,7 +4,8 @@ namespace App\Entity\Forum;
 
 use App\Entity\Clan\Clan;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * Forum
@@ -12,8 +13,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="nt_forum")
  * @ORM\Entity(repositoryClass="App\Repository\ForumRepository")
  */
-class Forum
+class Forum implements SluggableInterface
 {
+    use SluggableTrait;
+
     /**
      * @var integer
      *
@@ -36,12 +39,6 @@ class Forum
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
-
-    /**
-     * @Gedmo\Slug(fields={"nom"})
-     * @ORM\Column(length=128, unique=true)
-     */
-    private $slug;
 
     /**
      * @var integer
@@ -86,6 +83,39 @@ class Forum
 
     public function __toString(){
         return $this->nom;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['nom'];
+    }
+
+    public function generateSlugValue($values): string
+    {
+        $usableValues = [];
+        foreach ($values as $fieldValue) {
+            if (! empty($fieldValue)) {
+                $usableValues[] = $fieldValue;
+            }
+        }
+
+        $this->ensureAtLeastOneUsableValue($values, $usableValues);
+
+        // generate the slug itself
+        $sluggableText = implode(' ', $usableValues);
+
+        $unicodeString = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+
+        $slug = strtolower($unicodeString->toString());
+
+        if (empty($slug)) {
+            $slug = md5($this->id);
+        }
+
+        return $slug;
     }
 
     /**
@@ -165,29 +195,6 @@ class Forum
     public function getDateAjout()
     {
         return $this->dateAjout;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Forum
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**

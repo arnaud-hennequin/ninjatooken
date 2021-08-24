@@ -8,7 +8,8 @@ use App\Entity\User\Group;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,8 +22,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="ninja_tooken_user.username.already_used", groups={"Registration", "Profile"})
  * @UniqueEntity(fields="emailCanonical", errorPath="email", message="ninja_tooken_user.email.already_used", groups={"Registration", "Profile"})
  */
-class User implements UserInterface
+class User implements UserInterface, SluggableInterface
 {
+    use SluggableTrait;
+
     public const GENDER_FEMALE = 'f';
     public const GENDER_MALE = 'm';
     public const GENDER_UNKNOWN = 'u';
@@ -158,12 +161,6 @@ class User implements UserInterface
     * @ORM\Column(name="old_login", type="string", length=255, nullable=true)
     */
     private $old_login;
-
-    /**
-     * @Gedmo\Slug(fields={"username"})
-     * @ORM\Column(length=128, unique=true)
-     */
-    private $slug;
 
     /**
     * @var string
@@ -316,6 +313,39 @@ class User implements UserInterface
     public function __toString()
     {
         return (string) $this->getUsername();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['username'];
+    }
+
+    public function generateSlugValue($values): string
+    {
+        $usableValues = [];
+        foreach ($values as $fieldValue) {
+            if (! empty($fieldValue)) {
+                $usableValues[] = $fieldValue;
+            }
+        }
+
+        $this->ensureAtLeastOneUsableValue($values, $usableValues);
+
+        // generate the slug itself
+        $sluggableText = implode(' ', $usableValues);
+
+        $unicodeString = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+
+        $slug = strtolower($unicodeString->toString());
+
+        if (empty($slug)) {
+            $slug = md5($this->id);
+        }
+
+        return $slug;
     }
 
     public static function canonicalize($string)
@@ -906,29 +936,6 @@ class User implements UserInterface
         if($this->tempAvatar && file_exists($this->tempAvatar)) {
             unlink($this->tempAvatar);
         }
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return User
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**

@@ -2,6 +2,9 @@
     "behat/transliterator": {
         "version": "v1.3.0"
     },
+    "brick/math": {
+        "version": "0.9.3"
+    },
     "cocur/slugify": {
         "version": "v3.2"
     },
@@ -144,6 +147,9 @@
     "jms/serializer": {
         "version": "3.12.2"
     },
+    "knplabs/doctrine-behaviors": {
+        "version": "2.2.0"
+    },
     "knplabs/knp-menu": {
         "version": "2.6.0"
     },
@@ -180,6 +186,9 @@
     },
     "myclabs/deep-copy": {
         "version": "1.10.2"
+    },
+    "nette/utils": {
+        "version": "v3.2.3"
     },
     "nikic/php-parser": {
         "version": "v4.3.0"
@@ -254,6 +263,12 @@
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "ramsey/collection": {
+        "version": "1.2.1"
+    },
+    "ramsey/uuid": {
+        "version": "4.2.1"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"
@@ -581,6 +596,9 @@
     },
     "symfony/orm-pack": {
         "version": "v1.0.8"
+    },
+    "symfony/password-hasher": {
+        "version": "v5.3.4"
     },
     "symfony/phpunit-bridge": {
         "version": "3.3",

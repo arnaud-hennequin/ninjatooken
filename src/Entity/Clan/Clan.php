@@ -6,7 +6,8 @@ use App\Entity\Forum\Forum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,8 +18,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="App\Repository\ClanRepository")
  */
-class Clan
+class Clan implements SluggableInterface
 {
+    use SluggableTrait;
+
     /**
      * @var integer
      *
@@ -42,15 +45,9 @@ class Clan
     private $membres;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Forum\Forum", mappedBy="clan", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Forum\Forum", mappedBy="clan", cascade={"persist","remove"})
      */
     private $forums;
-
-    /**
-     * @Gedmo\Slug(fields={"nom"})
-     * @ORM\Column(length=128, unique=true)
-     */
-    private $slug;
 
     /**
      * @var string
@@ -154,6 +151,39 @@ class Clan
 
     public function __toString(){
         return $this->nom;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['nom'];
+    }
+
+    public function generateSlugValue($values): string
+    {
+        $usableValues = [];
+        foreach ($values as $fieldValue) {
+            if (! empty($fieldValue)) {
+                $usableValues[] = $fieldValue;
+            }
+        }
+
+        $this->ensureAtLeastOneUsableValue($values, $usableValues);
+
+        // generate the slug itself
+        $sluggableText = implode(' ', $usableValues);
+
+        $unicodeString = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+
+        $slug = strtolower($unicodeString->toString());
+
+        if (empty($slug)) {
+            $slug = md5($this->id);
+        }
+
+        return $slug;
     }
 
     public function getAbsoluteKamonUpload()
@@ -447,29 +477,6 @@ class Clan
     public function getOnline()
     {
         return $this->online;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Clan
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**

@@ -3,7 +3,8 @@ namespace App\Entity\Forum;
 
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,8 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="nt_thread")
  * @ORM\Entity(repositoryClass="App\Repository\ThreadRepository")
  */
-class Thread
+class Thread implements SluggableInterface
 {
+    use SluggableTrait;
+
     /**
      * @var integer
      *
@@ -95,12 +98,6 @@ class Thread
     private $dateAjout;
 
     /**
-     * @Gedmo\Slug(fields={"nom"})
-     * @ORM\Column(length=128, unique=true)
-     */
-    private $slug;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="body", type="text")
@@ -162,6 +159,39 @@ class Thread
 
     public function __toString(){
         return $this->nom;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['nom'];
+    }
+
+    public function generateSlugValue($values): string
+    {
+        $usableValues = [];
+        foreach ($values as $fieldValue) {
+            if (! empty($fieldValue)) {
+                $usableValues[] = $fieldValue;
+            }
+        }
+
+        $this->ensureAtLeastOneUsableValue($values, $usableValues);
+
+        // generate the slug itself
+        $sluggableText = implode(' ', $usableValues);
+
+        $unicodeString = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+
+        $slug = strtolower($unicodeString->toString());
+
+        if (empty($slug)) {
+            $slug = md5($this->id);
+        }
+
+        return $slug;
     }
 
     /**
@@ -241,29 +271,6 @@ class Thread
     public function getBody()
     {
         return $this->body;
-    }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Thread
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**

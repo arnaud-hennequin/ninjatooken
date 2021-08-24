@@ -22,7 +22,7 @@ class ClanListener
                 $repo_proposition = $em->getRepository(ClanProposition::class);
                 foreach($membres as $membre){
                     // supprime les propositions de recrutement
-                    $propositions = $repo_proposition->getPropositionByRecruteur($membre);
+                    $propositions = $repo_proposition->getPropositionByRecruteur($membre->getMembre());
                     if($propositions){
                         foreach($propositions as $proposition){
                             $em->remove($proposition);
