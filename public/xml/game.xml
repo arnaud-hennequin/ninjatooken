@@ -264,16 +264,16 @@
                 <x niveau="30" reduction="0a004" last="0a1" />
                 <x niveau="100" reduction="0a0" last="0a0" />
             </resistanceExplosion>
-            <marcherViteEau niveau="20" limit="356">
-                <x niveau="0" last="5" />
-                <x niveau="1" last="2" />
-                <x niveau="4" last="3" />
-                <x niveau="8" last="3" />
-                <x niveau="12" last="4" />
-                <x niveau="16" last="5" />
-                <x niveau="30" last="1" />
-                <x niveau="100" last="0" />
-            </marcherViteEau>
+            <transformationAqueuse niveau="20" limit="356">
+                <x niveau="0" reduction="0a1" last="5a0"  />
+                <x niveau="1" reduction="0a02" last="3a0" />
+                <x niveau="4" reduction="0a01" last="2a0" />
+                <x niveau="8" reduction="0a007" last="1a5" />
+                <x niveau="12" reduction="0a006" last="1a0" />
+                <x niveau="16" reduction="0a005" last="0a5" />
+                <x niveau="30" reduction="0a004" last="0a1" />
+                <x niveau="100" reduction="0a0" last="0a0" />
+            </transformationAqueuse>
             <changerObjet niveau="20" limit="357">
                 <x niveau="0" last="5a0" />
                 <x niveau="1" last="3a0" />
@@ -335,12 +335,12 @@
                 <x niveau="100" degat="0" largeur="0a0" longueur="0a0" distance="0a0" chakra="0" />
             </pieux>
             <teleportation niveau="45" limit="358">
-				<x niveau="0" chakra="70" distance="70a0" vie="0"/>
-				<x niveau="1" chakra="10" distance="10a0" vie="1"/>
-				<x niveau="8" chakra="7" distance="7a5" vie="1"/>
-				<x niveau="12" chakra="3" distance="5a5" vie="2"/>
-				<x niveau="16" chakra="1" distance="3a5" vie="2"/>
-				<x niveau="30" chakra="0" distance="2a0" vie="3"/>
+				<x niveau="0" chakra="70" distance="15a0" vie="15"/>
+				<x niveau="1" chakra="10" distance="5a0" vie="2"/>
+				<x niveau="8" chakra="7" distance="3a0" vie="1"/>
+				<x niveau="12" chakra="3" distance="2a0" vie="1"/>
+				<x niveau="16" chakra="1" distance="1a5" vie="1"/>
+				<x niveau="30" chakra="0" distance="1a0" vie="1"/>
 				<x niveau="100" chakra="0" distance="0a0" vie="0"/>
             </teleportation>
             <tornade niveau="45" limit="359">

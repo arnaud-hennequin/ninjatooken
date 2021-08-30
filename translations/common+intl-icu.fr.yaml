@@ -134,8 +134,9 @@ game:
         nom: "Protection contre le feu"
         reduction: "Protège à ##%"
         last: "Dure ##s."
-    marcherViteEau:
-        nom: "Marcher sur l'eau"
+    transformationAqueuse:
+        nom: "transformation aqueuse"
+        reduction: "Protège à ##%"
         last: "Dure ##s."
     changerObjet:
         nom: "Métamorphose"

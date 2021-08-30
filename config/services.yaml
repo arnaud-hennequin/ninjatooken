@@ -23,7 +23,6 @@ parameters:
     mail_name: no-reply
     unity.version: '%env(UNITY_VERSION)%'
     unity.crypt: '%env(UNITY_KEY)%'
-    imgur: null
     banned.ip: {  }
     akismet.active: '%env(AKISMET_ACTIVE)%'
     akismet.key: '%env(AKISMET_KEY)%'
@@ -41,6 +40,9 @@ parameters:
     discord:
         serverId: '%env(DISCORD_SERVER_ID)%'
         channelId: '%env(DISCORD_CHANNEL_ID)%'
+    imgur:
+        clientId: '%env(IMGUR_CLIENTID)%'
+        clientSecret: '%env(IMGUR_CLIENTSECRET)%'
 
 services:
     # default configuration for services in *this* file

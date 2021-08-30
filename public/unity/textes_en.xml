@@ -70,8 +70,8 @@ Each has his opposite, and afterward you cannot return on this choice.]]></t>
 		<t><![CDATA[Create a devastating attack in a large range.]]></t>
 		<t><![CDATA[Shape Shifting/Rock]]></t>
 		<t><![CDATA[Shape shifting is a Doton specific jutsu.]]></t>
-		<t><![CDATA[Walk/Water]]></t>
-		<t><![CDATA[Walking on water is a Suiton specific jutsu.]]></t>
+		<t><![CDATA[Aqueous transformation]]></t>
+		<t><![CDATA[Aqueous transformation is a Suiton specific jutsu.]]></t>
 		<t><![CDATA[Thorns]]></t>
 		<t><![CDATA[Thorns is a Doton specific jutsu.]]></t>
 		<t><![CDATA[Phoenix]]></t>
@@ -172,8 +172,8 @@ Walking on walls +5]]></t>
 		<t><![CDATA[##TOUCHE## : You can now be sneaky with this partial invisibility during a limited time. (Futon, lvl. min.##LEVEL##).]]></t>
 		<t><![CDATA[Fire resistance]]></t>
 		<t><![CDATA[##TOUCHE## : Decrease jutsus or explosive Kunai damages during a limited time.(Katon, lvl. min.##LEVEL##).]]></t>
-		<t><![CDATA[Walking on water.]]></t>
-		<t><![CDATA[##TOUCHE## : You can now walk on water during a limited time. (Suiton, lvl. min.##LEVEL##).]]></t>
+		<t><![CDATA[Aqueous transformation]]></t>
+		<t><![CDATA[##TOUCHE## : Decrease physical damages during a limited time. (Suiton, lvl. min.##LEVEL##).]]></t>
 		<t><![CDATA[Métamorphosis]]></t>
 		<t><![CDATA[##TOUCHE## : You can change your shape during a limited time, and turn into a rock to be sneaky. (Doton, lvl. min.##LEVEL##).]]></t>
 		<t><![CDATA[Phoenix]]></t>
@@ -503,7 +503,8 @@ You can now use ##JUTSUS##. Enabling from "My Ninja" (main menu).]]></t>
 		<t><![CDATA[Waterfall HD]]></t>
 		<t><![CDATA[A castle bordering a waterfall (high définition - 70Mo to download...)]]></t>
 		<t><![CDATA[Hardcore mode : ninjas respawn at 1 life point and/or bonuses don't respawn.]]></t>
-		<t><![CDATA[A new version of the game is available, it's strongly advised to download it]]></t><!--467-->
+		<t><![CDATA[A new version of the game is available, it's strongly advised to download it]]></t>
+		<t><![CDATA[Be warned, you can't revert this action !!!]]></t><!--468-->
 	</textes>
 	<accomplissements>
 		<ac name="Woyukil lvl 1"><![CDATA[3 ninjas killed in a row]]></ac>

@@ -467,7 +467,7 @@ guide:
             sousPartie5:
                 nom: Walk on walls
                 description: |
-                    This active jutsu allows you to walk on very steep slopes and vertical surfaces during a certain laps of time. By default, it is activated by pressing the « Ctrl » key. It consumes chakra at each release, but don’t worry, this very useful jutsu is economic.<br>
+                    This active jutsu allows you to walk on very steep slopes and vertical surfaces during a certain laps of time. It also allows passively to swim faster in water, and when activated to walk on it. By default, it is activated by pressing the « Ctrl » key. It consumes chakra at each release, but don’t worry, this very useful jutsu is economic.<br>
                     Improvement according to the jutsu points affected: lasts longer but increased chakra consumption.
             sousPartie6:
                 nom: Sharpened steel
@@ -515,14 +515,14 @@ guide:
                     nom: Kagutsuchi's Anger
                     description: |
                         Invoke the power of the kami Kagutsuchi. On a given area and during several seconds, the Katon's users and allies of the launcher, have their weapons ignite.<br>
-                        Improvement according to the jutsu points affected:: higher radius, distance from launch, duration, and damages inflicted by fire increase, accordingly to the chakra consumption.
+                        Improvement according to the jutsu points affected: higher radius, distance from launch, duration, and damages inflicted by fire increase, accordingly to the chakra consumption.
             sousPartie2:
                 nom: Suiton, the water
                 sousPartie1:
-                    nom: Walk on water
+                    nom: Aqueous transformation
                     description: |
-                        This jutsu allows you to walk on water, and increase your speed above and below this element. Walk on water doesn't consume chakra.<br>
-                        Improvement according to the jutsu points affected: lasts longer, and increase your speed.
+                        This jutsu reduces the damage of physical weapons: katana, kunai, shuriken and shadow shuriken. <br>
+                        Improvement based on affected jutsu points: Protection and duration of the effect increase. 
                 sousPartie2:
                     nom: Tsunami
                     description: |

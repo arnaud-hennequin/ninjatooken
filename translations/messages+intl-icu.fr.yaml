@@ -468,7 +468,7 @@ guide:
             sousPartie5:
                 nom: Marcher sur les murs
                 description: |
-                    Ce jutsu actif permet de marcher sur des pentes très raide et des surface verticales pendant un certain laps de temps. Il se déclenche en appuyant par défaut sur la touche "Contrôle". A chaque déclenchement, il consomme du chakra, mais n'ai crainte, ce jutsu très utile n'en consomme que très peu.<br>
+                    Ce jutsu actif permet de marcher sur des pentes très raide, et surface verticales pendant un certain laps de temps. Il permet également de façon passive de nager vite dans l'eau, et activé de marcher sur l'eau. Il se déclenche en appuyant par défaut sur la touche "Contrôle". A chaque déclenchement, il consomme du chakra, mais n'ai crainte, ce jutsu très utile n'en consomme que très peu.<br>
                     Amélioration en fonction des points de chakra affectés : Le temps pour marcher à la verticale ainsi que le coût en chakra augmente.
             sousPartie6:
                 nom: Acier renforcé
@@ -504,7 +504,7 @@ guide:
                     nom: Protection contre le feu
                     description: |
                         Cette protection permet de diminuer les dégâts des boules de chakra, des déflagrations, du Phoenix, et des explosifs (tonneau, ou kunaï explosif). Ce jutsu ne consomme pas de chakra.<br>
-                        Amélioration en fonction des points de jutsu affectés : La protection augmente.
+                        Amélioration en fonction des points de jutsu affectés : La protection et la durée de l'effet augmentent.
                 sousPartie2:
                     nom: Phoenix
                     description: |
@@ -519,10 +519,10 @@ guide:
             sousPartie2:
                 nom: Suiton, l'eau
                 sousPartie1:
-                    nom: Marcher sur l'eau
+                    nom: Transformation aqueuse
                     description: |
-                        Ce jutsu permet de marcher sur l'eau, et d’augmenter sa vitesse de déplacement sur et sous cet élément. Marcher sur l'eau est un jutsu actif qui ne consomme pas de chakra.<br>
-                        Amélioration en fonction des points de jutsu affectés : Augmente la durée de l'effet, et la vitesse de déplacement.
+                        Ce jutsu permet de diminuer les dégâts des armes physiques : katana, kunaï, shuriken et shuriken de l'ombre.<br>
+                        Amélioration en fonction des points de jutsu affectés : La protection et la durée de l'effet augmentent.
                 sousPartie2:
                     nom: Vague
                     description: |

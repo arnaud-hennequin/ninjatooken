@@ -70,8 +70,8 @@ Chacun a son opposé, et par la suite tu ne pourras pas revenir sur ce don inné
 		<t><![CDATA[Créer une attaque dévastatrice dans un rayon proche.]]></t>
 		<t><![CDATA[Changer/Rocher]]></t>
 		<t><![CDATA[Se changer en objet est un jutsu spécifique à Doton.]]></t>
-		<t><![CDATA[Marcher/Eau]]></t>
-		<t><![CDATA[Marcher sur l'eau est un jutsu spécifique à Suiton.]]></t>
+		<t><![CDATA[Transformation aqueuse]]></t>
+		<t><![CDATA[Transformation aqueuse est un jutsu spécifique à Suiton.]]></t>
 		<t><![CDATA[Pieux]]></t>
 		<t><![CDATA[Pieux est un jutsu spécifique à Doton.]]></t>
 		<t><![CDATA[Phoenix]]></t>
@@ -172,8 +172,8 @@ Chacun a son opposé, et par la suite tu ne pourras pas revenir sur ce don inné
 		<t><![CDATA[##TOUCHE## : pour une meilleure discrétion, deviens partiellement transparent pendant une durée limitée (Futon, lvl. min.##LEVEL##).]]></t>
 		<t><![CDATA[Résistance au feu]]></t>
 		<t><![CDATA[##TOUCHE## : diminue les dégâts subits provenant d'un jutsu ou d'une explosion pendant une durée limitée (Katon, lvl. min.##LEVEL##).]]></t>
-		<t><![CDATA[Marcher sur l'eau]]></t>
-		<t><![CDATA[##TOUCHE## : possibilité de marcher sur l'eau pendant une durée limitée (Suiton, lvl. min.##LEVEL##).]]></t>
+		<t><![CDATA[Transformation aqueuse]]></t>
+		<t><![CDATA[##TOUCHE## : diminue les dégâts subits provenant d'une arme physique pendant une durée limitée (Suiton, lvl. min.##LEVEL##).]]></t>
 		<t><![CDATA[Métamorphose]]></t>
 		<t><![CDATA[##TOUCHE## : possibilité de se changer en rocher pendant une durée limitée (Doton, lvl. min.##LEVEL##).]]></t>
 		<t><![CDATA[Phoenix]]></t>
@@ -503,7 +503,8 @@ Tu peux désormais utiliser ##JUTSUS##. L'activation ce fait depuis "Mon Ninja" 
 		<t><![CDATA[Cascade HD]]></t>
 		<t><![CDATA[Un château en bordure d'une cascade (haute définition - 70Mo à télécharger...)]]></t>
 		<t><![CDATA[Mode hardcore : Les ninjas réapparaissent avec 1 point de vie et/ou les caisses n'apparaissent pas.]]></t>
-		<t><![CDATA[Une nouvelle version du jeu est disponible, pour pouvoir continuer à jouer normalement, il est fortement conseillé de la télécharger]]></t><!--467-->
+		<t><![CDATA[Une nouvelle version du jeu est disponible, pour pouvoir continuer à jouer normalement, il est fortement conseillé de la télécharger]]></t>
+		<t><![CDATA[Cette action est irréversible !!!]]></t><!--468-->
 	</textes>
 	<accomplissements>
 		<ac name="Kitutu lvl 1"><![CDATA[Tuer 3 ninjas d'affilé]]></ac>

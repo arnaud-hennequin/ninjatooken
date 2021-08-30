@@ -97,9 +97,9 @@ class Ninja
     /**
      * @var integer
      *
-     * @ORM\Column(name="jutsu_marcher_eau", type="smallint")
+     * @ORM\Column(name="jutsu_transformation_aqueuse", type="smallint")
      */
-    private $jutsuMarcherEau = 0;
+    private $jutsuTransformationAqueuse = 0;
 
     /**
      * @var integer
@@ -523,26 +523,26 @@ class Ninja
     }
 
     /**
-     * Set jutsuMarcherEau
+     * Set jutsuTransformationAqueuse
      *
-     * @param integer $jutsuMarcherEau
+     * @param integer $jutsuTransformationAqueuse
      * @return Ninja
      */
-    public function setJutsuMarcherEau($jutsuMarcherEau)
+    public function setJutsuTransformationAqueuse($jutsuTransformationAqueuse)
     {
-        $this->jutsuMarcherEau = $jutsuMarcherEau;
+        $this->jutsuTransformationAqueuse = $jutsuTransformationAqueuse;
 
         return $this;
     }
 
     /**
-     * Get jutsuMarcherEau
+     * Get jutsuTransformationAqueuse
      *
      * @return integer 
      */
-    public function getJutsuMarcherEau()
+    public function getJutsuTransformationAqueuse()
     {
-        return $this->jutsuMarcherEau;
+        return $this->jutsuTransformationAqueuse;
     }
 
     /**

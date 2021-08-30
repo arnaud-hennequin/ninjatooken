@@ -135,8 +135,9 @@ game:
         nom: "Protection against the fire"
         reduction: "Protect at ##%"
         last: "Last ##s."
-    marcherViteEau:
-        nom: "Walk on water"
+    transformationAqueuse:
+        nom: "Aqueous transformation "
+        reduction: "Protect at ##%"
         last: "Last ##s."
     changerObjet:
         nom: "Metamorphosis"

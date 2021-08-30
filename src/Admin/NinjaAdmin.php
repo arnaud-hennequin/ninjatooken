@@ -28,7 +28,7 @@ class NinjaAdmin extends AbstractAdmin
             ->add('jutsuBouclier')
             ->add('jutsuMarcherMur')
             ->add('jutsuDeflagration')
-            ->add('jutsuMarcherEau')
+            ->add('jutsuTransformationAqueuse')
             ->add('jutsuMetamorphose')
             ->add('jutsuMultishoot')
             ->add('jutsuInvisibilite')
@@ -77,7 +77,7 @@ class NinjaAdmin extends AbstractAdmin
             ->add('jutsuBouclier')
             ->add('jutsuMarcherMur')
             ->add('jutsuDeflagration')
-            ->add('jutsuMarcherEau')
+            ->add('jutsuTransformationAqueuse')
             ->add('jutsuMetamorphose')
             ->add('jutsuMultishoot')
             ->add('jutsuInvisibilite')
@@ -150,8 +150,8 @@ class NinjaAdmin extends AbstractAdmin
             ->add('jutsuDeflagration', IntegerType::class, array(
                 'label' => 'Déflagration'
             ))
-            ->add('jutsuMarcherEau', IntegerType::class, array(
-                'label' => 'Marcher sur l\'eau'
+            ->add('jutsuTransformationAqueuse', IntegerType::class, array(
+                'label' => 'Transformation aqueuse'
             ))
             ->add('jutsuMetamorphose', IntegerType::class, array(
                 'label' => 'Changer en rocher'
@@ -259,7 +259,7 @@ class NinjaAdmin extends AbstractAdmin
             ->add('jutsuBouclier')
             ->add('jutsuMarcherMur')
             ->add('jutsuDeflagration')
-            ->add('jutsuMarcherEau')
+            ->add('jutsuTransformationAqueuse')
             ->add('jutsuMetamorphose')
             ->add('jutsuMultishoot')
             ->add('jutsuInvisibilite')

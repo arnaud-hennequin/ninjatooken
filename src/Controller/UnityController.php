@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Asset\Packages;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Entity\User\User;
@@ -84,7 +85,7 @@ class UnityController extends AbstractController
                                         $ninja->setJutsuBouclier(0);
                                         $ninja->setJutsuMarcherMur(0);
                                         $ninja->setJutsuDeflagration(0);
-                                        $ninja->setJutsuMarcherEau(0);
+                                        $ninja->setJutsuTransformationAqueuse(0);
                                         $ninja->setJutsuMetamorphose(0);
                                         $ninja->setJutsuMultishoot(0);
                                         $ninja->setJutsuInvisibilite(0);
@@ -306,7 +307,7 @@ class UnityController extends AbstractController
                                     $ninja->setJutsuBouclier(min(30, $levels[6]));
                                     $ninja->setJutsuMarcherMur(min(30, $levels[7]));
                                     $ninja->setJutsuDeflagration(min(30, $levels[8]));
-                                    $ninja->setJutsuMarcherEau(min(30, $levels[9]));
+                                    $ninja->setJutsuTransformationAqueuse(min(30, $levels[9]));
                                     $ninja->setJutsuMetamorphose(min(30, $levels[10]));
                                     $ninja->setJutsuMultishoot(min(30, $levels[11]));
                                     $ninja->setJutsuInvisibilite(min(30, $levels[12]));
@@ -386,24 +387,46 @@ class UnityController extends AbstractController
                                             $ninjaCheck->getJutsuBouclier() == $levels[6] &&
                                             $marcherMur == $levels[7] &&
                                             $ninjaCheck->getJutsuDeflagration() == $levels[8] &&
-                                            $ninjaCheck->getJutsuMarcherEau() == $levels[9] &&
-                                            $ninjaCheck->getJutsuMetamorphose() == $levels[10] &&
-                                            $ninjaCheck->getJutsuMultishoot() == $levels[11] &&
-                                            $ninjaCheck->getJutsuInvisibilite() == $levels[12] &&
-                                            $ninjaCheck->getJutsuResistanceExplosion() == $levels[13] &&
-                                            $ninjaCheck->getJutsuPhoenix() == $levels[14] &&
-                                            $ninjaCheck->getJutsuVague() == $levels[15] &&
-                                            $ninjaCheck->getJutsuPieux() == $levels[16] &&
-                                            $ninjaCheck->getJutsuTeleportation() == $levels[17] &&
-                                            $ninjaCheck->getJutsuTornade() == $levels[18] &&
+                                            (
+                                                (
+                                                    $ninjaCheck->getClasse() == "feu" &&
+                                                    $ninjaCheck->getJutsuResistanceExplosion() == $levels[13] &&
+                                                    $ninjaCheck->getJutsuPhoenix() == $levels[14] &&
+                                                    $ninjaCheck->getJutsuKagutsuchi() == $levels[26]
+                                                )
+                                                ||
+                                                (
+                                                    $ninjaCheck->getClasse() == "eau" &&
+                                                    $ninjaCheck->getJutsuTransformationAqueuse() == $levels[9] &&
+                                                    $ninjaCheck->getJutsuVague() == $levels[15] &&
+                                                    $ninjaCheck->getJutsuSusanoo() == $levels[25]
+                                                )
+                                                ||
+                                                (
+                                                    $ninjaCheck->getClasse() == "terre" &&
+                                                    $ninjaCheck->getJutsuMetamorphose() == $levels[10] &&
+                                                    $ninjaCheck->getJutsuPieux() == $levels[16] &&
+                                                    $ninjaCheck->getJutsuSarutahiko() == $levels[24]
+                                                )
+                                                ||
+                                                (
+                                                    $ninjaCheck->getClasse() == "foudre" &&
+                                                    $ninjaCheck->getJutsuMultishoot() == $levels[11] &&
+                                                    $ninjaCheck->getJutsuTeleportation() == $levels[17] &&
+                                                    $ninjaCheck->getJutsuRaijin() == $levels[23]
+                                                )
+                                                ||
+                                                (
+                                                    $ninjaCheck->getClasse() == "vent" &&
+                                                    $ninjaCheck->getJutsuInvisibilite() == $levels[12] &&
+                                                    $ninjaCheck->getJutsuTornade() == $levels[18] &&
+                                                    $ninjaCheck->getJutsuFujin() == $levels[22]
+                                                )
+                                            ) &&
                                             $ninjaCheck->getJutsuKusanagi() == $levels[19] &&
                                             $ninjaCheck->getJutsuAcierRenforce() == $levels[20] &&
                                             $ninjaCheck->getJutsuChakraVie() == $levels[21] &&
-                                            $ninjaCheck->getJutsuFujin() == $levels[22] &&
-                                            $ninjaCheck->getJutsuRaijin() == $levels[23] &&
-                                            $ninjaCheck->getJutsuSarutahiko() == $levels[24] &&
-                                            $ninjaCheck->getJutsuSusanoo() == $levels[25] &&
-                                            $ninjaCheck->getJutsuKagutsuchi() == $levels[26] &&
+
                                             $niveau == $levels[27]
                                         ) {
                                             $data    = '1';
@@ -533,7 +556,7 @@ class UnityController extends AbstractController
                     case"i":
                         $fileupload = $request->get('fileupload');
                         if ($this->isCryptingOk($a)) {
-                            $imgur = $this->getParameter('imgur');
+                            $clientId = $this->getParameter('imgur')['clientId'];
                             $ch = curl_init();
                             curl_setopt($ch, CURLOPT_HEADER, 0);
                             curl_setopt($ch, CURLOPT_VERBOSE, 0);
@@ -541,22 +564,21 @@ class UnityController extends AbstractController
                             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible;)");
-                            curl_setopt($ch, CURLOPT_URL, "https://api.imgur.com/3/upload.xml");
+                            curl_setopt($ch, CURLOPT_URL, "https://api.imgur.com/3/image");
                             curl_setopt($ch, CURLOPT_POST, true);
-                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Client-ID '.$imgur) );
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Client-ID '.$clientId) );
                             curl_setopt($ch, CURLOPT_POSTFIELDS, array(
                                 "image"            => $fileupload,
                                 "type"            => "base64",
                                 "name"            => "screenshot.jpg"
                             ));
                             if ($retour = curl_exec($ch)) {
-                                $xml    = @simplexml_load_string($retour);
-                                if ($xml) {
+                                if ($json = @json_decode($retour)) {
                                     // récupérer les chemins
                                     try{
-                                        if ($xml['success']=="1" && $xml['status']=="200") {
-                                            $url        = (string)$xml->link;
-                                            $deleteHash    = (string)$xml->deletehash;
+                                        if ($json->success == true && $json->status == 200) {
+                                            $url        = (string)$json->data->link;
+                                            $deleteHash = (string)$json->data->deletehash;
 
                                             $capture = new Capture();
                                             $capture->setUser($user);
@@ -748,9 +770,9 @@ class UnityController extends AbstractController
             $avatar = $user->getAvatar();
             if (empty($avatar)) {
                 if ($user->getGender()=='m') {
-                    $avatar = $assetsManager->getUrl('bundles/ninjatookenuser/images/boyz.jpg');
+                    $avatar = $assetsManager->getUrl('images/boyz.jpg');
                 } else {
-                    $avatar = $assetsManager->getUrl('bundles/ninjatookenuser/images/girlz.jpg');
+                    $avatar = $assetsManager->getUrl('images/girlz.jpg');
                 }
             } else {
                 $avatar = $cacheManager->getBrowserPath('avatar/'.$avatar, 'avatar');
@@ -798,7 +820,7 @@ class UnityController extends AbstractController
                 $em->flush();
             }
 
-            $content .= '<params force="'.$ninja->getAptitudeForce().'" vitesse="'.$ninja->getAptitudeVitesse().'" vie="'.$ninja->getAptitudeVie().'" chakra="'.$ninja->getAptitudeChakra().'" experience="'.$ninja->getExperience().'" grade="'.$ninja->getGrade().'" bouleElementaire="'.$ninja->getJutsuBoule().'" doubleSaut="'.$ninja->getJutsuDoubleSaut().'" bouclierElementaire="'.$ninja->getJutsuBouclier().'" marcherMur="'.$ninja->getJutsuMarcherMur().'" deflagrationElementaire="'.$ninja->getJutsuDeflagration().'" marcherViteEau="'.$ninja->getJutsuMarcherEau().'" changerObjet="'.$ninja->getJutsuMetamorphose().'" multishoot="'.$ninja->getJutsuMultishoot().'" invisibleman="'.$ninja->getJutsuInvisibilite().'" resistanceExplosion="'.$ninja->getJutsuResistanceExplosion().'" phoenix="'.$ninja->getJutsuPhoenix().'" vague="'.$ninja->getJutsuVague().'" pieux="'.$ninja->getJutsuPieux().'" tornade="'.$ninja->getJutsuTornade().'" teleportation="'.$ninja->getJutsuTeleportation().'" kusanagi="'.$ninja->getJutsuKusanagi().'" acierRenforce="'.$ninja->getJutsuAcierRenforce().'" chakraVie="'.$ninja->getJutsuChakraVie().'" kamiRaijin="'.$ninja->getJutsuRaijin().'" kamiSarutahiko="'.$ninja->getJutsuSarutahiko().'" kamiFujin="'.$ninja->getJutsuFujin().'" kamiSusanoo="'.$ninja->getJutsuSusanoo().'" kamiKagutsuchi="'.$ninja->getJutsuKagutsuchi().'" classe="'.$ninja->getClasse().'" masque="'.$ninja->getMasque().'" couleurMasque="'.$ninja->getMasqueCouleur().'" detailMasque="'.$ninja->getMasqueDetail().'" costume="'.$ninja->getCostume().'" couleurCostume="'.$ninja->getCostumeCouleur().'" detailCostume="'.$ninja->getCostumeDetail().'" assassinnat="'.$ninja->getMissionAssassinnat().'" course="'.$ninja->getMissionCourse().'" langue="'.$request->getLocale().'" accomplissement="'.$ninja->getAccomplissement().'" age="'.$age.'" sexe="'.($user->getGender()=='f'?'F':"H").'" roles="'.implode('-', $user->getRoles()).'" clan="'.$clan.'"/>';
+            $content .= '<params force="'.$ninja->getAptitudeForce().'" vitesse="'.$ninja->getAptitudeVitesse().'" vie="'.$ninja->getAptitudeVie().'" chakra="'.$ninja->getAptitudeChakra().'" experience="'.$ninja->getExperience().'" grade="'.$ninja->getGrade().'" bouleElementaire="'.$ninja->getJutsuBoule().'" doubleSaut="'.$ninja->getJutsuDoubleSaut().'" bouclierElementaire="'.$ninja->getJutsuBouclier().'" marcherMur="'.$ninja->getJutsuMarcherMur().'" deflagrationElementaire="'.$ninja->getJutsuDeflagration().'" transformationAqueuse="'.$ninja->getJutsuTransformationAqueuse().'" changerObjet="'.$ninja->getJutsuMetamorphose().'" multishoot="'.$ninja->getJutsuMultishoot().'" invisibleman="'.$ninja->getJutsuInvisibilite().'" resistanceExplosion="'.$ninja->getJutsuResistanceExplosion().'" phoenix="'.$ninja->getJutsuPhoenix().'" vague="'.$ninja->getJutsuVague().'" pieux="'.$ninja->getJutsuPieux().'" tornade="'.$ninja->getJutsuTornade().'" teleportation="'.$ninja->getJutsuTeleportation().'" kusanagi="'.$ninja->getJutsuKusanagi().'" acierRenforce="'.$ninja->getJutsuAcierRenforce().'" chakraVie="'.$ninja->getJutsuChakraVie().'" kamiRaijin="'.$ninja->getJutsuRaijin().'" kamiSarutahiko="'.$ninja->getJutsuSarutahiko().'" kamiFujin="'.$ninja->getJutsuFujin().'" kamiSusanoo="'.$ninja->getJutsuSusanoo().'" kamiKagutsuchi="'.$ninja->getJutsuKagutsuchi().'" classe="'.$ninja->getClasse().'" masque="'.$ninja->getMasque().'" couleurMasque="'.$ninja->getMasqueCouleur().'" detailMasque="'.$ninja->getMasqueDetail().'" costume="'.$ninja->getCostume().'" couleurCostume="'.$ninja->getCostumeCouleur().'" detailCostume="'.$ninja->getCostumeDetail().'" assassinnat="'.$ninja->getMissionAssassinnat().'" course="'.$ninja->getMissionCourse().'" langue="'.$request->getLocale().'" accomplissement="'.$ninja->getAccomplissement().'" age="'.$age.'" sexe="'.($user->getGender()=='f'?'F':"H").'" roles="'.implode('-', $user->getRoles()).'" clan="'.$clan.'"/>';
 
             // liste d'amis
             $friends = $em->getRepository(Friend::class)->getFriends($user, 100, 0);
@@ -810,7 +832,7 @@ class UnityController extends AbstractController
             $retour    = '1';
         } else if (!empty($visiteur)) {
             $content .= '<login avatar="" id="'.($maxid+date("Hms")).'" maxid="'.$maxid.'"><![CDATA[Visiteur_'.date("Hms").']]></login>';
-            $content .= '<params force="50" vitesse="50" vie="50" chakra="55" experience="'.$XP_LEVEL_100.'" grade="0" bouleElementaire="0" doubleSaut="30" bouclierElementaire="30" marcherMur="10" deflagrationElementaire="10" marcherViteEau="0" changerObjet="0" multishoot="0" invisibleman="0" resistanceExplosion="0" phoenix="0" vague="0" pieux="0" tornade="0" teleportation="0" kusanagi="0" acierRenforce="0" chakraVie="0" kamiRaijin="0" kamiSarutahiko="0" kamiFujin="0" kamiSusanoo="0" kamiKagutsuchi="0" classe="" masque="0" couleurMasque="0" detailMasque="0" costume="0" couleurCostume="0" detailCostume="0" assassinnat="0" course="0" langue="'.$request->getLocale().'" accomplissement="0000000000000000000000000" age="10" sexe="H" roles="ROLE_USER" clan=""/>';
+            $content .= '<params force="50" vitesse="50" vie="50" chakra="55" experience="'.$XP_LEVEL_100.'" grade="0" bouleElementaire="0" doubleSaut="30" bouclierElementaire="30" marcherMur="10" deflagrationElementaire="10" transformationAqueuse="0" changerObjet="0" multishoot="0" invisibleman="0" resistanceExplosion="0" phoenix="0" vague="0" pieux="0" tornade="0" teleportation="0" kusanagi="0" acierRenforce="0" chakraVie="0" kamiRaijin="0" kamiSarutahiko="0" kamiFujin="0" kamiSusanoo="0" kamiKagutsuchi="0" classe="" masque="0" couleurMasque="0" detailMasque="0" costume="0" couleurCostume="0" detailCostume="0" assassinnat="0" course="0" langue="'.$request->getLocale().'" accomplissement="0000000000000000000000000" age="10" sexe="H" roles="ROLE_USER" clan=""/>';
             $retour    = '1';
         }
 
