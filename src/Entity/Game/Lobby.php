@@ -299,36 +299,30 @@ class Lobby
     }
 
     /**
-     * Add users
-     *
-     * @param \App\Entity\User\User $user
-     * @return Lobby
+     * @return Collection|User[]
      */
-    public function addUser(\App\Entity\User\User $user)
+    public function getUsers(): Collection
     {
-        $this->users[] = $user;
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addLobby($this);
+        }
 
         return $this;
     }
 
-    /**
-     * Remove users
-     *
-     * @param \App\Entity\User\User $user
-     */
-    public function removeUser(\App\Entity\User\User $user)
+    public function removeUser(User $user): self
     {
-        $this->users->removeElement($user);
-    }
+        if ($this->users->removeElement($user)) {
+            $user->removeLobby($this);
+        }
 
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
+        return $this;
     }
 
     /**
