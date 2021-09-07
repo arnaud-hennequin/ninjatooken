@@ -7,10 +7,6 @@ liip_imagine:
             web_path:
                 web_root: "%kernel.project_dir%/public"
                 cache_prefix: "cache"
-    loaders:
-        default:
-            filesystem:
-                data_root: "%kernel.project_dir%/public/"
     filter_sets :
         cache : ~
         avatar:

@@ -22,7 +22,7 @@ class Ip
     /**
      * @var int
      *
-     * @ORM\Column(name="ip", type="integer")
+     * @ORM\Column(name="ip", type="integer", options={"unsigned"=true})
      */
     private $ip;
 

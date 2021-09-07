@@ -29,7 +29,7 @@ class Lobby
      *
      * @var User
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\User\User")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User\User", mappedBy="lobbies")
      * @ORM\JoinTable(name="nt_lobby_user",
      *      joinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id", onDelete="cascade")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")}

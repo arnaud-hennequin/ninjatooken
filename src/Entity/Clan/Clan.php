@@ -10,6 +10,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
  * Clan
@@ -18,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="App\Repository\ClanRepository")
  */
-class Clan implements SluggableInterface
+class Clan implements SluggableInterface, \Serializable
 {
     use SluggableTrait;
 
@@ -103,19 +104,8 @@ class Clan implements SluggableInterface
      * @var string
      *
      * @ORM\Column(name="kamon_upload", type="string", length=255, nullable=true)
-     * @Assert\Image(
-     *     minWidth = 50,
-     *     maxWidth = 400,
-     *     minHeight = 50,
-     *     maxHeight = 400,
-     *     mimeTypes = {"image/jpeg", "image/png", "image/gif"}
-     * )
      */
     private $kamonUpload;
-
-    // propriété utilisé temporairement pour la suppression
-    private $tempKamon;
-    public $file;
 
     /**
      * @var \DateTime
@@ -123,6 +113,13 @@ class Clan implements SluggableInterface
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private $dateAjout;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * @var boolean
@@ -139,6 +136,17 @@ class Clan implements SluggableInterface
     private $isRecruting = true;
 
     /**
+     * @Ignore()
+     */
+
+    private $tempKamon;
+
+    /**
+     * @Ignore()
+     */
+    public $file;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -151,6 +159,36 @@ class Clan implements SluggableInterface
 
     public function __toString(){
         return $this->nom;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            $this->nom,
+            $this->tag,
+            $this->accroche,
+            $this->description,
+            $this->url,
+            $this->id
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->nom,
+            $this->tag,
+            $this->accroche,
+            $this->description,
+            $this->url,
+            $this->id
+        ) = unserialize($serialized);
     }
 
     /**
@@ -186,19 +224,19 @@ class Clan implements SluggableInterface
         return $slug;
     }
 
-    public function getAbsoluteKamonUpload()
+    public function getAbsoluteKamon()
     {
         return null === $this->kamonUpload || "" === $this->kamonUpload ? null : $this->getUploadRootDir().'/'.$this->kamonUpload;
     }
 
-    public function getWebKamonUpload()
+    public function getWebKamon()
     {
         return null === $this->kamonUpload || "" === $this->kamonUpload  ? null : $this->getUploadDir().'/'.$this->kamonUpload;
     }
 
     protected function getUploadRootDir()
     {
-        return __DIR__.'/../../../../public/'.$this->getUploadDir();
+        return __DIR__.'/../../../public/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
@@ -211,6 +249,9 @@ class Clan implements SluggableInterface
      */
     public function prePersist()
     {
+        $this->dateAjout = new \DateTime();
+        $this->updatedAt = new \DateTime();
+
         if (null !== $this->file) {
             $this->setKamonUpload(uniqid(mt_rand(), true).".".$this->file->guessExtension());
         }
@@ -221,12 +262,15 @@ class Clan implements SluggableInterface
      */
     public function preUpdate()
     {
+        $this->updatedAt = new \DateTime();
+
         if (null !== $this->file) {
             $file = $this->id.'.'.$this->file->guessExtension();
 
             $fileAbsolute = $this->getUploadRootDir().$file;
-            if(file_exists($fileAbsolute))
+            if(file_exists($fileAbsolute)) {
                 unlink($fileAbsolute);
+            }
 
             $this->setKamonUpload($file);
         }
@@ -252,7 +296,7 @@ class Clan implements SluggableInterface
      */
     public function storeFilenameForRemove()
     {
-        $this->tempKamon = $this->getAbsoluteKamonUpload();
+        $this->tempKamon = $this->getAbsoluteKamon();
     }
 
     /**
@@ -614,5 +658,17 @@ class Clan implements SluggableInterface
     public function getKamonUpload()
     {
         return $this->kamonUpload;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }

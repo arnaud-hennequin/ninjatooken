@@ -166,7 +166,7 @@ class Thread implements SluggableInterface
      */
     public function getSluggableFields(): array
     {
-        return ['nom'];
+        return ['id', 'nom'];
     }
 
     public function generateSlugValue($values): string

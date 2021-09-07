@@ -34,13 +34,13 @@ class ClanController extends AbstractController
 
         $repo = $em->getRepository(Clan::class);
 
-        return $this->render('clan/liste.html.twig', array(
+        return $this->render('clan/liste.html.twig', [
             'clans' => $repo->getClans($order, $num, $page),
             'lastClans' => $repo->getClans("date", 10, 1),
             'page' => $page,
             'nombrePage' => ceil($repo->getNumClans()/$num),
             'order' => $order
-        ));
+        ]);
     }
 
     /**
@@ -52,36 +52,36 @@ class ClanController extends AbstractController
 
         // le forum du clan
         $forum = $em->getRepository(Forum::class)->getForum($clan->getSlug(), $clan);
-        $threads = array();
+        $threads = [];
         if ($forum) {
             $forum = current($forum);
             $threads = $em->getRepository(Thread::class)->getThreads($forum, 5, 1);
             if (count($threads)>0)
                 $forum->threads = $threads;
             else
-                $forum->threads = array();
+                $forum->threads = [];
         }
 
         // l'arborescence des membres
         $shishou = $em->getRepository(ClanUtilisateur::class)->getMembres($clan, 0, null, 1, 1);
-        $membres = array();
+        $membres = [];
         if ($shishou) {
             $shishou = current($shishou);
-            $membres = array(
+            $membres = [
                 'recruteur' => $shishou,
                 'recruts' => $this->getRecruts($shishou)
-            );
+            ];
         }
 
         // l'arborescence des membres mise à plat (listing simple)
         $membresListe = $this->getRecruteur($membres);
 
-        return $this->render('clan/clan.html.twig', array(
+        return $this->render('clan/clan.html.twig', [
             'clan' => $clan,
             'forum' => $forum,
             'membres' => $membres,
             'membresListe' => $membresListe
-        ));
+        ]);
     }
 
     public function clanAjouter(Request $request, TranslatorInterface $translator, ParameterBagInterface $params)
@@ -98,7 +98,7 @@ class ClanController extends AbstractController
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('clan', array_merge(
                         $request->request->get('clan'),
-                        array('description' => $request->get('clan_description'))
+                        ['description' => $request->get('clan_description')]
                     ));
 
                     $form->handleRequest($request);
@@ -111,9 +111,9 @@ class ClanController extends AbstractController
                         if ($file && isset($file['kamonUpload'])) {
                             $file = $file['kamonUpload'];
                             $extension = strtolower($file->guessExtension());
-                            if (in_array($extension, array('jpeg','jpg','png','gif'))) {
+                            if (in_array($extension, ['jpeg','jpg','png','gif'])) {
                                 $clan->setFile($file);
-                                $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clan->getWebKamonUpload();
+                                $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clan->getWebKamon();
                                 if (file_exists($cachedImage)) {
                                     unlink($cachedImage);
                                 }
@@ -134,7 +134,7 @@ class ClanController extends AbstractController
                         $forum->setClan($clan);
 
                         $thread = new Thread();
-                        $thread->setNom('Général');
+                        $thread->setNom('['.$clan->getNom().'] - Général');
                         $thread->setBody($clan->getDescription());
                         $thread->setForum($forum);
                         $thread->setAuthor($user);
@@ -151,19 +151,19 @@ class ClanController extends AbstractController
                             $translator->trans('notice.clan.ajoutOk')
                         );
 
-                        return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                        return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                             'clan_nom' => $clan->getSlug()
-                        )));
+                        ]));
                     }
                 }
             }else{
-                return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                     'clan_nom' => $user->getClan()->getClan()->getSlug()
-                )));
+                ]));
             }
-            return $this->render('clan/clan.form.html.twig', array(
+            return $this->render('clan/clan.form.html.twig', [
                 'form' => $form->createView()
-            ));
+            ]);
         }
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
@@ -201,9 +201,9 @@ class ClanController extends AbstractController
                         $translator->trans('notice.clan.editOk')
                     );
                 }
-                return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                     'clan_nom' => $clan->getSlug()
-                )));
+                ]));
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
@@ -232,12 +232,12 @@ class ClanController extends AbstractController
                 if ('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('clan', array_merge(
-                        $request->request->get('clan'),
-                        array('description' => $request->get('clan_description'))
+                        $request->request->get('clan', []),
+                        ['description' => $request->get('clan_description')]
                     ));
 
-                    $clanWebKamon = $clan->getWebKamonUpload();
 
+                    $clanWebKamon = $clan->getWebKamon();
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
@@ -248,7 +248,7 @@ class ClanController extends AbstractController
                         if ($file !== null && isset($file['kamonUpload'])) {
                             $file = $file['kamonUpload'];
                             $extension = strtolower($file->guessExtension());
-                            if (in_array($extension, array('jpeg','jpg','png','gif'))) {
+                            if (in_array($extension, ['jpeg','jpg','png','gif'])) {
                                 $clan->setFile($file);
                                 if (isset($clanWebKamon) && !empty($clanWebKamon)) {
                                     $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clanWebKamon;
@@ -256,7 +256,6 @@ class ClanController extends AbstractController
                                         unlink($cachedImage);
                                     }
                                 }
-                                $clan->setKamonUpload('upload');
                             }
                         }
 
@@ -268,15 +267,15 @@ class ClanController extends AbstractController
                             $translator->trans('notice.clan.editOk')
                         );
 
-                        return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                        return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                             'clan_nom' => $clan->getSlug()
-                        )));
+                        ]));
                     }
                 }
-                return $this->render('clan/clan.form.html.twig', array(
+                return $this->render('clan/clan.form.html.twig', [
                     'form' => $form->createView(),
                     'clan' => $clan
-                ));
+                ]);
             }
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
@@ -306,7 +305,7 @@ class ClanController extends AbstractController
                 // enlève les évènement sur clan_utilisateur
                 // on cherche à tous les supprimer et pas à ré-agencer la structure
                 $evm = $em->getEventManager();
-                $evm->removeEventListener(array('postRemove'), $clanUtilisateurListener);
+                $evm->removeEventListener(['postRemove'], $clanUtilisateurListener);
 
                 $em->remove($clan);
                 $em->flush();
@@ -342,11 +341,11 @@ class ClanController extends AbstractController
 
                     $membres = $clan->getMembres()->count() - 1;
                     if ($membres==0) {
-                        $evm->removeEventListener(array('postRemove'), $clanUtilisateurListener);
+                        $evm->removeEventListener(['postRemove'], $clanUtilisateurListener);
                         $em->remove($clan);
                     }else{
                         // enlève les évènement sur clan_proposition
-                        $evm->removeEventListener(array('postRemove'), $clanPropositionListener);
+                        $evm->removeEventListener(['postRemove'], $clanPropositionListener);
                         $em->remove($clanutilisateur);
                     }
                     $em->flush();
@@ -357,9 +356,9 @@ class ClanController extends AbstractController
                     );
 
                     if ($clan && $membres>0)
-                        return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                        return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                             'clan_nom' => $clan->getSlug()
-                        )));
+                        ]));
                     else
                         return $this->redirect($this->generateUrl('ninja_tooken_clans'));
                 }
@@ -417,9 +416,9 @@ class ClanController extends AbstractController
                                 $translator->trans('notice.clan.promotionOk')
                             );
 
-                            return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                            return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                                 'clan_nom' => $clan->getSlug()
-                            )));
+                            ]));
                         }
                     }
                 }
@@ -444,12 +443,12 @@ class ClanController extends AbstractController
             $repo_proposition = $em->getRepository(ClanProposition::class);
             $repo_demande = $em->getRepository(ClanPostulation::class);
 
-            return $this->render('clan/clan.recrutement.html.twig', array(
+            return $this->render('clan/clan.recrutement.html.twig', [
                 'recrutements' => $repo_proposition->getPropositionByRecruteur($user),
                 'propositions' => $repo_proposition->getPropositionByPostulant($user),
                 'demandes' => $repo_demande->getByUser($user),
                 'demandesFrom' => $clan && $clan->getDroit()<3?$repo_demande->getByClan($clan->getClan()):null
-            ));
+            ]);
         }
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
@@ -504,20 +503,20 @@ class ClanController extends AbstractController
                     $message = new Message();
                     $message->setAuthor($user);
                     $message->setNom($translator->trans('mail.recrutement.nouveau.sujet'));
-                    $message->setContent($translator->trans('mail.recrutement.nouveau.contenu', array(
-                        '%userUrl%' => $this->generateUrl('ninja_tooken_user_fiche', array(
+                    $message->setContent($translator->trans('mail.recrutement.nouveau.contenu', [
+                        '%userUrl%' => $this->generateUrl('ninja_tooken_user_fiche', [
                             'user_nom' => $user->getSlug()
-                        )),
+                        ]),
                         '%userPseudo%' => $user->getUsername(),
-                        '%urlRefuser%' => $this->generateUrl('ninja_tooken_clan_recruter_refuser', array(
+                        '%urlRefuser%' => $this->generateUrl('ninja_tooken_clan_recruter_refuser', [
                             'user_nom' => $utilisateur->getSlug(),
                             'recruteur_nom' => $user->getSlug()
-                        )),
-                        '%urlAccepter%' => $this->generateUrl('ninja_tooken_clan_recruter_accepter', array(
+                        ]),
+                        '%urlAccepter%' => $this->generateUrl('ninja_tooken_clan_recruter_accepter', [
                             'user_nom' => $utilisateur->getSlug(),
                             'recruteur_nom' => $user->getSlug()
-                        ))
-                    )));
+                        ])
+                    ]));
 
                     $messageuser = new MessageUser();
                     $messageuser->setDestinataire($utilisateur);
@@ -609,9 +608,9 @@ class ClanController extends AbstractController
                             $translator->trans('notice.recrutement.bienvenue')
                         );
 
-                        return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+                        return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                             'clan_nom' => $clan->getSlug()
-                        )));
+                        ]));
                     }
                 }
             }
@@ -717,9 +716,9 @@ class ClanController extends AbstractController
 
             }
 
-            return $this->redirect($this->generateUrl('ninja_tooken_clan', array(
+            return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                 'clan_nom' => $clan->getSlug()
-            )));
+            ]));
         }
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
@@ -750,8 +749,8 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    function getRecruteur($list=array()) {
-        $membre = array();
+    function getRecruteur($list = []) {
+        $membre = [];
         if (isset($list['recruteur'])) {
             $membre[] = $list['recruteur'];
             foreach($list['recruts'] as $recrut) {
@@ -764,12 +763,12 @@ class ClanController extends AbstractController
     function getRecruts(ClanUtilisateur $recruteur) {
         $em = $this->getDoctrine()->getManager();
         $recruts = $em->getRepository(ClanUtilisateur::class)->getMembres(null, null, $recruteur->getMembre(), 100);
-        $membres = array();
+        $membres = [];
         foreach($recruts as $recrut) {
-            $membres[] = array(
+            $membres[] = [
                 'recruteur' => $recrut,
                 'recruts' => $this->getRecruts($recrut)
-            );
+            ];
         }
 
         return $membres;
