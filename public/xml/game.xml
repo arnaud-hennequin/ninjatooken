@@ -1,28 +1,28 @@
-	<langue>
-		<x name="Francais" val="fr" />
-		<x name="English" val="en" />
-	</langue>
-	<game>
+    <langue>
+        <x name="Francais" val="fr" />
+        <x name="English" val="en" />
+    </langue>
+    <game>
         <map>
-			<m name="364" url="Map-Solo" ctf="1"><![CDATA[373]]></m>
-			<m name="365" url="Map-Island" ctf="1"><![CDATA[374]]></m>
-			<m name="366" url="Map-Island-N" ctf="1"><![CDATA[375]]></m>
-			<m name="367" url="Map-Cascade" ctf="1"><![CDATA[376]]></m>
-			<m name="368" url="Map-Tutoriel" ctf="0"><![CDATA[377]]></m>
-			<m name="369" url="Map-Riviere-Jour" ctf="1"><![CDATA[378]]></m>
-			<m name="370" url="Map-Riviere" ctf="1"><![CDATA[379]]></m>
-			<m name="371" url="Map-Dojo" ctf="0"><![CDATA[380]]></m>
-			<m name="372" url="Map-Forteresse" ctf="1"><![CDATA[381]]></m>
-			<m name="383" url="Map-Temple" ctf="0"><![CDATA[384]]></m>
-			<m name="387" url="Map-Grotte" ctf="0"><![CDATA[388]]></m>
-			<m name="389" url="Map-Grotte-N" ctf="0"><![CDATA[390]]></m>
-			<m name="392" url="Map-Arene" ctf="0"><![CDATA[393]]></m>
-			<m name="394" url="Map-Ville" ctf="1"><![CDATA[395]]></m>
-			<m name="405" url="Map-Montagne" ctf="1"><![CDATA[406]]></m>
-			<m name="428" url="Map-Auberge" ctf="0"><![CDATA[429]]></m>
-			<m name="432" url="Map-Horror" ctf="0"><![CDATA[433]]></m>
-			<m name="458" url="Map-Kami" ctf="1"><![CDATA[459]]></m>
-			<m name="464" url="Map-Cascade-hd" ctf="1"><![CDATA[465]]></m>
+            <m name="364" url="Map-Solo" ctf="1"><![CDATA[373]]></m>
+            <m name="365" url="Map-Island" ctf="1"><![CDATA[374]]></m>
+            <m name="366" url="Map-Island-N" ctf="1"><![CDATA[375]]></m>
+            <m name="367" url="Map-Cascade" ctf="1"><![CDATA[376]]></m>
+            <m name="368" url="Map-Tutoriel" ctf="0"><![CDATA[377]]></m>
+            <m name="369" url="Map-Riviere-Jour" ctf="1"><![CDATA[378]]></m>
+            <m name="370" url="Map-Riviere" ctf="1"><![CDATA[379]]></m>
+            <m name="371" url="Map-Dojo" ctf="0"><![CDATA[380]]></m>
+            <m name="372" url="Map-Forteresse" ctf="1"><![CDATA[381]]></m>
+            <m name="383" url="Map-Temple" ctf="0"><![CDATA[384]]></m>
+            <m name="387" url="Map-Grotte" ctf="0"><![CDATA[388]]></m>
+            <m name="389" url="Map-Grotte-N" ctf="0"><![CDATA[390]]></m>
+            <m name="392" url="Map-Arene" ctf="0"><![CDATA[393]]></m>
+            <m name="394" url="Map-Ville" ctf="1"><![CDATA[395]]></m>
+            <m name="405" url="Map-Montagne" ctf="1"><![CDATA[406]]></m>
+            <m name="428" url="Map-Auberge" ctf="0"><![CDATA[429]]></m>
+            <m name="432" url="Map-Horror" ctf="0"><![CDATA[433]]></m>
+            <m name="458" url="Map-Kami" ctf="1"><![CDATA[459]]></m>
+            <m name="464" url="Map-Cascade-hd" ctf="1"><![CDATA[465]]></m>
         </map>
         <classe>
             <x name="Katon" val="355" ennemy="359" />
@@ -36,126 +36,126 @@
             <aptitude val="1" depart="0" />
         </levelUp>
         <experience>
-			<x niveau="1" name="Blatte" val="0"/>
-			<x niveau="2" name="Blatte" val="10"/>
-			<x niveau="3" name="Blatte" val="71"/>
-			<x niveau="4" name="Blatte" val="156"/>
-			<x niveau="5" name="Blatte" val="268"/>
-			<x niveau="6" name="Blatte" val="408"/>
-			<x niveau="7" name="Blatte" val="578"/>
-			<x niveau="8" name="Blatte" val="782"/>
-			<x niveau="9" name="Blatte" val="1020"/>
-			<x niveau="10" name="Étudiant" val="1297"/>
-			<x niveau="11" name="Étudiant" val="1614"/>
-			<x niveau="12" name="Étudiant" val="1975"/>
-			<x niveau="13" name="Étudiant" val="2383"/>
-			<x niveau="14" name="Étudiant" val="2842"/>
-			<x niveau="15" name="Étudiant" val="3355"/>
-			<x niveau="16" name="Étudiant" val="3927"/>
-			<x niveau="17" name="Étudiant" val="4562"/>
-			<x niveau="18" name="Étudiant" val="5264"/>
-			<x niveau="19" name="Étudiant" val="6038"/>
-			<x niveau="20" name="Genin" val="6891"/>
-			<x niveau="21" name="Genin" val="7828"/>
-			<x niveau="22" name="Genin" val="8855"/>
-			<x niveau="23" name="Genin" val="9979"/>
-			<x niveau="24" name="Genin" val="11208"/>
-			<x niveau="25" name="Genin" val="12549"/>
-			<x niveau="26" name="Genin" val="14010"/>
-			<x niveau="27" name="Genin" val="15600"/>
-			<x niveau="28" name="Genin" val="17330"/>
-			<x niveau="29" name="Genin" val="19210"/>
-			<x niveau="30" name="Genin" val="21251"/>
-			<x niveau="31" name="Genin" val="23465"/>
-			<x niveau="32" name="Genin" val="25865"/>
-			<x niveau="33" name="Genin" val="28465"/>
-			<x niveau="34" name="Genin" val="31279"/>
-			<x niveau="35" name="Genin" val="34325"/>
-			<x niveau="36" name="Genin" val="37620"/>
-			<x niveau="37" name="Genin" val="41181"/>
-			<x niveau="38" name="Genin" val="45030"/>
-			<x niveau="39" name="Genin" val="49187"/>
-			<x niveau="40" name="Genin" val="53676"/>
-			<x niveau="41" name="Genin" val="58522"/>
-			<x niveau="42" name="Genin" val="63751"/>
-			<x niveau="43" name="Genin" val="69392"/>
-			<x niveau="44" name="Genin" val="75477"/>
-			<x niveau="45" name="Genin" val="82037"/>
-			<x niveau="46" name="Genin" val="89110"/>
-			<x niveau="47" name="Genin" val="96733"/>
-			<x niveau="48" name="Genin" val="104948"/>
-			<x niveau="49" name="Genin" val="113800"/>
-			<x niveau="50" name="Chunin" val="123335"/>
-			<x niveau="51" name="Chunin" val="133605"/>
-			<x niveau="52" name="Chunin" val="144665"/>
-			<x niveau="53" name="Chunin" val="156575"/>
-			<x niveau="54" name="Chunin" val="169398"/>
-			<x niveau="55" name="Chunin" val="183203"/>
-			<x niveau="56" name="Chunin" val="198063"/>
-			<x niveau="57" name="Chunin" val="214058"/>
-			<x niveau="58" name="Chunin" val="231272"/>
-			<x niveau="59" name="Chunin" val="249798"/>
-			<x niveau="60" name="Chunin" val="269732"/>
-			<x niveau="61" name="Chunin" val="291182"/>
-			<x niveau="62" name="Chunin" val="314261"/>
-			<x niveau="63" name="Chunin" val="339091"/>
-			<x niveau="64" name="Chunin" val="365802"/>
-			<x niveau="65" name="Chunin" val="394537"/>
-			<x niveau="66" name="Chunin" val="425448"/>
-			<x niveau="67" name="Chunin" val="458696"/>
-			<x niveau="68" name="Chunin" val="494459"/>
-			<x niveau="69" name="Chunin" val="532923"/>
-			<x niveau="70" name="Jōnin" val="574292"/>
-			<x niveau="71" name="Jōnin" val="618784"/>
-			<x niveau="72" name="Jōnin" val="666633"/>
-			<x niveau="73" name="Jōnin" val="718090"/>
-			<x niveau="74" name="Jōnin" val="773427"/>
-			<x niveau="75" name="Jōnin" val="832934"/>
-			<x niveau="76" name="Jōnin" val="896924"/>
-			<x niveau="77" name="Jōnin" val="965734"/>
-			<x niveau="78" name="Jōnin" val="1039724"/>
-			<x niveau="79" name="Jōnin" val="1119283"/>
-			<x niveau="80" name="Jōnin" val="1204829"/>
-			<x niveau="81" name="Jōnin" val="1296811"/>
-			<x niveau="82" name="Jōnin" val="1395712"/>
-			<x niveau="83" name="Jōnin" val="1502051"/>
-			<x niveau="84" name="Jōnin" val="1616384"/>
-			<x niveau="85" name="Jōnin" val="1739313"/>
-			<x niveau="86" name="Jōnin" val="1871482"/>
-			<x niveau="87" name="Jōnin" val="2013583"/>
-			<x niveau="88" name="Jōnin" val="2166362"/>
-			<x niveau="89" name="Jōnin" val="2330619"/>
-			<x niveau="90" name="Sannin" val="2507215"/>
-			<x niveau="91" name="Sannin" val="2697076"/>
-			<x niveau="92" name="Sannin" val="2901197"/>
-			<x niveau="93" name="Sannin" val="3120647"/>
-			<x niveau="94" name="Sannin" val="3356575"/>
-			<x niveau="95" name="Sannin" val="3610219"/>
-			<x niveau="96" name="Sannin" val="3882905"/>
-			<x niveau="97" name="Sannin" val="4176063"/>
-			<x niveau="98" name="Sannin" val="4491227"/>
-			<x niveau="99" name="Sannin" val="4830050"/>
-			<x niveau="100" name="Sannin" val="5194303"/>
+            <x niveau="1" name="Blatte" val="0"/>
+            <x niveau="2" name="Blatte" val="10"/>
+            <x niveau="3" name="Blatte" val="71"/>
+            <x niveau="4" name="Blatte" val="156"/>
+            <x niveau="5" name="Blatte" val="268"/>
+            <x niveau="6" name="Blatte" val="408"/>
+            <x niveau="7" name="Blatte" val="578"/>
+            <x niveau="8" name="Blatte" val="782"/>
+            <x niveau="9" name="Blatte" val="1020"/>
+            <x niveau="10" name="Étudiant" val="1297"/>
+            <x niveau="11" name="Étudiant" val="1614"/>
+            <x niveau="12" name="Étudiant" val="1975"/>
+            <x niveau="13" name="Étudiant" val="2383"/>
+            <x niveau="14" name="Étudiant" val="2842"/>
+            <x niveau="15" name="Étudiant" val="3355"/>
+            <x niveau="16" name="Étudiant" val="3927"/>
+            <x niveau="17" name="Étudiant" val="4562"/>
+            <x niveau="18" name="Étudiant" val="5264"/>
+            <x niveau="19" name="Étudiant" val="6038"/>
+            <x niveau="20" name="Genin" val="6891"/>
+            <x niveau="21" name="Genin" val="7828"/>
+            <x niveau="22" name="Genin" val="8855"/>
+            <x niveau="23" name="Genin" val="9979"/>
+            <x niveau="24" name="Genin" val="11208"/>
+            <x niveau="25" name="Genin" val="12549"/>
+            <x niveau="26" name="Genin" val="14010"/>
+            <x niveau="27" name="Genin" val="15600"/>
+            <x niveau="28" name="Genin" val="17330"/>
+            <x niveau="29" name="Genin" val="19210"/>
+            <x niveau="30" name="Genin" val="21251"/>
+            <x niveau="31" name="Genin" val="23465"/>
+            <x niveau="32" name="Genin" val="25865"/>
+            <x niveau="33" name="Genin" val="28465"/>
+            <x niveau="34" name="Genin" val="31279"/>
+            <x niveau="35" name="Genin" val="34325"/>
+            <x niveau="36" name="Genin" val="37620"/>
+            <x niveau="37" name="Genin" val="41181"/>
+            <x niveau="38" name="Genin" val="45030"/>
+            <x niveau="39" name="Genin" val="49187"/>
+            <x niveau="40" name="Genin" val="53676"/>
+            <x niveau="41" name="Genin" val="58522"/>
+            <x niveau="42" name="Genin" val="63751"/>
+            <x niveau="43" name="Genin" val="69392"/>
+            <x niveau="44" name="Genin" val="75477"/>
+            <x niveau="45" name="Genin" val="82037"/>
+            <x niveau="46" name="Genin" val="89110"/>
+            <x niveau="47" name="Genin" val="96733"/>
+            <x niveau="48" name="Genin" val="104948"/>
+            <x niveau="49" name="Genin" val="113800"/>
+            <x niveau="50" name="Chunin" val="123335"/>
+            <x niveau="51" name="Chunin" val="133605"/>
+            <x niveau="52" name="Chunin" val="144665"/>
+            <x niveau="53" name="Chunin" val="156575"/>
+            <x niveau="54" name="Chunin" val="169398"/>
+            <x niveau="55" name="Chunin" val="183203"/>
+            <x niveau="56" name="Chunin" val="198063"/>
+            <x niveau="57" name="Chunin" val="214058"/>
+            <x niveau="58" name="Chunin" val="231272"/>
+            <x niveau="59" name="Chunin" val="249798"/>
+            <x niveau="60" name="Chunin" val="269732"/>
+            <x niveau="61" name="Chunin" val="291182"/>
+            <x niveau="62" name="Chunin" val="314261"/>
+            <x niveau="63" name="Chunin" val="339091"/>
+            <x niveau="64" name="Chunin" val="365802"/>
+            <x niveau="65" name="Chunin" val="394537"/>
+            <x niveau="66" name="Chunin" val="425448"/>
+            <x niveau="67" name="Chunin" val="458696"/>
+            <x niveau="68" name="Chunin" val="494459"/>
+            <x niveau="69" name="Chunin" val="532923"/>
+            <x niveau="70" name="Jōnin" val="574292"/>
+            <x niveau="71" name="Jōnin" val="618784"/>
+            <x niveau="72" name="Jōnin" val="666633"/>
+            <x niveau="73" name="Jōnin" val="718090"/>
+            <x niveau="74" name="Jōnin" val="773427"/>
+            <x niveau="75" name="Jōnin" val="832934"/>
+            <x niveau="76" name="Jōnin" val="896924"/>
+            <x niveau="77" name="Jōnin" val="965734"/>
+            <x niveau="78" name="Jōnin" val="1039724"/>
+            <x niveau="79" name="Jōnin" val="1119283"/>
+            <x niveau="80" name="Jōnin" val="1204829"/>
+            <x niveau="81" name="Jōnin" val="1296811"/>
+            <x niveau="82" name="Jōnin" val="1395712"/>
+            <x niveau="83" name="Jōnin" val="1502051"/>
+            <x niveau="84" name="Jōnin" val="1616384"/>
+            <x niveau="85" name="Jōnin" val="1739313"/>
+            <x niveau="86" name="Jōnin" val="1871482"/>
+            <x niveau="87" name="Jōnin" val="2013583"/>
+            <x niveau="88" name="Jōnin" val="2166362"/>
+            <x niveau="89" name="Jōnin" val="2330619"/>
+            <x niveau="90" name="Sannin" val="2507215"/>
+            <x niveau="91" name="Sannin" val="2697076"/>
+            <x niveau="92" name="Sannin" val="2901197"/>
+            <x niveau="93" name="Sannin" val="3120647"/>
+            <x niveau="94" name="Sannin" val="3356575"/>
+            <x niveau="95" name="Sannin" val="3610219"/>
+            <x niveau="96" name="Sannin" val="3882905"/>
+            <x niveau="97" name="Sannin" val="4176063"/>
+            <x niveau="98" name="Sannin" val="4491227"/>
+            <x niveau="99" name="Sannin" val="4830050"/>
+            <x niveau="100" name="Sannin" val="5194303"/>
             <x niveau="101" name="Kage" val="999999999" />
         </experience>
-		<grade>
-			<x name=""/>
-			<x name="Shodan"/>
-			<x name="Nidan"/>
-			<x name="Sandan"/>
-			<x name="Yondan"/>
-			<x name="Godan"/>
-			<x name="Rokkudan"/>
-			<x name="Nanadan"/>
-			<x name="Hachidan"/>
-			<x name="Kyudan"/>
-			<x name="Judan"/>
-			<x name="Chigyo Happo Hiken"/>
-			<x name="Suigyo Happo Hiken"/>
-			<x name="Kagyo Happo Hiken"/>
-			<x name="Fugyo Happo Hiken"/>
-			<x name="Kugyo Happo Hiken"/>
-		</grade>
+        <grade>
+            <x name=""/>
+            <x name="Shodan"/>
+            <x name="Nidan"/>
+            <x name="Sandan"/>
+            <x name="Yondan"/>
+            <x name="Godan"/>
+            <x name="Rokkudan"/>
+            <x name="Nanadan"/>
+            <x name="Hachidan"/>
+            <x name="Kyudan"/>
+            <x name="Judan"/>
+            <x name="Chigyo Happo Hiken"/>
+            <x name="Suigyo Happo Hiken"/>
+            <x name="Kagyo Happo Hiken"/>
+            <x name="Fugyo Happo Hiken"/>
+            <x name="Kugyo Happo Hiken"/>
+        </grade>
         <capacite>
             <force>
                 <x niveau="0" val="7a0" />
@@ -225,7 +225,7 @@
                 <x niveau="30" chakra="0" last="0a0" />
                 <x niveau="100" chakra="0" last="0a0" />
             </marcherMur>
-			<acierRenforce niveau="20" limit="">
+            <acierRenforce niveau="20" limit="">
                 <x niveau="0" degat="0a2" last="5a0" chakra="30"  />
                 <x niveau="1" degat="0a05" last="3a0" chakra="15" />
                 <x niveau="4" degat="0a03" last="2a0" chakra="10" />
@@ -234,7 +234,7 @@
                 <x niveau="16" degat="0a005" last="0a5" chakra="2" />
                 <x niveau="30" degat="0a001" last="0a2" chakra="1" />
                 <x niveau="100" degat="0" last="0a0" chakra="0" />
-			</acierRenforce>
+            </acierRenforce>
             <deflagrationElementaire niveau="25" limit="">
                 <x niveau="0" degat="35" rayon="15a0" chakra="38" />
                 <x niveau="1" degat="7" rayon="3a0" chakra="10" />
@@ -244,7 +244,7 @@
                 <x niveau="30" degat="0" rayon="0a1" chakra="0" />
                 <x niveau="100" degat="0" rayon="0a0" chakra="0" />
             </deflagrationElementaire>
-			<chakraVie niveau="30" limit="">
+            <chakraVie niveau="30" limit="">
                 <x niveau="0" last="5a0" chakra="10"  />
                 <x niveau="1" last="3a0" chakra="7" />
                 <x niveau="4" last="2a0" chakra="5" />
@@ -253,7 +253,7 @@
                 <x niveau="16" last="0a5" chakra="1" />
                 <x niveau="30" last="0a2" chakra="0" />
                 <x niveau="100" last="0a0" chakra="0" />
-			</chakraVie>
+            </chakraVie>
             <resistanceExplosion niveau="20" limit="355">
                 <x niveau="0" reduction="0a1" last="5a0"  />
                 <x niveau="1" reduction="0a02" last="3a0" />
@@ -285,14 +285,14 @@
                 <x niveau="100" last="0a0" />
             </changerObjet>
             <multishoot niveau="20" limit="358">
-				<x niveau="0" speed="0a04" last="5a0" chakra="30"/>
-				<x niveau="1" speed="0a02" last="3a0" chakra="15"/>
-				<x niveau="4" speed="0a015" last="2a0" chakra="10"/>
-				<x niveau="8" speed="0a01" last="1a5" chakra="7"/>
-				<x niveau="12" speed="0a005" last="1a0" chakra="3"/>
-				<x niveau="16" speed="0a0025" last="0a5" chakra="2"/>
-				<x niveau="30" speed="0a0" last="0a1" chakra="1"/>
-				<x niveau="100" speed="0a0" last="0a0" chakra="0"/>
+                <x niveau="0" speed="0a04" last="5a0" chakra="30"/>
+                <x niveau="1" speed="0a02" last="3a0" chakra="15"/>
+                <x niveau="4" speed="0a015" last="2a0" chakra="10"/>
+                <x niveau="8" speed="0a01" last="1a5" chakra="7"/>
+                <x niveau="12" speed="0a005" last="1a0" chakra="3"/>
+                <x niveau="16" speed="0a0025" last="0a5" chakra="2"/>
+                <x niveau="30" speed="0a0" last="0a1" chakra="1"/>
+                <x niveau="100" speed="0a0" last="0a0" chakra="0"/>
             </multishoot>
             <invisibleman niveau="20" limit="359">
                 <x niveau="0" opacity="25a0" last="5a0"  />
@@ -335,13 +335,13 @@
                 <x niveau="100" degat="0" largeur="0a0" longueur="0a0" distance="0a0" chakra="0" />
             </pieux>
             <teleportation niveau="45" limit="358">
-				<x niveau="0" chakra="70" distance="15a0" vie="15"/>
-				<x niveau="1" chakra="10" distance="5a0" vie="2"/>
-				<x niveau="8" chakra="7" distance="3a0" vie="1"/>
-				<x niveau="12" chakra="3" distance="2a0" vie="1"/>
-				<x niveau="16" chakra="1" distance="1a5" vie="1"/>
-				<x niveau="30" chakra="0" distance="1a0" vie="1"/>
-				<x niveau="100" chakra="0" distance="0a0" vie="0"/>
+                <x niveau="0" chakra="70" distance="40a0" vie="15"/>
+                <x niveau="1" chakra="10" distance="9a0" vie="2"/>
+                <x niveau="8" chakra="7" distance="7a0" vie="1"/>
+                <x niveau="12" chakra="3" distance="5a0" vie="1"/>
+                <x niveau="16" chakra="1" distance="3a0" vie="1"/>
+                <x niveau="30" chakra="0" distance="2a0" vie="1"/>
+                <x niveau="100" chakra="0" distance="0a0" vie="0"/>
             </teleportation>
             <tornade niveau="45" limit="359">
                 <x niveau="0" degat="82" temps="1a0" distance="15a0" chakra="85" />
@@ -353,65 +353,65 @@
                 <x niveau="30" degat="2" temps="0a0" distance="0a2" chakra="2" />
                 <x niveau="100" degat="0" temps="0a0" distance="0a0" chakra="0" />
             </tornade>
-			<kusanagi niveau="50" limit="">
-				<x niveau="0" degat="40" last="0a05" chakra="10"/>
-				<x niveau="1" degat="12" last="0a015" chakra="4"/>
-				<x niveau="4" degat="7" last="0a01" chakra="3"/>
-				<x niveau="8" degat="5" last="0a007" chakra="2"/>
-				<x niveau="12" degat="3" last="0a005" chakra="1"/>
-				<x niveau="16" degat="2" last="0a003" chakra="1"/>
-				<x niveau="30" degat="1" last="0a001" chakra="1"/>
-				<x niveau="100" degat="0" last="0a0" chakra="0"/>
-			</kusanagi>
-			<kamiRaijin niveau="60" limit="358">
-				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
-				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
-				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
-				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
-				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
-				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
-				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
-				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
-			</kamiRaijin>
-			<kamiSarutahiko niveau="60" limit="357">
-				<x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
-				<x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
-				<x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
-				<x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
-				<x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
-				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
-				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
-				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
-			</kamiSarutahiko>
-			<kamiFujin niveau="60" limit="359">
-				<x niveau="0" temps="7a0" rayon="18a0" distance="15a0" chakra="35"/>
-				<x niveau="1" temps="2a0" rayon="3a5" distance="4a0" chakra="11"/>
-				<x niveau="4" temps="2a0" rayon="2a3" distance="3a0" chakra="8"/>
-				<x niveau="8" temps="1a0" rayon="1a6" distance="2a3" chakra="7"/>
-				<x niveau="12" temps="1a0" rayon="0a7" distance="1a0" chakra="4"/>
-				<x niveau="16" temps="0a5" rayon="0a4" distance="0a6" chakra="2"/>
-				<x niveau="30" temps="0a5" rayon="0a2" distance="0a2" chakra="1"/>
-				<x niveau="100" temps="0a0" rayon="0a0" distance="0a0" chakra="0"/>
-			</kamiFujin>
-			<kamiSusanoo niveau="60" limit="356">
-				<x niveau="0" effect="1" rayon="7a0" temps="5a0" distance="15a0" chakra="85" />
-				<x niveau="1" effect="1" rayon="1a5" temps="1a8" distance="3a5" chakra="17" />
-				<x niveau="4" effect="1" rayon="1a0" temps="1a0" distance="2a0" chakra="12" />
-				<x niveau="8" effect="1" rayon="0a5" temps="0a8" distance="1a0" chakra="8" />
-				<x niveau="12" effect="1" rayon="0a3" temps="0a6" distance="0a5" chakra="6" />
-				<x niveau="16" effect="1" rayon="0a1" temps="0a4" distance="0a3" chakra="4" />
-				<x niveau="30" effect="1" rayon="0a0" temps="0a2" distance="0a2" chakra="2" />
-				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0" />
-			</kamiSusanoo>
-			<kamiKagutsuchi niveau="60" limit="355">
-				<x niveau="0" effect="0a4" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
-				<x niveau="1" effect="0a2" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
-				<x niveau="4" effect="0a1" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
-				<x niveau="8" effect="0a05" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
-				<x niveau="12" effect="0a02" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
-				<x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
-				<x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
-				<x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
-			</kamiKagutsuchi>
+            <kusanagi niveau="50" limit="">
+                <x niveau="0" degat="40" last="0a05" chakra="10"/>
+                <x niveau="1" degat="12" last="0a015" chakra="4"/>
+                <x niveau="4" degat="7" last="0a01" chakra="3"/>
+                <x niveau="8" degat="5" last="0a007" chakra="2"/>
+                <x niveau="12" degat="3" last="0a005" chakra="1"/>
+                <x niveau="16" degat="2" last="0a003" chakra="1"/>
+                <x niveau="30" degat="1" last="0a001" chakra="1"/>
+                <x niveau="100" degat="0" last="0a0" chakra="0"/>
+            </kusanagi>
+            <kamiRaijin niveau="60" limit="358">
+                <x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
+                <x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
+                <x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
+                <x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
+                <x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
+                <x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
+                <x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
+                <x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
+            </kamiRaijin>
+            <kamiSarutahiko niveau="60" limit="357">
+                <x niveau="0" effect="0a3" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
+                <x niveau="1" effect="0a1" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
+                <x niveau="4" effect="0a05" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
+                <x niveau="8" effect="0a01" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
+                <x niveau="12" effect="0a01" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
+                <x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
+                <x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
+                <x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
+            </kamiSarutahiko>
+            <kamiFujin niveau="60" limit="359">
+                <x niveau="0" temps="7a0" rayon="18a0" distance="15a0" chakra="35"/>
+                <x niveau="1" temps="2a0" rayon="3a5" distance="4a0" chakra="11"/>
+                <x niveau="4" temps="2a0" rayon="2a3" distance="3a0" chakra="8"/>
+                <x niveau="8" temps="1a0" rayon="1a6" distance="2a3" chakra="7"/>
+                <x niveau="12" temps="1a0" rayon="0a7" distance="1a0" chakra="4"/>
+                <x niveau="16" temps="0a5" rayon="0a4" distance="0a6" chakra="2"/>
+                <x niveau="30" temps="0a5" rayon="0a2" distance="0a2" chakra="1"/>
+                <x niveau="100" temps="0a0" rayon="0a0" distance="0a0" chakra="0"/>
+            </kamiFujin>
+            <kamiSusanoo niveau="60" limit="356">
+                <x niveau="0" effect="1" rayon="7a0" temps="5a0" distance="15a0" chakra="85" />
+                <x niveau="1" effect="1" rayon="1a5" temps="1a8" distance="3a5" chakra="17" />
+                <x niveau="4" effect="1" rayon="1a0" temps="1a0" distance="2a0" chakra="12" />
+                <x niveau="8" effect="1" rayon="0a5" temps="0a8" distance="1a0" chakra="8" />
+                <x niveau="12" effect="1" rayon="0a3" temps="0a6" distance="0a5" chakra="6" />
+                <x niveau="16" effect="1" rayon="0a1" temps="0a4" distance="0a3" chakra="4" />
+                <x niveau="30" effect="1" rayon="0a0" temps="0a2" distance="0a2" chakra="2" />
+                <x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0" />
+            </kamiSusanoo>
+            <kamiKagutsuchi niveau="60" limit="355">
+                <x niveau="0" effect="0a4" rayon="15a0" temps="7a0" distance="15a0" chakra="40"/>
+                <x niveau="1" effect="0a2" rayon="3a0" temps="2a0" distance="3a5" chakra="12"/>
+                <x niveau="4" effect="0a1" rayon="2a0" temps="2a0" distance="2a0" chakra="9"/>
+                <x niveau="8" effect="0a05" rayon="1a5" temps="1a0" distance="1a0" chakra="7"/>
+                <x niveau="12" effect="0a02" rayon="0a5" temps="1a0" distance="0a5" chakra="4"/>
+                <x niveau="16" effect="0a01" rayon="0a2" temps="0a5" distance="0a3" chakra="2"/>
+                <x niveau="30" effect="0a01" rayon="0a1" temps="0a5" distance="0a2" chakra="1"/>
+                <x niveau="100" effect="0" rayon="0a0" temps="0a0" distance="0a0" chakra="0"/>
+            </kamiKagutsuchi>
         </aptitude>
     </game>
