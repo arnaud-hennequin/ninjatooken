@@ -265,13 +265,13 @@
                 <x niveau="100" reduction="0a0" last="0a0" />
             </resistanceExplosion>
             <transformationAqueuse niveau="20" limit="356">
-                <x niveau="0" reduction="0a1" last="5a0"  />
-                <x niveau="1" reduction="0a02" last="3a0" />
-                <x niveau="4" reduction="0a01" last="2a0" />
-                <x niveau="8" reduction="0a007" last="1a5" />
-                <x niveau="12" reduction="0a006" last="1a0" />
-                <x niveau="16" reduction="0a005" last="0a5" />
-                <x niveau="30" reduction="0a004" last="0a1" />
+                <x niveau="0" reduction="0a05" last="5a0"  />
+                <x niveau="1" reduction="0a01" last="3a0" />
+                <x niveau="4" reduction="0a007" last="2a0" />
+                <x niveau="8" reduction="0a005" last="1a5" />
+                <x niveau="12" reduction="0a004" last="1a0" />
+                <x niveau="16" reduction="0a003" last="0a5" />
+                <x niveau="30" reduction="0a002" last="0a1" />
                 <x niveau="100" reduction="0a0" last="0a0" />
             </transformationAqueuse>
             <changerObjet niveau="20" limit="357">
