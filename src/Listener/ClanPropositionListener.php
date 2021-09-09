@@ -37,30 +37,4 @@ class ClanPropositionListener
             }
         }
     }
-
-    // averti de l'annulation d'une proposition
-    public function postRemove(LifecycleEventArgs $args)
-    {
-        $entity = $args->getEntity();
-        if ($entity instanceof ClanProposition)
-        {
-            if($entity!==null && $entity->getEtat() == 0)
-            {
-                $em = $args->getEntityManager();
-
-                $message = new Message();
-                $message->setAuthor($entity->getRecruteur());
-                $message->setNom($this->translator->trans('mail.recrutement.nouveau.sujet'));
-                $message->setContent($this->translator->trans('description.recrutement.propositionRemove'));
-
-                $messageuser = new MessageUser();
-                $messageuser->setDestinataire($entity->getPostulant());
-                $message->addReceiver($messageuser);
-
-                $em->persist($messageuser);
-                $em->persist($message);
-                $em->flush();
-            }
-        }
-    }
 }
