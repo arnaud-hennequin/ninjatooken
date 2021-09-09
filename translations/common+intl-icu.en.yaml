@@ -1,6 +1,6 @@
 newsletter:
     subject: "NinjaTooken is back {username}"
-    body: |
+    html: |
         Hi {username},<br><br>
         NinjaTooken is back since almost two months now!<br>
         Your humble servant did his best to make the game funier than ever:<br>

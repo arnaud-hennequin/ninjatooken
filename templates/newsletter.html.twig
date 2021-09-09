@@ -1,3 +1,5 @@
 {% extends 'mail.html.twig' %}
 
-{% block content %}{{ message|raw|purify('full') }}{% endblock %}
+{% block content %}
+    {{ 'newsletter.html'|trans({'username':username, 'autologin':autologin}, 'common')|raw|purify('full') }}
+{% endblock %}

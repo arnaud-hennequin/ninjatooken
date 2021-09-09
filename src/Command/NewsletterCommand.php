@@ -46,12 +46,12 @@ class NewsletterCommand extends Command
         $this
             ->setName('newsletter:send')
             ->setDescription('Envoi de la newsletter')
-			->addOption(
-				'all',
-				null,
-				InputOption::VALUE_NONE,
-				'Envoi à tous les inscrits ?'
-			)
+            ->addOption(
+                'all',
+                null,
+                InputOption::VALUE_NONE,
+                'Envoi à tous les inscrits ?'
+            )
         ;
     }
 
@@ -62,10 +62,10 @@ class NewsletterCommand extends Command
         $io->writeln('---start');
 
         // boucle sur les différents utilisateurs
-		$restrict = " old_id=641 AND";
-
-		if ($input->getOption('all')) {
-			$restrict = "";
+        if ($input->getOption('all')) {
+            $restrict = "";
+        } else {
+            $restrict = " old_id=641 AND";
         }
 
         $request = 'SELECT id, username, email, auto_login, locale FROM nt_user WHERE'.$restrict.' enabled=1 AND locked=0 ORDER BY id ASC LIMIT ';
@@ -85,10 +85,11 @@ class NewsletterCommand extends Command
 
                     $username = $user['username'];
                     $email = $user['email'];
-                    $locale = $user['locale'];
 
-                    if (empty($locale)) {
+                    if (empty($user['locale'])) {
                         $locale = 'fr';
+                    } else {
+                        $locale = $user['locale'];
                     }
 
                     if (empty($user['auto_login'])) {
@@ -106,11 +107,11 @@ class NewsletterCommand extends Command
                         ->to($email)
                         ->subject($this->translator->trans('newsletter.subject', ['%username%' => $username], 'common'))
                         ->htmlTemplate('newsletter.html.twig')
-                        ->text($this->translator->trans('newsletter.text', ['%username%' => $username, '%autologin%' => $auto_login], 'common'))
+                        ->textTemplate('newsletter.text.twig')
                         ->context([
                             'mail' => $email,
                             'username' => $username,
-                            'message' => $this->translator->trans('newsletter.body', ['%username%' => $username, '%autologin%' => $auto_login], 'common'),
+                            'autologin' => $auto_login,
                             '_locale' => $locale
                         ])
                     ;
