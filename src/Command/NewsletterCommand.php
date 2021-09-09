@@ -116,7 +116,7 @@ class NewsletterCommand extends Command
 
                     $this->mailer->send($templateEmail);
 
-                    $io->writeln($i." ".$username.' ('.$email.')'.$auto_login);
+                    $io->writeln($i." ".$username.' ('.$email.')');
 
                     $this->logger->info($username.' ('.$email.')');
 

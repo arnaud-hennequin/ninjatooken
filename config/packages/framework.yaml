@@ -11,11 +11,15 @@ framework:
         cookie_samesite: 'lax'
         cookie_secure: auto
         cookie_domain: ".%base_host%"
+        storage_factory_id: session.storage.factory.native
 
     #esi: true
     #fragments: true
     php_errors:
         log: true
+
+    router:
+        utf8: true
 
     translator:      { fallback: "%locale%" }
     form:            ~
