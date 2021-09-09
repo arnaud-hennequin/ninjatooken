@@ -28,10 +28,15 @@ class NewsletterCommand extends Command
     {
         $this->translator = $translator;
         $this->mailer = $mailer;
-        $this->from = new Address($params->get('mail_contact'), $params->get('mail_name'));
         $this->logger = $logger;
         $this->router = $router;
         $this->em = $em;
+
+        $this->from = new Address($params->get('mail_contact'), $params->get('mail_name'));
+
+        $context = $this->router->getContext();
+        $context->setHost($params->get('base_host'));
+        $context->setScheme('http');
 
         parent::__construct();
     }
@@ -111,7 +116,7 @@ class NewsletterCommand extends Command
 
                     $this->mailer->send($templateEmail);
 
-                    $io->writeln($i." ".$username.' ('.$email.')');
+                    $io->writeln($i." ".$username.' ('.$email.')'.$auto_login);
 
                     $this->logger->info($username.' ('.$email.')');
 
