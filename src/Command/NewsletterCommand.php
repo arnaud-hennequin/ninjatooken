@@ -106,6 +106,7 @@ class NewsletterCommand extends Command
                         ->to($email)
                         ->subject($this->translator->trans('newsletter.subject', ['%username%' => $username], 'common'))
                         ->htmlTemplate('newsletter.html.twig')
+                        ->text($this->translator->trans('newsletter.text', ['%username%' => $username, '%autologin%' => $auto_login], 'common'))
                         ->context([
                             'mail' => $email,
                             'username' => $username,

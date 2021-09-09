@@ -1,10 +1,10 @@
 newsletter:
-    subject: "NinjaTooken, it's back {username} !"
+    subject: "NinjaTooken is back {username}"
     body: |
-        Hi {username}, <br> <br>
-        NinjaTooken is back since almost two months now! <br>
-        Your humble servant did his best to make the game funier than ever: <br>
-        &bull; network delay removed... a hit is a hit!<br>
+        Hi {username},<br><br>
+        NinjaTooken is back since almost two months now!<br>
+        Your humble servant did his best to make the game funier than ever:<br>
+        &bull; network delay removed... a hit is a hit,<br>
         &bull; "walk on water" is available to everyone, and Suitons have a brand new jutsu: "aqueous transformation",<br>
         &bull; redesign of the game interface, for a greater experience on big screen,<br>
         &bull; correction of bugs, for more stability,<br>
@@ -12,7 +12,24 @@ newsletter:
         &bull; and obviously the update to the latest version of the game engine.<br><br>
         Everything is hosted on a brand new dedicated server.<br><br>
         To play now and discover all those improvements, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style = "color: blue;">log in here</span></a> and then download the game (available on windows and macOS).<br>
-        And don't forget to reset your password !
+        And don't forget to reset your password.
+    text: |
+        Hi {username},
+
+        NinjaTooken is back since almost two months now!
+        Your humble servant did his best to make the game funier than ever:
+        - network delay removed... a hit is a hit,
+        - "walk on water" is available to everyone, and Suitons have a brand new jutsu: "aqueous transformation",
+        - redesign of the game interface, for a greater experience on big screen,
+        - correction of bugs, for more stability,
+        - reduced chakra costs and performance of some jutsus, for more balance in the game,
+        - and obviously the update to the latest version of the game engine.
+
+        Everything is hosted on a brand new dedicated server.
+
+        To play now and discover all those improvements, log in here {autologin} and then download the game (available on windows and macOS).
+
+        And don't forget to reset your password.
 popup:
     delete: Are you sure?
     confirm: Confirm

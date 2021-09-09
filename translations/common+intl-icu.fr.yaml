@@ -1,10 +1,10 @@
 newsletter:
-    subject: "NinjaTooken, c'est re-là {username} !"
+    subject: "NinjaTooken est de retour {username}"
     body: |
         Salut {username},<br><br>
-        NinjaTooken est de retour depuis maintenant presque deux mois !<br>
+        NinjaTooken est de retour depuis maintenant presque deux mois.<br><br>
         Ton humble serviteur a fait son possible pour rendre le jeu plus fun que jamais :<br>
-        &bull; suppression du décalage... quand on touche on touche !<br>
+        &bull; suppression du décalage... quand on touche on touche,<br>
         &bull; "marcher sur l'eau" est disponible pour tous, et les Suitons profitent d'un nouveau jutsu : "transformation aqueuse",<br>
         &bull; refonte de l'interface de jeu, pour un plaisir retrouvé sur grand écran,<br>
         &bull; correction de bugs en pagailles, pour plus de stabilité,<br>
@@ -12,7 +12,25 @@ newsletter:
         &bull; et évidemment la mise à jour sur la dernière version du moteur de jeu.<br><br>
         Le tout est hébergé sur un tout nouveau serveur dédié.<br><br>
         Pour rejouer dès maintenant au jeu, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">connecte-toi ici</span></a> puis télécharge le jeu (disponible sous windows et macOS).
-        Et n'oublies pas de réinitialiser ton mot de passe !
+        Et n'oublies pas de réinitialiser ton mot de passe.
+    text: |
+        Salut {username},
+
+        NinjaTooken est de retour depuis maintenant presque deux mois.
+
+        Ton humble serviteur a fait son possible pour rendre le jeu plus fun que jamais :
+        - suppression du décalage... quand on touche on touche,
+        - "marcher sur l'eau" est disponible pour tous, et les Suitons profitent d'un nouveau jutsu : "transformation aqueuse",
+        - refonte de l'interface de jeu, pour un plaisir retrouvé sur grand écran,
+        - correction de bugs en pagailles, pour plus de stabilité,
+        - coûts en chakra et performances de certains jutsus diminués, pour plus d'équilibre en jeu,
+        - et évidemment la mise à jour sur la dernière version du moteur de jeu.
+
+        Le tout est hébergé sur un tout nouveau serveur dédié.
+
+        Pour rejouer dès maintenant au jeu, connecte-toi ici {autologin} puis télécharge le jeu (disponible sous windows et macOS).
+
+        Et n'oublies pas de réinitialiser ton mot de passe.
 popup:
     delete: "Cette action est irréversible : es-tu sûr ?"
     confirm: Confirmer
