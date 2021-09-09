@@ -1,15 +1,18 @@
 newsletter:
-    newsite: |
+    subject: "NinjaTooken, c'est re-là {username} !"
+    body: |
         Salut {username},<br><br>
-        NinjaTooken vient de faire un grand pas dans son histoire, avec la nouvelle version de son site !<br>
-        Sur cette merveille toute neuve, tu trouveras, entre autres :<br>
-        &bull; un nouveau système de gestion des clans avec plus d'options d'affichage et des supers grades,<br>
-        &bull; un calculateur de jutsu pour mieux connaître tes pouvoirs, l'impact de tes attaques et apprendre à mieux maîtriser ton ninja,<br>
-        &bull; la possibilité d'avoir jusqu'à 5 pseudos différents,<br>
-        &bull; un affichage amélioré de l'intégralité des pages pour un confort de visionnage optimal sur pc mais aussi tablette et smartphone, et bien plus encore !<br>
-        Et pour toujours plus de performances, le tout est hébergé sur un serveur dédié.<br><br>
-        Côté jeu, on a entièrement repensé la physique, et tu seras peut-être content d'apprendre que tous les ninjas peuvent à nouveau sauter sur l'eau. Il y a aussi plein d'optimisations en réseau.<br><br>
-        Pour profiter dès maintenant de toutes ces améliorations, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">suis ce lien personnel</span></a> pour te connecter directement sur ton compte.
+        NinjaTooken est de retour depuis maintenant presque deux mois !<br>
+        Ton humble serviteur a fait son possible pour rendre le jeu plus fun que jamais :<br>
+        &bull; suppression du décalage... quand on touche on touche !<br>
+        &bull; "marcher sur l'eau" est disponible pour tous, et les Suitons profitent d'un nouveau jutsu : "transformation aqueuse",<br>
+        &bull; refonte de l'interface de jeu, pour un plaisir retrouvé sur grand écran,<br>
+        &bull; correction de bugs en pagailles, pour plus de stabilité,<br>
+        &bull; coûts en chakra et performances de certains jutsus diminués, pour plus d'équilibre en jeu,<br>
+        &bull; et évidemment la mise à jour sur la dernière version du moteur de jeu.<br><br>
+        Le tout est hébergé sur un tout nouveau serveur dédié.<br><br>
+        Pour rejouer dès maintenant au jeu, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">connecte-toi ici</span></a> puis télécharge le jeu (disponible sous windows et macOS).
+        Et n'oublies pas de réinitialiser ton mot de passe !
 popup:
     delete: "Cette action est irréversible : es-tu sûr ?"
     confirm: Confirmer

@@ -1,16 +1,18 @@
 newsletter:
-    newsite: |
-        Hi {username},<br><br>
-        Ninja Tooken just made the one giant leap of its history and is happy to announce the new version of its website!<br>
-        In this brand new gem, you'll find, amongst other wicked things :<br> 
-        &bull; a new clan management system with more display features and a cool ranking system,<br>
-        &bull; a jutsu calculator that will give you more info on your powers, the impact of your raids and will help you master your ninja's skills,<br>
-        &bull; the chance to own 5 different logins,<br>
-        &bull; an improved display : wether you want to visit us on your pc, tablet or smartphone, the whole website will adjust to your device !<br>
-        Also, just so you can benefit from an even better performance, we decided to host the website on a dedicated server.<br><br>
-        Now, don't think we forgot the gameplay : you'll find completely redesigned physics too, and maybe you'll be happy to know that every ninja can jump on water again. We hope you'll notice the many optimizations on network games.
-        <br><br>
-        To play now and discover all these improvements, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style="color:blue;">follow this personal link</span></a> that will log you directly to your account.
+    subject: "NinjaTooken, it's back {username} !"
+    body: |
+        Hi {username}, <br> <br>
+        NinjaTooken is back since almost two months now! <br>
+        Your humble servant did his best to make the game funier than ever: <br>
+        &bull; network delay removed... a hit is a hit!<br>
+        &bull; "walk on water" is available to everyone, and Suitons have a brand new jutsu: "aqueous transformation",<br>
+        &bull; redesign of the game interface, for a greater experience on big screen,<br>
+        &bull; correction of bugs, for more stability,<br>
+        &bull; reduced chakra costs and performance of some jutsus, for more balance in the game,<br>
+        &bull; and obviously the update to the latest version of the game engine.<br><br>
+        Everything is hosted on a brand new dedicated server.<br><br>
+        To play now and discover all those improvements, <a href="{autologin}" target="_blank" style="color:blue; text-decoration: none;"><span style = "color: blue;">log in here</span></a> and then download the game (available on windows and macOS).<br>
+        And don't forget to reset your password !
 popup:
     delete: Are you sure?
     confirm: Confirm

@@ -1,17 +1,42 @@
 <?php
 namespace App\Command;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mime\Address;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
-class NewsletterCommand extends ContainerAwareCommand
+class NewsletterCommand extends Command
 {
-    protected function configure()
+    private $translator;
+    private $mailer;
+    private $from;
+    private $logger;
+    private $router;
+    private $em;
+
+    public function __construct(TranslatorInterface $translator, MailerInterface $mailer, ParameterBagInterface $params, LoggerInterface $logger, UrlGeneratorInterface $router, EntityManagerInterface $em)
+    {
+        $this->translator = $translator;
+        $this->mailer = $mailer;
+        $this->from = new Address($params->get('mail_contact'), $params->get('mail_name'));
+        $this->logger = $logger;
+        $this->router = $router;
+        $this->em = $em;
+
+        parent::__construct();
+    }
+
+    protected function configure(): void
     {
         $this
             ->setName('newsletter:send')
@@ -25,83 +50,90 @@ class NewsletterCommand extends ContainerAwareCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $container = $this->getContainer();
-        $session = $container->get('session');
-        $template = $container->get('twig')->loadTemplate('::newsletter.html.twig');
-        $translator = $container->get('translator');
-        $route = $container->get('router');
-        $em = $container->get('doctrine')->getManager();
-        $mailer = $container->get('mailer');
+        $io = new SymfonyStyle($input, $output);
 
-        $from = array($container->getParameter('mail_contact') => $container->getParameter('mail_name'));
-
-        $output->writeln('---start');
+        $io->writeln('---start');
 
         // boucle sur les différents utilisateurs
 		$restrict = " old_id=641 AND";
-		if ($input->getOption('all'))
-			$restrict = "";
 
-        $request = 'SELECT id, username, email, auto_login, locale FROM nt_user WHERE'.$restrict.' enabled=1 AND locked=0 AND receive_newsletter=1 AND confirmation_token IS NULL ORDER BY id ASC LIMIT ';
+		if ($input->getOption('all')) {
+			$restrict = "";
+        }
+
+        $request = 'SELECT id, username, email, auto_login, locale FROM nt_user WHERE'.$restrict.' enabled=1 AND locked=0 ORDER BY id ASC LIMIT ';
         $start = 0;
         $num = 100;
         $i = 1;
-        $stmt = $em->getConnection()->prepare($request.$start.','.$num);
+
+        $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
         $stmt->execute();
         $users = $stmt->fetchAll();
-        while(count($users)>0){
-            foreach($users as $user){
-                $username = $user['username'];
-                $email = $user['email'];
-                $locale = $user['locale'];
-                if(empty($locale))
-                    $locale = 'fr';
-                $auto_login = $user['auto_login'];
-                if(empty($auto_login))
-                    $auto_login = null;
 
-                // construit le contenu
-                $translator->setLocale($locale);
-                $body = $template->render(array(
-                    'mail' => $email,
-                    'username' => $username,
-                    'message' => $translator->trans('newsletter.newsite', array(
-                        '%username%' => $username,
-                        '%autologin%' => $auto_login?$route->generate('ninja_tooken_user_autologin', array(
-                            'autologin' => $auto_login,
+        while (count($users)>0) {
+
+            foreach ($users as $user) {
+
+                try {
+
+                    $username = $user['username'];
+                    $email = $user['email'];
+                    $locale = $user['locale'];
+
+                    if (empty($locale)) {
+                        $locale = 'fr';
+                    }
+
+                    if (empty($user['auto_login'])) {
+                        $auto_login = $this->router->generate('ninja_tooken_homepage', ['_locale' => $locale], UrlGeneratorInterface::ABSOLUTE_URL);
+                    } else {
+                        $auto_login = $this->router->generate('ninja_tooken_user_autologin', ['autologin' => $user['auto_login'], '_locale' => $locale], UrlGeneratorInterface::ABSOLUTE_URL);
+                    }
+
+                    // construit le contenu
+                    $this->translator->setLocale($locale);
+
+                    // envoi les messages
+                    $templateEmail = (new TemplatedEmail())
+                        ->from($this->from)
+                        ->to($email)
+                        ->subject($this->translator->trans('newsletter.subject', ['%username%' => $username], 'common'))
+                        ->htmlTemplate('newsletter.html.twig')
+                        ->context([
+                            'mail' => $email,
+                            'username' => $username,
+                            'message' => $this->translator->trans('newsletter.body', ['%username%' => $username, '%autologin%' => $auto_login], 'common'),
                             '_locale' => $locale
-                        ), UrlGeneratorInterface::ABSOLUTE_URL):$route->generate('ninja_tooken_homepage', array(
-                            '_locale' => $locale
-                        ), UrlGeneratorInterface::ABSOLUTE_URL)
-                    ), 'common'),
-                    'locale' => $locale
-                ));
+                        ])
+                    ;
 
-                // envoi les messages
-                $message = (new \Swift_Message('[Ninjatooken] nouveau message de la part de '.$username))
-                    ->setFrom($from)
-                    ->setTo($email)
-                    ->setContentType("text/html")
-                    ->setBody($body);
-                $mailer->send($message);
+                    $this->mailer->send($templateEmail);
 
-                $output->writeln($i." ".$username.' ('.$email.')');
+                    $io->writeln($i." ".$username.' ('.$email.')');
+
+                    $this->logger->info($username.' ('.$email.')');
+
+                } catch (\Exception $e) {
+
+                    $io->writeln("<error>".$i." ".$username.' ('.$email.')</error>');
+                    $this->logger->error($username.' ('.$email.') '.$e->getMessage());
+
+                }
+
                 $i++;
             }
-            $start += $num;
 
-            // en cas de "spool", vide la queue
-            // http://symfony.com/fr/doc/master/cookbook/email/spool.html
-            /*$spool = $mailer->getTransport()->getSpool();
-            $transport = $container->get('swiftmailer.transport.real');
-            $spool->flushQueue($transport);*/
+            $start += $num;
             
-            $stmt = $em->getConnection()->prepare($request.$start.','.$num);
+            $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
             $stmt->execute();
             $users = $stmt->fetchAll();
         }
-        $output->writeln('---end');
+
+        $io->writeln('---end');
+
+        return Command::SUCCESS;
     }
 }
