@@ -64,7 +64,9 @@
 
 Discover a world where ninjas are merciless. Suiton, Futon, Raiton, Doton, Katon... Each class have their specific powers, so choose yours carefully!
 
-Create your account to save your experience, join a clan, or participate in tournaments. 
+Create your account to save your experience, join a clan, or participate in tournaments.
+
+Source code of the game (made with Unity 3D) is kept at https://gitlab.com/arnaud-hennequin/ninjatooken
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -72,14 +74,20 @@ Create your account to save your experience, join a clan, or participate in tour
 
 ### Built With
 
-* [Symfony](https://symfony.com/)
+* [Symfony 5.3](https://symfony.com/)
 * [Sonata Project](https://sonata-project.org/)
+* [LiipImagineBundle](https://github.com/liip/LiipImagineBundle)
+* [Imgur API](https://api.imgur.com/)
 * [HTMLPurifier](https://github.com/Exercise/HTMLPurifier)
+* [MySQLDump - PHP](https://github.com/ifsnop/mysqldump-php)
+* [Doctrine Behaviors](https://github.com/KnpLabs/DoctrineBehaviors) / Sluggable
 * [Font Awesome](https://fontawesome.com/)
 * [Bootstrap](https://getbootstrap.com)
 * [JQuery](https://jquery.com)
+* [{less}](https://lesscss.org/)
 * [TinyMCE](https://www.tiny.cloud/tinymce/)
 * [MotionCAPTCHA](https://github.com/josscrowcroft/MotionCAPTCHA)
+* [Discord html-embed](https://github.com/widgetbot-io/html-embed)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -96,16 +104,16 @@ You will need at least, a server with PHP / Mysql / Nginx installed.
 ```sh
 sudo apt update
 ```
-* nginx
+* nginx (>= 1.1)
 ```sh
 sudo apt install nginx
 ```
-* mysql
+* mysql (>= 5)
 ```sh
 sudo apt install mysql-server
 sudo mysql_secure_installation
 ```
-* php
+* php (>= 7.3)
 ```sh
 sudo apt install php-fpm php-mysql
 ```
@@ -145,6 +153,18 @@ php bin/console doctrine:schema:update --force
 php bin/console cache:clear
 php bin/console assets:install
  ```
+
+Add **127.0.0.1 ninjatooken.test** in your host file, and access the site via http://ninjatooken.test !
+
+
+Also, please take note that an automatic mysql backup can be tasked:
+ ```sh
+crontab -e
+ ```
+And then paste (every day at 4am):
+```sh
+0 4 * * * php /var/www/ninjatooken/bin/console doctrine:database:backup
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
