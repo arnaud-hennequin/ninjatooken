@@ -114,7 +114,13 @@
 							{% endfor %}
 							<br class="clear">
 							{% endif %}
-							{% if clan.isRecruting and ROLE_CLAN == false %}<a href="{{ path('ninja_tooken_clan_postuler', {'clan_nom': clan.slug}) }}" class="button mini">{{ 'action.postuler'|trans }}</a>{% endif %}<br/><br/>
+							{% if clan.isRecruting and ROLE_CLAN == false %}
+								{% if app.user.dateApplication|date("Ymd") == "today"|date("Ymd") and app.user.numberApplication >= constant('\\App\\Entity\\User\\User::MAX_APPLICATION_BY_DAY') %}
+									<strong class="button mini">{{ 'action.postulerDisabled'|trans }}</strong>
+								{% else %}
+									<a href="{{ path('ninja_tooken_clan_postuler', {'clan_nom': clan.slug}) }}" class="button mini" >{{ 'action.postuler'|trans }}</a>
+								{% endif %}
+							{% endif %}<br/><br/>
 						</section>
 
 						{% include 'common/pubAside.html.twig' %}

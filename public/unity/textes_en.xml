@@ -504,7 +504,12 @@ You can now use ##JUTSUS##. Enabling from "My Ninja" (main menu).]]></t>
 		<t><![CDATA[A castle bordering a waterfall (high définition - 70Mo to download...)]]></t>
 		<t><![CDATA[Hardcore mode : ninjas respawn at 1 life point and/or bonuses don't respawn.]]></t>
 		<t><![CDATA[A new version of the game is available, it's strongly advised to download it]]></t>
-		<t><![CDATA[Be warned, you can't revert this action !!!]]></t><!--468-->
+		<t><![CDATA[Be warned, you can't revert this action !!!]]></t>
+		<t><![CDATA[You can't throw more than 3 makibishis by map.]]></t>
+		<t><![CDATA[In the main menu]]></t>
+		<t><![CDATA[playing solo]]></t>
+		<t><![CDATA[playing network]]></t>
+		<t><![CDATA[I'm playing with granny's pc]]></t><!--473-->
 	</textes>
 	<accomplissements>
 		<ac name="Woyukil lvl 1"><![CDATA[3 ninjas killed in a row]]></ac>

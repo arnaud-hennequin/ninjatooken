@@ -3,20 +3,21 @@
 namespace App\Twig;
 
 use Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Exercise\HTMLPurifierBundle\HTMLPurifiersRegistryInterface;
 
 class HTMLPurifierExtensionNT extends HTMLPurifierExtension
 {
 
-    public $container;
+    public $htmlPurifier;
+
     /**
      * Constructor.
      *
      * @param \HTMLPurifier $purifier
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(HTMLPurifiersRegistryInterface $htmlPurifier)
     {
-        $this->container = $container;
+        $this->htmlPurifier = $htmlPurifier;
     }
 
     /**
@@ -91,7 +92,7 @@ class HTMLPurifierExtensionNT extends HTMLPurifierExtension
     private function getHTMLPurifierForProfile($profile)
     {
         if (!isset($this->purifiers[$profile])) {
-            $purifier = $this->container->get('exercise_html_purifier.' . $profile);
+            $purifier = $this->htmlPurifier->get($profile);
 
             if (!$purifier instanceof \HTMLPurifier) {
                 throw new \RuntimeException(sprintf('Service "exercise_html_purifier.%s" is not an HTMLPurifier instance.', $profile));

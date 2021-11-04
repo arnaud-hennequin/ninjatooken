@@ -35,3 +35,7 @@ spool/*
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+clic.csv
+open.csv
+todo.txt

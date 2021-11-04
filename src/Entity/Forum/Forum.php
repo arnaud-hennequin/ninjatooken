@@ -93,6 +93,11 @@ class Forum implements SluggableInterface
         return ['nom'];
     }
 
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
+    }
+
     public function generateSlugValue($values): string
     {
         $usableValues = [];

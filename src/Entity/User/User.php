@@ -13,6 +13,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 /**
  * @ORM\Table(name="nt_user")
@@ -22,13 +23,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="ninja_tooken_user.username.already_used", groups={"Registration", "Profile"})
  * @UniqueEntity(fields="emailCanonical", errorPath="email", message="ninja_tooken_user.email.already_used", groups={"Registration", "Profile"})
  */
-class User implements UserInterface, SluggableInterface
+class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUserInterface
 {
     use SluggableTrait;
 
     public const GENDER_FEMALE = 'f';
     public const GENDER_MALE = 'm';
     public const GENDER_UNKNOWN = 'u';
+
+    public const MAX_APPLICATION_BY_DAY = 3;
 
     const ROLE_DEFAULT = 'ROLE_USER';
     const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
@@ -273,6 +276,27 @@ class User implements UserInterface, SluggableInterface
     protected $timezone;
 
     /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="date_application", type="datetime", nullable=true)
+     */
+    protected $dateApplication;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="date_message", type="datetime", nullable=true)
+     */
+    protected $dateMessage;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="number_application", type="integer", nullable=true)
+     */
+    protected $numberApplication;
+
+    /**
      * lobby
      *
      * @var Lobby
@@ -291,6 +315,7 @@ class User implements UserInterface, SluggableInterface
         $this->salt = "";
         $this->enabled = false;
         $this->roles = [];
+        $this->numberApplication = 0;
 
         $this->setGender(self::GENDER_MALE);
         $this->oldUsernames = array();
@@ -321,6 +346,11 @@ class User implements UserInterface, SluggableInterface
     public function getSluggableFields(): array
     {
         return ['username'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
     }
 
     public function generateSlugValue($values): string
@@ -441,6 +471,11 @@ class User implements UserInterface, SluggableInterface
         return $this->id;
     }
 
+    public function getUserIdentifier(): ?string
+    {
+        return $this->getUsername();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -490,12 +525,16 @@ class User implements UserInterface, SluggableInterface
         return $this->emailCanonical;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPassword()
+    public function getPassword(): ?string
     {
-        return $this->password;
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
     }
 
     /**
@@ -647,16 +686,6 @@ class User implements UserInterface, SluggableInterface
     public function setEnabled($boolean)
     {
         $this->enabled = (bool) $boolean;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
 
         return $this;
     }
@@ -1524,6 +1553,42 @@ class User implements UserInterface, SluggableInterface
     public function removeLobby(Lobby $lobby): self
     {
         $this->lobbies->removeElement($lobby);
+
+        return $this;
+    }
+
+    public function getDateApplication(): ?\DateTimeInterface
+    {
+        return $this->dateApplication;
+    }
+
+    public function setDateApplication(?\DateTimeInterface $dateApplication): self
+    {
+        $this->dateApplication = $dateApplication;
+
+        return $this;
+    }
+
+    public function getNumberApplication(): ?int
+    {
+        return $this->numberApplication;
+    }
+
+    public function setNumberApplication(?int $numberApplication): self
+    {
+        $this->numberApplication = $numberApplication;
+
+        return $this;
+    }
+
+    public function getDateMessage(): ?\DateTimeInterface
+    {
+        return $this->dateMessage;
+    }
+
+    public function setDateMessage(?\DateTimeInterface $dateMessage): self
+    {
+        $this->dateMessage = $dateMessage;
 
         return $this;
     }

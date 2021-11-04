@@ -19,6 +19,7 @@ action:
     recrutement: Recruitment
     quitter: Quit the clan
     postuler: Apply
+    postulerDisabled: Limit for applying overcome
     destituer: Revoke
     recruter: Recruit
     refuser: Deny

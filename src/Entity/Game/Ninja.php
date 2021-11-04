@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ninja
 {
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
+
     /**
      * @var integer
      *

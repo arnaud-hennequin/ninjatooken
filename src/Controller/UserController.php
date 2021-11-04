@@ -649,12 +649,12 @@ class UserController extends AbstractController
 
             // enlève les évènement sur clan_proposition
             // on évite d'envoyer des messages qui seront supprimés
-            $evm->removeEventListener(array('postRemove'), $clanPropositionListener);
+            $evm->removeEventListener(['postRemove'], $clanPropositionListener);
 
             // enlève les évènement sur thread et comment
             // tout sera remis à plat à la fin
-            $evm->removeEventListener(array('postRemove'), $threadListener);
-            $evm->removeEventListener(array('postRemove'), $commentListener);
+            $evm->removeEventListener(['postRemove'], $threadListener);
+            $evm->removeEventListener(['postRemove'], $commentListener);
 
             // supprime l'utilisateur
             $em->remove($user);
@@ -954,20 +954,14 @@ class UserController extends AbstractController
     }
 
     public function online(User $user) {
+        // vérifie en jeu
         $em = $this->getDoctrine()->getManager();
-        $statement = $em->getConnection()->prepare('SELECT userID FROM ajax_chat_online WHERE userID = :userID AND  dateTime > DATE_SUB(NOW(), INTERVAL 10 MINUTE);');
+        $statement = $em->getConnection()->prepare('SELECT user_id FROM nt_lobby_user WHERE user_id = :userID;');
         $statement->bindValue('userID', $user->getId());
         $statement->execute();
-        if (!$statement->fetch()) {
-            // vérifie en jeu
-            $statement = $em->getConnection()->prepare('SELECT user_id FROM nt_lobby_user WHERE user_id = :userID;');
-            $statement->bindValue('userID', $user->getId());
-            $statement->execute();
-            if ($statement->fetch()) {
-                return new Response("online");
-            }
-            return new Response("offline");
+        if ($statement->fetch()) {
+            return new Response("online");
         }
-        return new Response("online");
+        return new Response("offline");
     }
 }

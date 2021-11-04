@@ -146,6 +146,12 @@ class Clan implements SluggableInterface, \Serializable
      */
     public $file;
 
+
+    /**
+     * @Ignore()
+     */
+    public $delete = false;
+
     /**
      * Constructor
      */
@@ -197,6 +203,11 @@ class Clan implements SluggableInterface, \Serializable
     public function getSluggableFields(): array
     {
         return ['nom'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
     }
 
     public function generateSlugValue($values): string

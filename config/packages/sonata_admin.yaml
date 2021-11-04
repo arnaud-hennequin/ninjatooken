@@ -32,22 +32,14 @@ sonata_admin:
       forum:
         label: Forums
   assets:
-    stylesheets:
-      - bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css
-      - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
-      - bundles/sonatacore/vendor/ionicons/css/ionicons.min.css
-      - bundles/sonataadmin/vendor/admin-lte/dist/css/AdminLTE.min.css
-      - bundles/sonataadmin/vendor/iCheck/skins/square/blue.css
-      - bundles/sonatacore/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css
-      - bundles/sonataadmin/vendor/jqueryui/themes/base/jquery-ui.css
-      - bundles/sonatacore/vendor/select2/select2.css
-      - bundles/sonatacore/vendor/select2-bootstrap-css/select2-bootstrap.min.css
-      - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
-      - bundles/sonataadmin/css/styles.css
-      - bundles/sonataadmin/css/layout.css
-      - bundles/sonataadmin/css/tree.css
-      - bundles/sonatacore/css/flashmessage.css
-      - css/admin.css
+      stylesheets:
+          - bundles/sonataadmin/app.css
+      extra_stylesheets: []
+      remove_stylesheets: []
+      javascripts:
+          - bundles/sonataadmin/app.js
+      extra_javascripts: []
+      remove_javascripts: []
 sonata_block:
   default_contexts:
     - cms
@@ -64,10 +56,6 @@ sonata_doctrine_orm_admin:
     audit:
         force: true
     templates:
-        form:
-            - "@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig"
-        filter:
-            - "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig"
         types:
             list:
                 array:      "@SonataAdmin/CRUD/list_array.html.twig"

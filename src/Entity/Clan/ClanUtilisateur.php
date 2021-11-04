@@ -36,6 +36,7 @@ class ClanUtilisateur
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="membres", cascade={"persist"}, fetch="LAZY")
+     * @ORM\JoinColumn(name="clan_id", referencedColumnName="id", onDelete="cascade")
      */
     private $clan;
 

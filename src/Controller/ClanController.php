@@ -285,27 +285,22 @@ class ClanController extends AbstractController
     /**
      * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
      */
-    public function clanSupprimer(TranslatorInterface $translator, \App\Listener\ClanPropositionListener $clanUtilisateurListener, Clan $clan)
+    public function clanSupprimer(TranslatorInterface $translator, Clan $clan)
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             // vérification des droits utilisateurs
-            $canDelete = false;
             $clanutilisateur = $user->getClan();
-            if ($clanutilisateur) {
-                if ($clanutilisateur->getClan() == $clan && $clanutilisateur->getDroit()==0)
-                    $canDelete = true;
-            }
+            $canDelete = $clanutilisateur && $clanutilisateur->getClan() == $clan && $clanutilisateur->getDroit() == 0;
 
             if ($canDelete || $authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false) {
                 $em = $this->getDoctrine()->getManager();
 
                 // enlève les évènement sur clan_utilisateur
                 // on cherche à tous les supprimer et pas à ré-agencer la structure
-                $evm = $em->getEventManager();
-                $evm->removeEventListener(['postRemove'], $clanUtilisateurListener);
+                $clan->delete = true;
 
                 $em->remove($clan);
                 $em->flush();
@@ -671,9 +666,18 @@ class ClanController extends AbstractController
             $canPostule = true;
             if ($user->getClan()) {
                 $clanUser = $user->getClan()->getClan();
-                if ($clanUser == $clan)
+                if ($clanUser == $clan) {
                     $canPostule = false;
+                }
             }
+
+            // si c'était hier, on reset la limitation
+            if ($user->getDateApplication() < new \DateTime('today')) {
+                $user->setDateApplication(new \DateTime);
+                $user->setNumberApplication(0);
+            }
+
+            $canPostule &= $user->getNumberApplication() < User::MAX_APPLICATION_BY_DAY; 
 
             // le clan recrute, on peut postuler
             if ($clan->getIsRecruting() && $canPostule) {
@@ -705,6 +709,9 @@ class ClanController extends AbstractController
                 }
 
                 if ($ok) {
+                    $user->setNumberApplication($user->getNumberApplication() + 1);
+
+                    $em->persist($user);
                     $em->persist($postulation);
                     $em->flush();
 

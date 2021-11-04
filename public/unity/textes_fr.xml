@@ -504,7 +504,12 @@ Tu peux désormais utiliser ##JUTSUS##. L'activation ce fait depuis "Mon Ninja" 
 		<t><![CDATA[Un château en bordure d'une cascade (haute définition - 70Mo à télécharger...)]]></t>
 		<t><![CDATA[Mode hardcore : Les ninjas réapparaissent avec 1 point de vie et/ou les caisses n'apparaissent pas.]]></t>
 		<t><![CDATA[Une nouvelle version du jeu est disponible, pour pouvoir continuer à jouer normalement, il est fortement conseillé de la télécharger]]></t>
-		<t><![CDATA[Cette action est irréversible !!!]]></t><!--468-->
+		<t><![CDATA[Cette action est irréversible !!!]]></t>
+		<t><![CDATA[Tu ne peux pas lancer plus de 3 makibishis par carte.]]></t>
+		<t><![CDATA[Dans le menu principal]]></t>
+		<t><![CDATA[En partie solo]]></t>
+		<t><![CDATA[En partie réseau]]></t>
+		<t><![CDATA[Je joue avec le pc de mamie]]></t><!--473-->
 	</textes>
 	<accomplissements>
 		<ac name="Kitutu lvl 1"><![CDATA[Tuer 3 ninjas d'affilé]]></ac>

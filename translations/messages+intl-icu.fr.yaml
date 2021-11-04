@@ -19,6 +19,7 @@ action:
     recrutement: Recrutement
     quitter: Quitter le clan
     postuler: Postuler
+    postulerDisabled: Limite pour postuler dépassée
     destituer: Destituer
     recruter: Recruter
     refuser: Refuser

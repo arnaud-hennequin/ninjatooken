@@ -17,6 +17,9 @@ class ClanUtilisateurListener
         $entity = $args->getEntity();
         if ($entity instanceof ClanUtilisateur)
         {
+            if ($entity->getClan()->delete) {
+                return;
+            }
             $em = $args->getEntityManager();
 
             // réaffectation des recruts
@@ -105,6 +108,9 @@ class ClanUtilisateurListener
         $entity = $args->getEntity();
         if ($entity instanceof ClanUtilisateur)
         {
+            if ($entity->getClan()->delete) {
+                return;
+            }
             $em = $args->getEntityManager();
 
             // supprime les propositions de recrutement

@@ -83,17 +83,19 @@ services:
     ninjatooken_clan.clan_listener:
         class: App\Listener\ClanListener
         tags:
-            - { name: doctrine.event_listener, event: postRemove }
+            - { name: doctrine.event_listener, event: preRemove }
 
     ninjatooken_clan.clan_proposition_listener:
         class: App\Listener\ClanPropositionListener
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postRemove }
 
     ninjatooken_clan.clan_postulation_listener:
         class: App\Listener\ClanPostulationListener
         tags:
             - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: postPersist }
 
     ninjatooken_clan.clan_utilisateur_listener:
         class: App\Listener\ClanUtilisateurListener
@@ -116,6 +118,11 @@ services:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: postRemove }
 
+    ninjatooken_user.message_user_listener:
+        class: App\Listener\MessageUserListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
     ninjatooken_game.gamedata:
         class: App\Utils\GameData
 
@@ -131,13 +138,6 @@ services:
         public:     false
         tags:
             - { name: security.voter }
-
-    ninjatooken_user.message_user_listener:
-        class: App\Listener\MessageUserListener
-        arguments:  ['@service_container']
-        tags:
-            - { name: doctrine.event_listener, event: postPersist }
-
     ninjatooken_user.type.ip:
         class: App\Form\Type\IpType
         tags:

@@ -10,7 +10,7 @@ class ClanListener
 {
 
     // supprime les propositions
-    public function postRemove(LifecycleEventArgs $args)
+    public function preRemove(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         if ($entity instanceof Clan)
@@ -19,6 +19,7 @@ class ClanListener
 
             $membres = $entity->getMembres();
             if($membres){
+                $flush = false;
                 $repo_proposition = $em->getRepository(ClanProposition::class);
                 foreach($membres as $membre){
                     // supprime les propositions de recrutement
@@ -26,10 +27,13 @@ class ClanListener
                     if($propositions){
                         foreach($propositions as $proposition){
                             $em->remove($proposition);
+                            $flush = true;
                         }
                     }
                 }
-                $em->flush();
+                if ($flush) {
+                    $em->flush();
+                }
             }
         }
     }
