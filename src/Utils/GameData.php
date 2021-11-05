@@ -20,7 +20,7 @@ class GameData
 
     public function __construct(ParameterBagInterface $parameterBag)
     {
-        $file = $parameterBag->get('kernel.project_dir') . '/public/xml/game.xml';
+        $file = $parameterBag->get('kernel.project_dir') . '/public/unity/game.xml';
         $this->xml = file_get_contents($file);
         $this->document = new DOMDocument();
         $this->document->loadXml('<root>'.$this->xml.'</root>' );

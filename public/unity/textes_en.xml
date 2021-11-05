@@ -509,7 +509,8 @@ You can now use ##JUTSUS##. Enabling from "My Ninja" (main menu).]]></t>
 		<t><![CDATA[In the main menu]]></t>
 		<t><![CDATA[playing solo]]></t>
 		<t><![CDATA[playing network]]></t>
-		<t><![CDATA[I'm playing with granny's pc]]></t><!--473-->
+		<t><![CDATA[I'm playing with granny's pc]]></t>
+		<t><![CDATA[Dash isn't yet available.]]></t><!--474-->
 	</textes>
 	<accomplissements>
 		<ac name="Woyukil lvl 1"><![CDATA[3 ninjas killed in a row]]></ac>

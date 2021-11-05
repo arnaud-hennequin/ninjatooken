@@ -509,7 +509,8 @@ Tu peux désormais utiliser ##JUTSUS##. L'activation ce fait depuis "Mon Ninja" 
 		<t><![CDATA[Dans le menu principal]]></t>
 		<t><![CDATA[En partie solo]]></t>
 		<t><![CDATA[En partie réseau]]></t>
-		<t><![CDATA[Je joue avec le pc de mamie]]></t><!--473-->
+		<t><![CDATA[Je joue avec le pc de mamie]]></t>
+		<t><![CDATA[Le dash n'est pas encore disponible.]]></t><!--473-->
 	</textes>
 	<accomplissements>
 		<ac name="Kitutu lvl 1"><![CDATA[Tuer 3 ninjas d'affilé]]></ac>
