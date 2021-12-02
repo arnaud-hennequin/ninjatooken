@@ -458,7 +458,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->id;
     }
 
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -504,7 +504,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
@@ -867,7 +867,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     *
     * @return string
     */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
