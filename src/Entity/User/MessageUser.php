@@ -53,7 +53,6 @@ class MessageUser
 
     public function __toString()
     {
-		return ' - ';
         $destination = $this->getDestinataire();
         if(null !== $destination)
             return $destination->getUsername();
@@ -65,7 +64,7 @@ class MessageUser
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -76,7 +75,7 @@ class MessageUser
      * @param \DateTime $dateRead
      * @return MessageUser
      */
-    public function setDateRead($dateRead)
+    public function setDateRead(\DateTime $dateRead): self
     {
         $this->dateRead = $dateRead;
 
@@ -88,7 +87,7 @@ class MessageUser
      *
      * @return \DateTime 
      */
-    public function getDateRead()
+    public function getDateRead(): ?\DateTime
     {
         return $this->dateRead;
     }
@@ -99,7 +98,7 @@ class MessageUser
      * @param boolean $hasDeleted
      * @return MessageUser
      */
-    public function setHasDeleted($hasDeleted)
+    public function setHasDeleted(bool $hasDeleted): self
     {
         $this->hasDeleted = $hasDeleted;
 
@@ -111,7 +110,7 @@ class MessageUser
      *
      * @return boolean 
      */
-    public function getHasDeleted()
+    public function getHasDeleted(): ?bool
     {
         return $this->hasDeleted;
     }
@@ -119,10 +118,10 @@ class MessageUser
     /**
      * Set destinataire
      *
-     * @param \App\Entity\User\User $destinataire
+     * @param User|null $destinataire
      * @return MessageUser
      */
-    public function setDestinataire(\App\Entity\User\User $destinataire = null)
+    public function setDestinataire(User $destinataire = null): self
     {
         $this->destinataire = $destinataire;
 
@@ -132,9 +131,9 @@ class MessageUser
     /**
      * Get destinataire
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getDestinataire()
+    public function getDestinataire(): ?User
     {
         return $this->destinataire;
     }
@@ -142,10 +141,10 @@ class MessageUser
     /**
      * Set message
      *
-     * @param \App\Entity\User\Message $message
+     * @param Message|null $message
      * @return MessageUser
      */
-    public function setMessage(\App\Entity\User\Message $message = null)
+    public function setMessage(Message $message = null): self
     {
         $this->message = $message;
 
@@ -155,9 +154,9 @@ class MessageUser
     /**
      * Get message
      *
-     * @return \App\Entity\User\Message 
+     * @return Message
      */
-    public function getMessage()
+    public function getMessage(): ?Message
     {
         return $this->message;
     }

@@ -6,8 +6,6 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,12 +23,9 @@ class ClanAdmin extends AbstractAdmin
     );
 
     //Fields to be shown on create/edit forms
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        $admin = $formMapper->getAdmin();
-        $current = $admin->getSubject();
-
-        $formMapper
+        $form
             ->add('nom', TextType::class, array(
                 'label' => 'Nom'
             ))
@@ -80,18 +75,18 @@ class ClanAdmin extends AbstractAdmin
     }
 
     //Fields to be shown on filter forms
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('nom')
             ->add('tag')
         ;
     }
 
     //Fields to be shown on lists
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('nom')
             ->add('tag')
             ->add('online', null, array('editable' => true))

@@ -4,13 +4,11 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use App\Utils\Chat;
 
 class ChatController extends AbstractController
 {
 
-    public function index()
+    public function index(): Response
     {
         $channelName = 'ninjatooken';
 

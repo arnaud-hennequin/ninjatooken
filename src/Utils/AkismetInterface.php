@@ -65,7 +65,7 @@ interface AkismetInterface
      * @param string $url The front page or home URL of the instance making the request
      * @return boolean
      */
-    public function keyCheck($apiKey, $url);
+    public function keyCheck(string $apiKey, string $url): bool;
 
     /**
      * Marks message as spam
@@ -79,7 +79,7 @@ interface AkismetInterface
      *      comment_content - the content that was submitted
      * @return boolean True if message has been marked as spam
      */
-    public function sendSpam(array $comment);
+    public function sendSpam(array $comment): bool;
 
     /**
      * Marks message as ham (not-spam)
@@ -93,7 +93,7 @@ interface AkismetInterface
      *      comment_content - the content that was submitted
      * @return boolean True if messahe has been marked as ham
      */
-    public function sendHam(array $comment);
+    public function sendHam(array $comment): bool;
 
     /**
      * Check if message is spam or not
@@ -107,7 +107,7 @@ interface AkismetInterface
      *      comment_content - the content that was submitted
      * @return boolean True if message is spam, false otherwise
      */
-    public function check(array $comment);
+    public function check(array $comment): bool;
 
     /**
      * Sets User Agent string for connection
@@ -115,12 +115,12 @@ interface AkismetInterface
      *
      * @param string $userAgent
      */
-    public function setUserAgent($userAgent);
+    public function setUserAgent(string $userAgent);
 
     /**
      * Gets last error occurred
      *
      * @return string Returns null if there's no error
      */
-    public function getError();
+    public function getError(): string;
 }

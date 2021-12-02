@@ -1,12 +1,19 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
+
+use App\Entity\User\Friend;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use App\Entity\User\User;
- 
-class FriendRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class FriendRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Friend::class);
+    }
+
     public function getFriends(User $user, $nombreParPage=5, $page=1)
     {
         $page = max(1, $page);
@@ -24,7 +31,7 @@ class FriendRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getDemandes(User $user, $nombreParPage=5, $page=1)
+    public function getDemandes(User $user, $nombreParPage=5, $page=1): Paginator
     {
         $page = max(1, $page);
 
@@ -80,7 +87,7 @@ class FriendRepository extends EntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getBlocked(User $user, $nombreParPage=5, $page=1)
+    public function getBlocked(User $user, $nombreParPage=5, $page=1): Paginator
     {
         $page = max(1, $page);
 
@@ -95,7 +102,7 @@ class FriendRepository extends EntityRepository
         return new Paginator($query);
     }
 
-    public function deleteAllBlocked(User $user = null)
+    public function deleteAllBlocked(User $user = null): bool
     {
         if($user){
             $query = $this->createQueryBuilder('f')
@@ -110,7 +117,7 @@ class FriendRepository extends EntityRepository
         return false;
     }
 
-    public function deleteAllDemandes(User $user = null)
+    public function deleteAllDemandes(User $user = null): bool
     {
         if($user){
             $query = $this->createQueryBuilder('f')

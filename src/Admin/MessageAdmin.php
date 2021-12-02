@@ -22,28 +22,28 @@ class MessageAdmin extends AbstractAdmin
     );
 
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('nom', null, array('label' => 'Nom'))
             ->add('content', null, array('label' => 'Contenu'))
         ;
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('nom', null, array('label' => 'Nom'));
 
         if(!$this->isChild())
-            $listMapper->add('author', null, array('label' => 'Auteur'));
+            $list->add('author', null, array('label' => 'Auteur'));
 
-        $listMapper
+        $list
             ->add('dateAjout', null, array('label' => 'Créé le'))
             ->add('hasDeleted', null, array('editable' => true, 'label' => 'Supprimé ?'))
             ->add('_action', 'actions', array(
@@ -57,19 +57,19 @@ class MessageAdmin extends AbstractAdmin
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         if(!$this->isChild())
-            $formMapper->add('author', ModelListType::class, array(
+            $form->add('author', ModelListType::class, array(
                 'label'         => 'Auteur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
                 'btn_delete'    => false
             ));
 
-        $formMapper
+        $form
             ->add('nom', TextType::class, array(
                 'label' => 'Nom'
             ))
@@ -106,11 +106,11 @@ class MessageAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('id')
             ->add('old_id')
             ->add('author')

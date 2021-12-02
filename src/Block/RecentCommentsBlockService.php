@@ -6,9 +6,7 @@ use Sonata\BlockBundle\Block\BlockContextInterface;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\Response;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
-use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityManager;
@@ -19,9 +17,11 @@ class RecentCommentsBlockService extends AbstractBlockService
 {
 
     private $em;
-    
+
     /**
-     * @var Environment
+     *
+     * @param Environment $twig
+     * @param EntityManager $entityManager
      */
     public function __construct(Environment $twig, EntityManager $entityManager)
     {
@@ -30,15 +30,8 @@ class RecentCommentsBlockService extends AbstractBlockService
         parent::__construct($twig);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $criteria = array(
-            'mode' => $blockContext->getSetting('mode')
-        );
-
         $query = $this->em->getRepository(Comment::class)
             ->createQueryBuilder('c')
             ->orderby('c.dateAjout', 'DESC');
@@ -62,10 +55,7 @@ class RecentCommentsBlockService extends AbstractBlockService
         return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildEditForm(FormMapper $formMapper)
     {
         $formMapper->add('settings', 'sonata_type_immutable_array', array(
             'keys' => array(
@@ -79,14 +69,6 @@ class RecentCommentsBlockService extends AbstractBlockService
                 ))
             )
         ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'Recent Comments';
     }
 
     /**

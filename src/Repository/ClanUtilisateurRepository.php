@@ -1,12 +1,19 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
+
+use App\Entity\Clan\ClanUtilisateur;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\Clan\Clan;
 use App\Entity\User\User;
- 
-class ClanUtilisateurRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class ClanUtilisateurRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ClanUtilisateur::class);
+    }
+
     public function getMembres(Clan $clan=null, $droit=null, User $recruteur=null, $nombreParPage=100, $page=1)
     {
         $page = max(1, $page);
@@ -51,7 +58,7 @@ class ClanUtilisateurRepository extends EntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function removeByClan(Clan $clan = null)
+    public function removeByClan(Clan $clan = null): bool
     {
         if($clan){
             $query = $this->createQueryBuilder('cu')

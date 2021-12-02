@@ -67,9 +67,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function getMultiAccount($ip = "", $username = ""){
 
         if(empty($ip) && empty($username))
-            return array();
+            return [];
 
-        $ips = array();
         if(!empty($username)){
             $query = $this
                 ->createQueryBuilder('u')
@@ -82,11 +81,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                     ->setParameter('ip', $ip);
             }
 
-            if(!empty($username)){
-                $query
-                    ->andWhere('u.username = :username')
-                    ->setParameter('username', $username);
-            }
+            $query
+                ->andWhere('u.username = :username')
+                ->setParameter('username', $username);
 
             $ips = $query->getQuery()->getResult();
             if(count($ips)>0)
@@ -134,19 +131,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 return $query->getQuery()->getResult();
             }
         }
-        return array();
+        return [];
     }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    public function upgradePassword(UserInterface $user, string $newEncodedPassword): void
+    public function upgradePassword(UserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
-        $user->setPassword($newEncodedPassword);
+        $user->setPassword($newHashedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
     }
@@ -154,7 +151,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Find user by his email
      */
-    public function findUserByEmail($email)
+    public function findUserByEmail($email): array
     {
         return $this->findBy(['emailCanonical' => User::canonicalize($email)]);
     }
@@ -162,7 +159,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Find user by his username
      */
-    public function findUserByUsername($username)
+    public function findUserByUsername($username): array
     {
         return $this->findBy(['usernameCanonical' => User::canonicalize($username)]);
     }
@@ -170,7 +167,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Find user by his email or username
      */
-    public function findUserByUsernameOrEmail($usernameOrEmail)
+    public function findUserByUsernameOrEmail($usernameOrEmail): array
     {
         if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
             $user = $this->findUserByEmail($usernameOrEmail);

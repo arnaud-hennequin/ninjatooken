@@ -2,40 +2,42 @@
 
 namespace App\Controller;
 
+use App\Repository\ClanRepository;
+use App\Repository\CommentRepository;
+use App\Repository\ForumRepository;
+use App\Repository\ThreadRepository;
+use App\Repository\UserRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Cookie;
-use App\Entity\Forum\Comment;
-use App\Entity\Forum\Thread;
-use App\Entity\Forum\Forum;
-use App\Entity\Clan\Clan;
-use App\Entity\User\User;
 
 class CommonController extends AbstractController
 {
-    public function addBlocker()
+    public function addBlocker(): Response
     {
-        return new Response('<html><body>add</body></html>');
+        return new Response('<html lang="fr"><body>add</body></html>');
     }
 
-    public function index()
+    public function index(ThreadRepository $threadRepository, ForumRepository $forumRepository): Response
     {
         $num = $this->getParameter('numReponse');
-        $em = $this->getDoctrine()->getManager();
 
         return $this->render('common/index.html.twig', array(
-            'threads' => $em->getRepository(Thread::class)->findBy(
-                array('forum' => $em->getRepository(Forum::class)->findOneBy(array('slug' => 'nouveautes'))),
+            'threads' => $threadRepository->findBy(
+                array('forum' => $forumRepository->findOneBy(array('slug' => 'nouveautes'))),
                 array('dateAjout' => 'DESC'),
                 $num,0
             )
         ));
     }
 
-    public function jouer()
+    public function jouer(): Response
     {
         $response = $this->render('common/jouer.html.twig', [
             'gameversion' => $this->getParameter('unity.version')
@@ -45,47 +47,47 @@ class CommonController extends AbstractController
         return $response;
     }
 
-    public function manuel()
+    public function manuel(): Response
     {
         return $this->render('common/manuel.html.twig');
     }
 
-    public function reglement()
+    public function reglement(): Response
     {
         return $this->render('common/reglement.html.twig');
     }
 
-    public function chat()
+    public function chat(): Response
     {
         return $this->render('common/chat.html.twig');
     }
 
-    public function faqGenerale()
+    public function faqGenerale(): Response
     {
         return $this->render('common/faqGenerale.html.twig');
     }
 
-    public function faqTechnique()
+    public function faqTechnique(): Response
     {
         return $this->render('common/faqTechnique.html.twig');
     }
 
-    public function team()
+    public function team(): Response
     {
         return $this->render('common/team.html.twig');
     }
 
-    public function mentionsLegales()
+    public function mentionsLegales(): Response
     {
         return $this->render('common/mentionsLegales.html.twig');
     }
 
-    public function contact(Request $request, TranslatorInterface $translator, \Swift_Mailer $mailer)
+    public function contact(Request $request, TranslatorInterface $translator, MailerInterface $mailer): Response
     {
         if ('POST' === $request->getMethod()) {
             $csrfTokenManager = $this->get('security.csrf.token_manager');
             if(!$csrfTokenManager->isTokenValid(new CsrfToken('contact'.$request->cookies->get('PHPSESSID'), $request->request->get('_token')))) {
-                throw new RuntimeException('CSRF attack detected.');
+                throw new \RuntimeException('CSRF attack detected.');
             }
             $texte = trim($request->get('content'));
             $sujet = trim($request->get('sujet'));
@@ -93,18 +95,20 @@ class CommonController extends AbstractController
             if(!empty($texte)){
                 $emailContact = $this->getParameter('mail_admin');
 
-                $message = (new \Swift_Message('[NT] Contact : '.$sujet))
-                    ->setFrom([$this->getParameter('mail_contact') => $this->getParameter('mail_name')])
-                    ->setTo($emailContact)
-                    ->setReplyTo($email)
-                    ->setContentType("text/html")
-                    ->setBody($this->renderView('common/contactEmail.html.twig', array(
-                        'texte' => $texte,
-                        'mail' => $email,
-                        'locale' => 'fr'
-                    )));
-
-                $mailer->send($message);
+                try {
+                    $messageMail = (new TemplatedEmail())
+                        ->from(new Address($this->getParameter('mail_contact') , $this->getParameter('mail_name')))
+                        ->to($emailContact)
+                        ->subject('[NT] Contact : '.$sujet)
+                        ->htmlTemplate('common/contactEmail.html.twig')
+                        ->context([
+                            'texte' => $texte,
+                            'mail' => $email,
+                            'locale' => 'fr'
+                        ])
+                    ;
+                    $mailer->send($messageMail);
+                } catch (TransportExceptionInterface $e) {}
 
                 $this->get('session')->getFlashBag()->add(
                     'notice',
@@ -116,17 +120,16 @@ class CommonController extends AbstractController
         return $this->render('common/contact.html.twig');
     }
 
-    public function search(Request $request)
+    public function search(Request $request, ThreadRepository $threadRepository, CommentRepository $commentRepository, ClanRepository $clanRepository, UserRepository $userRepository): Response
     {
-        $em = $this->getDoctrine()->getManager();
         $num = $this->getParameter('numReponse');
         $q = (string)$request->get('q');
 
         // recherche dans les threads
-        $threads = $em->getRepository(Thread::class)->searchThreads(null, null, $q, $num, 1);
+        $threads = $threadRepository->searchThreads(null, null, $q, $num, 1);
 
         // recherche dans les commentaires
-        $comments = $em->getRepository(Comment::class)->searchComments(null, null, $q, $num, 1);
+        $comments = $commentRepository->searchComments(null, null, $q, $num, 1);
         foreach($comments as $comment){
             $thread = $comment->getThread();
             $finded = false;
@@ -141,8 +144,8 @@ class CommonController extends AbstractController
         }
 
         return $this->render('common/search.html.twig', array(
-            'clans' => $em->getRepository(Clan::class)->searchClans($q, $num, 1),
-            'users' => $em->getRepository(User::class)->searchUser($q, $num),
+            'clans' => $clanRepository->searchClans($q, $num, 1),
+            'users' => $userRepository->searchUser($q, $num),
             'threads' => $threads,
             'forum' => null
         ));

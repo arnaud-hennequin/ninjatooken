@@ -14,7 +14,7 @@ class CommentListener
     protected $akismetUrl;
     protected $requestStack;
 
-    public function __construct($akismetActive = false, $akismetKey = "", $akismetUrl = "", RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, bool $akismetActive = false, string $akismetKey = "", string $akismetUrl = "")
     {
         $this->akismetActive = $akismetActive;
         $this->akismetKey = $akismetKey;
@@ -100,7 +100,7 @@ class CommentListener
                     $thread->setLastCommentBy(null);
                     $thread->setLastCommentAt($thread->getDateAjout());
                 }else{
-                    if($thread->getLastCommentBy() == $entity->getAuthor() && $thread->getLastCommentAt() == $entity->getDateAjout()){
+                    if($thread->getLastCommentBy() === $entity->getAuthor() && $thread->getLastCommentAt() == $entity->getDateAjout()){
                         $lastComment = $em->getRepository(Comment::class)->getCommentsByThread($thread, 1, 1);
                         if($lastComment){
                             $lastComment = current($lastComment);

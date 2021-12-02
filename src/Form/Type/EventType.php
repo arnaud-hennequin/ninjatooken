@@ -52,9 +52,4 @@ class EventType extends AbstractType
                 'required' => false
             ));
     }
-
-    public function getName()
-    {
-        return 'event';
-    }
 }

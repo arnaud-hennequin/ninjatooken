@@ -15,9 +15,4 @@ class CommentType extends AbstractType
                 'label_attr' => array('class' => 'libelle')
             ));
     }
-
-    public function getName()
-    {
-        return 'comment';
-    }
 }

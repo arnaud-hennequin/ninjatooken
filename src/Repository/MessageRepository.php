@@ -1,12 +1,18 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+
+use App\Entity\User\Message;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\User\User;
- 
-class MessageRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class MessageRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Message::class);
+    }
+
     public function getSendMessages(User $user, $nombreParPage=5, $page=1)
     {
         $page = max(1, $page);

@@ -2,7 +2,6 @@
 
 namespace App\Entity\User;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -89,7 +88,7 @@ class Message
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -100,7 +99,7 @@ class Message
      * @param string $nom
      * @return Message
      */
-    public function setNom($nom)
+    public function setNom(string $nom): self
     {
         $this->nom = $nom;
 
@@ -112,7 +111,7 @@ class Message
      *
      * @return string 
      */
-    public function getNom()
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -123,7 +122,7 @@ class Message
      * @param string $content
      * @return Message
      */
-    public function setContent($content)
+    public function setContent(string $content): self
     {
         $this->content = $content;
 
@@ -135,7 +134,7 @@ class Message
      *
      * @return string 
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -146,7 +145,7 @@ class Message
      * @param \DateTime $dateAjout
      * @return Message
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -158,7 +157,7 @@ class Message
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -169,7 +168,7 @@ class Message
      * @param string $author
      * @return Message
      */
-    public function setAuthor($author)
+    public function setAuthor(string $author): self
     {
         $this->author = $author;
 
@@ -179,9 +178,9 @@ class Message
     /**
      * Get author
      *
-     * @return string 
+     * @return User
      */
-    public function getAuthor()
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -192,7 +191,7 @@ class Message
      * @param boolean $hasDeleted
      * @return Message
      */
-    public function setHasDeleted($hasDeleted)
+    public function setHasDeleted(bool $hasDeleted): self
     {
         $this->hasDeleted = $hasDeleted;
 
@@ -204,7 +203,7 @@ class Message
      *
      * @return boolean 
      */
-    public function getHasDeleted()
+    public function getHasDeleted(): ?bool
     {
         return $this->hasDeleted;
     }
@@ -215,7 +214,7 @@ class Message
      * @param integer $oldId
      * @return Message
      */
-    public function setOldId($oldId)
+    public function setOldId(int $oldId): self
     {
         $this->old_id = $oldId;
 
@@ -227,7 +226,7 @@ class Message
      *
      * @return integer 
      */
-    public function getOldId()
+    public function getOldId(): ?int
     {
         return $this->old_id;
     }
@@ -235,10 +234,10 @@ class Message
     /**
      * Add receivers
      *
-     * @param \App\Entity\User\MessageUser $receivers
+     * @param MessageUser $receiver
      * @return Message
      */
-    public function addReceiver(\App\Entity\User\MessageUser $receiver)
+    public function addReceiver(MessageUser $receiver): self
     {
         $this->receivers[] = $receiver;
         $receiver->setMessage($this);
@@ -249,9 +248,9 @@ class Message
     /**
      * Remove receivers
      *
-     * @param \App\Entity\User\MessageUser $receivers
+     * @param MessageUser $receiver
      */
-    public function removeReceiver(\App\Entity\User\MessageUser $receiver)
+    public function removeReceiver(MessageUser $receiver)
     {
         $this->receivers->removeElement($receiver);
         $receiver->setMessage(null);
@@ -260,9 +259,9 @@ class Message
     /**
      * Get receivers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
-    public function getReceivers()
+    public function getReceivers(): Collection
     {
         return $this->receivers;
     }

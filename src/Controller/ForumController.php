@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -17,10 +20,8 @@ use App\Entity\Forum\Comment;
 
 class ForumController extends AbstractController
 {
-    public function oldMessage(Request $request, TranslatorInterface $translator)
+    public function oldMessage(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
         $thread = $em->getRepository('App\Entity\Forum\Thread')->findOneBy(array('old_id' => (int)$request->get('ID')));
         if(!$thread){
             $comment = $em->getRepository('App\Entity\Forum\Comment')->findOneBy(array('old_id' => (int)$request->get('ID')));
@@ -39,10 +40,8 @@ class ForumController extends AbstractController
         )));
     }
 
-    public function oldForum(Request $request, TranslatorInterface $translator)
+    public function oldForum(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
-
         $forum = $em->getRepository('App\Entity\Forum\Forum')->findOneBy(array('old_id' => (int)$request->get('ID')));
 
         if(!$forum){
@@ -55,10 +54,8 @@ class ForumController extends AbstractController
         )));
     }
 
-    public function event($page)
+    public function event(EntityManagerInterface $em, $page): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
@@ -76,7 +73,7 @@ class ForumController extends AbstractController
         ));
     }
 
-    public function eventAjouter(Request $request, TranslatorInterface $translator)
+    public function eventAjouter(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): Response
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -85,11 +82,11 @@ class ForumController extends AbstractController
             if($authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
                 $thread = new Thread();
                 $thread->setAuthor($user);
-                $forum = $this->getDoctrine()->getManager()->getRepository(Forum::class)->getForum('nouveautes')[0];
+                $forum = $em->getRepository(Forum::class)->getForum('nouveautes')[0];
                 $thread->setForum($forum);
                 $thread->setIsEvent(true);
                 $form = $this->createForm(EventType::class, $thread);
-                if('POST' === $request->getMethod()) {
+                if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('event', array_merge(
                         $request->request->get('event'),
@@ -99,7 +96,6 @@ class ForumController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($thread);
                         $em->flush();
 
@@ -122,7 +118,7 @@ class ForumController extends AbstractController
     /**
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function eventModifier(Request $request, TranslatorInterface $translator, Thread $thread)
+    public function eventModifier(Request $request, TranslatorInterface $translator, Thread $thread, EntityManagerInterface $em): Response
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -130,7 +126,7 @@ class ForumController extends AbstractController
 
             if($thread->getAuthor() == $user || $authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
                 $form = $this->createForm(EventType::class, $thread);
-                if('POST' === $request->getMethod()) {
+                if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('event', array_merge(
                         $request->request->get('event'),
@@ -140,7 +136,6 @@ class ForumController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($thread);
                         $em->flush();
 
@@ -164,10 +159,8 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function forum()
+    public function forum(EntityManagerInterface $em): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
         $allForums = $em->getRepository(Forum::class)->getForum('');
         $forums = array();
         foreach($allForums as $forum){
@@ -184,10 +177,8 @@ class ForumController extends AbstractController
     /**
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      */
-    public function topic(Forum $forum, $page)
+    public function topic(Forum $forum, EntityManagerInterface $em, $page): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
@@ -205,9 +196,8 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function thread(Forum $forum, Thread $thread, $page)
+    public function thread(Forum $forum, Thread $thread, EntityManagerInterface $em, $page): Response
     {
-        $em = $this->getDoctrine()->getManager();
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
@@ -228,7 +218,7 @@ class ForumController extends AbstractController
     /**
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      */
-    public function threadAjouter(Request $request, TranslatorInterface $translator, Forum $forum)
+    public function threadAjouter(Request $request, TranslatorInterface $translator, Forum $forum, EntityManagerInterface $em): Response
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -249,7 +239,6 @@ class ForumController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($thread);
                         $em->flush();
 
@@ -277,7 +266,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread)
+    public function threadModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): Response
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -285,7 +274,7 @@ class ForumController extends AbstractController
 
             if($this->globalRight($authorizationChecker, $user, $forum) || $thread->getAuthor() == $user){
                 $form = $this->createForm(ThreadType::class, $thread);
-                if('POST' === $request->getMethod()) {
+                if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('thread', array_merge(
                         $request->request->get('thread'),
@@ -295,7 +284,6 @@ class ForumController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($thread);
                         $em->flush();
 
@@ -324,14 +312,13 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadVerrouiller(TranslatorInterface $translator, Forum $forum, Thread $thread)
+    public function threadVerrouiller(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): RedirectResponse
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if($this->globalRight($authorizationChecker, $user, $forum)){
-                $em = $this->getDoctrine()->getManager();
                 $thread->setIsCommentable(
                     !$thread->getIsCommentable()
                 );
@@ -354,14 +341,13 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadPostit(TranslatorInterface $translator, Forum $forum, Thread $thread)
+    public function threadPostit(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): RedirectResponse
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if($this->globalRight($authorizationChecker, $user, $forum)){
-                $em = $this->getDoctrine()->getManager();
                 $thread->setIsPostit(
                     !$thread->getIsPostit()
                 );
@@ -384,7 +370,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function threadSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread)
+    public function threadSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): Response
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
@@ -393,7 +379,6 @@ class ForumController extends AbstractController
             if($this->globalRight($authorizationChecker, $user, $forum) || $thread->getAuthor() == $user){
                 $isEvent = $thread->getIsEvent();
 
-                $em = $this->getDoctrine()->getManager();
                 $em->remove($thread);
                 $em->flush();
 
@@ -425,7 +410,7 @@ class ForumController extends AbstractController
      * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      */
-    public function commentAjouter(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, $page)
+    public function commentAjouter(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em, $page): RedirectResponse
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
@@ -448,7 +433,6 @@ class ForumController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($comment);
                         $em->flush();
 
@@ -472,7 +456,7 @@ class ForumController extends AbstractController
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      * @ParamConverter("comment", class="App\Entity\Forum\Comment", options={"mapping": {"comment_id":"id"}})
      */
-    public function commentModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, $page)
+    public function commentModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, EntityManagerInterface $em, $page): Response
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
@@ -481,7 +465,7 @@ class ForumController extends AbstractController
 
             if($this->globalRight($authorizationChecker, $user, $forum) || ($thread->getIsCommentable() && $comment->getAuthor() == $user)){
                 $form = $this->createForm(CommentType::class, $comment);
-                if('POST' === $request->getMethod()) {
+                if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('comment', array_merge(
                         $request->request->get('comment'),
@@ -491,7 +475,6 @@ class ForumController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-                        $em = $this->getDoctrine()->getManager();
                         $em->persist($comment);
                         $em->flush();
 
@@ -528,7 +511,7 @@ class ForumController extends AbstractController
      * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
      * @ParamConverter("comment", class="App\Entity\Forum\Comment", options={"mapping": {"comment_id":"id"}})
      */
-    public function commentSupprimer(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, $page)
+    public function commentSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, EntityManagerInterface $em, $page): RedirectResponse
     {
         $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
@@ -536,7 +519,6 @@ class ForumController extends AbstractController
             $user = $this->get('security.token_storage')->getToken()->getUser();
 
             if($this->globalRight($authorizationChecker, $user, $forum) || ($thread->getIsCommentable() && $comment->getAuthor() == $user)){
-                $em = $this->getDoctrine()->getManager();
                 $em->remove($comment);
                 $em->flush();
 
@@ -553,18 +535,16 @@ class ForumController extends AbstractController
         )));
     }
 
-    public function recentComments($max = 10, Forum $forum = null, User $user = null)
+    public function recentComments(EntityManagerInterface $em, $max = 10, Forum $forum = null, User $user = null): Response
     {
-        $em = $this->getDoctrine()->getManager();
         $lastComments = $em->getRepository(Comment::class)->getRecentComments($forum, $user, $max);
         return $this->render('forum/comments/recentList.html.twig', array(
             'comments' => $lastComments
         ));
     }
 
-    public function recentThreads($max = 10)
+    public function recentThreads(EntityManagerInterface $em): Response
     {
-        $em = $this->getDoctrine()->getManager();
         $conn = $em->getConnection();
         $threadRepo = $em->getRepository(Thread::class);
         $commentRepo = $em->getRepository(Comment::class);
@@ -574,14 +554,14 @@ class ForumController extends AbstractController
                    "(SELECT nt_comment.id, 'comment' as type, nt_comment.date_ajout FROM nt_comment JOIN nt_thread ON nt_thread.id=nt_comment.thread_id JOIN nt_forum ON nt_forum.id=nt_thread.forum_id AND nt_forum.clan_id IS NULL ORDER BY nt_comment.date_ajout DESC LIMIT 0,10)".
                    "ORDER BY date_ajout DESC LIMIT 0,10";
         $stmt = $conn->prepare($request);
-        $stmt->execute();
-        $results = $stmt->fetchAll();
+        $result = $stmt->executeQuery();
+        $results = $result->fetchAllAssociative();
         $data = array();
         foreach($results as $result){
             if($result['type']=='thread')
-                $data[] = $threadRepo->findOneById($result['id']);
+                $data[] = $threadRepo->findOneBy(['id' => $result['id']]);
             else
-                $data[] = $commentRepo->findOneById($result['id']);
+                $data[] = $commentRepo->findOneBy(['id' => $result['id']]);
         }
 
         return $this->render('forum/lasts/recentList.html.twig', array(
@@ -589,17 +569,13 @@ class ForumController extends AbstractController
         ));
     }
 
-    public function globalRight($authorizationChecker=null, User $user=null, Forum $forum=null){
-        if($user && $authorizationChecker){
-            if($authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false)
+    public function globalRight($authorizationChecker=null, User $user=null, Forum $forum=null): bool
+    {
+        if ($user && $authorizationChecker) {
+            if ($authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false)
                 return true;
-            if($forum){
-                $clan = $forum->getClan();
-                if($clan){
-                    $clanutilisateur = $user->getClan();
-                    if($clanutilisateur)
-                        return $clanutilisateur->getClan()==$clan && ($clanutilisateur->getCanEditClan() || $clanutilisateur->getDroit()==0);
-                }
+            if ($forum && ($clan = $forum->getClan()) !== null && ($clanutilisateur = $user->getClan()) !== null) {
+                return ($clanutilisateur->getClan() === $clan) && ($clanutilisateur->getCanEditClan() || $clanutilisateur->getDroit() == 0);
             }
         }
         return false;

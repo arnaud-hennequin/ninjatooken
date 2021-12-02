@@ -4,7 +4,6 @@ namespace App\Entity\User;
 use App\Entity\Clan\ClanUtilisateur;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
-use App\Entity\User\Group;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -337,7 +336,12 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     public function __toString()
     {
-        return (string) $this->getUsername();
+        return $this->getUserIdentifier();
+    }
+
+    public function getUserIdentifier(): ?string
+    {
+        return $this->getUsername();
     }
 
     /**
@@ -378,24 +382,19 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $slug;
     }
 
-    public static function canonicalize($string)
+    public static function canonicalize(?string $string = null): string
     {
         if (null === $string) {
-            return;
+            return "";
         }
 
         $encoding = mb_detect_encoding($string);
-        $result = $encoding
+        return $encoding
             ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
             : mb_convert_case($string, MB_CASE_LOWER);
-
-        return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addRole($role)
+    public function addRole(string $role): self
     {
         $role = strtoupper($role);
         if ($role === static::ROLE_DEFAULT) {
@@ -409,10 +408,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->password,
@@ -426,9 +422,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function unserialize($serialized)
     {
         $data = unserialize($serialized);
@@ -455,31 +448,17 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         ) = $data;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function eraseCredentials()
     {
         $this->plainPassword = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserIdentifier(): ?string
-    {
-        return $this->getUsername();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -493,34 +472,22 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUsernameCanonical()
+    public function getUsernameCanonical(): ?string
     {
         return $this->usernameCanonical;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return $this->salt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getEmailCanonical()
+    public function getEmailCanonical(): ?string
     {
         return $this->emailCanonical;
     }
@@ -530,17 +497,14 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return (string) $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getPlainPassword()
+    public function getPlainPassword(): string
     {
         return $this->plainPassword;
     }
@@ -550,22 +514,16 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return \DateTime|null
      */
-    public function getLastLogin()
+    public function getLastLogin(): ?\DateTime
     {
         return $this->lastLogin;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfirmationToken()
+    public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -580,55 +538,37 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return array_values(array_unique($roles));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isAccountNonExpired()
+    public function isAccountNonExpired(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isAccountNonLocked()
+    public function isAccountNonLocked(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isCredentialsNonExpired()
+    public function isCredentialsNonExpired(): bool
     {
         return true;
     }
 
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->hasRole(static::ROLE_SUPER_ADMIN);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function removeRole($role)
+    public function removeRole(string $role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -638,30 +578,21 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setUsernameCanonical($usernameCanonical)
+    public function setUsernameCanonical(?string $usernameCanonical): self
     {
         $this->usernameCanonical = $usernameCanonical;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setSalt($salt)
+    public function setSalt(?string $salt): self
     {
         $this->salt = $salt;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEmail($email)
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -670,30 +601,21 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEmailCanonical($emailCanonical)
+    public function setEmailCanonical(string $emailCanonical): self
     {
         $this->emailCanonical = $emailCanonical;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setEnabled($boolean)
+    public function setEnabled(bool $boolean): self
     {
         $this->enabled = (bool) $boolean;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setSuperAdmin($boolean)
+    public function setSuperAdmin(bool $boolean): self
     {
         if (true === $boolean) {
             $this->addRole(static::ROLE_SUPER_ADMIN);
@@ -704,40 +626,28 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setPlainPassword($password)
+    public function setPlainPassword(?string $password): self
     {
         $this->plainPassword = $password;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setLastLogin(\DateTime $time = null)
+    public function setLastLogin(?\DateTime $time = null): self
     {
         $this->lastLogin = $time;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setConfirmationToken($confirmationToken)
+    public function setConfirmationToken(?string $confirmationToken): self
     {
         $this->confirmationToken = $confirmationToken;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setPasswordRequestedAt(\DateTime $date = null)
+    public function setPasswordRequestedAt(?\DateTime $date = null): self
     {
         $this->passwordRequestedAt = $date;
 
@@ -749,24 +659,18 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return \DateTime|null
      */
-    public function getPasswordRequestedAt()
+    public function getPasswordRequestedAt(): ?\DateTime
     {
         return $this->passwordRequestedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isPasswordRequestNonExpired($ttl)
+    public function isPasswordRequestNonExpired(int $ttl): bool
     {
         return $this->getPasswordRequestedAt() instanceof \DateTime &&
                $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = [];
 
@@ -777,18 +681,12 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getGroups()
     {
         return $this->groups ?: $this->groups = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getGroupNames()
+    public function getGroupNames(): array
     {
         $names = [];
         foreach ($this->getGroups() as $group) {
@@ -798,18 +696,12 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $names;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasGroup($name)
+    public function hasGroup(string $name): bool
     {
         return in_array($name, $this->getGroupNames());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addGroup(Group $group)
+    public function addGroup(Group $group): self
     {
         if (!$this->getGroups()->contains($group)) {
             $this->getGroups()->add($group);
@@ -818,10 +710,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function removeGroup(Group $group)
+    public function removeGroup(Group $group): self
     {
         if ($this->getGroups()->contains($group)) {
             $this->getGroups()->removeElement($group);
@@ -830,15 +719,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function isEqualTo(User $user)
+    public function isEqualTo(User $user): bool
     {
-        if (!$user instanceof self) {
-            return false;
-        }
-
         if ($this->password !== $user->getPassword()) {
             return false;
         }
@@ -847,28 +729,28 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             return false;
         }
 
-        if ($this->username !== $user->getUsername()) {
+        if ($this->getUserIdentifier() !== $user->getUserIdentifier()) {
             return false;
         }
 
         return true;
     }
-    public function getAbsoluteAvatar()
+    public function getAbsoluteAvatar(): ?string
     {
         return null === $this->avatar || "" === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
     }
 
-    public function getWebAvatar()
+    public function getWebAvatar(): ?string
     {
         return null === $this->avatar || "" === $this->avatar  ? null : $this->getUploadDir().'/'.$this->avatar;
     }
 
-    protected function getUploadRootDir()
+    protected function getUploadRootDir(): string
     {
         return __DIR__.'/../../../public/'.$this->getUploadDir();
     }
 
-    protected function getUploadDir()
+    protected function getUploadDir(): string
     {
         return 'avatar';
     }
@@ -932,9 +814,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Sets file.
      *
-     * @param UploadedFile $file
+     * @param UploadedFile|null $file
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile(?UploadedFile $file = null)
     {
         $this->file = $file;
     }
@@ -944,7 +826,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return UploadedFile
      */
-    public function getFile()
+    public function getFile(): UploadedFile
     {
         return $this->file;
     }
@@ -973,7 +855,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     * @param string $description
     * @return User
     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -985,7 +867,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     *
     * @return string
     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -996,7 +878,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param string $avatar
      * @return User
      */
-    public function setAvatar($avatar)
+    public function setAvatar(string $avatar): self
     {
         $this->avatar = $avatar;
 
@@ -1008,7 +890,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return string 
      */
-    public function getAvatar()
+    public function getAvatar(): string
     {
         return $this->avatar;
     }
@@ -1018,7 +900,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return array The usernames
      */
-    public function getOldUsernames()
+    public function getOldUsernames(): array
     {
         return array_unique($this->oldUsernames);
     }
@@ -1026,10 +908,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Set oldUsername
      *
-     * @param array $oldUsername
+     * @param array $oldUsernames
      * @return User
      */
-    public function setOldUsernames(array $oldUsernames)
+    public function setOldUsernames(array $oldUsernames): self
     {
         $this->oldUsernames = array();
 
@@ -1043,7 +925,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * add oldusername
      */
-    public function addOldUsername($username)
+    public function addOldUsername(string $username): self
     {
         if (!in_array($username, $this->oldUsernames, true)) {
             $this->oldUsernames[] = $username;
@@ -1055,7 +937,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * remove oldusername
      */
-    public function removeOldUsername($username)
+    public function removeOldUsername(string $username): self
     {
         if (false !== $key = array_search(strtoupper($username), $this->oldUsernames, true)) {
             unset($this->oldUsernames[$key]);
@@ -1071,7 +953,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param string $oldUsernamesCanonical
      * @return User
      */
-    public function setOldUsernamesCanonical($oldUsernamesCanonical)
+    public function setOldUsernamesCanonical(string $oldUsernamesCanonical): self
     {
         $this->oldUsernamesCanonical = $oldUsernamesCanonical;
 
@@ -1083,7 +965,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return string 
      */
-    public function getOldUsernamesCanonical()
+    public function getOldUsernamesCanonical(): string
     {
         return $this->oldUsernamesCanonical;
     }
@@ -1094,7 +976,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param string $autoLogin
      * @return User
      */
-    public function setAutoLogin($autoLogin)
+    public function setAutoLogin(?string $autoLogin): self
     {
         $this->autoLogin = $autoLogin;
 
@@ -1106,7 +988,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return string 
      */
-    public function getAutoLogin()
+    public function getAutoLogin(): string
     {
         return $this->autoLogin;
     }
@@ -1117,7 +999,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param boolean $receiveNewsletter
      * @return User
      */
-    public function setReceiveNewsletter($receiveNewsletter)
+    public function setReceiveNewsletter(bool $receiveNewsletter): self
     {
         $this->receiveNewsletter = $receiveNewsletter;
 
@@ -1129,7 +1011,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return boolean 
      */
-    public function getReceiveNewsletter()
+    public function getReceiveNewsletter(): bool
     {
         return $this->receiveNewsletter;
     }
@@ -1140,7 +1022,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param boolean $receiveAvertissement
      * @return User
      */
-    public function setReceiveAvertissement($receiveAvertissement)
+    public function setReceiveAvertissement(bool $receiveAvertissement): self
     {
         $this->receiveAvertissement = $receiveAvertissement;
 
@@ -1152,7 +1034,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return boolean 
      */
-    public function getReceiveAvertissement()
+    public function getReceiveAvertissement(): bool
     {
         return $this->receiveAvertissement;
     }
@@ -1163,7 +1045,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param boolean $locked
      * @return User
      */
-    public function setLocked($locked)
+    public function setLocked(bool $locked): self
     {
         $this->locked = $locked;
 
@@ -1175,7 +1057,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return boolean 
      */
-    public function getLocked()
+    public function getLocked(): bool
     {
         return $this->locked;
     }
@@ -1186,7 +1068,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param integer $oldId
      * @return User
      */
-    public function setOldId($oldId)
+    public function setOldId(int $oldId): self
     {
         $this->old_id = $oldId;
 
@@ -1198,7 +1080,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return integer 
      */
-    public function getOldId()
+    public function getOldId(): int
     {
         return $this->old_id;
     }
@@ -1209,7 +1091,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @param string $oldLogin
      * @return User
      */
-    public function setOldLogin($oldLogin)
+    public function setOldLogin(string $oldLogin): self
     {
         $this->old_login = $oldLogin;
 
@@ -1221,27 +1103,18 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return string 
      */
-    public function getOldLogin()
+    public function getOldLogin(): string
     {
         return $this->old_login;
     }
 
     /**
-     * Get the full name of the user (first + last name)
-     * @return string
-     */
-    public function getFullName()
-    {
-        return $this->getFirstname() . ' ' . $this->getLastname();
-    }
-
-    /**
      * Set ninja
      *
-     * @param \App\Entity\Game\Ninja $ninja
+     * @param Ninja|null $ninja
      * @return User
      */
-    public function setNinja(\App\Entity\Game\Ninja $ninja = null)
+    public function setNinja(?Ninja $ninja = null): self
     {
         $this->ninja = $ninja;
 
@@ -1251,9 +1124,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get ninja
      *
-     * @return \App\Entity\Game\Ninja 
+     * @return Ninja
      */
-    public function getNinja()
+    public function getNinja(): Ninja
     {
         return $this->ninja;
     }
@@ -1261,10 +1134,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Set clan
      *
-     * @param \App\Entity\Clan\ClanUtilisateur $clan
+     * @param ClanUtilisateur|null $clan
      * @return User
      */
-    public function setClan(\App\Entity\Clan\ClanUtilisateur $clan = null)
+    public function setClan(?ClanUtilisateur $clan = null): self
     {
         $this->clan = $clan;
 
@@ -1274,9 +1147,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get clan
      *
-     * @return \App\Entity\Clan\ClanUtilisateur 
+     * @return ClanUtilisateur
      */
-    public function getClan()
+    public function getClan(): ?ClanUtilisateur
     {
         return $this->clan;
     }
@@ -1284,10 +1157,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Add recruts
      *
-     * @param \App\Entity\Clan\ClanUtilisateur $recruts
+     * @param ClanUtilisateur $recruts
      * @return User
      */
-    public function addRecrut(\App\Entity\Clan\ClanUtilisateur $recruts)
+    public function addRecrut(ClanUtilisateur $recruts): self
     {
         $this->recruts[] = $recruts;
 
@@ -1297,9 +1170,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Remove recruts
      *
-     * @param \App\Entity\Clan\ClanUtilisateur $recruts
+     * @param ClanUtilisateur $recruts
      */
-    public function removeRecrut(\App\Entity\Clan\ClanUtilisateur $recruts)
+    public function removeRecrut(ClanUtilisateur $recruts)
     {
         $this->recruts->removeElement($recruts);
     }
@@ -1307,9 +1180,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get recruts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
-    public function getRecruts()
+    public function getRecruts(): ?Collection
     {
         return $this->recruts;
     }
@@ -1317,9 +1190,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Set recruts collection
      *
+     * @param Collection $recruts
      * @return User
      */
-    public function setRecruts(\Doctrine\Common\Collections\Collection $recruts)
+    public function setRecruts(Collection $recruts): self
     {
         $this->recruts = $recruts;
 
@@ -1329,10 +1203,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Add ips
      *
-     * @param \App\Entity\User\Ip $ips
+     * @param Ip $ips
      * @return User
      */
-    public function addIp(\App\Entity\User\Ip $ips)
+    public function addIp(Ip $ips): self
     {
         $this->ips[] = $ips;
         $ips->setUser($this);
@@ -1343,9 +1217,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Remove ips
      *
-     * @param \App\Entity\User\Ip $ips
+     * @param Ip $ips
      */
-    public function removeIp(\App\Entity\User\Ip $ips)
+    public function removeIp(Ip $ips)
     {
         $this->ips->removeElement($ips);
     }
@@ -1353,9 +1227,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get ips
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
-    public function getIps()
+    public function getIps(): ?Collection
     {
         return $this->ips;
     }
@@ -1363,10 +1237,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Add messages
      *
-     * @param \App\Entity\User\Message $messages
+     * @param Message $message
      * @return User
      */
-    public function addMessage(\App\Entity\User\Message $message)
+    public function addMessage(Message $message): self
     {
         $this->messages[] = $message;
         $message->setAuthor($this);
@@ -1377,9 +1251,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Remove messages
      *
-     * @param \App\Entity\User\Message $messages
+     * @param Message $messages
      */
-    public function removeMessage(\App\Entity\User\Message $messages)
+    public function removeMessage(Message $messages)
     {
         $this->messages->removeElement($messages);
     }
@@ -1387,117 +1261,81 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get messages
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
-    public function getMessages()
+    public function getMessages(): ?Collection
     {
         return $this->messages;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setCreatedAt(?\DateTime $createdAt = null)
+    public function setCreatedAt(?\DateTime $createdAt = null): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setUpdatedAt(?\DateTime $updatedAt = null)
+    public function setUpdatedAt(?\DateTime $updatedAt = null): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setBiography($biography)
+    public function setBiography(string $biography): self
     {
         $this->biography = $biography;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBiography()
+    public function getBiography(): ?string
     {
         return $this->biography;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setGender($gender)
+    public function setGender(string $gender): self
     {
         $this->gender = $gender;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getGender()
+    public function getGender(): ?string
     {
         return $this->gender;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setLocale($locale)
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setTimezone($timezone)
+    public function setTimezone(string $timezone): self
     {
         $this->timezone = $timezone;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTimezone()
+    public function getTimezone(): ?string
     {
         return $this->timezone;
     }
@@ -1507,7 +1345,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return array
      */
-    public static function getGenderList()
+    public static function getGenderList(): array
     {
         return [
             'gender_unknown' => self::GENDER_UNKNOWN,
@@ -1536,7 +1374,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * @return Collection|Lobby[]
      */
-    public function getLobbies(): Collection
+    public function getLobbies(): ?Collection
     {
         return $this->lobbies;
     }

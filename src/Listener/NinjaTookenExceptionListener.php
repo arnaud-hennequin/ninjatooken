@@ -5,7 +5,7 @@ namespace App\Listener;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Twig\Environment;;
+use Twig\Environment;
 
 class NinjaTookenExceptionListener{
 
@@ -28,7 +28,7 @@ class NinjaTookenExceptionListener{
         // personnalise notre objet réponse pour afficher les détails de notre exception
         $response = new Response($this->twig->render('exception.html.twig',array(
                 'status_code' => $code,
-                'status_text' => isset(Response::$statusTexts[$code]) ? Response::$statusTexts[$code] : '',
+                'status_text' => Response::$statusTexts[$code] ?? '',
                 'exception' => $exception,
             ))
         );

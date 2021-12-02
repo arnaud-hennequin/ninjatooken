@@ -3,7 +3,6 @@
 namespace App\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class IpToLongTransformer implements DataTransformerInterface
 {
@@ -11,30 +10,29 @@ class IpToLongTransformer implements DataTransformerInterface
     /**
      * Transforms an object to a string (id).
      *
-     * @param  Object|null $entity
+     * @param null $value
      * @return string
      */
-    public function transform($ip = null)
+    public function transform($value = null): string
     {
-        if (null === $ip) {
+        if (null === $value) {
             return "";
         }
 
-        return long2ip($ip);
+        return long2ip($value);
     }
 
     /**
      * Transforms an id to an object.
      *
-     * @param  string $id
-     * @return Object|null
-     * @throws TransformationFailedException if object is not found.
+     * @param null $value
+     * @return int
      */
-    public function reverseTransform($ip = null)
+    public function reverseTransform($value = null): int
     { 
-        if (!$id) {
-            return null;
+        if (!$value) {
+            return false;
         }
-        return ip2long($ip);
+        return ip2long($value);
     }
 }

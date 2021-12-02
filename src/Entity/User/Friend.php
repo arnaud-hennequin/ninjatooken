@@ -3,6 +3,7 @@
 namespace App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Friend
@@ -71,7 +72,7 @@ class Friend
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -83,7 +84,7 @@ class Friend
      * @param boolean $isBlocked
      * @return Friend
      */
-    public function setIsBlocked($isBlocked)
+    public function setIsBlocked(bool $isBlocked): self
     {
         $this->isBlocked = $isBlocked;
 
@@ -95,7 +96,7 @@ class Friend
      *
      * @return boolean 
      */
-    public function getIsBlocked()
+    public function getIsBlocked(): ?bool
     {
         return $this->isBlocked;
     }
@@ -106,7 +107,7 @@ class Friend
      * @param boolean $isConfirmed
      * @return Friend
      */
-    public function setIsConfirmed($isConfirmed)
+    public function setIsConfirmed(bool $isConfirmed): self
     {
         $this->isConfirmed = $isConfirmed;
 
@@ -118,7 +119,7 @@ class Friend
      *
      * @return boolean 
      */
-    public function getIsConfirmed()
+    public function getIsConfirmed(): ?bool
     {
         return $this->isConfirmed;
     }
@@ -129,7 +130,7 @@ class Friend
      * @param \DateTime $dateAjout
      * @return Friend
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -141,7 +142,7 @@ class Friend
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -149,10 +150,10 @@ class Friend
     /**
      * Set user
      *
-     * @param \App\Entity\User\User $user
+     * @param User|null $user
      * @return Friend
      */
-    public function setUser(\App\Entity\User\User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
@@ -162,9 +163,9 @@ class Friend
     /**
      * Get user
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -172,10 +173,10 @@ class Friend
     /**
      * Set friend
      *
-     * @param \App\Entity\User\User $friend
+     * @param UserInterface|null $friend
      * @return Friend
      */
-    public function setFriend(\App\Entity\User\User $friend = null)
+    public function setFriend(UserInterface $friend = null): self
     {
         $this->friend = $friend;
 
@@ -185,9 +186,9 @@ class Friend
     /**
      * Get friend
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getFriend()
+    public function getFriend(): ?User
     {
         return $this->friend;
     }

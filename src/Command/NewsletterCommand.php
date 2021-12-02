@@ -74,8 +74,8 @@ class NewsletterCommand extends Command
         $i = 1;
 
         $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
-        $stmt->execute();
-        $users = $stmt->fetchAll();
+        $result = $stmt->executeQuery();
+        $users = $result->fetchAllAssociative();
 
         while (count($users)>0) {
 
@@ -135,8 +135,8 @@ class NewsletterCommand extends Command
             $start += $num;
             
             $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
-            $stmt->execute();
-            $users = $stmt->fetchAll();
+            $request = $stmt->executeQuery();
+            $users = $request->fetchAllAssociative();
         }
 
         $io->writeln('---end');

@@ -3,9 +3,7 @@ namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -48,7 +46,7 @@ class InactiveCommand extends Command
         $request = 'SELECT `nt_user`.`id`, `nt_user`.`username`, `nt_user`.`email`, `nt_user`.`auto_login`, `nt_user`.`locale`, `nt_ninja`.`experience` FROM `nt_user` INNER JOIN `nt_ninja` ON `nt_user`.`id` = `nt_ninja`.`user_id` WHERE `nt_user`.`id`=10 OR (`nt_ninja`.`classe` != "" AND `nt_user`.`updated_at` < DATE_SUB(curdate(), INTERVAL 2 MONTH) AND `nt_user`.`email_canonical` NOT LIKE "%yopmail%") ORDER BY `nt_ninja`.`experience` DESC';
 
         $stmt = $this->em->getConnection()->prepare($request);
-        $stmt->execute();
+        $stmt->executeQuery();
 
         foreach ($stmt as $row) {
             try {

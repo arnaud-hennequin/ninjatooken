@@ -74,7 +74,7 @@ class ClanUtilisateur
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -85,7 +85,7 @@ class ClanUtilisateur
      * @param integer $droit
      * @return ClanUtilisateur
      */
-    public function setDroit($droit)
+    public function setDroit(int $droit): self
     {
         $this->droit = $droit;
 
@@ -97,7 +97,7 @@ class ClanUtilisateur
      *
      * @return integer 
      */
-    public function getDroit()
+    public function getDroit(): ?int
     {
         return $this->droit;
     }
@@ -108,7 +108,7 @@ class ClanUtilisateur
      * @param boolean $canEditClan
      * @return ClanUtilisateur
      */
-    public function setCanEditClan($canEditClan)
+    public function setCanEditClan(bool $canEditClan): self
     {
         $this->canEditClan = $canEditClan;
 
@@ -120,7 +120,7 @@ class ClanUtilisateur
      *
      * @return boolean 
      */
-    public function getCanEditClan()
+    public function getCanEditClan(): ?bool
     {
         return $this->canEditClan;
     }
@@ -131,7 +131,7 @@ class ClanUtilisateur
      * @param \DateTime $dateAjout
      * @return ClanUtilisateur
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -143,7 +143,7 @@ class ClanUtilisateur
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -151,10 +151,10 @@ class ClanUtilisateur
     /**
      * Set membre
      *
-     * @param \App\Entity\User\User $membre
+     * @param User|null $membre
      * @return ClanUtilisateur
      */
-    public function setMembre(\App\Entity\User\User $membre = null)
+    public function setMembre(User $membre = null): self
     {
         if($this->membre)
             $this->membre->setClan(null);
@@ -168,9 +168,9 @@ class ClanUtilisateur
     /**
      * Get membre
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getMembre()
+    public function getMembre(): ?User
     {
         return $this->membre;
     }
@@ -178,10 +178,10 @@ class ClanUtilisateur
     /**
      * Set recruteur
      *
-     * @param \App\Entity\User\User $recruteur
+     * @param User|null $recruteur
      * @return ClanUtilisateur
      */
-    public function setRecruteur(\App\Entity\User\User $recruteur = null)
+    public function setRecruteur(User $recruteur = null): self
     {
         if($this->recruteur)
             $this->recruteur->removeRecrut($this);
@@ -196,9 +196,9 @@ class ClanUtilisateur
     /**
      * Get recruteur
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getRecruteur()
+    public function getRecruteur(): ?User
     {
         return $this->recruteur;
     }
@@ -206,10 +206,10 @@ class ClanUtilisateur
     /**
      * Set clan
      *
-     * @param \App\Entity\Clan\Clan $clan
+     * @param Clan|null $clan
      * @return ClanUtilisateur
      */
-    public function setClan(\App\Entity\Clan\Clan $clan = null)
+    public function setClan(Clan $clan = null): self
     {
         $this->clan = $clan;
 
@@ -219,9 +219,9 @@ class ClanUtilisateur
     /**
      * Get clan
      *
-     * @return \App\Entity\Clan\Clan 
+     * @return Clan
      */
-    public function getClan()
+    public function getClan(): ?Clan
     {
         return $this->clan;
     }

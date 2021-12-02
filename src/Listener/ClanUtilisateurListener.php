@@ -3,7 +3,6 @@
 namespace App\Listener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Clan\ClanUtilisateur;
 use App\Entity\Clan\ClanProposition;
@@ -77,7 +76,7 @@ class ClanUtilisateurListener
 
                     // le recruteur du membre supprimé
                     $previousRecruteur = $entity->getRecruteur();//User
-                    if(!$previousRecruteur || $previousRecruteur==$previousUser)
+                    if(!$previousRecruteur || $previousRecruteur === $previousUser)
                         $previousRecruteur = $substitute;
 
                     // redéfini le remplaçant

@@ -14,27 +14,27 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 class FriendAdmin extends AbstractAdmin
 {
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('dateAjout')
         ;
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('id');
 
         if(!$this->isChild())
-            $listMapper->add('user', null, array('label' => 'Utilisateur'));
+            $list->add('user', null, array('label' => 'Utilisateur'));
 
-        $listMapper
+        $list
             ->add('friend', null, array('label' => 'Ami'))
             ->add('isBlocked', null, array('editable' => true, 'label' => 'Bloqué'))
             ->add('isConfirmed', null, array('editable' => true, 'label' => 'Confirmé'))
@@ -50,19 +50,19 @@ class FriendAdmin extends AbstractAdmin
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         if(!$this->isChild())
-            $formMapper->add('user', ModelListType::class, array(
+            $form->add('user', ModelListType::class, array(
                 'label'         => 'Utilisateur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
                 'btn_delete'    => false
             ));
 
-        $formMapper
+        $form
             ->add('friend', ModelListType::class, array(
                 'label'         => 'Ami',
                 'btn_add'       => 'Ajouter',
@@ -89,11 +89,11 @@ class FriendAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('id')
             ->add('user')
             ->add('friend')

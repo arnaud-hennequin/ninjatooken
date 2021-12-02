@@ -2,18 +2,13 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Http\SecurityEvents;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\Asset\Packages;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use App\Entity\User\User;
@@ -21,7 +16,6 @@ use App\Entity\User\Friend;
 use App\Entity\User\Message;
 use App\Entity\User\MessageUser;
 use App\Entity\User\Capture;
-use App\Entity\User\Ip;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
 use App\Utils\GameData;
@@ -35,13 +29,12 @@ class UnityController extends AbstractController
     private $gameversion;
     private $idUtilisateur;
 
-    public function update(Request $request, TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage, GameData $gameData)
+    public function update(Request $request, TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage, GameData $gameData, EntityManagerInterface $em): Response
     {
         $session = $this->get('session');
 
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $tokenStorage->getToken()->getUser();
-            $em = $this->getDoctrine()->getManager();
 
             $this->time = preg_replace('/[^0-9]/i','',(string)$request->get('time'));
             $this->crypt = $request->headers->get('X-COMMON');
@@ -352,7 +345,6 @@ class UnityController extends AbstractController
                                         $experience    = $ninjaCheck->getExperience();
                                         // le grade
                                         $dan        = $ninjaCheck->getGrade();
-                                        $niveau        = 0;
                                         $xpXML        = $doc->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
                                         $k            = 0;
                                         $xp            = $experience-$dan*$xpXML->item($xpXML->length-2)->getAttribute('val');
@@ -727,7 +719,7 @@ class UnityController extends AbstractController
         return new Response(!empty($session->get('visit')) ? "1":"0", 200, array('Content-Type' => 'text/plain'));
     }
 
-    public function connect(Request $request, AuthorizationCheckerInterface $authorizationChecker, Packages $assetsManager, CacheManager $cacheManager, TokenStorageInterface $tokenStorage, GameData $gameData)
+    public function connect(Request $request, AuthorizationCheckerInterface $authorizationChecker, Packages $assetsManager, CacheManager $cacheManager, TokenStorageInterface $tokenStorage, GameData $gameData, EntityManagerInterface $em): Response
     {
         // initialisation
         $content = "<"."?xml version=\"1.0\" encoding=\"UTF-8\""."?><root>";
@@ -747,8 +739,6 @@ class UnityController extends AbstractController
 
         // variables postées
         $visiteur = $request->get('visiteur');
-
-        $em = $this->getDoctrine()->getManager();
 
         $maxid    = $em->getRepository(User::class)
             ->createQueryBuilder('u')
@@ -851,12 +841,14 @@ class UnityController extends AbstractController
     }
 
     // fonction de cryptage
-    private function isCryptingOk($val="") {
+    private function isCryptingOk($val=""): bool
+    {
         return $this->crypt == hash("sha256", $this->cryptUnity.$this->phpsessid.$this->time.$val.$this->idUtilisateur.$this->phpsessid.$this->gameversion, false);
     }
 
     // récupère les données xml
-    private function getDataContent() {
+    private function getDataContent(): string
+    {
         return file_get_contents(dirname(__FILE__).'/../../public/xml/game.xml');
     }
 }

@@ -1,13 +1,20 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
+
+use App\Entity\User\Capture;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use App\Entity\User\User;
- 
-class CaptureRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class CaptureRepository extends ServiceEntityRepository
 {
-    public function getCaptures(User $user, $nombreParPage=5, $page=1)
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Capture::class);
+    }
+
+    public function getCaptures(User $user, $nombreParPage=5, $page=1): Paginator
     {
         $page = max(1, $page);
 

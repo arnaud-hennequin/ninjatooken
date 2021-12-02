@@ -42,10 +42,8 @@ class ClanPropositionListener
     public function postRemove(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof ClanProposition)
-        {
-            if($entity!==null && $entity->getEtat() == 0)
-            {
+        if ($entity instanceof ClanProposition) {
+            if ($entity->getEtat() == 0) {
                 $em = $args->getEntityManager();
 
                 $message = new Message();

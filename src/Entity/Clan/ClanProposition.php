@@ -70,7 +70,7 @@ class ClanProposition
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -81,7 +81,7 @@ class ClanProposition
      * @param \DateTime $dateAjout
      * @return ClanProposition
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -93,7 +93,7 @@ class ClanProposition
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -101,10 +101,10 @@ class ClanProposition
     /**
      * Set recruteur
      *
-     * @param \App\Entity\User\User $recruteur
+     * @param User|null $recruteur
      * @return ClanProposition
      */
-    public function setRecruteur(\App\Entity\User\User $recruteur = null)
+    public function setRecruteur(User $recruteur = null): self
     {
         $this->recruteur = $recruteur;
 
@@ -114,9 +114,9 @@ class ClanProposition
     /**
      * Get recruteur
      *
-     * @return \App\Entity\User\User 
+     * @return User 
      */
-    public function getRecruteur()
+    public function getRecruteur(): ?User
     {
         return $this->recruteur;
     }
@@ -124,10 +124,10 @@ class ClanProposition
     /**
      * Set postulant
      *
-     * @param \App\Entity\User\User $postulant
+     * @param User|null $postulant
      * @return ClanProposition
      */
-    public function setPostulant(\App\Entity\User\User $postulant = null)
+    public function setPostulant(User $postulant = null): self
     {
         $this->postulant = $postulant;
 
@@ -137,9 +137,9 @@ class ClanProposition
     /**
      * Get postulant
      *
-     * @return \App\Entity\User\User 
+     * @return User 
      */
-    public function getPostulant()
+    public function getPostulant(): ?User
     {
         return $this->postulant;
     }
@@ -150,7 +150,7 @@ class ClanProposition
      * @param integer $etat
      * @return ClanProposition
      */
-    public function setEtat($etat)
+    public function setEtat(int $etat): self
     {
         $this->etat = $etat;
 
@@ -162,7 +162,7 @@ class ClanProposition
      *
      * @return integer 
      */
-    public function getEtat()
+    public function getEtat(): ?int
     {
         return $this->etat;
     }
@@ -173,7 +173,7 @@ class ClanProposition
      * @param \DateTime $dateChangementEtat
      * @return ClanProposition
      */
-    public function setDateChangementEtat($dateChangementEtat)
+    public function setDateChangementEtat(\DateTime $dateChangementEtat): self
     {
         $this->dateChangementEtat = $dateChangementEtat;
 
@@ -185,7 +185,7 @@ class ClanProposition
      *
      * @return \DateTime 
      */
-    public function getDateChangementEtat()
+    public function getDateChangementEtat(): ?\DateTime
     {
         return $this->dateChangementEtat;
     }

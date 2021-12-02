@@ -17,19 +17,19 @@ class ClientIpVoter implements VoterInterface
         $this->blacklistedIp = $blacklistedIp;
     }
 
-    public function supportsAttribute($attribute)
+    public function supportsAttribute(): bool
     {
         // you won't check against a user attribute, so return true
         return true;
     }
 
-    public function supportsClass($class)
+    public function supportsClass(): bool
     {
         // your voter supports all type of token classes, so return true
         return true;
     }
 
-    public function vote(TokenInterface $token, $object, array $attributes)
+    public function vote(TokenInterface $token, $subject, array $attributes): int
     {
         $request = $this->requestStack->getCurrentRequest();
         if (in_array($request->getClientIp(), $this->blacklistedIp)) {

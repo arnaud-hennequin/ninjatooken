@@ -4,7 +4,6 @@ namespace App\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -22,10 +21,5 @@ class MessageType extends AbstractType
                 'label_attr' => array('class' => 'libelle')
             ))
         ;
-    }
-
-    public function getName()
-    {
-        return 'message';
     }
 }

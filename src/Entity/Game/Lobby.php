@@ -3,7 +3,6 @@
 namespace App\Entity\Game;
 
 use App\Entity\User\User;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -109,7 +108,7 @@ class Lobby
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -120,7 +119,7 @@ class Lobby
      * @param integer $carte
      * @return Lobby
      */
-    public function setCarte($carte)
+    public function setCarte(int $carte): self
     {
         $this->carte = $carte;
 
@@ -132,7 +131,7 @@ class Lobby
      *
      * @return integer 
      */
-    public function getCarte()
+    public function getCarte(): ?int
     {
         return $this->carte;
     }
@@ -143,7 +142,7 @@ class Lobby
      * @param integer $partie
      * @return Lobby
      */
-    public function setPartie($partie)
+    public function setPartie(int $partie): self
     {
         $this->partie = $partie;
 
@@ -155,7 +154,7 @@ class Lobby
      *
      * @return integer 
      */
-    public function getPartie()
+    public function getPartie(): ?int
     {
         return $this->partie;
     }
@@ -166,7 +165,7 @@ class Lobby
      * @param integer $maximum
      * @return Lobby
      */
-    public function setMaximum($maximum)
+    public function setMaximum(int $maximum): self
     {
         $this->maximum = $maximum;
 
@@ -178,7 +177,7 @@ class Lobby
      *
      * @return integer 
      */
-    public function getMaximum()
+    public function getMaximum(): ?int
     {
         return $this->maximum;
     }
@@ -189,7 +188,7 @@ class Lobby
      * @param integer $jeu
      * @return Lobby
      */
-    public function setJeu($jeu)
+    public function setJeu(int $jeu): self
     {
         $this->jeu = $jeu;
 
@@ -201,7 +200,7 @@ class Lobby
      *
      * @return integer 
      */
-    public function getJeu()
+    public function getJeu(): ?int
     {
         return $this->jeu;
     }
@@ -212,7 +211,7 @@ class Lobby
      * @param string $privee
      * @return Lobby
      */
-    public function setPrivee($privee)
+    public function setPrivee(string $privee): self
     {
         $this->privee = $privee;
 
@@ -224,7 +223,7 @@ class Lobby
      *
      * @return string 
      */
-    public function getPrivee()
+    public function getPrivee(): ?string
     {
         return $this->privee;
     }
@@ -235,7 +234,7 @@ class Lobby
      * @param float $version
      * @return Lobby
      */
-    public function setVersion($version)
+    public function setVersion(float $version): self
     {
         $this->version = $version;
 
@@ -247,7 +246,7 @@ class Lobby
      *
      * @return float 
      */
-    public function getVersion()
+    public function getVersion(): ?float
     {
         return $this->version;
     }
@@ -258,7 +257,7 @@ class Lobby
      * @param \DateTime $dateDebut
      * @return Lobby
      */
-    public function setDateDebut($dateDebut)
+    public function setDateDebut(\DateTime $dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
@@ -270,7 +269,7 @@ class Lobby
      *
      * @return \DateTime 
      */
-    public function getDateDebut()
+    public function getDateDebut(): ?\DateTime
     {
         return $this->dateDebut;
     }
@@ -281,7 +280,7 @@ class Lobby
      * @param \DateTime $dateUpdate
      * @return Lobby
      */
-    public function setDateUpdate($dateUpdate)
+    public function setDateUpdate(\DateTime $dateUpdate): self
     {
         $this->dateUpdate = $dateUpdate;
 
@@ -293,7 +292,7 @@ class Lobby
      *
      * @return \DateTime 
      */
-    public function getDateUpdate()
+    public function getDateUpdate(): ?\DateTime
     {
         return $this->dateUpdate;
     }
@@ -301,7 +300,7 @@ class Lobby
     /**
      * @return Collection|User[]
      */
-    public function getUsers(): Collection
+    public function getUsers(): ?Collection
     {
         return $this->users;
     }

@@ -1,12 +1,18 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
+
+use App\Entity\Clan\ClanPostulation;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\Clan\Clan;
 use App\Entity\User\User;
- 
-class ClanPostulationRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class ClanPostulationRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ClanPostulation::class);
+    }
 
     public function getByClanUser(Clan $clan=null, User $user=null)
     {

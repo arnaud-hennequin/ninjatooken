@@ -13,7 +13,7 @@ class HTMLPurifierExtensionNT extends HTMLPurifierExtension
     /**
      * Constructor.
      *
-     * @param \HTMLPurifier $purifier
+     * @param HTMLPurifiersRegistryInterface $htmlPurifier
      */
     public function __construct(HTMLPurifiersRegistryInterface $htmlPurifier)
     {
@@ -27,7 +27,7 @@ class HTMLPurifierExtensionNT extends HTMLPurifierExtension
      * @param string $profile
      * @return string
      */
-    public function purify($string, $profile = 'default')
+    public function purify(string $string, string $profile = 'default'): string
     {
         $HTMLPurifier = $this->getHTMLPurifierForProfile($profile);
 
@@ -89,7 +89,7 @@ class HTMLPurifierExtensionNT extends HTMLPurifierExtension
      * @return \HTMLPurifier
      * @throws \RuntimeException
      */
-    private function getHTMLPurifierForProfile($profile)
+    private function getHTMLPurifierForProfile(string $profile): \HTMLPurifier
     {
         if (!isset($this->purifiers[$profile])) {
             $purifier = $this->htmlPurifier->get($profile);

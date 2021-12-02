@@ -37,18 +37,15 @@ class Group
      * Group constructor.
      *
      * @param string $name
-     * @param array  $roles
+     * @param array $roles
      */
-    public function __construct($name, $roles = [])
+    public function __construct(string $name, array $roles = [])
     {
         $this->name = $name;
         $this->roles = $roles;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function addRole($role)
+    public function addRole($role): self
     {
         if (!$this->hasRole($role)) {
             $this->roles[] = strtoupper($role);
@@ -57,42 +54,27 @@ class Group
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return in_array(strtoupper($role), $this->roles, true);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRoles()
+    public function getRoles(): ?array
     {
         return $this->roles;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function removeRole($role)
+    public function removeRole($role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -102,20 +84,14 @@ class Group
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setRoles(array $roles)
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 

@@ -70,7 +70,7 @@ class ClanPostulation
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -81,7 +81,7 @@ class ClanPostulation
      * @param \DateTime $dateAjout
      * @return ClanPostulation
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -93,7 +93,7 @@ class ClanPostulation
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -101,10 +101,10 @@ class ClanPostulation
     /**
      * Set postulant
      *
-     * @param \App\Entity\User\User $postulant
+     * @param User|null $postulant
      * @return ClanPostulation
      */
-    public function setPostulant(\App\Entity\User\User $postulant = null)
+    public function setPostulant(\App\Entity\User\User $postulant = null): self
     {
         $this->postulant = $postulant;
 
@@ -116,7 +116,7 @@ class ClanPostulation
      *
      * @return \App\Entity\User\User 
      */
-    public function getPostulant()
+    public function getPostulant(): ?User
     {
         return $this->postulant;
     }
@@ -124,10 +124,10 @@ class ClanPostulation
     /**
      * Set clan
      *
-     * @param \App\Entity\Clan\Clan $clan
+     * @param Clan|null $clan
      * @return ClanPostulation
      */
-    public function setClan(\App\Entity\Clan\Clan $clan = null)
+    public function setClan(\App\Entity\Clan\Clan $clan = null): self
     {
         $this->clan = $clan;
 
@@ -139,7 +139,7 @@ class ClanPostulation
      *
      * @return \App\Entity\Clan\Clan 
      */
-    public function getClan()
+    public function getClan(): ?Clan
     {
         return $this->clan;
     }
@@ -150,7 +150,7 @@ class ClanPostulation
      * @param integer $etat
      * @return ClanPostulation
      */
-    public function setEtat($etat)
+    public function setEtat(int $etat): self
     {
         $this->etat = $etat;
 
@@ -162,7 +162,7 @@ class ClanPostulation
      *
      * @return integer 
      */
-    public function getEtat()
+    public function getEtat(): ?int
     {
         return $this->etat;
     }
@@ -173,7 +173,7 @@ class ClanPostulation
      * @param \DateTime $dateChangementEtat
      * @return ClanPostulation
      */
-    public function setDateChangementEtat($dateChangementEtat)
+    public function setDateChangementEtat(\DateTime $dateChangementEtat): self
     {
         $this->dateChangementEtat = $dateChangementEtat;
 
@@ -185,7 +185,7 @@ class ClanPostulation
      *
      * @return \DateTime 
      */
-    public function getDateChangementEtat()
+    public function getDateChangementEtat(): ?\DateTime
     {
         return $this->dateChangementEtat;
     }

@@ -6,7 +6,6 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Form\Type\ModelListType;
@@ -26,19 +25,16 @@ class ThreadAdmin extends AbstractAdmin
     );
 
     //Fields to be shown on create/edit forms
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        $admin = $formMapper->getAdmin();
-        $current = $admin->getSubject();
-
-        $formMapper
+        $form
             ->with('General')
                 ->add('nom', TextType::class, array(
                     'label' => 'Nom'
                 ));
 
         if(!$this->isChild())
-            $formMapper->add('forum', ModelListType::class, array(
+            $form->add('forum', ModelListType::class, array(
                     'btn_add'       => 'Add forum',
                     'btn_list'      => 'List',
                     'btn_delete'    => false,
@@ -46,7 +42,7 @@ class ThreadAdmin extends AbstractAdmin
                     'placeholder' => 'No forum selected'
                 ));
 
-        $formMapper
+        $form
                 ->add('author', ModelListType::class, array(
                     'btn_add'       => 'Add author',
                     'btn_list'      => 'List',
@@ -102,24 +98,24 @@ class ThreadAdmin extends AbstractAdmin
     }
 
     //Fields to be shown on filter forms
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('nom')
         ;
     }
 
     //Fields to be shown on lists
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('nom')
             ->add('author.username');
 
         if(!$this->isChild())
-            $listMapper->add('forum.nom');
+            $list->add('forum.nom');
 
-        $listMapper
+        $list
             ->add('isCommentable', null, array('editable' => true))
             ->add('isPostit', null, array('editable' => true))
             ->add('isEvent', null, array('editable' => true))

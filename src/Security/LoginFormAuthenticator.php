@@ -23,7 +23,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'ninja_tooken_user_security_login';
 
-    private UrlGeneratorInterface $urlGenerator;
+    private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {

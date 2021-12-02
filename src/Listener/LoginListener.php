@@ -6,7 +6,6 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use App\Entity\User\Ip;
-use App\Entity\User\User;
 
 class LoginListener
 {
@@ -14,11 +13,11 @@ class LoginListener
     private $em;
 
     /**
-    * Constructor
-    * 
-    * @param securityChecker $context
-    * @param Doctrine        $doctrine
-    */
+     * Constructor
+     *
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param Doctrine $doctrine
+     */
     public function __construct( AuthorizationCheckerInterface $authorizationChecker , Doctrine $doctrine )
     {
         $this->authorizationChecker = $authorizationChecker;

@@ -2,7 +2,9 @@
 namespace App\Entity\Forum;
 
 use App\Entity\User\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -63,7 +65,7 @@ class Comment
 
     public function __construct()
     {
-        $this->setDateAjout(new \DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     /**
@@ -71,17 +73,18 @@ class Comment
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-    * Set author's name
-    * 
-    * @param UserInterface $author 
-    */
-    public function setAuthor(\App\Entity\User\User $author)
+     * Set author's name
+     *
+     * @param UserInterface $author
+     * @return Comment
+     */
+    public function setAuthor(UserInterface $author): self
     {
         $this->author = $author;
 
@@ -91,9 +94,9 @@ class Comment
     /**
     * Get author's name
     * 
-    * @return type 
+    * @return User 
     */
-    public function getAuthor()
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
@@ -101,7 +104,7 @@ class Comment
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): ?string
     {
         return $this->body;
     }
@@ -111,7 +114,7 @@ class Comment
      *
      * @return Comment
      */
-    public function setBody($body)
+    public function setBody($body): self
     {
         $this->body = $body;
 
@@ -121,7 +124,7 @@ class Comment
     /**
      * @return DateTime
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -132,7 +135,7 @@ class Comment
      *
      * @return Comment
      */
-    public function setDateAjout(\DateTime $dateAjout)
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -140,9 +143,9 @@ class Comment
     }
 
     /**
-     * @return App\Entity\Forum\Thread
+     * @return Thread
      */
-    public function getThread()
+    public function getThread(): ?Thread
     {
         return $this->thread;
     }
@@ -152,7 +155,7 @@ class Comment
      *
      * @return Comment
      */
-    public function setThread(\App\Entity\Forum\Thread $thread)
+    public function setThread(Thread $thread): self
     {
         $this->thread = $thread;
 
@@ -165,7 +168,7 @@ class Comment
      * @param integer $oldId
      * @return Comment
      */
-    public function setOldId($oldId)
+    public function setOldId(int $oldId): self
     {
         $this->old_id = $oldId;
 
@@ -177,7 +180,7 @@ class Comment
      *
      * @return integer 
      */
-    public function getOldId()
+    public function getOldId(): ?int
     {
         return $this->old_id;
     }

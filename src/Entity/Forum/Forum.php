@@ -6,6 +6,7 @@ use App\Entity\Clan\Clan;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * Forum
@@ -98,7 +99,7 @@ class Forum implements SluggableInterface
         return true;
     }
 
-    public function generateSlugValue($values): string
+    public function generateSlugValue($values): ?string
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
@@ -112,7 +113,7 @@ class Forum implements SluggableInterface
         // generate the slug itself
         $sluggableText = implode(' ', $usableValues);
 
-        $unicodeString = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+        $unicodeString = (new AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
 
         $slug = strtolower($unicodeString->toString());
 
@@ -128,7 +129,7 @@ class Forum implements SluggableInterface
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -139,7 +140,7 @@ class Forum implements SluggableInterface
      * @param string $nom
      * @return Forum
      */
-    public function setNom($nom)
+    public function setNom(string $nom): self
     {
         $this->nom = $nom;
 
@@ -151,7 +152,7 @@ class Forum implements SluggableInterface
      *
      * @return string 
      */
-    public function getNom()
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -162,7 +163,7 @@ class Forum implements SluggableInterface
      * @param integer $ordre
      * @return Forum
      */
-    public function setOrdre($ordre)
+    public function setOrdre(int $ordre): self
     {
         $this->ordre = $ordre;
 
@@ -174,7 +175,7 @@ class Forum implements SluggableInterface
      *
      * @return integer 
      */
-    public function getOrdre()
+    public function getOrdre(): ?int
     {
         return $this->ordre;
     }
@@ -185,7 +186,7 @@ class Forum implements SluggableInterface
      * @param \DateTime $dateAjout
      * @return Forum
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -197,7 +198,7 @@ class Forum implements SluggableInterface
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -208,7 +209,7 @@ class Forum implements SluggableInterface
      * @param integer $oldId
      * @return Forum
      */
-    public function setOldId($oldId)
+    public function setOldId(int $oldId): self
     {
         $this->old_id = $oldId;
 
@@ -220,7 +221,7 @@ class Forum implements SluggableInterface
      *
      * @return integer 
      */
-    public function getOldId()
+    public function getOldId(): ?int
     {
         return $this->old_id;
     }
@@ -230,7 +231,7 @@ class Forum implements SluggableInterface
      *
      * @return integer
      */
-    public function getNumThreads()
+    public function getNumThreads(): ?int
     {
         return $this->numThreads;
     }
@@ -240,30 +241,32 @@ class Forum implements SluggableInterface
      *
      * @param integer $threads
      */
-    public function setNumThreads($threads)
+    public function setNumThreads(int $threads): self
     {
-        $this->numThreads = intval($threads);
+        $this->numThreads = $threads;
+
+        return $this;
     }
 
     /**
      * Increments the number of threads by the supplied
      * value.
      *
-     * @param  integer $by Value to increment threads by
+     * @param integer $by Value to increment threads by
      * @return integer The new thread total
      */
-    public function incrementNumThreads($by = 1)
+    public function incrementNumThreads(int $by = 1): ?int
     {
-        return $this->numThreads += intval($by);
+        return $this->numThreads += $by;
     }
 
     /**
      * Set clan
      *
-     * @param \App\Entity\Clan\Clan $clan
+     * @param Clan|null $clan
      * @return Forum
      */
-    public function setClan(\App\Entity\Clan\Clan $clan = null)
+    public function setClan(Clan $clan = null): self
     {
         $this->clan = $clan;
 
@@ -273,9 +276,9 @@ class Forum implements SluggableInterface
     /**
      * Get clan
      *
-     * @return \App\Entity\Clan\Clan 
+     * @return Clan
      */
-    public function getClan()
+    public function getClan(): ?Clan
     {
         return $this->clan;
     }
@@ -284,9 +287,9 @@ class Forum implements SluggableInterface
      * Set canUserCreateThread
      *
      * @param boolean $canUserCreateThread
-     * @return Thread
+     * @return Forum
      */
-    public function setCanUserCreateThread($canUserCreateThread)
+    public function setCanUserCreateThread(bool $canUserCreateThread): self
     {
         $this->canUserCreateThread = $canUserCreateThread;
 
@@ -298,7 +301,7 @@ class Forum implements SluggableInterface
      *
      * @return boolean 
      */
-    public function getCanUserCreateThread()
+    public function getCanUserCreateThread(): ?bool
     {
         return $this->canUserCreateThread;
     }

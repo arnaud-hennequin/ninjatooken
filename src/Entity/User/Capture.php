@@ -79,7 +79,7 @@ class Capture
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -90,7 +90,7 @@ class Capture
      * @param string $url
      * @return Capture
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
@@ -102,7 +102,7 @@ class Capture
      *
      * @return string 
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -113,7 +113,7 @@ class Capture
      * @param string $urlTmb
      * @return Capture
      */
-    public function setUrlTmb($urlTmb)
+    public function setUrlTmb(string $urlTmb): self
     {
         $this->urlTmb = $urlTmb;
 
@@ -125,7 +125,7 @@ class Capture
      *
      * @return string 
      */
-    public function getUrlTmb()
+    public function getUrlTmb(): ?string
     {
         return $this->urlTmb;
     }
@@ -136,7 +136,7 @@ class Capture
      * @param string $deleteHash
      * @return Capture
      */
-    public function setDeleteHash($deleteHash)
+    public function setDeleteHash(string $deleteHash): self
     {
         $this->deleteHash = $deleteHash;
 
@@ -148,7 +148,7 @@ class Capture
      *
      * @return string 
      */
-    public function getDeleteHash()
+    public function getDeleteHash(): ?string
     {
         return $this->deleteHash;
     }
@@ -159,7 +159,7 @@ class Capture
      * @param \DateTime $dateAjout
      * @return Capture
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -171,7 +171,7 @@ class Capture
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -179,10 +179,10 @@ class Capture
     /**
      * Set user
      *
-     * @param \App\Entity\User\User $user
+     * @param User|null $user
      * @return Capture
      */
-    public function setUser(\App\Entity\User\User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
@@ -192,9 +192,9 @@ class Capture
     /**
      * Get user
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }

@@ -234,11 +234,6 @@ class Chat extends \CustomAJAXChat
         parent::__construct();
     }
 
-    public function initConfig()
-    {
-        return;
-    }
-
     public function getValidLoginUserData()
     {
         if (!empty($this->_userData)) {
@@ -260,14 +255,16 @@ class Chat extends \CustomAJAXChat
         return $this->getGuestUser();
     }
 
-    function &getChannels() {
+    function &getChannels(): array
+    {
         if($this->_channels === null) {
             $this->_channels = $this->getAllChannels();
         }
         return $this->_channels;
     }
 
-    function &getAllChannels() {
+    function &getAllChannels(): array
+    {
         if($this->_allChannels === null) {
             // Get all existing channels:
             $customChannels = $this->getCustomChannels();
@@ -297,7 +294,7 @@ class Chat extends \CustomAJAXChat
         return $this->_allChannels;
     }
 
-    function &getCustomUsers()
+    function &getCustomUsers(): array
     {
         $users = [
             [
@@ -310,14 +307,15 @@ class Chat extends \CustomAJAXChat
         return $users;
     }
 
-    function &getCustomChannels()
+    function &getCustomChannels(): array
     {
         $channels = ['NinjaTooken'];
         return $channels;
     }
 
 
-    function parseCustomCommands($text, $textParts) {
+    function parseCustomCommands($text, $textParts): bool
+    {
         switch($textParts[0]) {
             // Away from keyboard message:
             case '/afk':
@@ -331,7 +329,8 @@ class Chat extends \CustomAJAXChat
         }
     }
 
-    function onNewMessage($text) {
+    function onNewMessage($text): bool
+    {
         if($this->getSessionVar('AwayFromKeyboard')) {
             $this->setUserName($this->subString($this->getUserName(), 5));
             $this->updateOnlineList();

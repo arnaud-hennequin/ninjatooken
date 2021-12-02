@@ -1,12 +1,17 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
-use App\Entity\Clan\Clan;
+
+use App\Entity\Clan\ClanProposition;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\User\User;
- 
-class ClanPropositionRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class ClanPropositionRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ClanProposition::class);
+    }
 
     public function getPropositionByUsers(User $recruteur=null, User $postulant=null)
     {

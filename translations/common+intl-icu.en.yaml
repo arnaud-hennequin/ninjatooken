@@ -246,13 +246,5 @@ gameDownload:
         <h1>Current version : {version}</h1>
         <ul>
             <li><h1><a href="/windows{version}.zip" target="_blank">Windows</a></h1></li>
-            <li>
-                <h1><a href="/mac{version}.zip" target="_blank">MacOS</a></h1>
-                For the mac version, the game may not launch. You must then open the terminal and then:<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<code>cd &lt;PATH_TO_YOUR_APP&gt;/ninjatooken.app/Contents/MacOS/</code><br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<code>chmod +x ninjatooken.app</code><br>
-                if this chmod is not enough to make the game executable:<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<code>sudo chmod -R 755</code><br>
-                It is possible that even if the game is well executable, the build version differs too much and that it is still impossible to launch it ... I have no solution right now for this :/ 
-                </li>
+            <li><h1><a href="/mac{version}.zip" target="_blank">MacOS</a></h1></li>
         </ul>

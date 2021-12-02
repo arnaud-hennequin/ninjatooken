@@ -13,11 +13,11 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 class ClanPostulationAdmin extends AbstractAdmin
 {
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('dateAjout')
             ->add('dateChangementEtat')
             ->add('etat')
@@ -25,17 +25,17 @@ class ClanPostulationAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('id');
 
         if(!$this->isChild())
-            $listMapper->add('clan', null, array('label' => 'Clan'));
+            $list->add('clan', null, array('label' => 'Clan'));
 
-        $listMapper
+        $list
             ->add('postulant', null, array('label' => 'Postulant'))
             ->add('dateAjout', null, array('label' => 'Ajouté le'))
             ->add('dateChangementEtat', null, array('label' => 'Modifié le'))
@@ -51,12 +51,12 @@ class ClanPostulationAdmin extends AbstractAdmin
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         if(!$this->isChild())
-            $formMapper->add('clan', ModelListType::class, array(
+            $form->add('clan', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Clan',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
@@ -64,7 +64,7 @@ class ClanPostulationAdmin extends AbstractAdmin
                 'placeholder' => 'Pas de clan'
             ));
 
-        $formMapper
+        $form
             ->add('postulant', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Utilisateur',
                 'btn_list'      => 'List',
@@ -83,11 +83,11 @@ class ClanPostulationAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('id')
             ->add('postulant')
             ->add('dateAjout')

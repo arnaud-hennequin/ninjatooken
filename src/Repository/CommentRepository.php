@@ -1,13 +1,20 @@
 <?php
 namespace App\Repository;
  
-use Doctrine\ORM\EntityRepository;
+use App\Entity\Forum\Comment;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\Forum\Forum;
 use App\Entity\Forum\Thread;
 use App\Entity\User\User;
- 
-class CommentRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class CommentRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Comment::class);
+    }
+
     public function getCommentsByThread(Thread $thread, $nombreParPage=5, $page=1)
     {
         $page = max(1, $page);
@@ -91,7 +98,7 @@ class CommentRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function deleteCommentsByThread(Thread $thread = null)
+    public function deleteCommentsByThread(Thread $thread = null): bool
     {
         if($thread){
             $query = $this->createQueryBuilder('c')

@@ -10,9 +10,7 @@ class GameData
     private $document;
     private $xml;
 
-    private $experience;
     private $experienceRelatif;
-    private $dan;
     private $levelActuel;
     private $levelSuivant;
 
@@ -28,19 +26,18 @@ class GameData
         $this->domExperience = $this->document->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
     }
 
-    public function getDocument(){
+    public function getDocument(): DOMDocument
+    {
         return $this->document;
     }
     public function getRaw(){
         return $this->xml;
     }
 
-    public function setExperience($experience = 0, $dan = 0){
-        $this->experience = (int)$experience;
-        $this->dan = (int)$dan;
-
+    public function setExperience(int $experience = 0, int $dan = 0): GameData
+    {
         $k = 0;
-        $this->experienceRelatif = $this->experience - $this->dan * $this->domExperience->item($this->domExperience->length-2)->getAttribute('val');
+        $this->experienceRelatif = $experience - $dan * $this->domExperience->item($this->domExperience->length-2)->getAttribute('val');
         foreach($this->domExperience as $exp){
             if($exp->getAttribute('val') <= $this->experienceRelatif)
                 $k++;

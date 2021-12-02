@@ -7,7 +7,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Doctrine\ORM\EntityRepository;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,9 +28,9 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('username', null, array('label' => 'Login'))
             ->add('oldUsernames', null, array('label' => 'Autres logins'))
             ->add('email', null, array('label' => 'Email'))
@@ -44,9 +43,9 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureDatagridFilters(DatagridMapper $filterMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $filterMapper
+        $filter
             ->add('username', null, array('label' => 'Login'))
             ->add('locked', null, array('label' => 'Verrouillé'))
             ->add('email', null, array('label' => 'Email'))
@@ -56,9 +55,9 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->with('General')
                 ->add('username')
                 ->add('oldUsernames')
@@ -82,9 +81,9 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper
+        $form
             ->with('General')
                 ->add('username', TextType::class, array(
                     'label' => 'Login'
@@ -149,7 +148,7 @@ class UserAdmin extends AbstractAdmin
             ->end()
         ;
 
-        $formMapper
+        $form
             ->with('Sécurité')
                 ->add('confirmationToken', TextType::class, array('required' => false))
                 ->add('autologin', TextType::class, array('required' => false))
@@ -160,12 +159,12 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    public function preUpdate(object $user): void
+    public function preUpdate(object $object): void
     {
         if(!isset($this->userManager))
             return;
-        $this->getUserManager()->updateCanonicalFields($user);
-        $this->getUserManager()->updatePassword($user);
+        $this->getUserManager()->updateCanonicalFields($object);
+        $this->getUserManager()->updatePassword($object);
     }
 
     /**
@@ -175,8 +174,7 @@ class UserAdmin extends AbstractAdmin
     {
         if(!isset($this->userManager))
             return;
-        $em = $this->userManager->getManager();
-        $conn = $em->getConnection();
+        $em = $this->getModelManager()->getEntityManager(get_class($object));
         $evm = $em->getEventManager();
 
         // enlève les évènement sur clan_proposition
@@ -192,9 +190,9 @@ class UserAdmin extends AbstractAdmin
     /**
      * {@inheritdoc}
      */
-    public function postRemove(object $object=null): void
+    public function postRemove(object $object = null): void
     {
-        $conn = $this->modelManager->getEntityManager()->getConnection();
+        $conn = $this->getModelManager()->getEntityManager(get_class($object))->getConnection();
 
         // recalcul les nombres de réponses d'un thread
         $conn->executeUpdate("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = isnull(c.num, 0)");

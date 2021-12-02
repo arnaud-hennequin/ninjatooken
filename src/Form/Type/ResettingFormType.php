@@ -24,9 +24,4 @@ class ResettingFormType extends AbstractType
             'invalid_message' => 'resetting.mismatch',
         ));
     }
-
-    public function getName()
-    {
-        return 'ninjatooken_user_resetting';
-    }
 }

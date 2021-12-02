@@ -14,28 +14,28 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 class ClanUtilisateurAdmin extends AbstractAdmin
 {
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('droit')
             ->add('canEditClan')
         ;
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('id');
 
         if(!$this->isChild())
-            $listMapper->add('clan', null, array('label' => 'Clan'));
+            $list->add('clan', null, array('label' => 'Clan'));
 
-        $listMapper
+        $list
             ->add('recruteur', null, array('label' => 'Recruteur'))
             ->add('membre', null, array('label' => 'Membre'))
             ->add('droit', null, array('label' => 'Droit', 'editable' => true))
@@ -52,12 +52,12 @@ class ClanUtilisateurAdmin extends AbstractAdmin
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         if(!$this->isChild()){
-            $formMapper->add('clan', ModelListType::class, array(
+            $form->add('clan', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Clan',
                 'btn_list'      => 'List',
                 'btn_delete'    => false,
@@ -66,7 +66,7 @@ class ClanUtilisateurAdmin extends AbstractAdmin
             ));
         }
 
-        $formMapper
+        $form
             ->add('recruteur', ModelListType::class, array(
                 'btn_add'       => 'Ajouter Utilisateur',
                 'btn_list'      => 'List',
@@ -100,11 +100,11 @@ class ClanUtilisateurAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('id')
             ->add('droit')
             ->add('canEditClan')

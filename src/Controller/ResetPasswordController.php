@@ -5,15 +5,18 @@ namespace App\Controller;
 use App\Entity\User\User;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
@@ -69,7 +72,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null): Response
+    public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em, string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -103,8 +106,8 @@ class ResetPasswordController extends AbstractController
             // A password reset token should be used only once, remove it.
             $this->resetPasswordHelper->removeResetRequest($token);
 
-            $user->setPassword($passwordEncoder->encodePassword($user, $form->get('plainPassword')->getData()));
-            $this->getDoctrine()->getManager()->flush();
+            $user->setPassword($passwordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            $em->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -117,13 +120,13 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, UserRepository $userRepository): RedirectResponse
     {
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+        $user = $userRepository->findOneBy([
             'email' => $emailFormData,
         ]);
         if (!$user) {
-            $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
+            $user = $$userRepository->findOneBy([
                 'username' => $emailFormData,
             ]);
         }
@@ -161,7 +164,7 @@ class ResetPasswordController extends AbstractController
             ;
 
             $mailer->send($email);
-        } catch (\Exception $e) {
+        } catch (\Exception | TransportExceptionInterface $e) {
             $this->addFlash('warning', 'Une erreur est survenue lors de l\'envoi du mail : '.$e->getMessage());
             return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
         }

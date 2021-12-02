@@ -1,12 +1,18 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
+
 use App\Entity\Forum\Forum;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\Clan\Clan;
- 
-class ForumRepository extends EntityRepository
+use Doctrine\Persistence\ManagerRegistry;
+
+class ForumRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Forum::class);
+    }
+
     public function getForum($slug="", Clan $clan = null, $nombreParPage=20, $page=1)
     {
         $page = max(1, $page);

@@ -319,7 +319,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -330,7 +330,7 @@ class Ninja
      * @param integer $aptitudeForce
      * @return Ninja
      */
-    public function setAptitudeForce($aptitudeForce)
+    public function setAptitudeForce(int $aptitudeForce): self
     {
         $this->aptitudeForce = $aptitudeForce;
 
@@ -342,7 +342,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getAptitudeForce()
+    public function getAptitudeForce(): ?int
     {
         return $this->aptitudeForce;
     }
@@ -353,7 +353,7 @@ class Ninja
      * @param integer $aptitudeVitesse
      * @return Ninja
      */
-    public function setAptitudeVitesse($aptitudeVitesse)
+    public function setAptitudeVitesse(int $aptitudeVitesse): self
     {
         $this->aptitudeVitesse = $aptitudeVitesse;
 
@@ -365,7 +365,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getAptitudeVitesse()
+    public function getAptitudeVitesse(): ?int
     {
         return $this->aptitudeVitesse;
     }
@@ -376,7 +376,7 @@ class Ninja
      * @param integer $aptitudeVie
      * @return Ninja
      */
-    public function setAptitudeVie($aptitudeVie)
+    public function setAptitudeVie(int $aptitudeVie): self
     {
         $this->aptitudeVie = $aptitudeVie;
 
@@ -388,7 +388,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getAptitudeVie()
+    public function getAptitudeVie(): ?int
     {
         return $this->aptitudeVie;
     }
@@ -399,7 +399,7 @@ class Ninja
      * @param integer $aptitudeChakra
      * @return Ninja
      */
-    public function setAptitudeChakra($aptitudeChakra)
+    public function setAptitudeChakra(int $aptitudeChakra): self
     {
         $this->aptitudeChakra = $aptitudeChakra;
 
@@ -411,7 +411,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getAptitudeChakra()
+    public function getAptitudeChakra(): ?int
     {
         return $this->aptitudeChakra;
     }
@@ -422,7 +422,7 @@ class Ninja
      * @param integer $jutsuBoule
      * @return Ninja
      */
-    public function setJutsuBoule($jutsuBoule)
+    public function setJutsuBoule(int $jutsuBoule): self
     {
         $this->jutsuBoule = $jutsuBoule;
 
@@ -434,7 +434,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuBoule()
+    public function getJutsuBoule(): ?int
     {
         return $this->jutsuBoule;
     }
@@ -445,7 +445,7 @@ class Ninja
      * @param integer $jutsuDoubleSaut
      * @return Ninja
      */
-    public function setJutsuDoubleSaut($jutsuDoubleSaut)
+    public function setJutsuDoubleSaut(int $jutsuDoubleSaut): self
     {
         $this->jutsuDoubleSaut = $jutsuDoubleSaut;
 
@@ -457,7 +457,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuDoubleSaut()
+    public function getJutsuDoubleSaut(): ?int
     {
         return $this->jutsuDoubleSaut;
     }
@@ -468,7 +468,7 @@ class Ninja
      * @param integer $jutsuBouclier
      * @return Ninja
      */
-    public function setJutsuBouclier($jutsuBouclier)
+    public function setJutsuBouclier(int $jutsuBouclier): self
     {
         $this->jutsuBouclier = $jutsuBouclier;
 
@@ -480,7 +480,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuBouclier()
+    public function getJutsuBouclier(): ?int
     {
         return $this->jutsuBouclier;
     }
@@ -491,7 +491,7 @@ class Ninja
      * @param integer $jutsuMarcherMur
      * @return Ninja
      */
-    public function setJutsuMarcherMur($jutsuMarcherMur)
+    public function setJutsuMarcherMur(int $jutsuMarcherMur): self
     {
         $this->jutsuMarcherMur = $jutsuMarcherMur;
 
@@ -503,7 +503,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuMarcherMur()
+    public function getJutsuMarcherMur(): ?int
     {
         return $this->jutsuMarcherMur;
     }
@@ -514,7 +514,7 @@ class Ninja
      * @param integer $jutsuDeflagration
      * @return Ninja
      */
-    public function setJutsuDeflagration($jutsuDeflagration)
+    public function setJutsuDeflagration(int $jutsuDeflagration): self
     {
         $this->jutsuDeflagration = $jutsuDeflagration;
 
@@ -526,7 +526,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuDeflagration()
+    public function getJutsuDeflagration(): ?int
     {
         return $this->jutsuDeflagration;
     }
@@ -537,7 +537,7 @@ class Ninja
      * @param integer $jutsuTransformationAqueuse
      * @return Ninja
      */
-    public function setJutsuTransformationAqueuse($jutsuTransformationAqueuse)
+    public function setJutsuTransformationAqueuse(int $jutsuTransformationAqueuse): self
     {
         $this->jutsuTransformationAqueuse = $jutsuTransformationAqueuse;
 
@@ -549,7 +549,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuTransformationAqueuse()
+    public function getJutsuTransformationAqueuse(): ?int
     {
         return $this->jutsuTransformationAqueuse;
     }
@@ -560,7 +560,7 @@ class Ninja
      * @param integer $jutsuMetamorphose
      * @return Ninja
      */
-    public function setJutsuMetamorphose($jutsuMetamorphose)
+    public function setJutsuMetamorphose(int $jutsuMetamorphose): self
     {
         $this->jutsuMetamorphose = $jutsuMetamorphose;
 
@@ -572,7 +572,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuMetamorphose()
+    public function getJutsuMetamorphose(): ?int
     {
         return $this->jutsuMetamorphose;
     }
@@ -583,7 +583,7 @@ class Ninja
      * @param integer $jutsuMultishoot
      * @return Ninja
      */
-    public function setJutsuMultishoot($jutsuMultishoot)
+    public function setJutsuMultishoot(int $jutsuMultishoot): self
     {
         $this->jutsuMultishoot = $jutsuMultishoot;
 
@@ -595,7 +595,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuMultishoot()
+    public function getJutsuMultishoot(): ?int
     {
         return $this->jutsuMultishoot;
     }
@@ -606,7 +606,7 @@ class Ninja
      * @param integer $jutsuInvisibilite
      * @return Ninja
      */
-    public function setJutsuInvisibilite($jutsuInvisibilite)
+    public function setJutsuInvisibilite(int $jutsuInvisibilite): self
     {
         $this->jutsuInvisibilite = $jutsuInvisibilite;
 
@@ -618,7 +618,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuInvisibilite()
+    public function getJutsuInvisibilite(): ?int
     {
         return $this->jutsuInvisibilite;
     }
@@ -629,7 +629,7 @@ class Ninja
      * @param integer $jutsuResistanceExplosion
      * @return Ninja
      */
-    public function setJutsuResistanceExplosion($jutsuResistanceExplosion)
+    public function setJutsuResistanceExplosion(int $jutsuResistanceExplosion): self
     {
         $this->jutsuResistanceExplosion = $jutsuResistanceExplosion;
 
@@ -641,7 +641,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuResistanceExplosion()
+    public function getJutsuResistanceExplosion(): ?int
     {
         return $this->jutsuResistanceExplosion;
     }
@@ -652,7 +652,7 @@ class Ninja
      * @param integer $jutsuPhoenix
      * @return Ninja
      */
-    public function setJutsuPhoenix($jutsuPhoenix)
+    public function setJutsuPhoenix(int $jutsuPhoenix): self
     {
         $this->jutsuPhoenix = $jutsuPhoenix;
 
@@ -664,7 +664,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuPhoenix()
+    public function getJutsuPhoenix(): ?int
     {
         return $this->jutsuPhoenix;
     }
@@ -675,7 +675,7 @@ class Ninja
      * @param integer $jutsuVague
      * @return Ninja
      */
-    public function setJutsuVague($jutsuVague)
+    public function setJutsuVague(int $jutsuVague): self
     {
         $this->jutsuVague = $jutsuVague;
 
@@ -687,7 +687,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuVague()
+    public function getJutsuVague(): ?int
     {
         return $this->jutsuVague;
     }
@@ -698,7 +698,7 @@ class Ninja
      * @param integer $jutsuPieux
      * @return Ninja
      */
-    public function setJutsuPieux($jutsuPieux)
+    public function setJutsuPieux(int $jutsuPieux): self
     {
         $this->jutsuPieux = $jutsuPieux;
 
@@ -710,7 +710,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuPieux()
+    public function getJutsuPieux(): ?int
     {
         return $this->jutsuPieux;
     }
@@ -721,7 +721,7 @@ class Ninja
      * @param integer $jutsuTeleportation
      * @return Ninja
      */
-    public function setJutsuTeleportation($jutsuTeleportation)
+    public function setJutsuTeleportation(int $jutsuTeleportation): self
     {
         $this->jutsuTeleportation = $jutsuTeleportation;
 
@@ -733,7 +733,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuTeleportation()
+    public function getJutsuTeleportation(): ?int
     {
         return $this->jutsuTeleportation;
     }
@@ -744,7 +744,7 @@ class Ninja
      * @param integer $jutsuTornade
      * @return Ninja
      */
-    public function setJutsuTornade($jutsuTornade)
+    public function setJutsuTornade(int $jutsuTornade): self
     {
         $this->jutsuTornade = $jutsuTornade;
 
@@ -756,7 +756,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuTornade()
+    public function getJutsuTornade(): ?int
     {
         return $this->jutsuTornade;
     }
@@ -767,7 +767,7 @@ class Ninja
      * @param integer $jutsuKusanagi
      * @return Ninja
      */
-    public function setJutsuKusanagi($jutsuKusanagi)
+    public function setJutsuKusanagi(int $jutsuKusanagi): self
     {
         $this->jutsuKusanagi = $jutsuKusanagi;
 
@@ -779,7 +779,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuKusanagi()
+    public function getJutsuKusanagi(): ?int
     {
         return $this->jutsuKusanagi;
     }
@@ -790,7 +790,7 @@ class Ninja
      * @param integer $jutsuAcierRenforce
      * @return Ninja
      */
-    public function setJutsuAcierRenforce($jutsuAcierRenforce)
+    public function setJutsuAcierRenforce(int $jutsuAcierRenforce): self
     {
         $this->jutsuAcierRenforce = $jutsuAcierRenforce;
 
@@ -802,7 +802,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuAcierRenforce()
+    public function getJutsuAcierRenforce(): ?int
     {
         return $this->jutsuAcierRenforce;
     }
@@ -813,7 +813,7 @@ class Ninja
      * @param integer $jutsuChakraVie
      * @return Ninja
      */
-    public function setJutsuChakraVie($jutsuChakraVie)
+    public function setJutsuChakraVie(int $jutsuChakraVie): self
     {
         $this->jutsuChakraVie = $jutsuChakraVie;
 
@@ -825,7 +825,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuChakraVie()
+    public function getJutsuChakraVie(): ?int
     {
         return $this->jutsuChakraVie;
     }
@@ -836,7 +836,7 @@ class Ninja
      * @param integer $grade
      * @return Ninja
      */
-    public function setGrade($grade)
+    public function setGrade(int $grade): self
     {
         $this->grade = $grade;
 
@@ -848,7 +848,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getGrade()
+    public function getGrade(): ?int
     {
         return $this->grade;
     }
@@ -859,7 +859,7 @@ class Ninja
      * @param integer $experience
      * @return Ninja
      */
-    public function setExperience($experience)
+    public function setExperience(int $experience): self
     {
         $this->experience = $experience;
 
@@ -871,7 +871,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getExperience()
+    public function getExperience(): ?int
     {
         return $this->experience;
     }
@@ -882,7 +882,7 @@ class Ninja
      * @param string $classe
      * @return Ninja
      */
-    public function setClasse($classe)
+    public function setClasse(string $classe): self
     {
         $this->classe = $classe;
 
@@ -894,7 +894,7 @@ class Ninja
      *
      * @return string 
      */
-    public function getClasse()
+    public function getClasse(): ?string
     {
         return $this->classe;
     }
@@ -902,10 +902,10 @@ class Ninja
     /**
      * Set user
      *
-     * @param \App\Entity\User\User $user
+     * @param User|null $user
      * @return Ninja
      */
-    public function setUser(\App\Entity\User\User $user = null)
+    public function setUser(\App\Entity\User\User $user = null): self
     {
         $this->user = $user;
 
@@ -917,7 +917,7 @@ class Ninja
      *
      * @return \App\Entity\User\User 
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -928,7 +928,7 @@ class Ninja
      * @param integer $masque
      * @return Ninja
      */
-    public function setMasque($masque)
+    public function setMasque(int $masque): self
     {
         $this->masque = $masque;
 
@@ -940,7 +940,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getMasque()
+    public function getMasque(): ?int
     {
         return $this->masque;
     }
@@ -951,7 +951,7 @@ class Ninja
      * @param integer $masqueCouleur
      * @return Ninja
      */
-    public function setMasqueCouleur($masqueCouleur)
+    public function setMasqueCouleur(int $masqueCouleur): self
     {
         $this->masqueCouleur = $masqueCouleur;
 
@@ -963,7 +963,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getMasqueCouleur()
+    public function getMasqueCouleur(): ?int
     {
         return $this->masqueCouleur;
     }
@@ -974,7 +974,7 @@ class Ninja
      * @param integer $masqueDetail
      * @return Ninja
      */
-    public function setMasqueDetail($masqueDetail)
+    public function setMasqueDetail(int $masqueDetail): self
     {
         $this->masqueDetail = $masqueDetail;
 
@@ -986,7 +986,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getMasqueDetail()
+    public function getMasqueDetail(): ?int
     {
         return $this->masqueDetail;
     }
@@ -997,7 +997,7 @@ class Ninja
      * @param integer $costume
      * @return Ninja
      */
-    public function setCostume($costume)
+    public function setCostume(int $costume): self
     {
         $this->costume = $costume;
 
@@ -1009,7 +1009,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getCostume()
+    public function getCostume(): ?int
     {
         return $this->costume;
     }
@@ -1020,7 +1020,7 @@ class Ninja
      * @param integer $costumeCouleur
      * @return Ninja
      */
-    public function setCostumeCouleur($costumeCouleur)
+    public function setCostumeCouleur(int $costumeCouleur): self
     {
         $this->costumeCouleur = $costumeCouleur;
 
@@ -1032,7 +1032,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getCostumeCouleur()
+    public function getCostumeCouleur(): ?int
     {
         return $this->costumeCouleur;
     }
@@ -1043,7 +1043,7 @@ class Ninja
      * @param integer $costumeDetail
      * @return Ninja
      */
-    public function setCostumeDetail($costumeDetail)
+    public function setCostumeDetail(int $costumeDetail): self
     {
         $this->costumeDetail = $costumeDetail;
 
@@ -1055,7 +1055,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getCostumeDetail()
+    public function getCostumeDetail(): ?int
     {
         return $this->costumeDetail;
     }
@@ -1066,7 +1066,7 @@ class Ninja
      * @param integer $missionAssassinnat
      * @return Ninja
      */
-    public function setMissionAssassinnat($missionAssassinnat)
+    public function setMissionAssassinnat(int $missionAssassinnat): self
     {
         $this->missionAssassinnat = $missionAssassinnat;
 
@@ -1078,7 +1078,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getMissionAssassinnat()
+    public function getMissionAssassinnat(): ?int
     {
         return $this->missionAssassinnat;
     }
@@ -1089,7 +1089,7 @@ class Ninja
      * @param integer $missionCourse
      * @return Ninja
      */
-    public function setMissionCourse($missionCourse)
+    public function setMissionCourse(int $missionCourse): self
     {
         $this->missionCourse = $missionCourse;
 
@@ -1101,7 +1101,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getMissionCourse()
+    public function getMissionCourse(): ?int
     {
         return $this->missionCourse;
     }
@@ -1112,7 +1112,7 @@ class Ninja
      * @param string $accomplissement
      * @return Ninja
      */
-    public function setAccomplissement($accomplissement)
+    public function setAccomplissement(string $accomplissement): self
     {
         $this->accomplissement = $accomplissement;
 
@@ -1124,7 +1124,7 @@ class Ninja
      *
      * @return string 
      */
-    public function getAccomplissement()
+    public function getAccomplissement(): ?string
     {
         return $this->accomplissement;
     }
@@ -1135,7 +1135,7 @@ class Ninja
      * @param integer $jutsuFujin
      * @return Ninja
      */
-    public function setJutsuFujin($jutsuFujin)
+    public function setJutsuFujin(int $jutsuFujin): self
     {
         $this->jutsuFujin = $jutsuFujin;
     
@@ -1147,7 +1147,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuFujin()
+    public function getJutsuFujin(): ?int
     {
         return $this->jutsuFujin;
     }
@@ -1158,7 +1158,7 @@ class Ninja
      * @param integer $jutsuRaijin
      * @return Ninja
      */
-    public function setJutsuRaijin($jutsuRaijin)
+    public function setJutsuRaijin(int $jutsuRaijin): self
     {
         $this->jutsuRaijin = $jutsuRaijin;
     
@@ -1170,7 +1170,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuRaijin()
+    public function getJutsuRaijin(): ?int
     {
         return $this->jutsuRaijin;
     }
@@ -1181,7 +1181,7 @@ class Ninja
      * @param integer $jutsuSarutahiko
      * @return Ninja
      */
-    public function setJutsuSarutahiko($jutsuSarutahiko)
+    public function setJutsuSarutahiko(int $jutsuSarutahiko): self
     {
         $this->jutsuSarutahiko = $jutsuSarutahiko;
     
@@ -1193,7 +1193,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuSarutahiko()
+    public function getJutsuSarutahiko(): ?int
     {
         return $this->jutsuSarutahiko;
     }
@@ -1204,7 +1204,7 @@ class Ninja
      * @param integer $jutsuSusanoo
      * @return Ninja
      */
-    public function setJutsuSusanoo($jutsuSusanoo)
+    public function setJutsuSusanoo(int $jutsuSusanoo): self
     {
         $this->jutsuSusanoo = $jutsuSusanoo;
     
@@ -1216,7 +1216,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuSusanoo()
+    public function getJutsuSusanoo(): ?int
     {
         return $this->jutsuSusanoo;
     }
@@ -1227,7 +1227,7 @@ class Ninja
      * @param integer $jutsuKagutsuchi
      * @return Ninja
      */
-    public function setJutsuKagutsuchi($jutsuKagutsuchi)
+    public function setJutsuKagutsuchi(int $jutsuKagutsuchi): self
     {
         $this->jutsuKagutsuchi = $jutsuKagutsuchi;
     
@@ -1239,7 +1239,7 @@ class Ninja
      *
      * @return integer 
      */
-    public function getJutsuKagutsuchi()
+    public function getJutsuKagutsuchi(): ?int
     {
         return $this->jutsuKagutsuchi;
     }

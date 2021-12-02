@@ -3,6 +3,7 @@
 namespace App\Entity\User;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
 * Group
@@ -56,7 +57,7 @@ class Ip
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -67,7 +68,7 @@ class Ip
      * @param integer $ip
      * @return Ip
      */
-    public function setIp($ip)
+    public function setIp(int $ip): self
     {
         $this->ip = $ip;
 
@@ -79,7 +80,7 @@ class Ip
      *
      * @return integer 
      */
-    public function getIp()
+    public function getIp(): ?int
     {
         return $this->ip;
     }
@@ -90,7 +91,7 @@ class Ip
      * @param \DateTime $createdAt
      * @return Ip
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -102,7 +103,7 @@ class Ip
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
@@ -113,7 +114,7 @@ class Ip
      * @param \DateTime $updatedAt
      * @return Ip
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -125,7 +126,7 @@ class Ip
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -133,10 +134,10 @@ class Ip
     /**
      * Set user
      *
-     * @param \App\Entity\User\User $user
+     * @param User|null $user
      * @return Ip
      */
-    public function setUser(\App\Entity\User\User $user = null)
+    public function setUser(UserInterface $user = null): self
     {
         $this->user = $user;
 
@@ -146,9 +147,9 @@ class Ip
     /**
      * Get user
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }

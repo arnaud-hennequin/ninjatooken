@@ -14,13 +14,6 @@ use \Exception;
 class Akismet implements AkismetInterface
 {
     /**
-     * Holds API key
-     *
-     * @var string
-     */
-    private $apiKey;
-
-    /**
      * URL to query
      *
      * @var string
@@ -68,7 +61,7 @@ class Akismet implements AkismetInterface
      * @param string $url The front page or home URL of the instance making the request
      * @return boolean
      */
-    public function keyCheck($apiKey, $url)
+    public function keyCheck(string $apiKey, string $url): bool
     {
         $check = $this->query(array(
             'key' => $apiKey,
@@ -76,9 +69,8 @@ class Akismet implements AkismetInterface
         ), self::PATH_KEY, self::RETURN_VALID);
 
         if ($check === true) {
-            $this->apiKey = $apiKey;
             $this->url = $url;
-            $this->apiUrl = sprintf('http://%s.%s/%s/', $this->apiKey, self::AKISMET_URL, self::AKISMET_API_VERSION);
+            $this->apiUrl = sprintf('http://%s.%s/%s/', $apiKey, self::AKISMET_URL, self::AKISMET_API_VERSION);
             return true;
         } else {
             return false;
@@ -97,7 +89,7 @@ class Akismet implements AkismetInterface
      *      comment_content - the content that was submitted
      * @return boolean True if messahe has been marked as ham
      */
-    public function sendHam(array $comment)
+    public function sendHam(array $comment): bool
     {
         return $this->query($comment, self::PATH_HAM, self::RETURN_THANKS);
     }
@@ -114,7 +106,7 @@ class Akismet implements AkismetInterface
      *      comment_content - the content that was submitted
      * @return boolean True if message has been marked as spam
      */
-    public function sendSpam(array $comment)
+    public function sendSpam(array $comment): bool
     {
         return $this->query($comment, self::PATH_SPAM, self::RETURN_THANKS);
     }
@@ -131,7 +123,7 @@ class Akismet implements AkismetInterface
      *      comment_content - the content that was submitted
      * @return boolean True if message is spam, false otherwise
      */
-    public function check(array $comment)
+    public function check(array $comment): bool
     {
         return $this->query($comment, self::PATH_CHECK, self::RETURN_TRUE);
     }
@@ -150,7 +142,7 @@ class Akismet implements AkismetInterface
      * @param string $expect Expected response self::RETURN_*
      * @return boolean True is response is same as expected
      */
-    private function query(array $comment, $path = self::PATH_CHECK, $expect = self::RETURN_TRUE)
+    private function query(array $comment, string $path = self::PATH_CHECK, string $expect = self::RETURN_TRUE): bool
     {
         $this->error = null;
 
@@ -202,7 +194,7 @@ class Akismet implements AkismetInterface
      *
      * @param string $userAgent
      */
-    public function setUserAgent($userAgent)
+    public function setUserAgent(string $userAgent)
     {
         $this->userAgent = $userAgent;
     }
@@ -212,7 +204,7 @@ class Akismet implements AkismetInterface
      *
      * @return string Returns null if there's no error
      */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }

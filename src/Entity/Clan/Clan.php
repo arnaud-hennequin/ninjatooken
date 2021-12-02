@@ -3,7 +3,6 @@
 namespace App\Entity\Clan;
 
 use App\Entity\Forum\Forum;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
@@ -170,7 +169,7 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * {@inheritdoc}
      */
-    public function serialize()
+    public function serialize(): ?string
     {
         return serialize([
             $this->nom,
@@ -182,10 +181,7 @@ class Clan implements SluggableInterface, \Serializable
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function unserialize($serialized)
+    public function unserialize($data)
     {
         list(
             $this->nom,
@@ -194,7 +190,7 @@ class Clan implements SluggableInterface, \Serializable
             $this->description,
             $this->url,
             $this->id
-        ) = unserialize($serialized);
+        ) = unserialize($data);
     }
 
     /**
@@ -210,7 +206,7 @@ class Clan implements SluggableInterface, \Serializable
         return true;
     }
 
-    public function generateSlugValue($values): string
+    public function generateSlugValue($values): ?string
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
@@ -235,22 +231,22 @@ class Clan implements SluggableInterface, \Serializable
         return $slug;
     }
 
-    public function getAbsoluteKamon()
+    public function getAbsoluteKamon(): ?string
     {
         return null === $this->kamonUpload || "" === $this->kamonUpload ? null : $this->getUploadRootDir().'/'.$this->kamonUpload;
     }
 
-    public function getWebKamon()
+    public function getWebKamon(): ?string
     {
         return null === $this->kamonUpload || "" === $this->kamonUpload  ? null : $this->getUploadDir().'/'.$this->kamonUpload;
     }
 
-    protected function getUploadRootDir()
+    protected function getUploadRootDir(): string
     {
         return __DIR__.'/../../../public/'.$this->getUploadDir();
     }
 
-    protected function getUploadDir()
+    protected function getUploadDir(): string
     {
         return 'kamon';
     }
@@ -323,9 +319,9 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Sets file.
      *
-     * @param UploadedFile $file
+     * @param UploadedFile|null $file
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile(?UploadedFile $file = null)
     {
         $this->file = $file;
     }
@@ -335,7 +331,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return UploadedFile
      */
-    public function getFile()
+    public function getFile(): ?UploadedFile
     {
         return $this->file;
     }
@@ -345,7 +341,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return integer 
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -356,7 +352,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $nom
      * @return Clan
      */
-    public function setNom($nom)
+    public function setNom(?string $nom): self
     {
         $this->nom = $nom;
 
@@ -368,7 +364,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getNom()
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -379,7 +375,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $tag
      * @return Clan
      */
-    public function setTag($tag)
+    public function setTag(?string $tag): self
     {
         $this->tag = $tag;
 
@@ -391,7 +387,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getTag()
+    public function getTag(): ?string
     {
         return $this->tag;
     }
@@ -402,7 +398,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $description
      * @return Clan
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -414,7 +410,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -425,7 +421,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $accroche
      * @return Clan
      */
-    public function setAccroche($accroche)
+    public function setAccroche(?string $accroche): self
     {
         $this->accroche = $accroche;
 
@@ -437,7 +433,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getAccroche()
+    public function getAccroche(): ?string
     {
         return $this->accroche;
     }
@@ -448,7 +444,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $url
      * @return Clan
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
@@ -460,7 +456,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -471,7 +467,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $kamon
      * @return Clan
      */
-    public function setKamon($kamon)
+    public function setKamon(string $kamon): self
     {
         $this->kamon = $kamon;
 
@@ -483,7 +479,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getKamon()
+    public function getKamon(): ?string
     {
         return $this->kamon;
     }
@@ -494,7 +490,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param \DateTime $dateAjout
      * @return Clan
      */
-    public function setDateAjout($dateAjout)
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -506,7 +502,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return \DateTime 
      */
-    public function getDateAjout()
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -517,7 +513,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param boolean $online
      * @return Clan
      */
-    public function setOnline($online)
+    public function setOnline(bool $online): self
     {
         $this->online = $online;
 
@@ -529,7 +525,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return boolean 
      */
-    public function getOnline()
+    public function getOnline(): ?bool
     {
         return $this->online;
     }
@@ -540,7 +536,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param integer $oldId
      * @return Clan
      */
-    public function setOldId($oldId)
+    public function setOldId(int $oldId): self
     {
         $this->old_id = $oldId;
 
@@ -552,7 +548,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return integer 
      */
-    public function getOldId()
+    public function getOldId(): ?int
     {
         return $this->old_id;
     }
@@ -560,10 +556,10 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Add membres
      *
-     * @param \App\Entity\Clan\ClanUtilisateur $membre
+     * @param ClanUtilisateur $membre
      * @return Clan
      */
-    public function addMembre(\App\Entity\Clan\ClanUtilisateur $membre)
+    public function addMembre(ClanUtilisateur $membre): self
     {
         $this->membres[] = $membre;
         $membre->setClan($this);
@@ -574,9 +570,9 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Remove membres
      *
-     * @param \App\Entity\Clan\ClanUtilisateur $membre
+     * @param ClanUtilisateur $membre
      */
-    public function removeMembre(\App\Entity\Clan\ClanUtilisateur $membre)
+    public function removeMembre(ClanUtilisateur $membre)
     {
         $this->membres->removeElement($membre);
     }
@@ -584,7 +580,7 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Get membres
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
     public function getMembres()
     {
@@ -597,7 +593,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param boolean $isRecruting
      * @return Clan
      */
-    public function setIsRecruting($isRecruting)
+    public function setIsRecruting(bool $isRecruting): self
     {
         $this->isRecruting = $isRecruting;
 
@@ -609,7 +605,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return boolean 
      */
-    public function getIsRecruting()
+    public function getIsRecruting(): ?bool
     {
         return $this->isRecruting;
     }
@@ -617,10 +613,10 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Add forums
      *
-     * @param \App\Entity\Forum\Forum $forums
+     * @param Forum $forums
      * @return Clan
      */
-    public function addForum(\App\Entity\Forum\Forum $forums)
+    public function addForum(Forum $forums): self
     {
         $this->forums[] = $forums;
         $forums->setClan($this);
@@ -631,9 +627,9 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Remove forums
      *
-     * @param \App\Entity\Forum\Forum $forums
+     * @param Forum $forums
      */
-    public function removeForum(\App\Entity\Forum\Forum $forums)
+    public function removeForum(Forum $forums)
     {
         $this->forums->removeElement($forums);
     }
@@ -641,9 +637,9 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Get forums
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection
      */
-    public function getForums()
+    public function getForums(): ?Collection
     {
         return $this->forums;
     }
@@ -654,7 +650,7 @@ class Clan implements SluggableInterface, \Serializable
      * @param string $kamonUpload
      * @return Clan
      */
-    public function setKamonUpload($kamonUpload)
+    public function setKamonUpload(string $kamonUpload): self
     {
         $this->kamonUpload = $kamonUpload;
 
@@ -666,7 +662,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return string 
      */
-    public function getKamonUpload()
+    public function getKamonUpload(): ?string
     {
         return $this->kamonUpload;
     }

@@ -1,10 +1,17 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
- 
-class LobbyRepository extends EntityRepository
+
+use App\Entity\Game\Lobby;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+class LobbyRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Lobby::class);
+    }
+
     public function getRecent($nombre=3, $page=1)
     {
         $page = max(1, $page);
@@ -22,7 +29,7 @@ class LobbyRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function deleteOld()
+    public function deleteOld(): bool
     {
         $query = $this->createQueryBuilder('a')
             ->delete('App\Entity\Game\Lobby', 'a')

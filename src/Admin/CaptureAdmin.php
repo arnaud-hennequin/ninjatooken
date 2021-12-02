@@ -14,11 +14,11 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 class CaptureAdmin extends AbstractAdmin
 {
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('id')
             ->add('url')
             ->add('urlTmb')
@@ -28,17 +28,17 @@ class CaptureAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper): void
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper
+        $list
             ->addIdentifier('id');
 
         if(!$this->isChild())
-            $listMapper->add('user', null, array('label' => 'Utilisateur'));
+            $list->add('user', null, array('label' => 'Utilisateur'));
 
-        $listMapper
+        $list
             ->add('url', null, array('label' => 'Url'))
             ->add('urlTmb', null, array('label' => 'Url de la vignette'))
             ->add('deleteHash', null, array('label' => 'Hash de suppression'))
@@ -54,9 +54,9 @@ class CaptureAdmin extends AbstractAdmin
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper): void
+    protected function configureFormFields(FormMapper $form): void
     {
         // get the current instance
         $capture = $this->getSubject();
@@ -68,14 +68,14 @@ class CaptureAdmin extends AbstractAdmin
         }
 
         if(!$this->isChild())
-            $formMapper->add('user', ModelListType::class, array(
+            $form->add('user', ModelListType::class, array(
                 'label'         => 'Utilisateur',
                 'btn_add'       => 'Ajouter',
                 'btn_list'      => 'Sélectionner',
                 'btn_delete'    => false
             ));
 
-        $formMapper
+        $form
             ->add('url', TextType::class, array(
                 'label' => 'Url',
                 'help' => (!empty($url)?'<img src="'.$url.'" class="thumbnail"/>':'').''
@@ -95,11 +95,11 @@ class CaptureAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper): void
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper
+        $show
             ->add('id')
             ->add('url')
             ->add('urlTmb')

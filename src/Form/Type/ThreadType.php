@@ -20,9 +20,4 @@ class ThreadType extends AbstractType
                 'label_attr' => array('class' => 'libelle')
             ));
     }
-
-    public function getName()
-    {
-        return 'thread';
-    }
 }

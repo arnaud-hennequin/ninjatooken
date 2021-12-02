@@ -2,24 +2,25 @@
 
 namespace App\Controller;
 
+use App\Repository\LobbyRepository;
+use App\Repository\NinjaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Utils\GameData;
 use App\Entity\User\User;
-use App\Entity\Game\Lobby;
-use App\Entity\Game\Ninja;
 
 class GameController extends AbstractController
 {
-    public function parties()
+    public function parties(LobbyRepository $lobbyRepository): Response
     {
         return $this->render('game/parties.html.twig', [
-            'games' => $this->getDoctrine()->getManager()->getRepository(Lobby::class)->getRecent(50)
+            'games' => $lobbyRepository->getRecent(50)
         ]);
     }
 
-    public function calculateur(TranslatorInterface $translator, GameData $gameData)
+    public function calculateur(TranslatorInterface $translator, GameData $gameData): Response
     {
         $level = 0;
         $classe = "suiton";
@@ -317,7 +318,7 @@ class GameController extends AbstractController
                 $xml[] = $attr;
             }
             $limit = $dom->getElementsByTagName($k)->item(0)->getAttribute('limit');
-            $aptitudes[$k]['limit'] = isset($classes[$limit])?$classes[$limit]:'';
+            $aptitudes[$k]['limit'] = $classes[$limit] ?? '';
             $aptitudes[$k]['niveau'] = $dom->getElementsByTagName($k)->item(0)->getAttribute('niveau');
             $aptitudes[$k]['xml'] = json_encode($xml);
             $aptitudes[$k]['values'] = json_encode($aptitudes[$k]['values']);
@@ -333,7 +334,7 @@ class GameController extends AbstractController
         ]);
     }
 
-    public function classement(Request $request, $page)
+    public function classement(Request $request, NinjaRepository $ninjaRepository, $page): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -345,36 +346,35 @@ class GameController extends AbstractController
 
         $filter = $request->get('filter');
 
-        $repo = $this->getDoctrine()->getManager()->getRepository(Ninja::class);
-
-        $total = $repo->getNumNinjas();
+        $total = $ninjaRepository->getNumNinjas();
 
         $classe = $this->getParameter('class');
+        $classeNum = [];
         foreach ($classe as $k=>$v) {
-            $classeNum[$k] = $repo->getNumNinjas($k);
+            $classeNum[$k] = $ninjaRepository->getNumNinjas($k);
         }
 
         return $this->render('game/classement.html.twig', [
             'order' => $order,
             'filter' => $filter,
-            'joueurs' => $repo->getNinjas($order, $filter, $num, $page),
+            'joueurs' => $ninjaRepository->getNinjas($order, $filter, $num, $page),
             'page' => $page,
             'nombrePage' => ceil($total/$num),
             'nombre' => $num,
             'nombreNinja' => $total,
-            'experienceTotal' => $repo->getSumExperience(),
+            'experienceTotal' => $ninjaRepository->getSumExperience(),
             'classes' => $classeNum
         ]);
     }
 
-    public function recentGames($max = 3)
+    public function recentGames(LobbyRepository $lobbyRepository, $max = 3): Response
     {
         return $this->render('game/games/recentList.html.twig', [
-            'games' => $this->getDoctrine()->getManager()->getRepository(Lobby::class)->getRecent($max)
+            'games' => $lobbyRepository->getRecent($max)
         ]);
     }
 
-    public function signature(User $user, GameData $gameData)
+    public function signature(User $user, GameData $gameData, NinjaRepository $ninjaRepository): Response
     {
         $ninja = $user->getNinja();
 
@@ -386,12 +386,10 @@ class GameController extends AbstractController
             $user->ratio = $gameData->getRatio();
 
             // classement
-            $repo = $this->getDoctrine()->getManager()->getRepository(Ninja::class);
-
-			$user->classement = $repo->getClassement($ninja->getExperience());
+			$user->classement = $ninjaRepository->getClassement($ninja->getExperience());
 
             // total de joueurs
-            $user->total = $repo->getNumNinjas();
+            $user->total = $ninjaRepository->getNumNinjas();
 
         }
         return $this->render('game/signature.html.twig', ['user' => $user]);

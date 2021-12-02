@@ -1,11 +1,17 @@
 <?php
 namespace App\Repository;
- 
-use Doctrine\ORM\EntityRepository;
+
 use App\Entity\Game\Ninja;
- 
-class NinjaRepository extends EntityRepository
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+class NinjaRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Ninja::class);
+    }
+
     public function getNinjas($order="experience", $filter="", $nombreParPage=5, $page=1)
     {
         $page = max(1, $page);
@@ -44,7 +50,7 @@ class NinjaRepository extends EntityRepository
 
         $query = $query->getQuery();
 
-        $query->useResultCache(true, 1800, __METHOD__.serialize($query->getParameters()));
+        $query->enableResultCache(true, 1800);
         $query->useQueryCache(true);
 
         return $query->getSingleScalarResult();
@@ -57,15 +63,16 @@ class NinjaRepository extends EntityRepository
 
         $query = $query->getQuery();
 
-        $query->useResultCache(true, 1800, __METHOD__);
+        $query->enableResultCache(true, 1800);
         $query->useQueryCache(true);
 
         return $query->getSingleScalarResult();
     }
 
-    public function getClassement($experience = 0)
+    public function getClassement(int $experience = 0): string
     {
-        return "-";// TODO :: deactivate / time consumer
+        return "-";
+        // deactivate / time consumer
         $query = $this->createQueryBuilder('a')
             ->select('COUNT(a)')
             ->leftJoin('App\Entity\User\User', 'u', 'WITH', 'a.user = u.id')

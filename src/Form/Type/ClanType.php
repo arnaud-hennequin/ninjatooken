@@ -63,9 +63,4 @@ class ClanType extends AbstractType
                 'choices'  => array('label.oui' => true, 'label.non' => false)
             ));
     }
-
-    public function getName()
-    {
-        return 'clan';
-    }
 }
