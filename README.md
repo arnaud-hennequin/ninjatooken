@@ -74,7 +74,7 @@ Source code of the game (made with Unity 3D) is kept at https://gitlab.com/arnau
 
 ### Built With
 
-* [Symfony 5.3](https://symfony.com/)
+* [Symfony 5.4](https://symfony.com/)
 * [Sonata Project](https://sonata-project.org/)
 * [LiipImagineBundle](https://github.com/liip/LiipImagineBundle)
 * [Imgur API](https://api.imgur.com/)
@@ -227,4 +227,3 @@ Project Link: [https://github.com/arnaud-hennequin/ninjatooken](https://github.c
 [license-url]: https://github.com/arnaud-hennequin/ninjatooken/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/arnaud-hennequin
-[product-screenshot]: images/screenshot.png
