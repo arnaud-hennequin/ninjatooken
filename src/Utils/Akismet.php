@@ -9,7 +9,7 @@
 
 namespace App\Utils;
 
-use \Exception;
+use Exception;
 
 class Akismet implements AkismetInterface
 {
@@ -18,28 +18,28 @@ class Akismet implements AkismetInterface
      *
      * @var string
      */
-    private $apiUrl;
+    private string $apiUrl;
 
     /**
      * User Agent string sent in query
      *
      * @var string
      */
-    private $userAgent;
+    private string $userAgent;
 
     /**
      * The front page or home URL of the instance making the request
      *
      * @var string
      */
-    private $url;
+    private string $url;
 
     /**
      * Last error message. It's null if there is no error
      *
      * @var string
      */
-    private $error;
+    private string $error;
 
     /**
      * Constructor checks if cURL extension exists and sets API url

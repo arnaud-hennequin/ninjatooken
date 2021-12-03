@@ -9,17 +9,16 @@ use App\Utils\Akismet;
  
 class CommentListener
 {
-    protected $akismetActive;
-    protected $akismetKey;
-    protected $akismetUrl;
-    protected $requestStack;
+    protected bool $akismetActive;
+    protected string $akismetKey;
+    protected string $akismetUrl;
+    protected RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack, bool $akismetActive = false, string $akismetKey = "", string $akismetUrl = "")
     {
         $this->akismetActive = $akismetActive;
         $this->akismetKey = $akismetKey;
         $this->akismetUrl = $akismetUrl;
-
         $this->requestStack = $requestStack;
     }
 

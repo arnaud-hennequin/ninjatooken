@@ -3,6 +3,7 @@
 namespace App\Entity\Forum;
 
 use App\Entity\Clan\Clan;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -19,67 +20,67 @@ class Forum implements SluggableInterface
     use SluggableTrait;
 
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
-    private $old_id;
+    private ?int $old_id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255)
      */
-    private $nom;
+    private string $nom;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="ordre", type="smallint")
      */
-    private $ordre = 0;
+    private int $ordre = 0;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="can_user_create_thread", type="boolean")
      */
-    private $canUserCreateThread = true;
+    private bool $canUserCreateThread = true;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="num_threads", type="integer")
      */
-    private $numThreads = 0;
+    private int $numThreads = 0;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="forums", fetch="EAGER")
      */
-    private $clan;
+    private ?Clan $clan;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDateAjout(new \DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     public function __toString(){
@@ -183,10 +184,10 @@ class Forum implements SluggableInterface
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return Forum
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -196,9 +197,9 @@ class Forum implements SluggableInterface
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -206,10 +207,10 @@ class Forum implements SluggableInterface
     /**
      * Set old_id
      *
-     * @param integer $oldId
+     * @param int|null $oldId
      * @return Forum
      */
-    public function setOldId(int $oldId): self
+    public function setOldId(?int $oldId): self
     {
         $this->old_id = $oldId;
 
@@ -240,6 +241,7 @@ class Forum implements SluggableInterface
      * Sets the number of threads
      *
      * @param integer $threads
+     * @return Forum
      */
     public function setNumThreads(int $threads): self
     {

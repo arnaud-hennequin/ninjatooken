@@ -4,6 +4,7 @@ namespace App\Entity\Game;
 
 use App\Entity\User\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Ninja
@@ -15,21 +16,13 @@ class Ninja
 {
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getId();
-    }
-
-    /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
     * user of the ninja
@@ -38,281 +31,288 @@ class Ninja
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
     * @var User
     */
-    private $user;
+    private User $user;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="aptitude_force", type="smallint")
      */
-    private $aptitudeForce = 0;
+    private int $aptitudeForce = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="aptitude_vitesse", type="smallint")
      */
-    private $aptitudeVitesse = 0;
+    private int $aptitudeVitesse = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="aptitude_vie", type="smallint")
      */
-    private $aptitudeVie = 0;
+    private int $aptitudeVie = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="aptitude_chakra", type="smallint")
      */
-    private $aptitudeChakra = 0;
+    private int $aptitudeChakra = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_boule", type="smallint")
      */
-    private $jutsuBoule = 0;
+    private int $jutsuBoule = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_double_saut", type="smallint")
      */
-    private $jutsuDoubleSaut = 0;
+    private int $jutsuDoubleSaut = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_bouclier", type="smallint")
      */
-    private $jutsuBouclier = 0;
+    private int $jutsuBouclier = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_marcher_mur", type="smallint")
      */
-    private $jutsuMarcherMur = 0;
+    private int $jutsuMarcherMur = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_deflagration", type="smallint")
      */
-    private $jutsuDeflagration = 0;
+    private int $jutsuDeflagration = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_transformation_aqueuse", type="smallint")
      */
-    private $jutsuTransformationAqueuse = 0;
+    private int $jutsuTransformationAqueuse = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_metamorphose", type="smallint")
      */
-    private $jutsuMetamorphose = 0;
+    private int $jutsuMetamorphose = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_multishoot", type="smallint")
      */
-    private $jutsuMultishoot = 0;
+    private int $jutsuMultishoot = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_invisibilite", type="smallint")
      */
-    private $jutsuInvisibilite = 0;
+    private int $jutsuInvisibilite = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_resistance_explosion", type="smallint")
      */
-    private $jutsuResistanceExplosion = 0;
+    private int $jutsuResistanceExplosion = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_phoenix", type="smallint")
      */
-    private $jutsuPhoenix = 0;
+    private int $jutsuPhoenix = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_vague", type="smallint")
      */
-    private $jutsuVague = 0;
+    private int $jutsuVague = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_pieux", type="smallint")
      */
-    private $jutsuPieux = 0;
+    private int $jutsuPieux = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_teleportation", type="smallint")
      */
-    private $jutsuTeleportation = 0;
+    private int $jutsuTeleportation = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_tornade", type="smallint")
      */
-    private $jutsuTornade = 0;
+    private int $jutsuTornade = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_kusanagi", type="smallint")
      */
-    private $jutsuKusanagi = 0;
+    private int $jutsuKusanagi = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_acier_renforce", type="smallint")
      */
-    private $jutsuAcierRenforce = 0;
+    private int $jutsuAcierRenforce = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_chakra_vie", type="smallint")
      */
-    private $jutsuChakraVie = 0;
+    private int $jutsuChakraVie = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_fujin", type="smallint")
      */
-    private $jutsuFujin = 0;
+    private int $jutsuFujin = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_raijin", type="smallint")
      */
-    private $jutsuRaijin = 0;
+    private int $jutsuRaijin = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_sarutahiko", type="smallint")
      */
-    private $jutsuSarutahiko = 0;
+    private int $jutsuSarutahiko = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_susanoo", type="smallint")
      */
-    private $jutsuSusanoo = 0;
+    private int $jutsuSusanoo = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jutsu_kagutsuchi", type="smallint")
      */
-    private $jutsuKagutsuchi = 0;
+    private int $jutsuKagutsuchi = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="grade", type="smallint")
      */
-    private $grade = 0;
+    private int $grade = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="experience", type="bigint")
      */
-    private $experience = 0;
+    private int $experience = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="classe", type="string", length=25)
      */
-    private $classe = "";
+    private string $classe = "";
 
     /**
      * @var integer
      *
      * @ORM\Column(name="masque", type="smallint")
      */
-    private $masque = 0;
+    private int $masque = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="masque_couleur", type="smallint")
      */
-    private $masqueCouleur = 0;
+    private int $masqueCouleur = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="masque_detail", type="smallint")
      */
-    private $masqueDetail = 0;
+    private int $masqueDetail = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="costume", type="smallint")
      */
-    private $costume = 0;
+    private int $costume = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="costume_couleur", type="smallint")
      */
-    private $costumeCouleur = 0;
+    private int $costumeCouleur = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="costume_detail", type="smallint")
      */
-    private $costumeDetail = 0;
+    private int $costumeDetail = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="mission_assassinnat", type="smallint")
      */
-    private $missionAssassinnat = 0;
+    private int $missionAssassinnat = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="mission_course", type="smallint")
      */
-    private $missionCourse = 0;
+    private int $missionCourse = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="accomplissement", type="string", length=25)
      */
-    private $accomplissement = "0000000000000000000000000";
+    private string $accomplissement = "0000000000000000000000000";
 
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
 
     /**
      * Get id
@@ -905,7 +905,7 @@ class Ninja
      * @param User|null $user
      * @return Ninja
      */
-    public function setUser(\App\Entity\User\User $user = null): self
+    public function setUser(?UserInterface $user = null): self
     {
         $this->user = $user;
 
@@ -915,7 +915,7 @@ class Ninja
     /**
      * Get user
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
     public function getUser(): ?User
     {

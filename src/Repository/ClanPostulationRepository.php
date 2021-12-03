@@ -4,8 +4,8 @@ namespace App\Repository;
 use App\Entity\Clan\ClanPostulation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\Clan\Clan;
-use App\Entity\User\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ClanPostulationRepository extends ServiceEntityRepository
 {
@@ -14,7 +14,7 @@ class ClanPostulationRepository extends ServiceEntityRepository
         parent::__construct($registry, ClanPostulation::class);
     }
 
-    public function getByClanUser(Clan $clan=null, User $user=null)
+    public function getByClanUser(?Clan $clan = null, ?UserInterface $user = null)
     {
         $query = $this->createQueryBuilder('cp');
 
@@ -31,7 +31,7 @@ class ClanPostulationRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getByUser(User $user=null)
+    public function getByUser(?UserInterface $user = null)
     {
 
         if(isset($user)){
@@ -43,7 +43,7 @@ class ClanPostulationRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getByClan(Clan $clan=null)
+    public function getByClan(?Clan $clan = null)
     {
 
         if(isset($clan)){

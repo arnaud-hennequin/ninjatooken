@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,13 +14,13 @@ use Doctrine\ORM\Mapping as ORM;
 class MessageUser
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var Message
@@ -27,7 +28,7 @@ class MessageUser
      * @ORM\ManyToOne(targetEntity="App\Entity\User\Message", inversedBy="receivers")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $message;
+    private Message $message;
 
     /**
      * @var User
@@ -35,21 +36,21 @@ class MessageUser
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="destinataire_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $destinataire;
+    private User $destinataire;
 
     /**
-     * @var \DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="date_read", type="datetime", nullable=true)
      */
-    private $dateRead;
+    private ?DateTime $dateRead;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="has_deleted", type="boolean")
      */
-    private $hasDeleted = false;
+    private bool $hasDeleted = false;
 
     public function __toString()
     {
@@ -72,10 +73,10 @@ class MessageUser
     /**
      * Set dateRead
      *
-     * @param \DateTime $dateRead
+     * @param DateTime|null $dateRead
      * @return MessageUser
      */
-    public function setDateRead(\DateTime $dateRead): self
+    public function setDateRead(?DateTime $dateRead): self
     {
         $this->dateRead = $dateRead;
 
@@ -85,9 +86,9 @@ class MessageUser
     /**
      * Get dateRead
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateRead(): ?\DateTime
+    public function getDateRead(): ?DateTime
     {
         return $this->dateRead;
     }

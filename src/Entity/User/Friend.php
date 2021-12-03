@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -14,57 +15,57 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Friend
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @var User
+     * @var UserInterface|null
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $user;
+    private ?UserInterface $user;
 
     /**
-     * @var User
+     * @var UserInterface|null
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="friend_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $friend;
+    private ?UserInterface $friend;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_blocked", type="boolean")
      */
-    private $isBlocked = false;
+    private bool $isBlocked = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_confirmed", type="boolean")
      */
-    private $isConfirmed = false;
+    private bool $isConfirmed = false;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDateAjout(new \DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     /**
@@ -127,10 +128,10 @@ class Friend
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return Friend
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -140,9 +141,9 @@ class Friend
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -153,7 +154,7 @@ class Friend
      * @param User|null $user
      * @return Friend
      */
-    public function setUser(User $user = null): self
+    public function setUser(?UserInterface $user = null): self
     {
         $this->user = $user;
 
@@ -165,7 +166,7 @@ class Friend
      *
      * @return User
      */
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
@@ -176,7 +177,7 @@ class Friend
      * @param UserInterface|null $friend
      * @return Friend
      */
-    public function setFriend(UserInterface $friend = null): self
+    public function setFriend(?UserInterface $friend = null): self
     {
         $this->friend = $friend;
 
@@ -188,7 +189,7 @@ class Friend
      *
      * @return User
      */
-    public function getFriend(): ?User
+    public function getFriend(): ?UserInterface
     {
         return $this->friend;
     }

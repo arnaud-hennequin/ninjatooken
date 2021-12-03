@@ -30,7 +30,7 @@ require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatInterface.php');
 
 class Chat extends \CustomAJAXChat
 {
-    private $_userData = [];
+    private array $_userData;
 
     public function __construct($params = [], $userData = [])
     {

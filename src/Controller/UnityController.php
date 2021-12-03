@@ -22,16 +22,16 @@ use App\Utils\GameData;
 
 class UnityController extends AbstractController
 {
-    private $time;
-    private $crypt;
-    private $cryptUnity;
-    private $phpsessid;
-    private $gameversion;
-    private $idUtilisateur;
+    private string $time;
+    private string $crypt;
+    private string $cryptUnity;
+    private string $phpsessid;
+    private string $gameversion;
+    private int $idUtilisateur;
 
     public function update(Request $request, TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage, GameData $gameData, EntityManagerInterface $em): Response
     {
-        $session = $this->get('session');
+        $session = $request->getSession();
 
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             $user = $tokenStorage->getToken()->getUser();
@@ -730,7 +730,7 @@ class UnityController extends AbstractController
         $this->time = preg_replace('/[^0-9]/i','',(string)$request->get('time'));
         $this->crypt = $request->headers->get('X-COMMON');
 
-        $session = $this->get('session');
+        $session = $request->getSession();
         $this->phpsessid = $session->getName()."=".$session->getId();
 
         $this->gameversion = $this->getParameter('unity.version');

@@ -3,14 +3,14 @@
 namespace App\Utils;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use \DOMDocument;
+use DOMDocument;
 
 class GameData
 {
-    private $document;
+    private DOMDocument $document;
     private $xml;
 
-    private $experienceRelatif;
+    private int $experienceRelatif;
     private $levelActuel;
     private $levelSuivant;
 

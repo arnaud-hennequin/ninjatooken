@@ -3,7 +3,9 @@
 namespace App\Entity\Clan;
 
 use App\Entity\User\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * ClanUtilisateur
@@ -14,59 +16,59 @@ use Doctrine\ORM\Mapping as ORM;
 class ClanUtilisateur
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="clan", cascade={"persist"}, fetch="LAZY")
      * @var User
      */
-    private $membre;
+    private User $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="recruts", cascade={"persist"}, fetch="LAZY")
      * @var User
      */
-    private $recruteur;
+    private User $recruteur;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="membres", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="clan_id", referencedColumnName="id", onDelete="cascade")
      */
-    private $clan;
+    private ?Clan $clan;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="droit", type="smallint")
      */
-    private $droit = 0;
+    private int $droit = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="can_edit_clan", type="boolean")
      */
-    private $canEditClan = false;
+    private bool $canEditClan = false;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDateAjout(new \DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     /**
@@ -128,10 +130,10 @@ class ClanUtilisateur
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return ClanUtilisateur
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -141,9 +143,9 @@ class ClanUtilisateur
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -154,7 +156,7 @@ class ClanUtilisateur
      * @param User|null $membre
      * @return ClanUtilisateur
      */
-    public function setMembre(User $membre = null): self
+    public function setMembre(?UserInterface $membre = null): self
     {
         if($this->membre)
             $this->membre->setClan(null);
@@ -181,7 +183,7 @@ class ClanUtilisateur
      * @param User|null $recruteur
      * @return ClanUtilisateur
      */
-    public function setRecruteur(User $recruteur = null): self
+    public function setRecruteur(?UserInterface $recruteur = null): self
     {
         if($this->recruteur)
             $this->recruteur->removeRecrut($this);

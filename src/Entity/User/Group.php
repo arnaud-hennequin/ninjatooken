@@ -17,21 +17,21 @@ class Group
     * @ORM\Column(type="integer")
     * @ORM\GeneratedValue(strategy="AUTO")
     */
-    protected $id;
+    private ?int $id = null;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var array
      *
      * @ORM\Column(type="array")
      */
-    protected $roles;
+    protected array $roles;
 
     /**
      * Group constructor.

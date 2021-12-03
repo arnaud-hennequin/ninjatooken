@@ -3,7 +3,9 @@
 namespace App\Entity\Clan;
 
 use App\Entity\User\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * ClanPostulation
@@ -14,55 +16,55 @@ use Doctrine\ORM\Mapping as ORM;
 class ClanPostulation
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(name="postulant_id", referencedColumnName="id", onDelete="CASCADE")
      * @var User
      */
-    private $postulant;
+    private User $postulant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", fetch="EAGER")
      * @ORM\JoinColumn(name="clan_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $clan;
+    private ?Clan $clan;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_changement_etat", type="datetime", nullable=true)
      */
-    private $dateChangementEtat;
+    private ?DateTime $dateChangementEtat;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="etat", type="smallint")
      */
-    private $etat = 0;
+    private int $etat = 0;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDateChangementEtat(new \DateTime());
-        $this->setDateAjout(new \DateTime());
+        $this->setDateChangementEtat(new DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     /**
@@ -78,10 +80,10 @@ class ClanPostulation
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return ClanPostulation
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -91,9 +93,9 @@ class ClanPostulation
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -104,7 +106,7 @@ class ClanPostulation
      * @param User|null $postulant
      * @return ClanPostulation
      */
-    public function setPostulant(\App\Entity\User\User $postulant = null): self
+    public function setPostulant(?UserInterface $postulant = null): self
     {
         $this->postulant = $postulant;
 
@@ -114,7 +116,7 @@ class ClanPostulation
     /**
      * Get postulant
      *
-     * @return \App\Entity\User\User 
+     * @return User
      */
     public function getPostulant(): ?User
     {
@@ -127,7 +129,7 @@ class ClanPostulation
      * @param Clan|null $clan
      * @return ClanPostulation
      */
-    public function setClan(\App\Entity\Clan\Clan $clan = null): self
+    public function setClan(?Clan $clan = null): self
     {
         $this->clan = $clan;
 
@@ -137,7 +139,7 @@ class ClanPostulation
     /**
      * Get clan
      *
-     * @return \App\Entity\Clan\Clan 
+     * @return Clan
      */
     public function getClan(): ?Clan
     {
@@ -170,10 +172,10 @@ class ClanPostulation
     /**
      * Set dateChangementEtat
      *
-     * @param \DateTime $dateChangementEtat
+     * @param DateTime $dateChangementEtat
      * @return ClanPostulation
      */
-    public function setDateChangementEtat(\DateTime $dateChangementEtat): self
+    public function setDateChangementEtat(?DateTime $dateChangementEtat): self
     {
         $this->dateChangementEtat = $dateChangementEtat;
 
@@ -183,9 +185,9 @@ class ClanPostulation
     /**
      * Get dateChangementEtat
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateChangementEtat(): ?\DateTime
+    public function getDateChangementEtat(): ?DateTime
     {
         return $this->dateChangementEtat;
     }

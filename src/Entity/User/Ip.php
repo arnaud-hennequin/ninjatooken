@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -18,38 +19,38 @@ class Ip
     * @ORM\Column(type="integer")
     * @ORM\GeneratedValue(strategy="AUTO")
     */
-    protected $id;
+    private ?int $id = null;
 
     /**
      * @var int
      *
      * @ORM\Column(name="ip", type="integer", options={"unsigned"=true})
      */
-    private $ip;
+    private int $ip;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
-    private $createdAt;
+    private DateTime $createdAt;
 
     /**
-     * @var \DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private ?DateTime $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="ips")
      * @var User
      */
-    private $user;
+    private User $user;
 
     public function __construct()
     {
-        $this->setCreatedAt(new \DateTime());
+        $this->setCreatedAt(new DateTime());
     }
 
     /**
@@ -88,10 +89,10 @@ class Ip
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      * @return Ip
      */
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -101,9 +102,9 @@ class Ip
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
@@ -111,10 +112,10 @@ class Ip
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime|null $updatedAt
      * @return Ip
      */
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(?DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -124,9 +125,9 @@ class Ip
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }

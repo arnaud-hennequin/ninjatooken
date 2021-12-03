@@ -7,6 +7,8 @@ use App\Repository\NinjaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use App\Utils\GameData;
 use App\Entity\User\User;
@@ -20,15 +22,14 @@ class GameController extends AbstractController
         ]);
     }
 
-    public function calculateur(TranslatorInterface $translator, GameData $gameData): Response
+    public function calculateur(TranslatorInterface $translator, GameData $gameData, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage): Response
     {
         $level = 0;
         $classe = "suiton";
         // les données du joueur connecté
         $ninja = null;
-        $authorizationChecker = $this->get('security.authorization_checker');
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $user = $tokenStorage->getToken()->getUser();
             $ninja = $user->getNinja();
             if ($ninja) {
                 $c = $ninja->getClasse();

@@ -2,7 +2,9 @@
 
 namespace App\Entity\User;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,13 +16,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Capture
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @var User
@@ -28,7 +30,7 @@ class Capture
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $user;
+    private User $user;
 
     /**
      * @var string
@@ -38,7 +40,7 @@ class Capture
      * @Assert\Url()
      * @Assert\NotBlank()
      */
-    private $url;
+    private string $url;
 
     /**
      * @var string
@@ -48,7 +50,7 @@ class Capture
      * @Assert\Url()
      * @Assert\NotBlank()
      */
-    private $urlTmb;
+    private string $urlTmb;
 
     /**
      * @var string
@@ -57,21 +59,21 @@ class Capture
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
      */
-    private $deleteHash;
+    private string $deleteHash;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->setDateAjout(new \DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     /**
@@ -156,10 +158,10 @@ class Capture
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return Capture
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -169,9 +171,9 @@ class Capture
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -182,7 +184,7 @@ class Capture
      * @param User|null $user
      * @return Capture
      */
-    public function setUser(User $user = null): self
+    public function setUser(?UserInterface $user = null): self
     {
         $this->user = $user;
 

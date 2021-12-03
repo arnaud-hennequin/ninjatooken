@@ -2,24 +2,40 @@
 
 namespace App\Controller;
 
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\flashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\Type\ThreadType;
 use App\Form\Type\EventType;
 use App\Form\Type\CommentType;
-use App\Entity\User\User;
 use App\Entity\Forum\Forum;
 use App\Entity\Forum\Thread;
 use App\Entity\Forum\Comment;
 
 class ForumController extends AbstractController
 {
+    protected flashBagInterface $flashBag;
+    protected ?UserInterface $user;
+    protected ?AuthorizationCheckerInterface $authorizationChecker;
+
+    public function __construct(TokenStorageInterface $tokenStorage, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker)
+    {
+        $this->user = $tokenStorage->getToken() ? $tokenStorage->getToken()->getUser() : null;
+        $this->flashBag = $requestStack->getSession()->getflashBag();
+        $this->authorizationChecker = $authorizationChecker;
+    }
+
     public function oldMessage(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): RedirectResponse
     {
         $thread = $em->getRepository('App\Entity\Forum\Thread')->findOneBy(array('old_id' => (int)$request->get('ID')));
@@ -75,13 +91,10 @@ class ForumController extends AbstractController
 
     public function eventAjouter(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): Response
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->authorizationChecker->isGranted('ROLE_ADMIN') !== false || $this->authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
                 $thread = new Thread();
-                $thread->setAuthor($user);
+                $thread->setAuthor($this->user);
                 $forum = $em->getRepository(Forum::class)->getForum('nouveautes')[0];
                 $thread->setForum($forum);
                 $thread->setIsEvent(true);
@@ -99,7 +112,7 @@ class ForumController extends AbstractController
                         $em->persist($thread);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add(
+                        $this->flashBag->add(
                             'notice',
                             $translator->trans('notice.topic.ajoutOk')
                         );
@@ -120,11 +133,8 @@ class ForumController extends AbstractController
      */
     public function eventModifier(Request $request, TranslatorInterface $translator, Thread $thread, EntityManagerInterface $em): Response
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($thread->getAuthor() == $user || $authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($thread->getAuthor() === $this->user || $this->authorizationChecker->isGranted('ROLE_ADMIN') !== false || $this->authorizationChecker->isGranted('ROLE_MODERATOR') !== false){
                 $form = $this->createForm(EventType::class, $thread);
                 if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
@@ -139,7 +149,7 @@ class ForumController extends AbstractController
                         $em->persist($thread);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add(
+                        $this->flashBag->add(
                             'notice',
                             $translator->trans('notice.topic.editOk')
                         );
@@ -220,13 +230,10 @@ class ForumController extends AbstractController
      */
     public function threadAjouter(Request $request, TranslatorInterface $translator, Forum $forum, EntityManagerInterface $em): Response
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum) || $forum->getCanUserCreateThread()){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum) || $forum->getCanUserCreateThread()){
                 $thread = new Thread();
-                $thread->setAuthor($user);
+                $thread->setAuthor($this->user);
                 $thread->setForum($forum);
                 $form = $this->createForm(ThreadType::class, $thread);
                 if('POST' === $request->getMethod()) {
@@ -242,7 +249,7 @@ class ForumController extends AbstractController
                         $em->persist($thread);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add(
+                        $this->flashBag->add(
                             'notice',
                             $translator->trans('notice.topic.ajoutOk')
                         );
@@ -268,11 +275,8 @@ class ForumController extends AbstractController
      */
     public function threadModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): Response
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum) || $thread->getAuthor() == $user){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum) || $thread->getAuthor() === $this->user){
                 $form = $this->createForm(ThreadType::class, $thread);
                 if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
@@ -287,7 +291,7 @@ class ForumController extends AbstractController
                         $em->persist($thread);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add(
+                        $this->flashBag->add(
                             'notice',
                             $translator->trans('notice.topic.editOk')
                         );
@@ -314,18 +318,15 @@ class ForumController extends AbstractController
      */
     public function threadVerrouiller(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): RedirectResponse
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum)){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+              if($this->globalRight($forum)){
                 $thread->setIsCommentable(
                     !$thread->getIsCommentable()
                 );
                 $em->persist($thread);
                 $em->flush();
 
-                $this->get('session')->getFlashBag()->add(
+                $this->flashBag->add(
                     'notice',
                     $thread->getIsCommentable()?$translator->trans('notice.topic.deverrouilleOk'):$translator->trans('notice.topic.verrouilleOk')
                 );
@@ -343,18 +344,15 @@ class ForumController extends AbstractController
      */
     public function threadPostit(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): RedirectResponse
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum)){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum)){
                 $thread->setIsPostit(
                     !$thread->getIsPostit()
                 );
                 $em->persist($thread);
                 $em->flush();
 
-                $this->get('session')->getFlashBag()->add(
+                $this->flashBag->add(
                     'notice',
                     $thread->getIsPostit()?$translator->trans('notice.topic.postitOk'):$translator->trans('notice.topic.unpostitOk')
                 );
@@ -372,17 +370,14 @@ class ForumController extends AbstractController
      */
     public function threadSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): Response
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum) || $thread->getAuthor() == $user){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum) || $thread->getAuthor() === $this->user){
                 $isEvent = $thread->getIsEvent();
 
                 $em->remove($thread);
                 $em->flush();
 
-                $this->get('session')->getFlashBag()->add(
+                $this->flashBag->add(
                     'notice',
                     $translator->trans('notice.topic.deleteOk')
                 );
@@ -412,14 +407,11 @@ class ForumController extends AbstractController
      */
     public function commentAjouter(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em, $page): RedirectResponse
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum) || $thread->getIsCommentable()){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum) || $thread->getIsCommentable()){
                 $comment = new Comment();
-                $comment->setAuthor($user);
+                $comment->setAuthor($this->user);
                 $comment->setThread($thread);
 
                 $form = $this->createForm(CommentType::class, $comment);
@@ -436,7 +428,7 @@ class ForumController extends AbstractController
                         $em->persist($comment);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add(
+                        $this->flashBag->add(
                             'notice',
                             $translator->trans('notice.comment.ajoutOk')
                         );
@@ -458,12 +450,9 @@ class ForumController extends AbstractController
      */
     public function commentModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, EntityManagerInterface $em, $page): Response
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum) || ($thread->getIsCommentable() && $comment->getAuthor() == $user)){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum) || ($thread->getIsCommentable() && $comment->getAuthor() === $this->user)){
                 $form = $this->createForm(CommentType::class, $comment);
                 if(Request::METHOD_POST === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
@@ -478,7 +467,7 @@ class ForumController extends AbstractController
                         $em->persist($comment);
                         $em->flush();
 
-                        $this->get('session')->getFlashBag()->add(
+                        $this->flashBag->add(
                             'notice',
                             $translator->trans('notice.comment.editOk')
                         );
@@ -513,16 +502,13 @@ class ForumController extends AbstractController
      */
     public function commentSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, EntityManagerInterface $em, $page): RedirectResponse
     {
-        $authorizationChecker = $this->get('security.authorization_checker');
         $page = max(1, $page);
-        if($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-
-            if($this->globalRight($authorizationChecker, $user, $forum) || ($thread->getIsCommentable() && $comment->getAuthor() == $user)){
+        if($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ){
+            if($this->globalRight($forum) || ($thread->getIsCommentable() && $comment->getAuthor() === $this->user)){
                 $em->remove($comment);
                 $em->flush();
 
-                $this->get('session')->getFlashBag()->add(
+                $this->flashBag->add(
                     'notice',
                      $translator->trans('notice.comment.deleteOk')
                 );
@@ -535,11 +521,10 @@ class ForumController extends AbstractController
         )));
     }
 
-    public function recentComments(EntityManagerInterface $em, $max = 10, Forum $forum = null, User $user = null): Response
+    public function recentComments(CommentRepository $commentRepository, $max = 10, Forum $forum = null): Response
     {
-        $lastComments = $em->getRepository(Comment::class)->getRecentComments($forum, $user, $max);
         return $this->render('forum/comments/recentList.html.twig', array(
-            'comments' => $lastComments
+            'comments' => $commentRepository->getRecentComments($forum, $this->user, $max)
         ));
     }
 
@@ -569,12 +554,12 @@ class ForumController extends AbstractController
         ));
     }
 
-    public function globalRight($authorizationChecker=null, User $user=null, Forum $forum=null): bool
+    public function globalRight(Forum $forum=null): bool
     {
-        if ($user && $authorizationChecker) {
-            if ($authorizationChecker->isGranted('ROLE_ADMIN') !== false || $authorizationChecker->isGranted('ROLE_MODERATOR') !== false)
+        if ($this->user && $this->authorizationChecker) {
+            if ($this->authorizationChecker->isGranted('ROLE_ADMIN') !== false || $this->authorizationChecker->isGranted('ROLE_MODERATOR') !== false)
                 return true;
-            if ($forum && ($clan = $forum->getClan()) !== null && ($clanutilisateur = $user->getClan()) !== null) {
+            if ($forum && ($clan = $forum->getClan()) !== null && ($clanutilisateur = $this->user->getClan()) !== null) {
                 return ($clanutilisateur->getClan() === $clan) && ($clanutilisateur->getCanEditClan() || $clanutilisateur->getDroit() == 0);
             }
         }

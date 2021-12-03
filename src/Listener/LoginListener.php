@@ -2,6 +2,7 @@
 
 namespace App\Listener;
 
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
@@ -9,8 +10,8 @@ use App\Entity\User\Ip;
 
 class LoginListener
 {
-    private $authorizationChecker;
-    private $em;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private ObjectManager $em;
 
     /**
      * Constructor

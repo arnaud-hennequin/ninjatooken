@@ -3,6 +3,8 @@
 namespace App\Entity\Game;
 
 use App\Entity\User\User;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,13 +17,13 @@ use Doctrine\ORM\Mapping as ORM;
 class Lobby
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * user
@@ -41,35 +43,35 @@ class Lobby
      *
      * @ORM\Column(name="carte", type="smallint")
      */
-    private $carte = 0;
+    private int $carte = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="partie", type="smallint")
      */
-    private $partie = 0;
+    private int $partie = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="maximum", type="smallint")
      */
-    private $maximum = 2;
+    private int $maximum = 2;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="jeu", type="smallint")
      */
-    private $jeu = 0;
+    private int $jeu = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="privee", type="string", length=30)
      */
-    private $privee = '';
+    private string $privee = '';
 
     /**
      * @var float
@@ -79,27 +81,27 @@ class Lobby
     private $version = 0;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_debut", type="datetime")
      */
-    private $dateDebut;
+    private DateTime $dateDebut;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_update", type="datetime")
      */
-    private $dateUpdate;
+    private DateTime $dateUpdate;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->setDateDebut(new \DateTime());
-        $this->setDateUpdate(new \DateTime());
+        $this->users = new ArrayCollection();
+        $this->setDateDebut(new DateTime());
+        $this->setDateUpdate(new DateTime());
     }
 
 
@@ -254,10 +256,10 @@ class Lobby
     /**
      * Set dateDebut
      *
-     * @param \DateTime $dateDebut
+     * @param DateTime $dateDebut
      * @return Lobby
      */
-    public function setDateDebut(\DateTime $dateDebut): self
+    public function setDateDebut(DateTime $dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
@@ -267,9 +269,9 @@ class Lobby
     /**
      * Get dateDebut
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateDebut(): ?\DateTime
+    public function getDateDebut(): ?DateTime
     {
         return $this->dateDebut;
     }
@@ -277,10 +279,10 @@ class Lobby
     /**
      * Set dateUpdate
      *
-     * @param \DateTime $dateUpdate
+     * @param DateTime $dateUpdate
      * @return Lobby
      */
-    public function setDateUpdate(\DateTime $dateUpdate): self
+    public function setDateUpdate(DateTime $dateUpdate): self
     {
         $this->dateUpdate = $dateUpdate;
 
@@ -290,9 +292,9 @@ class Lobby
     /**
      * Get dateUpdate
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateUpdate(): ?\DateTime
+    public function getDateUpdate(): ?DateTime
     {
         return $this->dateUpdate;
     }

@@ -211,33 +211,33 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/(fr|en)/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/resetting, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/new$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/check-confirmation-email$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/confirm/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/confirmed$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/request-reset-password$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/send-resetting-email$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/check-resetting-email$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/(fr|en)/user/reset-password/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/(fr|en)/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/login_check$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/register, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/resetting, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/new$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/check-confirmation-email$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/confirm/, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/confirmed$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/request-reset-password$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/send-resetting-email$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/check-resetting-email$, roles: PUBLIC_ACCESS }
+        - { path: ^/(fr|en)/user/reset-password/, roles: PUBLIC_ACCESS }
 
         - { path: ^/(fr|en)/compte, roles: ROLE_USER }
 
         - { path: ^/daFuckingAdmin, roles: [ROLE_MODERATOR, ROLE_ADMIN] }
 
-        - { path: ^/daFuckingAdmin/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/daFuckingAdmin/logout$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/daFuckingAdmin/login-check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/daFuckingAdmin/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/daFuckingAdmin/logout$, roles: PUBLIC_ACCESS }
+        - { path: ^/daFuckingAdmin/login-check$, roles: PUBLIC_ACCESS }
 
-        - { path: ^/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/.*, roles: PUBLIC_ACCESS }
 
         # The WDT has to be allowed to anonymous users to avoid requiring the login with the AJAX request
-        - { path: ^/_wdt/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/_profiler/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/_wdt/, roles: PUBLIC_ACCESS }
+        - { path: ^/_profiler/, roles: PUBLIC_ACCESS }
 
         # AsseticBundle paths used when using the controller for assets
-        - { path: ^/js/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/css/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/js/, roles: PUBLIC_ACCESS }
+        - { path: ^/css/, roles: PUBLIC_ACCESS }

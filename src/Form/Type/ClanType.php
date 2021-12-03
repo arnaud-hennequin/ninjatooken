@@ -47,7 +47,7 @@ class ClanType extends AbstractType
                 'label_attr' => array('class' => 'libelle'),
                 'multiple' => false,
                 'choices'  => $kamonChoices,
-                'data' => (isset($options['data']) && $options['data']->getKamon() !== null) ? $options['data']->getKamon() : key($kamonChoices)
+                'data' => isset($options['data']) ? $options['data']->getKamon() ?? key($kamonChoices) : key($kamonChoices)
             ))
             ->add('kamonUpload', FileType::class, array(
                 'label' => 'label.kamonUpload',

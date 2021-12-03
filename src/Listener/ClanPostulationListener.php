@@ -11,7 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  
 class ClanPostulationListener
 {
-    protected $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator)
     {

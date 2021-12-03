@@ -2,8 +2,11 @@
 
 namespace App\Entity\User;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,20 +18,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Message
 {
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
-    private $old_id;
+    private ?int $old_id;
 
     /**
      * @var string
@@ -37,7 +40,7 @@ class Message
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
      */
-    private $nom;
+    private string $nom;
 
     /**
      * @var string
@@ -45,42 +48,42 @@ class Message
      * @ORM\Column(name="content", type="text")
      * @Assert\NotBlank()
      */
-    private $content;
+    private string $content;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
-     * @var User
+     * @var UserInterface|null
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="messages", fetch="EAGER")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $author;
+    private ?UserInterface $author;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="has_deleted", type="boolean")
      */
-    private $hasDeleted = false;
+    private bool $hasDeleted = false;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\User\MessageUser", mappedBy="message", cascade={"remove"}, fetch="EAGER")
      */
-    private $receivers;
+    private Collection $receivers;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->receivers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->setDateAjout(new \DateTime());
+        $this->receivers = new ArrayCollection();
+        $this->setDateAjout(new DateTime());
     }
 
     /**
@@ -142,10 +145,10 @@ class Message
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return Message
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -155,9 +158,9 @@ class Message
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -165,10 +168,10 @@ class Message
     /**
      * Set author
      *
-     * @param string $author
+     * @param UserInterface|null $author
      * @return Message
      */
-    public function setAuthor(string $author): self
+    public function setAuthor(?UserInterface $author): Message
     {
         $this->author = $author;
 
@@ -178,9 +181,9 @@ class Message
     /**
      * Get author
      *
-     * @return User
+     * @return UserInterface
      */
-    public function getAuthor(): ?User
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
@@ -211,10 +214,10 @@ class Message
     /**
      * Set old_id
      *
-     * @param integer $oldId
+     * @param int|null $oldId
      * @return Message
      */
-    public function setOldId(int $oldId): self
+    public function setOldId(?int $oldId): self
     {
         $this->old_id = $oldId;
 

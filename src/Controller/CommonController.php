@@ -8,11 +8,13 @@ use App\Repository\ForumRepository;
 use App\Repository\ThreadRepository;
 use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +26,9 @@ class CommonController extends AbstractController
         return new Response('<html lang="fr"><body>add</body></html>');
     }
 
-    public function index(ThreadRepository $threadRepository, ForumRepository $forumRepository): Response
+    public function index(ThreadRepository $threadRepository, ForumRepository $forumRepository, ParameterBagInterface $parameterBag): Response
     {
-        $num = $this->getParameter('numReponse');
+        $num = $parameterBag->get('numReponse');
 
         return $this->render('common/index.html.twig', array(
             'threads' => $threadRepository->findBy(
@@ -37,10 +39,10 @@ class CommonController extends AbstractController
         ));
     }
 
-    public function jouer(): Response
+    public function jouer(ParameterBagInterface $parameterBag): Response
     {
         $response = $this->render('common/jouer.html.twig', [
-            'gameversion' => $this->getParameter('unity.version')
+            'gameversion' => $parameterBag->get('unity.version')
         ]);
         $response->setSharedMaxAge(600);
         
@@ -82,10 +84,9 @@ class CommonController extends AbstractController
         return $this->render('common/mentionsLegales.html.twig');
     }
 
-    public function contact(Request $request, TranslatorInterface $translator, MailerInterface $mailer): Response
+    public function contact(Request $request, TranslatorInterface $translator, MailerInterface $mailer, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag): Response
     {
         if ('POST' === $request->getMethod()) {
-            $csrfTokenManager = $this->get('security.csrf.token_manager');
             if(!$csrfTokenManager->isTokenValid(new CsrfToken('contact'.$request->cookies->get('PHPSESSID'), $request->request->get('_token')))) {
                 throw new \RuntimeException('CSRF attack detected.');
             }
@@ -93,11 +94,11 @@ class CommonController extends AbstractController
             $sujet = trim($request->get('sujet'));
             $email = trim($request->get('email'));
             if(!empty($texte)){
-                $emailContact = $this->getParameter('mail_admin');
+                $emailContact = $parameterBag->get('mail_admin');
 
                 try {
                     $messageMail = (new TemplatedEmail())
-                        ->from(new Address($this->getParameter('mail_contact') , $this->getParameter('mail_name')))
+                        ->from(new Address($parameterBag->get('mail_contact') , $parameterBag->get('mail_name')))
                         ->to($emailContact)
                         ->subject('[NT] Contact : '.$sujet)
                         ->htmlTemplate('common/contactEmail.html.twig')
@@ -110,7 +111,7 @@ class CommonController extends AbstractController
                     $mailer->send($messageMail);
                 } catch (TransportExceptionInterface $e) {}
 
-                $this->get('session')->getFlashBag()->add(
+                $request->getSession()->getFlashBag()->add(
                     'notice',
                     $translator->trans('notice.contact')
                 );
@@ -120,9 +121,9 @@ class CommonController extends AbstractController
         return $this->render('common/contact.html.twig');
     }
 
-    public function search(Request $request, ThreadRepository $threadRepository, CommentRepository $commentRepository, ClanRepository $clanRepository, UserRepository $userRepository): Response
+    public function search(Request $request, ThreadRepository $threadRepository, CommentRepository $commentRepository, ClanRepository $clanRepository, UserRepository $userRepository, ParameterBagInterface $parameterBag): Response
     {
-        $num = $this->getParameter('numReponse');
+        $num = $parameterBag->get('numReponse');
         $q = (string)$request->get('q');
 
         // recherche dans les threads

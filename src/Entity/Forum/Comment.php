@@ -1,7 +1,6 @@
 <?php
 namespace App\Entity\Forum;
 
-use App\Entity\User\User;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,7 +18,7 @@ class Comment
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
      * Thread of this comment
@@ -28,14 +27,14 @@ class Comment
      * @ORM\ManyToOne(targetEntity="App\Entity\Forum\Thread", fetch="LAZY")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $thread;
+    private Thread $thread;
 
     /**
      * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
      * Comment text
@@ -45,23 +44,23 @@ class Comment
      * @ORM\Column(name="body", type="text")
      * @Assert\NotBlank
      */
-    private $body;
+    private string $body;
 
     /**
     * Author of the comment
     *
     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
-    * @var User
-    */
-    private $author;
+    * @var UserInterface|null
+     */
+    private ?UserInterface $author;
 
     /**
-    * @var int
-    *
+    * @var int|null
+     *
     * @ORM\Column(name="old_id", type="integer", nullable=true)
     */
-    private $old_id;
+    private ?int $old_id;
 
     public function __construct()
     {
@@ -94,9 +93,9 @@ class Comment
     /**
     * Get author's name
     * 
-    * @return User 
-    */
-    public function getAuthor(): ?User
+    * @return UserInterface
+     */
+    public function getAuthor(): UserInterface
     {
         return $this->author;
     }
@@ -165,10 +164,10 @@ class Comment
     /**
      * Set old_id
      *
-     * @param integer $oldId
+     * @param int|null $oldId
      * @return Comment
      */
-    public function setOldId(int $oldId): self
+    public function setOldId(?int $oldId): self
     {
         $this->old_id = $oldId;
 

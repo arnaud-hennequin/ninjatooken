@@ -3,11 +3,16 @@
 namespace App\Entity\Clan;
 
 use App\Entity\Forum\Forum;
+use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use Serializable;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Ignore;
 
@@ -18,36 +23,36 @@ use Symfony\Component\Serializer\Annotation\Ignore;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="App\Repository\ClanRepository")
  */
-class Clan implements SluggableInterface, \Serializable
+class Clan implements SluggableInterface, Serializable
 {
     use SluggableTrait;
 
     /**
-     * @var integer
+     * @var int|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
-    private $old_id;
+    private ?int $old_id;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Clan\ClanUtilisateur", mappedBy="clan", cascade={"remove"})
      * @ORM\OrderBy({"dateAjout" = "ASC"})
      */
-    private $membres;
+    private ?Collection $membres;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Forum\Forum", mappedBy="clan", cascade={"persist","remove"})
      */
-    private $forums;
+    private ?Collection $forums;
 
     /**
      * @var string
@@ -56,23 +61,23 @@ class Clan implements SluggableInterface, \Serializable
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
      */
-    private $nom;
+    private string $nom;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="tag", type="string", length=5, nullable=true)
      * @Assert\Length(max=5)
      */
-    private $tag;
+    private ?string $tag;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="accroche", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    private $accroche;
+    private ?string $accroche;
 
     /**
      * @var string
@@ -80,86 +85,86 @@ class Clan implements SluggableInterface, \Serializable
      * @ORM\Column(name="description", type="text")
      * @Assert\NotBlank()
      */
-    private $description;
+    private string $description;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      * @Assert\Url()
      */
-    private $url;
+    private ?string $url;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="kamon", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    private $kamon;
+    private ?string $kamon = "";
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="kamon_upload", type="string", length=255, nullable=true)
      */
-    private $kamonUpload;
+    private ?string $kamonUpload;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
-     * @var \DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    private ?DateTime $updatedAt;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="online", type="boolean")
      */
-    private $online = true;
+    private bool $online = true;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="is_recruting", type="boolean")
      */
-    private $isRecruting = true;
+    private bool $isRecruting = true;
 
     /**
      * @Ignore()
      */
 
-    private $tempKamon;
+    private string $tempKamon;
 
     /**
      * @Ignore()
      */
-    public $file;
+    public ?UploadedFile $file;
 
 
     /**
      * @Ignore()
      */
-    public $delete = false;
+    public bool $delete = false;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->membres = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->forums = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->membres = new ArrayCollection();
+        $this->forums = new ArrayCollection();
 
-        $this->setDateAjout(new \DateTime());
+        $this->setDateAjout(new DateTime());
     }
 
     public function __toString(){
@@ -220,7 +225,7 @@ class Clan implements SluggableInterface, \Serializable
         // generate the slug itself
         $sluggableText = implode(' ', $usableValues);
 
-        $unicodeString = (new \Symfony\Component\String\Slugger\AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+        $unicodeString = (new AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
 
         $slug = strtolower($unicodeString->toString());
 
@@ -256,8 +261,8 @@ class Clan implements SluggableInterface, \Serializable
      */
     public function prePersist()
     {
-        $this->dateAjout = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->dateAjout = new DateTime();
+        $this->updatedAt = new DateTime();
 
         if (null !== $this->file) {
             $this->setKamonUpload(uniqid(mt_rand(), true).".".$this->file->guessExtension());
@@ -269,7 +274,7 @@ class Clan implements SluggableInterface, \Serializable
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new DateTime();
 
         if (null !== $this->file) {
             $file = $this->id.'.'.$this->file->guessExtension();
@@ -349,7 +354,7 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Set nom
      *
-     * @param string $nom
+     * @param string|null $nom
      * @return Clan
      */
     public function setNom(?string $nom): self
@@ -372,7 +377,7 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Set tag
      *
-     * @param string $tag
+     * @param string|null $tag
      * @return Clan
      */
     public function setTag(?string $tag): self
@@ -395,7 +400,7 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Set description
      *
-     * @param string $description
+     * @param string|null $description
      * @return Clan
      */
     public function setDescription(?string $description): self
@@ -418,7 +423,7 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Set accroche
      *
-     * @param string $accroche
+     * @param string|null $accroche
      * @return Clan
      */
     public function setAccroche(?string $accroche): self
@@ -464,10 +469,10 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Set kamon
      *
-     * @param string $kamon
+     * @param string|null $kamon
      * @return Clan
      */
-    public function setKamon(string $kamon): self
+    public function setKamon(?string $kamon): self
     {
         $this->kamon = $kamon;
 
@@ -487,10 +492,10 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Set dateAjout
      *
-     * @param \DateTime $dateAjout
+     * @param DateTime $dateAjout
      * @return Clan
      */
-    public function setDateAjout(\DateTime $dateAjout): self
+    public function setDateAjout(DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -500,9 +505,9 @@ class Clan implements SluggableInterface, \Serializable
     /**
      * Get dateAjout
      *
-     * @return \DateTime 
+     * @return DateTime
      */
-    public function getDateAjout(): ?\DateTime
+    public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
@@ -582,7 +587,7 @@ class Clan implements SluggableInterface, \Serializable
      *
      * @return Collection
      */
-    public function getMembres()
+    public function getMembres(): ?Collection
     {
         return $this->membres;
     }
@@ -667,12 +672,12 @@ class Clan implements SluggableInterface, \Serializable
         return $this->kamonUpload;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

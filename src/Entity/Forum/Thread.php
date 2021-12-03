@@ -20,20 +20,20 @@ class Thread implements SluggableInterface
     use SluggableTrait;
 
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    protected ?int $id = null;
 
     /**
-     * @var int
+     * @var int|null
      *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
-    private $old_id;
+    private ?int $old_id;
 
     /**
      * Tells if the thread is viewable on top of list
@@ -42,28 +42,28 @@ class Thread implements SluggableInterface
      *
      * @ORM\Column(name="is_postit", type="boolean")
      */
-    private $isPostit = false;
+    private bool $isPostit = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="is_event", type="boolean")
      */
-    private $isEvent = false;
+    private bool $isEvent = false;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="date_event_start", type="date", nullable=true)
      */
-    private $dateEventStart;
+    private ?DateTime $dateEventStart;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="date_event_end", type="date", nullable=true)
      */
-    private $dateEventEnd;
+    private ?DateTime $dateEventEnd;
 
     /**
      * Tells if new comments can be added in this thread
@@ -72,7 +72,7 @@ class Thread implements SluggableInterface
      *
      * @ORM\Column(name="is_commentable", type="boolean")
      */
-    private $isCommentable = true;
+    private bool $isCommentable = true;
 
     /**
      * forum
@@ -82,7 +82,7 @@ class Thread implements SluggableInterface
      * @ORM\ManyToOne(targetEntity="Forum", fetch="EAGER")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $forum;
+    private Forum $forum;
 
     /**
      * @var string
@@ -91,14 +91,14 @@ class Thread implements SluggableInterface
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
      */
-    private $nom;
+    private string $nom;
 
     /**
      * @var DateTime
      *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
-    private $dateAjout;
+    private DateTime $dateAjout;
 
     /**
      * @var string
@@ -106,23 +106,23 @@ class Thread implements SluggableInterface
      * @ORM\Column(name="body", type="text")
      * @Assert\NotBlank()
      */
-    protected $body;
+    protected string $body;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="url_video", type="string", length=255, nullable=true)
      */
-    private $urlVideo;
+    private ?string $urlVideo;
 
     /**
     * Author of the comment
     *
     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
-    * @var User
-    */
-    private $author;
+    * @var UserInterface|null
+     */
+    private ?UserInterface $author;
 
     /**
      * Denormalized number of comments
@@ -131,25 +131,25 @@ class Thread implements SluggableInterface
      *
      * @ORM\Column(name="num_comments", type="integer")
      */
-    private $numComments = 0;
+    private int $numComments = 0;
 
     /**
      * Denormalized date of the last comment
      *
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="last_comment_at", type="datetime", nullable=true)
      */
-    private $lastCommentAt;
+    private ?DateTime $lastCommentAt;
 
     /**
      * Denormalized author of the last comment
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(name="lastCommentBy_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * @var User
+     * @var User|null
      */
-    private $lastCommentBy;
+    private ?User $lastCommentBy;
 
     /**
      * Constructor
@@ -196,7 +196,7 @@ class Thread implements SluggableInterface
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id);
+            $slug = md5($this->id ?? uniqid("thread"));
         }
 
         return $slug;
@@ -374,11 +374,11 @@ class Thread implements SluggableInterface
     }
 
     /**
-    * Set author's name
-    * 
-    * @param UserInterface $author 
-    */
-    public function setAuthor(UserInterface $author)
+     * Set author's name
+     *
+     * @param UserInterface|null $author
+     */
+    public function setAuthor(?UserInterface $author)
     {
         $this->author = $author;
     }
@@ -386,9 +386,9 @@ class Thread implements SluggableInterface
     /**
     * Get author's name
     * 
-    * @return User 
+    * @return User
     */
-    public function getAuthor(): ?User
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
@@ -433,7 +433,7 @@ class Thread implements SluggableInterface
     /**
      * Get lastCommentBy
      *
-     * @return User 
+     * @return User
      */
     public function getLastCommentBy(): ?User
     {

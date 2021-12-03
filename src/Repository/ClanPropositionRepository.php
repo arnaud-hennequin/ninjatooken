@@ -5,6 +5,7 @@ use App\Entity\Clan\ClanProposition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\User\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ClanPropositionRepository extends ServiceEntityRepository
 {
@@ -13,7 +14,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         parent::__construct($registry, ClanProposition::class);
     }
 
-    public function getPropositionByUsers(User $recruteur=null, User $postulant=null)
+    public function getPropositionByUsers(?UserInterface $recruteur=null, User $postulant=null)
     {
         $query = $this->createQueryBuilder('cp');
 
@@ -30,7 +31,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getWaitingPropositionByUsers(User $recruteur=null, User $postulant=null)
+    public function getWaitingPropositionByUsers(?UserInterface $recruteur = null, User $postulant=null)
     {
         $query = $this->createQueryBuilder('cp')
             ->where('cp.etat = 0');
@@ -48,7 +49,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getPropositionByRecruteur(User $recruteur=null)
+    public function getPropositionByRecruteur(?UserInterface $recruteur=null)
     {
         if(isset($recruteur)){
             $query = $this->createQueryBuilder('cp');
@@ -60,7 +61,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getPropositionByPostulant(User $postulant=null)
+    public function getPropositionByPostulant(?UserInterface $postulant=null)
     {
         if(isset($postulant)){
             $query = $this->createQueryBuilder('cp');
@@ -72,7 +73,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getNumPropositionsByPostulant(User $postulant=null)
+    public function getNumPropositionsByPostulant(?UserInterface $postulant=null)
     {
         if(isset($postulant)){
             $query = $this->createQueryBuilder('cp')

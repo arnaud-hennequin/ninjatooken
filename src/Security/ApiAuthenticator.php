@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 
 class ApiAuthenticator extends AbstractAuthenticator
@@ -32,7 +31,7 @@ class ApiAuthenticator extends AbstractAuthenticator
         return false;
     }
 
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $request->getSession()->set('visit', !empty($request->get("visiteur")));
 

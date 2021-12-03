@@ -7,6 +7,7 @@ use App\Entity\Forum\Forum;
 use App\Entity\Forum\Thread;
 use App\Entity\User\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommentRepository extends ServiceEntityRepository
 {
@@ -36,7 +37,7 @@ class CommentRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getRecentComments(Forum $forum = null, User $user = null, $num = 0)
+    public function getRecentComments(?Forum $forum = null, ?UserInterface $user = null, $num = 0)
     {
         $query = $this->createQueryBuilder('c')
             ->orderBy('c.dateAjout', 'DESC');
@@ -71,7 +72,7 @@ class CommentRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function searchComments(User $user=null, Forum $forum=null, $q = "", $nombreParPage=5, $page=1)
+    public function searchComments(?User $user = null, ?Forum $forum = null, $q = "", $nombreParPage=5, $page=1)
     {
         $query = $this->createQueryBuilder('c')
             ->addOrderBy('c.dateAjout', 'DESC');
@@ -98,7 +99,7 @@ class CommentRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function deleteCommentsByThread(Thread $thread = null): bool
+    public function deleteCommentsByThread(?Thread $thread = null): bool
     {
         if($thread){
             $query = $this->createQueryBuilder('c')
