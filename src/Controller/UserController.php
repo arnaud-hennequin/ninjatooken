@@ -635,9 +635,9 @@ class UserController extends AbstractController
             $em->flush();
 
             // recalcul les nombres de réponses d'un thread
-            $conn->executeStatement("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = isnull(c.num, 0)");
+            $conn->executeStatement("UPDATE nt_thread as t LEFT JOIN (SELECT COUNT(nt_comment.id) as num, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.num_comments = ifnull(c.num, 0)");
             // recalcul les nombres de réponses d'un forum
-            $conn->executeStatement("UPDATE nt_forum as f LEFT JOIN (SELECT COUNT(nt_thread.id) as num, forum_id FROM nt_thread GROUP BY forum_id) t ON t.forum_id=f.id SET f.num_threads = isnull(t.num, 0)");
+            $conn->executeStatement("UPDATE nt_forum as f LEFT JOIN (SELECT COUNT(nt_thread.id) as num, forum_id FROM nt_thread GROUP BY forum_id) t ON t.forum_id=f.id SET f.num_threads = ifnull(t.num, 0)");
 
             // ré-affecte les derniers commentaires
             $conn->executeStatement("UPDATE nt_thread as t LEFT JOIN (SELECT MAX(date_ajout) as lastAt, thread_id FROM nt_comment GROUP BY thread_id) c ON c.thread_id=t.id SET t.last_comment_at = c.lastAt");

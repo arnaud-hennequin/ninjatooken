@@ -182,8 +182,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     private string $avatar;
 
     // propriété utilisé temporairement pour la suppression
-    private string $tempAvatar;
-    private UploadedFile $file;
+    private ?string $tempAvatar = null;
+    private ?UploadedFile $file = null;
 
     /**
      * @var boolean
