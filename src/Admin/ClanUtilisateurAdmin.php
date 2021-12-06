@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Clan\ClanUtilisateur;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -85,7 +86,7 @@ class ClanUtilisateurAdmin extends AbstractAdmin
                 'label' => 'Droit',
                 'multiple' => false,
                 'expanded' => false,
-                'choices'  => array('Shishō', 'Taishō', 'Jōnin', 'Chūnin')
+                'choices'  => array('Shishō' => 0, 'Taishō' => 1, 'Jōnin' => 2, 'Chūnin' => 3)
             ))
             ->add('canEditClan', ChoiceType::class, array(
                 'label' => 'Peut éditer le clan',

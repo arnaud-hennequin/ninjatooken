@@ -83,7 +83,7 @@ class ClanPropositionAdmin extends AbstractAdmin
                 'label' => 'État',
                 'multiple' => false,
                 'expanded' => false,
-                'choices'  => array('En attente', 'Accepté', 'Refusé')
+                'choices'  => array('En attente' => 0, 'Accepté' => 1, 'Refusé' => 2)
             ))
         ;
     }

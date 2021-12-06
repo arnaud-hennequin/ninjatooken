@@ -50,34 +50,34 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected ?DateTime $createdAt;
+    protected DateTime $createdAt;
 
     /**
      * @var DateTime|null
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    protected ?DateTime $updatedAt;
+    protected DateTime $updatedAt;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected ?string $username;
+    protected string $username;
 
     /**
      * @ORM\Column(name="username_canonical", type="string", length=255, unique=true)
      */
-    protected ?string $usernameCanonical;
+    protected string $usernameCanonical;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected ?string $email;
+    protected string $email;
 
     /**
      * @ORM\Column(name="email_canonical", type="string", length=255, unique=true)
      */
-    protected ?string $emailCanonical;
+    protected string $emailCanonical;
 
     /**
      * @var bool
@@ -98,7 +98,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected ?string $password;
+    protected string $password;
 
     /**
      * Plain password. Used for model validation. Must not be persisted.
@@ -172,7 +172,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     *
     * @ORM\Column(name="description", type="text", nullable=true)
     */
-    private string $description;
+    private ?string $description;
 
     /**
      * @var string
@@ -379,7 +379,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id);
+            $slug = md5($this->id ?? uniqid("user"));
         }
 
         return $slug;
@@ -461,7 +461,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -475,32 +475,32 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getUsernameCanonical(): ?string
+    public function getUsernameCanonical(): string
     {
         return $this->usernameCanonical;
     }
 
-    public function getSalt(): ?string
+    public function getSalt(): string
     {
         return $this->salt;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function getEmailCanonical(): ?string
+    public function getEmailCanonical(): string
     {
         return $this->emailCanonical;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return (string) $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -581,21 +581,21 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function setUsernameCanonical(?string $usernameCanonical): self
+    public function setUsernameCanonical(string $usernameCanonical): self
     {
         $this->usernameCanonical = $usernameCanonical;
 
         return $this;
     }
 
-    public function setSalt(?string $salt): self
+    public function setSalt(string $salt): self
     {
         $this->salt = $salt;
 
         return $this;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -728,10 +728,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             return false;
         }
 
-        if ($this->salt !== $user->getSalt()) {
-            return false;
-        }
-
         if ($this->getUserIdentifier() !== $user->getUserIdentifier()) {
             return false;
         }
@@ -858,7 +854,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     * @param string $description
     * @return User
     */
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 

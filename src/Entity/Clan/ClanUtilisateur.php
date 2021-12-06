@@ -28,13 +28,13 @@ class ClanUtilisateur
      * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="clan", cascade={"persist"}, fetch="LAZY")
      * @var User
      */
-    private User $membre;
+    private ?User $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="recruts", cascade={"persist"}, fetch="LAZY")
      * @var User
      */
-    private User $recruteur;
+    private ?User $recruteur;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="membres", cascade={"persist"}, fetch="LAZY")
@@ -99,7 +99,7 @@ class ClanUtilisateur
      *
      * @return integer 
      */
-    public function getDroit(): ?int
+    public function getDroit(): int
     {
         return $this->droit;
     }
@@ -122,7 +122,7 @@ class ClanUtilisateur
      *
      * @return boolean 
      */
-    public function getCanEditClan(): ?bool
+    public function getCanEditClan(): bool
     {
         return $this->canEditClan;
     }

@@ -143,12 +143,12 @@ class Clan implements SluggableInterface, Serializable
      * @Ignore()
      */
 
-    private string $tempKamon;
+    private ?string $tempKamon = null;
 
     /**
      * @Ignore()
      */
-    public ?UploadedFile $file;
+    public ?UploadedFile $file = null;
 
 
     /**

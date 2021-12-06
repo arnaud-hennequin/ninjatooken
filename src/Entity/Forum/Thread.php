@@ -494,10 +494,10 @@ class Thread implements SluggableInterface
     /**
      * Set dateEventStart
      *
-     * @param DateTime $dateEventStart
+     * @param DateTime|null $dateEventStart
      * @return Thread
      */
-    public function setDateEventStart(DateTime $dateEventStart): self
+    public function setDateEventStart(?DateTime $dateEventStart): self
     {
         $this->dateEventStart = $dateEventStart;
 
@@ -517,10 +517,10 @@ class Thread implements SluggableInterface
     /**
      * Set dateEventEnd
      *
-     * @param DateTime $dateEventEnd
+     * @param DateTime|null $dateEventEnd
      * @return Thread
      */
-    public function setDateEventEnd(DateTime $dateEventEnd): self
+    public function setDateEventEnd(?DateTime $dateEventEnd): self
     {
         $this->dateEventEnd = $dateEventEnd;
 
