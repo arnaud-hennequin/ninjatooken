@@ -17,12 +17,12 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class NewsletterCommand extends Command
 {
-    private $translator;
-    private $mailer;
-    private $from;
-    private $logger;
-    private $router;
-    private $em;
+    private TranslatorInterface $translator;
+    private MailerInterface $mailer;
+    private Address $from;
+    private LoggerInterface $logger;
+    private UrlGeneratorInterface $router;
+    private EntityManagerInterface $em;
 
     public function __construct(TranslatorInterface $translator, MailerInterface $mailer, ParameterBagInterface $params, LoggerInterface $logger, UrlGeneratorInterface $router, EntityManagerInterface $em)
     {

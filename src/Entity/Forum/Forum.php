@@ -128,7 +128,7 @@ class Forum implements SluggableInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -151,7 +151,7 @@ class Forum implements SluggableInterface
     /**
      * Get nom
      *
-     * @return string 
+     * @return string|null
      */
     public function getNom(): ?string
     {
@@ -174,7 +174,7 @@ class Forum implements SluggableInterface
     /**
      * Get ordre
      *
-     * @return integer 
+     * @return int|null
      */
     public function getOrdre(): ?int
     {
@@ -197,7 +197,7 @@ class Forum implements SluggableInterface
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -220,7 +220,7 @@ class Forum implements SluggableInterface
     /**
      * Get old_id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getOldId(): ?int
     {
@@ -230,7 +230,7 @@ class Forum implements SluggableInterface
     /**
      * Gets the number of threads
      *
-     * @return integer
+     * @return int|null
      */
     public function getNumThreads(): ?int
     {
@@ -255,7 +255,7 @@ class Forum implements SluggableInterface
      * value.
      *
      * @param integer $by Value to increment threads by
-     * @return integer The new thread total
+     * @return int|null The new thread total
      */
     public function incrementNumThreads(int $by = 1): ?int
     {
@@ -278,7 +278,7 @@ class Forum implements SluggableInterface
     /**
      * Get clan
      *
-     * @return Clan
+     * @return Clan|null
      */
     public function getClan(): ?Clan
     {
@@ -301,7 +301,7 @@ class Forum implements SluggableInterface
     /**
      * Get canUserCreateThread
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getCanUserCreateThread(): ?bool
     {

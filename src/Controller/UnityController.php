@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -490,7 +491,7 @@ class UnityController extends AbstractController
                                         $lobby->addUser($userCheck);
                                         $em->persist($lobby);
                                         $em->flush();
-                                    } catch (\Exception $e) {/*avoid error*/}
+                                    } catch (Exception) {}
                                 }
                             }
                         }
@@ -582,7 +583,7 @@ class UnityController extends AbstractController
                                             $em->flush();
                                             $data    = "1";
                                         }
-                                    }catch(Exception $e){}
+                                    }catch(Exception){}
                                 }
                             }
                         }

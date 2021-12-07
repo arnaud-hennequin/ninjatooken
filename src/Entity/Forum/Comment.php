@@ -70,7 +70,7 @@ class Comment
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -101,7 +101,7 @@ class Comment
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBody(): ?string
     {
@@ -121,7 +121,7 @@ class Comment
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -142,7 +142,7 @@ class Comment
     }
 
     /**
-     * @return Thread
+     * @return Thread|null
      */
     public function getThread(): ?Thread
     {
@@ -177,7 +177,7 @@ class Comment
     /**
      * Get old_id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getOldId(): ?int
     {

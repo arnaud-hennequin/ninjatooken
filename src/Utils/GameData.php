@@ -8,7 +8,7 @@ use DOMDocument;
 class GameData
 {
     private DOMDocument $document;
-    private $xml;
+    private string|false $xml;
 
     private int $experienceRelatif;
     private $levelActuel;
@@ -30,7 +30,8 @@ class GameData
     {
         return $this->document;
     }
-    public function getRaw(){
+    public function getRaw(): bool|string
+    {
         return $this->xml;
     }
 
@@ -54,7 +55,8 @@ class GameData
         return $this->levelActuel->getAttribute('niveau');
     }
 
-    public function getRatio(){
+    public function getRatio(): float|int
+    {
         return ($this->experienceRelatif - $this->levelActuel->getAttribute("val"))/($this->levelSuivant->getAttribute("val")-$this->levelActuel->getAttribute("val"))*100;
     }
 }

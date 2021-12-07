@@ -63,7 +63,7 @@ class MessageUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -86,7 +86,7 @@ class MessageUser
     /**
      * Get dateRead
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateRead(): ?DateTime
     {
@@ -109,7 +109,7 @@ class MessageUser
     /**
      * Get hasDeleted
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getHasDeleted(): ?bool
     {
@@ -132,7 +132,7 @@ class MessageUser
     /**
      * Get destinataire
      *
-     * @return User
+     * @return User|null
      */
     public function getDestinataire(): ?User
     {
@@ -155,7 +155,7 @@ class MessageUser
     /**
      * Get message
      *
-     * @return Message
+     * @return Message|null
      */
     public function getMessage(): ?Message
     {

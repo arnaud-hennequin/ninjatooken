@@ -8,8 +8,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class ClientIpVoter implements VoterInterface
 {
-    protected $requestStack;
-    protected $blacklistedIp;
+    protected RequestStack $requestStack;
+    protected array $blacklistedIp;
 
     public function __construct(RequestStack $requestStack, array $blacklistedIp = array())
     {

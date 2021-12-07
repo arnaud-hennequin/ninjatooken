@@ -26,13 +26,13 @@ class ClanUtilisateur
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="clan", cascade={"persist"}, fetch="LAZY")
-     * @var User
+     * @var User|null
      */
     private ?User $membre;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="recruts", cascade={"persist"}, fetch="LAZY")
-     * @var User
+     * @var User|null
      */
     private ?User $recruteur;
 
@@ -74,7 +74,7 @@ class ClanUtilisateur
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -143,7 +143,7 @@ class ClanUtilisateur
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -158,10 +158,8 @@ class ClanUtilisateur
      */
     public function setMembre(?UserInterface $membre = null): self
     {
-        if($this->membre)
-            $this->membre->setClan(null);
-        if($membre)
-            $membre->setClan($this);
+        $this->membre?->setClan(null);
+        $membre?->setClan($this);
         $this->membre = $membre;
 
         return $this;
@@ -170,7 +168,7 @@ class ClanUtilisateur
     /**
      * Get membre
      *
-     * @return User
+     * @return User|null
      */
     public function getMembre(): ?User
     {
@@ -185,10 +183,8 @@ class ClanUtilisateur
      */
     public function setRecruteur(?UserInterface $recruteur = null): self
     {
-        if($this->recruteur)
-            $this->recruteur->removeRecrut($this);
-        if($recruteur)
-            $recruteur->addRecrut($this);
+        $this->recruteur?->removeRecrut($this);
+        $recruteur?->addRecrut($this);
 
         $this->recruteur = $recruteur;
 
@@ -198,7 +194,7 @@ class ClanUtilisateur
     /**
      * Get recruteur
      *
-     * @return User
+     * @return User|null
      */
     public function getRecruteur(): ?User
     {
@@ -221,7 +217,7 @@ class ClanUtilisateur
     /**
      * Get clan
      *
-     * @return Clan
+     * @return Clan|null
      */
     public function getClan(): ?Clan
     {

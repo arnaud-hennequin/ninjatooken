@@ -205,7 +205,7 @@ class Thread implements SluggableInterface
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -228,7 +228,7 @@ class Thread implements SluggableInterface
     /**
      * Get nom
      *
-     * @return string 
+     * @return string|null
      */
     public function getNom(): ?string
     {
@@ -251,7 +251,7 @@ class Thread implements SluggableInterface
     /**
      * Get forum
      *
-     * @return Forum 
+     * @return Forum|null
      */
     public function getForum(): ?Forum
     {
@@ -274,7 +274,7 @@ class Thread implements SluggableInterface
     /**
      * Get body
      *
-     * @return string 
+     * @return string|null
      */
     public function getBody(): ?string
     {
@@ -297,7 +297,7 @@ class Thread implements SluggableInterface
     /**
      * Get urlVideo
      *
-     * @return string 
+     * @return string|null
      */
     public function getUrlVideo(): ?string
     {
@@ -320,7 +320,7 @@ class Thread implements SluggableInterface
     /**
      * Get old_id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getOldId(): ?int
     {
@@ -343,7 +343,7 @@ class Thread implements SluggableInterface
     /**
      * Get dateAjout
      *
-     * @return DateTime 
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -366,7 +366,7 @@ class Thread implements SluggableInterface
     /**
      * Get isEvent
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getIsEvent(): ?bool
     {
@@ -384,10 +384,10 @@ class Thread implements SluggableInterface
     }
 
     /**
-    * Get author's name
-    * 
-    * @return User
-    */
+     * Get author's name
+     *
+     * @return UserInterface|null
+     */
     public function getAuthor(): ?UserInterface
     {
         return $this->author;
@@ -410,7 +410,7 @@ class Thread implements SluggableInterface
     /**
      * Get isPostit
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getIsPostit(): ?bool
     {
@@ -433,7 +433,7 @@ class Thread implements SluggableInterface
     /**
      * Get lastCommentBy
      *
-     * @return User
+     * @return User|null
      */
     public function getLastCommentBy(): ?User
     {
@@ -443,7 +443,7 @@ class Thread implements SluggableInterface
     /**
      * Gets the number of comments
      *
-     * @return integer
+     * @return int|null
      */
     public function getNumComments(): ?int
     {
@@ -465,7 +465,7 @@ class Thread implements SluggableInterface
      * value.
      *
      * @param integer $by Value to increment comments by
-     * @return integer The new comment total
+     * @return int|null The new comment total
      */
     public function incrementNumComments(int $by = 1): ?int
     {
@@ -473,7 +473,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getLastCommentAt(): ?DateTime
     {
@@ -507,7 +507,7 @@ class Thread implements SluggableInterface
     /**
      * Get dateEventStart
      *
-     * @return DateTime 
+     * @return DateTime|null
      */
     public function getDateEventStart(): ?DateTime
     {
@@ -530,7 +530,7 @@ class Thread implements SluggableInterface
     /**
      * Get dateEventEnd
      *
-     * @return DateTime 
+     * @return DateTime|null
      */
     public function getDateEventEnd(): ?DateTime
     {
@@ -553,7 +553,7 @@ class Thread implements SluggableInterface
     /**
      * Get isCommentable
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getIsCommentable(): ?bool
     {

@@ -11,9 +11,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class InactiveCommand extends Command
 {
-    private $translator;
-    private $logger;
-    private $em;
+    private TranslatorInterface $translator;
+    private LoggerInterface $logger;
+    private EntityManagerInterface $em;
 
     public function __construct(TranslatorInterface $translator, LoggerInterface $logger, EntityManagerInterface $em)
     {

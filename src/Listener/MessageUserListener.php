@@ -52,7 +52,7 @@ class MessageUserListener
                         ])
                     ;
                     $this->mailer->send($messageMail);
-                } catch (TransportExceptionInterface $e) {}
+                } catch (TransportExceptionInterface) {}
 
                 $destinataire->setDateMessage(new DateTime);
                 $em->persist($destinataire);

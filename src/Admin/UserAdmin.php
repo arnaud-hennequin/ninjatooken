@@ -21,7 +21,7 @@ use Sonata\AdminBundle\Form\Type\AdminType;
 
 class UserAdmin extends AbstractAdmin
 {
-    protected $formOptions = array(
+    protected array $formOptions = array(
         'validation_groups' => 'Profile'
     );
 

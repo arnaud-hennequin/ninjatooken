@@ -317,7 +317,7 @@ class Ninja
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -340,7 +340,7 @@ class Ninja
     /**
      * Get aptitudeForce
      *
-     * @return integer 
+     * @return int|null
      */
     public function getAptitudeForce(): ?int
     {
@@ -363,7 +363,7 @@ class Ninja
     /**
      * Get aptitudeVitesse
      *
-     * @return integer 
+     * @return int|null
      */
     public function getAptitudeVitesse(): ?int
     {
@@ -386,7 +386,7 @@ class Ninja
     /**
      * Get aptitudeVie
      *
-     * @return integer 
+     * @return int|null
      */
     public function getAptitudeVie(): ?int
     {
@@ -409,7 +409,7 @@ class Ninja
     /**
      * Get aptitudeChakra
      *
-     * @return integer 
+     * @return int|null
      */
     public function getAptitudeChakra(): ?int
     {
@@ -432,7 +432,7 @@ class Ninja
     /**
      * Get jutsuBoule
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuBoule(): ?int
     {
@@ -455,7 +455,7 @@ class Ninja
     /**
      * Get jutsuDoubleSaut
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuDoubleSaut(): ?int
     {
@@ -478,7 +478,7 @@ class Ninja
     /**
      * Get jutsuBouclier
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuBouclier(): ?int
     {
@@ -501,7 +501,7 @@ class Ninja
     /**
      * Get jutsuMarcherMur
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuMarcherMur(): ?int
     {
@@ -524,7 +524,7 @@ class Ninja
     /**
      * Get jutsuDeflagration
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuDeflagration(): ?int
     {
@@ -547,7 +547,7 @@ class Ninja
     /**
      * Get jutsuTransformationAqueuse
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuTransformationAqueuse(): ?int
     {
@@ -570,7 +570,7 @@ class Ninja
     /**
      * Get jutsuMetamorphose
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuMetamorphose(): ?int
     {
@@ -593,7 +593,7 @@ class Ninja
     /**
      * Get jutsuMultishoot
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuMultishoot(): ?int
     {
@@ -616,7 +616,7 @@ class Ninja
     /**
      * Get jutsuInvisibilite
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuInvisibilite(): ?int
     {
@@ -639,7 +639,7 @@ class Ninja
     /**
      * Get jutsuResistanceExplosion
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuResistanceExplosion(): ?int
     {
@@ -662,7 +662,7 @@ class Ninja
     /**
      * Get jutsuPhoenix
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuPhoenix(): ?int
     {
@@ -685,7 +685,7 @@ class Ninja
     /**
      * Get jutsuVague
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuVague(): ?int
     {
@@ -708,7 +708,7 @@ class Ninja
     /**
      * Get jutsuPieux
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuPieux(): ?int
     {
@@ -731,7 +731,7 @@ class Ninja
     /**
      * Get jutsuTeleportation
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuTeleportation(): ?int
     {
@@ -754,7 +754,7 @@ class Ninja
     /**
      * Get jutsuTornade
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuTornade(): ?int
     {
@@ -777,7 +777,7 @@ class Ninja
     /**
      * Get jutsuKusanagi
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuKusanagi(): ?int
     {
@@ -800,7 +800,7 @@ class Ninja
     /**
      * Get jutsuAcierRenforce
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuAcierRenforce(): ?int
     {
@@ -823,7 +823,7 @@ class Ninja
     /**
      * Get jutsuChakraVie
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuChakraVie(): ?int
     {
@@ -846,7 +846,7 @@ class Ninja
     /**
      * Get grade
      *
-     * @return integer 
+     * @return int|null
      */
     public function getGrade(): ?int
     {
@@ -869,7 +869,7 @@ class Ninja
     /**
      * Get experience
      *
-     * @return integer 
+     * @return int|null
      */
     public function getExperience(): ?int
     {
@@ -892,7 +892,7 @@ class Ninja
     /**
      * Get classe
      *
-     * @return string 
+     * @return string|null
      */
     public function getClasse(): ?string
     {
@@ -915,7 +915,7 @@ class Ninja
     /**
      * Get user
      *
-     * @return User
+     * @return User|null
      */
     public function getUser(): ?User
     {
@@ -938,7 +938,7 @@ class Ninja
     /**
      * Get masque
      *
-     * @return integer 
+     * @return int|null
      */
     public function getMasque(): ?int
     {
@@ -961,7 +961,7 @@ class Ninja
     /**
      * Get masqueCouleur
      *
-     * @return integer 
+     * @return int|null
      */
     public function getMasqueCouleur(): ?int
     {
@@ -984,7 +984,7 @@ class Ninja
     /**
      * Get masqueDetail
      *
-     * @return integer 
+     * @return int|null
      */
     public function getMasqueDetail(): ?int
     {
@@ -1007,7 +1007,7 @@ class Ninja
     /**
      * Get costume
      *
-     * @return integer 
+     * @return int|null
      */
     public function getCostume(): ?int
     {
@@ -1030,7 +1030,7 @@ class Ninja
     /**
      * Get costumeCouleur
      *
-     * @return integer 
+     * @return int|null
      */
     public function getCostumeCouleur(): ?int
     {
@@ -1053,7 +1053,7 @@ class Ninja
     /**
      * Get costumeDetail
      *
-     * @return integer 
+     * @return int|null
      */
     public function getCostumeDetail(): ?int
     {
@@ -1076,7 +1076,7 @@ class Ninja
     /**
      * Get missionAssassinnat
      *
-     * @return integer 
+     * @return int|null
      */
     public function getMissionAssassinnat(): ?int
     {
@@ -1099,7 +1099,7 @@ class Ninja
     /**
      * Get missionCourse
      *
-     * @return integer 
+     * @return int|null
      */
     public function getMissionCourse(): ?int
     {
@@ -1122,7 +1122,7 @@ class Ninja
     /**
      * Get accomplissement
      *
-     * @return string 
+     * @return string|null
      */
     public function getAccomplissement(): ?string
     {
@@ -1145,7 +1145,7 @@ class Ninja
     /**
      * Get jutsuFujin
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuFujin(): ?int
     {
@@ -1168,7 +1168,7 @@ class Ninja
     /**
      * Get jutsuRaijin
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuRaijin(): ?int
     {
@@ -1191,7 +1191,7 @@ class Ninja
     /**
      * Get jutsuSarutahiko
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuSarutahiko(): ?int
     {
@@ -1214,7 +1214,7 @@ class Ninja
     /**
      * Get jutsuSusanoo
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuSusanoo(): ?int
     {
@@ -1237,7 +1237,7 @@ class Ninja
     /**
      * Get jutsuKagutsuchi
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJutsuKagutsuchi(): ?int
     {

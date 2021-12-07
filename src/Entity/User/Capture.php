@@ -79,7 +79,7 @@ class Capture
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -102,7 +102,7 @@ class Capture
     /**
      * Get url
      *
-     * @return string 
+     * @return string|null
      */
     public function getUrl(): ?string
     {
@@ -125,7 +125,7 @@ class Capture
     /**
      * Get urlTmb
      *
-     * @return string 
+     * @return string|null
      */
     public function getUrlTmb(): ?string
     {
@@ -148,7 +148,7 @@ class Capture
     /**
      * Get deleteHash
      *
-     * @return string 
+     * @return string|null
      */
     public function getDeleteHash(): ?string
     {
@@ -171,7 +171,7 @@ class Capture
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -194,7 +194,7 @@ class Capture
     /**
      * Get user
      *
-     * @return User
+     * @return User|null
      */
     public function getUser(): ?User
     {

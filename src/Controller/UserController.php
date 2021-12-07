@@ -135,9 +135,7 @@ class UserController extends AbstractController
         // last username entered by the user
         $lastUsername = (null === $session) ? '' : $session->get($lastUsernameKey);
 
-        $csrfToken = $this->tokenManager
-            ? $this->tokenManager->getToken('authenticate')->getValue()
-            : null;
+        $csrfToken = $this->tokenManager?->getToken('authenticate')->getValue();
 
         return $this->render('user/security/login.html.twig', [
             'last_username' => $lastUsername,
@@ -398,7 +396,7 @@ class UserController extends AbstractController
                     'nombrePage' => ceil($total/$num),
                     'currentmessage' => $message,
                     'id' => $id,
-                    'form' => $form?$form->createView():null
+                    'form' => $form?->createView()
                 )
             );
         }
@@ -487,7 +485,8 @@ class UserController extends AbstractController
                         if ($oEmail != $email) {
                             if (!$em->getRepository(User::class)->findUserByEmail($email)) {
                                 if (null === $this->user->getConfirmationToken()) {
-                                    $this->user->setConfirmationToken($this->get('ninja_tooken_user.util.token_generator')->generateToken());
+                                    $token = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+                                    $this->user->setConfirmationToken($token);
                                 }
                                 $this->user->setEmail($email);
                             } else {
@@ -645,7 +644,7 @@ class UserController extends AbstractController
             $conn->executeStatement("UPDATE nt_thread as t SET t.last_comment_at=t.date_ajout WHERE t.last_comment_at IS NULL");
 
             // supprime l'utilisateur de la session
-            $session = new \Symfony\Component\HttpFoundation\Session\Session();
+            $session = new Session();
             $session->invalidate();
 
             return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
@@ -839,7 +838,7 @@ class UserController extends AbstractController
 
             $captures = $em
                 ->getRepository(Capture::class)
-                ->getCaptures($this->get('security.token_storage')->getToken()->getUser(), $num, $page);
+                ->getCaptures($this->user, $num, $page);
 
             return $this->render('user/captures.html.twig', array(
                 'captures' => $captures,

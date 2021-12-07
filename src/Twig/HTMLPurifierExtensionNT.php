@@ -2,33 +2,47 @@
 
 namespace App\Twig;
 
-use Exercise\HTMLPurifierBundle\Twig\HTMLPurifierExtension;
-use Exercise\HTMLPurifierBundle\HTMLPurifiersRegistryInterface;
+use App\Utils\HTMLPurifier;
+use RuntimeException;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class HTMLPurifierExtensionNT extends HTMLPurifierExtension
+class HTMLPurifierExtensionNT extends AbstractExtension
 {
 
-    public $htmlPurifier;
+    public HTMLPurifier $htmlPurifier;
+    private array $purifiers = [];
 
     /**
      * Constructor.
      *
-     * @param HTMLPurifiersRegistryInterface $htmlPurifier
+     * @param HTMLPurifier $htmlPurifier
      */
-    public function __construct(HTMLPurifiersRegistryInterface $htmlPurifier)
+    public function __construct(HTMLPurifier $htmlPurifier)
     {
         $this->htmlPurifier = $htmlPurifier;
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('purify', [$this, 'purify'], ['is_safe' => ['html']]),
+        ];
     }
 
     /**
      * Filter the input through an HTMLPurifier service.
      *
-     * @param string $string
+     * @param string|null $string $string
      * @param string $profile
      * @return string
      */
-    public function purify(string $string, string $profile = 'default'): string
+    public function purify(?string $string, string $profile = 'default'): string
     {
+        if (null === $string) {
+            return '';
+        }
+
         $HTMLPurifier = $this->getHTMLPurifierForProfile($profile);
 
         // ajoute certaines définitions
@@ -87,7 +101,7 @@ class HTMLPurifierExtensionNT extends HTMLPurifierExtension
      *
      * @param string $profile
      * @return \HTMLPurifier
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     private function getHTMLPurifierForProfile(string $profile): \HTMLPurifier
     {
@@ -95,7 +109,7 @@ class HTMLPurifierExtensionNT extends HTMLPurifierExtension
             $purifier = $this->htmlPurifier->get($profile);
 
             if (!$purifier instanceof \HTMLPurifier) {
-                throw new \RuntimeException(sprintf('Service "exercise_html_purifier.%s" is not an HTMLPurifier instance.', $profile));
+                throw new RuntimeException(sprintf('Service "exercise_html_purifier.%s" is not an HTMLPurifier instance.', $profile));
             }
 
             $this->purifiers[$profile] = $purifier;

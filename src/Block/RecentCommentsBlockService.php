@@ -16,7 +16,7 @@ use App\Entity\Forum\Comment;
 class RecentCommentsBlockService extends AbstractBlockService
 {
 
-    private $em;
+    private EntityManager $em;
 
     /**
      *

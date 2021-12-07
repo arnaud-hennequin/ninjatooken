@@ -45,7 +45,7 @@ class ClanPostulation
     private DateTime $dateAjout;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="date_changement_etat", type="datetime", nullable=true)
      */
@@ -70,7 +70,7 @@ class ClanPostulation
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -93,7 +93,7 @@ class ClanPostulation
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -116,7 +116,7 @@ class ClanPostulation
     /**
      * Get postulant
      *
-     * @return User
+     * @return User|null
      */
     public function getPostulant(): ?User
     {
@@ -139,7 +139,7 @@ class ClanPostulation
     /**
      * Get clan
      *
-     * @return Clan
+     * @return Clan|null
      */
     public function getClan(): ?Clan
     {
@@ -162,7 +162,7 @@ class ClanPostulation
     /**
      * Get etat
      *
-     * @return integer 
+     * @return int|null
      */
     public function getEtat(): ?int
     {
@@ -172,7 +172,7 @@ class ClanPostulation
     /**
      * Set dateChangementEtat
      *
-     * @param DateTime $dateChangementEtat
+     * @param DateTime|null $dateChangementEtat
      * @return ClanPostulation
      */
     public function setDateChangementEtat(?DateTime $dateChangementEtat): self
@@ -185,7 +185,7 @@ class ClanPostulation
     /**
      * Get dateChangementEtat
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateChangementEtat(): ?DateTime
     {

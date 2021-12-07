@@ -89,7 +89,7 @@ class Message
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -112,7 +112,7 @@ class Message
     /**
      * Get nom
      *
-     * @return string 
+     * @return string|null
      */
     public function getNom(): ?string
     {
@@ -135,7 +135,7 @@ class Message
     /**
      * Get content
      *
-     * @return string 
+     * @return string|null
      */
     public function getContent(): ?string
     {
@@ -158,7 +158,7 @@ class Message
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -181,7 +181,7 @@ class Message
     /**
      * Get author
      *
-     * @return UserInterface
+     * @return UserInterface|null
      */
     public function getAuthor(): ?UserInterface
     {
@@ -204,7 +204,7 @@ class Message
     /**
      * Get hasDeleted
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getHasDeleted(): ?bool
     {
@@ -227,7 +227,7 @@ class Message
     /**
      * Get old_id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getOldId(): ?int
     {

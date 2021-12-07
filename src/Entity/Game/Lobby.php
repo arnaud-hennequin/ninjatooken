@@ -36,7 +36,7 @@ class Lobby
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")}
      * )
      */
-    private $users;
+    private Collection $users;
 
     /**
      * @var integer
@@ -78,7 +78,7 @@ class Lobby
      *
      * @ORM\Column(name="version", type="decimal", precision=10, scale=6)
      */
-    private $version = 0;
+    private float $version = 0;
 
     /**
      * @var DateTime
@@ -108,7 +108,7 @@ class Lobby
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -131,7 +131,7 @@ class Lobby
     /**
      * Get carte
      *
-     * @return integer 
+     * @return int|null
      */
     public function getCarte(): ?int
     {
@@ -154,7 +154,7 @@ class Lobby
     /**
      * Get partie
      *
-     * @return integer 
+     * @return int|null
      */
     public function getPartie(): ?int
     {
@@ -177,7 +177,7 @@ class Lobby
     /**
      * Get maximum
      *
-     * @return integer 
+     * @return int|null
      */
     public function getMaximum(): ?int
     {
@@ -200,7 +200,7 @@ class Lobby
     /**
      * Get jeu
      *
-     * @return integer 
+     * @return int|null
      */
     public function getJeu(): ?int
     {
@@ -223,7 +223,7 @@ class Lobby
     /**
      * Get privee
      *
-     * @return string 
+     * @return string|null
      */
     public function getPrivee(): ?string
     {
@@ -246,7 +246,7 @@ class Lobby
     /**
      * Get version
      *
-     * @return float 
+     * @return float|null
      */
     public function getVersion(): ?float
     {
@@ -269,7 +269,7 @@ class Lobby
     /**
      * Get dateDebut
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateDebut(): ?DateTime
     {
@@ -292,7 +292,7 @@ class Lobby
     /**
      * Get dateUpdate
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateUpdate(): ?DateTime
     {

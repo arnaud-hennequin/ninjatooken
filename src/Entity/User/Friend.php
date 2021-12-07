@@ -71,7 +71,7 @@ class Friend
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -95,7 +95,7 @@ class Friend
     /**
      * Get isBlocked
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getIsBlocked(): ?bool
     {
@@ -118,7 +118,7 @@ class Friend
     /**
      * Get isConfirmed
      *
-     * @return boolean 
+     * @return bool|null
      */
     public function getIsConfirmed(): ?bool
     {
@@ -141,7 +141,7 @@ class Friend
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -164,7 +164,7 @@ class Friend
     /**
      * Get user
      *
-     * @return User
+     * @return UserInterface|null
      */
     public function getUser(): ?UserInterface
     {
@@ -187,7 +187,7 @@ class Friend
     /**
      * Get friend
      *
-     * @return User
+     * @return UserInterface|null
      */
     public function getFriend(): ?UserInterface
     {

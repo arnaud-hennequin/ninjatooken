@@ -56,7 +56,7 @@ class Ip
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -79,7 +79,7 @@ class Ip
     /**
      * Get ip
      *
-     * @return integer 
+     * @return int|null
      */
     public function getIp(): ?int
     {
@@ -102,7 +102,7 @@ class Ip
     /**
      * Get createdAt
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getCreatedAt(): ?DateTime
     {
@@ -125,7 +125,7 @@ class Ip
     /**
      * Get updatedAt
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getUpdatedAt(): ?DateTime
     {
@@ -148,7 +148,7 @@ class Ip
     /**
      * Get user
      *
-     * @return User
+     * @return User|null
      */
     public function getUser(): ?User
     {

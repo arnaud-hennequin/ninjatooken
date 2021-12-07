@@ -46,7 +46,7 @@ class ClanProposition
     private DateTime $dateAjout;
 
     /**
-     * @var DateTime
+     * @var DateTime|null
      *
      * @ORM\Column(name="date_changement_etat", type="datetime", nullable=true)
      */
@@ -70,7 +70,7 @@ class ClanProposition
     /**
      * Get id
      *
-     * @return integer 
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -93,7 +93,7 @@ class ClanProposition
     /**
      * Get dateAjout
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateAjout(): ?DateTime
     {
@@ -116,7 +116,7 @@ class ClanProposition
     /**
      * Get recruteur
      *
-     * @return User 
+     * @return User|null
      */
     public function getRecruteur(): ?User
     {
@@ -139,7 +139,7 @@ class ClanProposition
     /**
      * Get postulant
      *
-     * @return User 
+     * @return User|null
      */
     public function getPostulant(): ?User
     {
@@ -162,7 +162,7 @@ class ClanProposition
     /**
      * Get etat
      *
-     * @return integer 
+     * @return int|null
      */
     public function getEtat(): ?int
     {
@@ -172,7 +172,7 @@ class ClanProposition
     /**
      * Set dateChangementEtat
      *
-     * @param DateTime $dateChangementEtat
+     * @param DateTime|null $dateChangementEtat
      * @return ClanProposition
      */
     public function setDateChangementEtat(?DateTime $dateChangementEtat): self
@@ -185,7 +185,7 @@ class ClanProposition
     /**
      * Get dateChangementEtat
      *
-     * @return DateTime
+     * @return DateTime|null
      */
     public function getDateChangementEtat(): ?DateTime
     {

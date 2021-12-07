@@ -9,6 +9,8 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -46,14 +48,14 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     private ?int $id = null;
 
     /**
-     * @var DateTime|null
+     * @var DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected DateTime $createdAt;
 
     /**
-     * @var DateTime|null
+     * @var DateTime
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
@@ -128,9 +130,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     protected ?DateTime $passwordRequestedAt;
 
     /**
-     * @var Group[]|Collection
+     * @var Collection|null
      */
-    protected $groups;
+    protected ?Collection $groups = null;
 
     /**
      * @ORM\Column(type="array")
@@ -168,8 +170,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     private string $old_login;
 
     /**
-    * @var string
-    *
+    * @var string|null
+     *
     * @ORM\Column(name="description", type="text", nullable=true)
     */
     private ?string $description;
@@ -292,16 +294,16 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     protected ?DateTime $dateMessage;
 
     /**
-     * @var DateTime|null
+     * @var int|null
      *
      * @ORM\Column(name="number_application", type="integer", nullable=true)
      */
-    protected $numberApplication;
+    protected ?int $numberApplication;
 
     /**
      * lobby
      *
-     * @var Lobby
+     * @var Collection
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Game\Lobby", inversedBy="users")
      * @ORM\JoinTable(name="nt_lobby_user",
@@ -309,7 +311,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")}
      * )
      */
-    private $lobbies;
+    private Collection $lobbies;
 
 
     public function __construct()
@@ -497,7 +499,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -684,7 +686,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getGroups()
+    public function getGroups(): Collection
     {
         return $this->groups ?: $this->groups = new ArrayCollection();
     }
@@ -739,11 +741,13 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return null === $this->avatar || "" === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
     }
 
+    #[Pure]
     public function getWebAvatar(): ?string
     {
         return null === $this->avatar || "" === $this->avatar  ? null : $this->getUploadDir().'/'.$this->avatar;
     }
 
+    #[Pure]
     protected function getUploadRootDir(): string
     {
         return __DIR__.'/../../../public/'.$this->getUploadDir();
@@ -849,11 +853,11 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-    * Set description
-    *
-    * @param string $description
-    * @return User
-    */
+     * Set description
+     *
+     * @param string|null $description
+     * @return User
+     */
     public function setDescription(?string $description): self
     {
         $this->description = $description;
@@ -862,10 +866,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-    * Get description
-    *
-    * @return string
-    */
+     * Get description
+     *
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->description;
@@ -895,7 +899,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Returns the old user names
+     * Returns the old usernames
      *
      * @return array The usernames
      */
@@ -1123,7 +1127,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get ninja
      *
-     * @return Ninja
+     * @return Ninja|null
      */
     public function getNinja(): ?Ninja
     {
@@ -1146,7 +1150,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get clan
      *
-     * @return ClanUtilisateur
+     * @return ClanUtilisateur|null
      */
     public function getClan(): ?ClanUtilisateur
     {
@@ -1179,7 +1183,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get recruts
      *
-     * @return Collection
+     * @return Collection|null
      */
     public function getRecruts(): ?Collection
     {
@@ -1226,7 +1230,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get ips
      *
-     * @return Collection
+     * @return Collection|null
      */
     public function getIps(): ?Collection
     {
@@ -1260,7 +1264,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get messages
      *
-     * @return Collection
+     * @return Collection|null
      */
     public function getMessages(): ?Collection
     {
@@ -1344,6 +1348,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return array
      */
+    #[ArrayShape(['gender_unknown' => "string", 'gender_female' => "string", 'gender_male' => "string"])]
     public static function getGenderList(): array
     {
         return [

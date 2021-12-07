@@ -14,7 +14,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 class CommentUserAdmin extends AbstractAdmin
 {
 
-    protected $datagridValues = array(
+    protected array $datagridValues = array(
         '_sort_order' => 'DESC',
         '_sort_by' => 'dateAjout'
     );

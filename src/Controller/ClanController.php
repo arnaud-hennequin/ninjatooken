@@ -525,7 +525,7 @@ class ClanController extends AbstractController
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
             $clanProposition = $em->getRepository(ClanProposition::class)->getWaitingPropositionByUsers($recruteur, $utilisateur);
             if ($clanProposition) {
-                if ($this->user == $utilisateur && $recruteur->getClan() !== null) {
+                if ($this->user === $utilisateur && $recruteur->getClan() !== null) {
                     $clanutilisateur = $recruteur->getClan();
                     if ($clanutilisateur->getDroit()<3) {
                         // on supprime l'ancienne liaison

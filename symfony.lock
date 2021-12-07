@@ -105,18 +105,6 @@
     "egulias/email-validator": {
         "version": "2.1.17"
     },
-    "exercise/htmlpurifier-bundle": {
-        "version": "0.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "0.2",
-            "ref": "0b76657841c2ba52647bb1b4a5595a0e3b9f485c"
-        },
-        "files": [
-            "config/packages/exercise_html_purifier.yaml"
-        ]
-    },
     "ezyang/htmlpurifier": {
         "version": "v4.12.0"
     },
@@ -411,7 +399,7 @@
         ]
     },
     "symfony/acl-bundle": {
-        "version": "v2.0.0"
+        "version": "v2.2.0"
     },
     "symfony/asset": {
         "version": "v5.2.4"
@@ -626,7 +614,7 @@
         "version": "v1.14.0"
     },
     "symfony/polyfill-php73": {
-        "version": "v1.14.0"
+        "version": "v1.23.0"
     },
     "symfony/polyfill-php80": {
         "version": "v1.22.1"
@@ -684,7 +672,7 @@
         "version": "v4.4.5"
     },
     "symfony/security-guard": {
-        "version": "v4.4.5"
+        "version": "v5.4.0"
     },
     "symfony/security-http": {
         "version": "v4.4.5"
