@@ -113,9 +113,9 @@ sudo apt install nginx
 sudo apt install mysql-server
 sudo mysql_secure_installation
 ```
-* php (>= 7.3)
+* php (>= 8.1)
 ```sh
-sudo apt install php-fpm php-mysql
+sudo apt install php8.1 php8.1-{fpm,mysql,zip,intl,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi}
 ```
 
 ### Installation
