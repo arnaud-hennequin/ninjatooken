@@ -101,68 +101,68 @@ For getting started, you just have to follow main symfony install steps.
 ### Prerequisites
 
 You will need at least, a server with PHP / Mysql / Nginx installed.
-```sh
+```shell
 sudo apt update
 ```
 * nginx (>= 1.1)
-```sh
+```shell
 sudo apt install nginx
 ```
 * mysql (>= 5)
-```sh
+```shell
 sudo apt install mysql-server
 sudo mysql_secure_installation
 ```
 * php (>= 8.1)
-```sh
+```shell
 sudo apt install php8.1 php8.1-{fpm,mysql,zip,intl,gd,cli,bz2,curl,mbstring,pgsql,opcache,soap,cgi}
 ```
 
 ### Installation
 
 1. Clone the repo
- ```sh
-   git clone https://github.com/arnaud-hennequin/ninjatooken.git
- ```
+```shell
+git clone https://github.com/arnaud-hennequin/ninjatooken.git
+```
 2. Then, open a new configuration file in Nginx’s sites-available directory using your preferred command-line editor. Here, we’ll use nano:
- ```sh
-    sudo nano /etc/nginx/sites-available/ninjatooken
- ```
+```shell
+sudo nano /etc/nginx/sites-available/ninjatooken
+```
 And paste in the [following configuration](ninjatooken.nginx), and then...
- ```sh
-    sudo ln -s /etc/nginx/sites-available/ninjatooken /etc/nginx/sites-enabled/
-    sudo service nginx reload
- ```
+```shell
+sudo ln -s /etc/nginx/sites-available/ninjatooken /etc/nginx/sites-enabled/
+sudo service nginx reload
+```
 3. Copy .env.test to .env and edit parameters to fit your server's installation.
 4. [Install composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos)
 5. Download the vendors
- ```sh
-   php composer.phar install
+ ```shell
+php composer.phar install
  ```
 6. If the database you have entered during step 2 doesn't exist yet, create it :
- ```sh
+```shell
 php bin/console doctrine:database:create
- ```
+```
 And then create corresponding tables :
- ```sh
+```shell
 php bin/console doctrine:schema:update --dump-sql
 php bin/console doctrine:schema:update --force
- ```
+```
 7. Install the assets in the public folder
- ```sh
+```shell
 php bin/console cache:clear
 php bin/console assets:install
- ```
+```
 
 Add **127.0.0.1 ninjatooken.test** in your host file, and access the site via http://ninjatooken.test !
 
 
 Also, please take note that an automatic mysql backup can be tasked:
- ```sh
+```shell
 crontab -e
- ```
+```
 And then paste (every day at 4am):
-```sh
+```text
 0 4 * * * php /var/www/ninjatooken/bin/console doctrine:database:backup
 ```
 

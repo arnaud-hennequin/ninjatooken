@@ -524,7 +524,7 @@ class ForumController extends AbstractController
     public function recentComments(CommentRepository $commentRepository, $max = 10, Forum $forum = null): Response
     {
         return $this->render('forum/comments/recentList.html.twig', array(
-            'comments' => $commentRepository->getRecentComments($forum, $this->user, $max)
+            'comments' => $commentRepository->getRecentComments($forum, null, $max)
         ));
     }
 

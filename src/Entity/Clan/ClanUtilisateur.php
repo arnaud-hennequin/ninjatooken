@@ -28,19 +28,19 @@ class ClanUtilisateur
      * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="clan", cascade={"persist"}, fetch="LAZY")
      * @var User|null
      */
-    private ?User $membre;
+    private ?User $membre = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="recruts", cascade={"persist"}, fetch="LAZY")
      * @var User|null
      */
-    private ?User $recruteur;
+    private ?User $recruteur = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="membres", cascade={"persist"}, fetch="LAZY")
      * @ORM\JoinColumn(name="clan_id", referencedColumnName="id", onDelete="cascade")
      */
-    private ?Clan $clan;
+    private ?Clan $clan = null;
 
     /**
      * @var integer

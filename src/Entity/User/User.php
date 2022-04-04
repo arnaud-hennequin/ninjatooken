@@ -991,7 +991,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      *
      * @return string 
      */
-    public function getAutoLogin(): string
+    public function getAutoLogin(): ?string
     {
         return $this->autoLogin;
     }

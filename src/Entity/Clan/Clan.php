@@ -70,7 +70,7 @@ class Clan implements SluggableInterface, Serializable
      * @ORM\Column(name="tag", type="string", length=5, nullable=true)
      * @Assert\Length(max=5)
      */
-    private ?string $tag;
+    private ?string $tag = null;
 
     /**
      * @var string|null
@@ -78,7 +78,7 @@ class Clan implements SluggableInterface, Serializable
      * @ORM\Column(name="accroche", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    private ?string $accroche;
+    private ?string $accroche = null;
 
     /**
      * @var string
@@ -95,7 +95,7 @@ class Clan implements SluggableInterface, Serializable
      * @Assert\Length(max=255)
      * @Assert\Url()
      */
-    private ?string $url;
+    private ?string $url = null;
 
     /**
      * @var string|null
@@ -110,7 +110,7 @@ class Clan implements SluggableInterface, Serializable
      *
      * @ORM\Column(name="kamon_upload", type="string", length=255, nullable=true)
      */
-    private ?string $kamonUpload;
+    private ?string $kamonUpload = null;
 
     /**
      * @var DateTime
@@ -124,7 +124,7 @@ class Clan implements SluggableInterface, Serializable
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private ?DateTime $updatedAt;
+    private ?DateTime $updatedAt = null;
 
     /**
      * @var boolean
