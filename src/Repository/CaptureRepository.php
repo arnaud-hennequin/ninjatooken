@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\User\Capture;
+use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use App\Entity\User\User;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CaptureRepository extends ServiceEntityRepository
@@ -14,7 +15,7 @@ class CaptureRepository extends ServiceEntityRepository
         parent::__construct($registry, Capture::class);
     }
 
-    public function getCaptures(User $user, $nombreParPage=5, $page=1): Paginator
+    public function getCaptures(UserInterface $user, $nombreParPage = 5, $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -22,7 +23,7 @@ class CaptureRepository extends ServiceEntityRepository
             ->where('c.user = :user')
             ->setParameter('user', $user)
             ->addOrderBy('c.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage);
 
         return new Paginator($query);

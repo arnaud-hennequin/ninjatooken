@@ -2,13 +2,12 @@
 
 namespace App\Entity\Clan;
 
-use App\Entity\User\User;
+use App\Entity\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * ClanUtilisateur
+ * ClanUtilisateur.
  *
  * @ORM\Table(name="nt_clanutilisateur")
  * @ORM\Entity(repositoryClass="App\Repository\ClanUtilisateurRepository")
@@ -16,8 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ClanUtilisateur
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -26,15 +23,13 @@ class ClanUtilisateur
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="clan", cascade={"persist"}, fetch="LAZY")
-     * @var User|null
      */
-    private ?User $membre = null;
+    private ?UserInterface $membre = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="recruts", cascade={"persist"}, fetch="LAZY")
-     * @var User|null
      */
-    private ?User $recruteur = null;
+    private ?UserInterface $recruteur = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="membres", cascade={"persist"}, fetch="LAZY")
@@ -43,28 +38,22 @@ class ClanUtilisateur
     private ?Clan $clan = null;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="droit", type="smallint")
      */
     private int $droit = 0;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="can_edit_clan", type="boolean")
      */
     private bool $canEditClan = false;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -72,9 +61,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -82,10 +69,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Set droit
-     *
-     * @param integer $droit
-     * @return ClanUtilisateur
+     * Set droit.
      */
     public function setDroit(int $droit): self
     {
@@ -95,9 +79,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Get droit
-     *
-     * @return integer 
+     * Get droit.
      */
     public function getDroit(): int
     {
@@ -105,10 +87,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Set canEditClan
-     *
-     * @param boolean $canEditClan
-     * @return ClanUtilisateur
+     * Set canEditClan.
      */
     public function setCanEditClan(bool $canEditClan): self
     {
@@ -118,9 +97,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Get canEditClan
-     *
-     * @return boolean 
+     * Get canEditClan.
      */
     public function getCanEditClan(): bool
     {
@@ -128,10 +105,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Set dateAjout
-     *
-     * @param DateTime $dateAjout
-     * @return ClanUtilisateur
+     * Set dateAjout.
      */
     public function setDateAjout(DateTime $dateAjout): self
     {
@@ -141,9 +115,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -151,10 +123,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Set membre
-     *
-     * @param User|null $membre
-     * @return ClanUtilisateur
+     * Set membre.
      */
     public function setMembre(?UserInterface $membre = null): self
     {
@@ -166,20 +135,15 @@ class ClanUtilisateur
     }
 
     /**
-     * Get membre
-     *
-     * @return User|null
+     * Get membre.
      */
-    public function getMembre(): ?User
+    public function getMembre(): ?UserInterface
     {
         return $this->membre;
     }
 
     /**
-     * Set recruteur
-     *
-     * @param User|null $recruteur
-     * @return ClanUtilisateur
+     * Set recruteur.
      */
     public function setRecruteur(?UserInterface $recruteur = null): self
     {
@@ -192,20 +156,15 @@ class ClanUtilisateur
     }
 
     /**
-     * Get recruteur
-     *
-     * @return User|null
+     * Get recruteur.
      */
-    public function getRecruteur(): ?User
+    public function getRecruteur(): ?UserInterface
     {
         return $this->recruteur;
     }
 
     /**
-     * Set clan
-     *
-     * @param Clan|null $clan
-     * @return ClanUtilisateur
+     * Set clan.
      */
     public function setClan(Clan $clan = null): self
     {
@@ -215,9 +174,7 @@ class ClanUtilisateur
     }
 
     /**
-     * Get clan
-     *
-     * @return Clan|null
+     * Get clan.
      */
     public function getClan(): ?Clan
     {

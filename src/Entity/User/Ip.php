@@ -4,47 +4,39 @@ namespace App\Entity\User;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
-* Group
-*
-* @ORM\Table(name="nt_ip")
-* @ORM\Entity
-*/
+ * Group.
+ *
+ * @ORM\Table(name="nt_ip")
+ * @ORM\Entity
+ */
 class Ip
 {
     /**
-    * @ORM\Id
-    * @ORM\Column(type="integer")
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     private ?int $id = null;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="ip", type="integer", options={"unsigned"=true})
      */
     private int $ip;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     private DateTime $createdAt;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private ?DateTime $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="ips")
-     * @var User
      */
     private User $user;
 
@@ -54,9 +46,7 @@ class Ip
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -64,9 +54,8 @@ class Ip
     }
 
     /**
-     * Set ip
+     * Set ip.
      *
-     * @param integer $ip
      * @return Ip
      */
     public function setIp(int $ip): self
@@ -77,9 +66,7 @@ class Ip
     }
 
     /**
-     * Get ip
-     *
-     * @return int|null
+     * Get ip.
      */
     public function getIp(): ?int
     {
@@ -87,9 +74,8 @@ class Ip
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
-     * @param DateTime $createdAt
      * @return Ip
      */
     public function setCreatedAt(DateTime $createdAt): self
@@ -100,9 +86,7 @@ class Ip
     }
 
     /**
-     * Get createdAt
-     *
-     * @return DateTime|null
+     * Get createdAt.
      */
     public function getCreatedAt(): ?DateTime
     {
@@ -110,9 +94,8 @@ class Ip
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
-     * @param DateTime|null $updatedAt
      * @return Ip
      */
     public function setUpdatedAt(?DateTime $updatedAt): self
@@ -123,9 +106,7 @@ class Ip
     }
 
     /**
-     * Get updatedAt
-     *
-     * @return DateTime|null
+     * Get updatedAt.
      */
     public function getUpdatedAt(): ?DateTime
     {
@@ -133,9 +114,10 @@ class Ip
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User|null $user
+     *
      * @return Ip
      */
     public function setUser(UserInterface $user = null): self
@@ -146,9 +128,7 @@ class Ip
     }
 
     /**
-     * Get user
-     *
-     * @return User|null
+     * Get user.
      */
     public function getUser(): ?User
     {

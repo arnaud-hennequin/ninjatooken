@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity\User;
 
 use App\Entity\Clan\ClanUtilisateur;
@@ -9,13 +10,10 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\ArrayShape;
-use JetBrains\PhpStorm\Pure;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -37,8 +35,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     public const MAX_APPLICATION_BY_DAY = 3;
 
-    const ROLE_DEFAULT = 'ROLE_USER';
-    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    public const ROLE_DEFAULT = 'ROLE_USER';
+    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
     /**
      * @ORM\Id
@@ -48,15 +46,11 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     private ?int $id = null;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected DateTime $createdAt;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="updated_at", type="datetime")
      */
     protected DateTime $updatedAt;
@@ -82,8 +76,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     protected string $emailCanonical;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="enabled", type="boolean")
      */
     protected bool $enabled;
@@ -104,13 +96,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Plain password. Used for model validation. Must not be persisted.
-     *
      */
     protected ?string $plainPassword;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
     protected ?DateTime $lastLogin;
@@ -123,15 +112,10 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     protected ?string $confirmationToken;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
      */
     protected ?DateTime $passwordRequestedAt;
 
-    /**
-     * @var Collection|null
-     */
     protected ?Collection $groups = null;
 
     /**
@@ -156,29 +140,21 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     private Collection $recruts;
 
     /**
-     * @var int
-     *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private int $old_id;
 
     /**
-    * @var string
-    *
-    * @ORM\Column(name="old_login", type="string", length=255, nullable=true)
-    */
+     * @ORM\Column(name="old_login", type="string", length=255, nullable=true)
+     */
     private string $old_login;
 
     /**
-    * @var string|null
-     *
-    * @ORM\Column(name="description", type="text", nullable=true)
-    */
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
     private ?string $description;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
      */
     private string $avatar;
@@ -188,43 +164,31 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     private ?UploadedFile $file = null;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="receive_newsletter", type="boolean")
      */
     private bool $receiveNewsletter = false;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="receive_avertissement", type="boolean")
      */
     private bool $receiveAvertissement = false;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="locked", type="boolean")
      */
     private bool $locked = false;
 
     /**
-     * @var array
-     *
      * @ORM\Column(name="old_usernames", type="array")
      */
     private array $oldUsernames;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="old_usernames_canonical", type="string")
      */
     private string $oldUsernamesCanonical;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="auto_login", type="string", length=255, nullable=true)
      */
     private ?string $autoLogin;
@@ -239,71 +203,50 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     private Collection $messages;
 
-    /**
-     * @var string
-     */
     protected string $twoStepVerificationCode;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_of_birth", type="datetime", nullable=true)
      */
-    protected ?DateTime $dateOfBirth;
+    protected ?DateTimeInterface $dateOfBirth;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="biography", type="string", length=255, nullable=true)
      */
     protected ?string $biography;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="gender", type="string", length=1, nullable=true)
      */
     protected string $gender = self::GENDER_UNKNOWN; // set the default to unknown
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="locale", type="string", length=8, nullable=true)
      */
     protected string $locale;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="timezone", type="string", length=64, nullable=true)
      */
     protected string $timezone;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_application", type="datetime", nullable=true)
      */
-    protected ?DateTime $dateApplication;
+    protected ?DateTimeInterface $dateApplication;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_message", type="datetime", nullable=true)
      */
-    protected ?DateTime $dateMessage;
+    protected ?DateTimeInterface $dateMessage;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="number_application", type="integer", nullable=true)
      */
     protected ?int $numberApplication;
 
     /**
-     * lobby
-     *
-     * @var Collection
+     * lobby.
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Game\Lobby", inversedBy="users")
      * @ORM\JoinTable(name="nt_lobby_user",
@@ -313,18 +256,28 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     private Collection $lobbies;
 
+    private ?int $level = null;
+
+    private int $numNewMessage;
+
+    private int $numDemandesFriends;
+
+    private int $numPropositionsRecrutement;
+    public int|float $ratio;
+    public string $classement;
+    public int|float $total;
 
     public function __construct()
     {
-        $this->salt = "";
+        $this->salt = '';
         $this->enabled = false;
         $this->roles = [];
         $this->numberApplication = 0;
 
         $this->setGender(self::GENDER_MALE);
-        $this->oldUsernames = array();
-        $this->oldUsernamesCanonical = "";
-        $this->roles = array('ROLE_USER');
+        $this->oldUsernames = [];
+        $this->oldUsernamesCanonical = '';
+        $this->roles = ['ROLE_USER'];
         $this->setConfirmationToken(null);
         $this->setAutoLogin(null);
         $this->setTimezone('Europe/Paris');
@@ -349,6 +302,46 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->getUsername();
     }
 
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(?int $level): void
+    {
+        $this->level = $level;
+    }
+
+    public function getNumNewMessage(): int
+    {
+        return $this->numNewMessage;
+    }
+
+    public function setNumNewMessage(int $numNewMessage): void
+    {
+        $this->numNewMessage = $numNewMessage;
+    }
+
+    public function getNumDemandesFriends(): int
+    {
+        return $this->numDemandesFriends;
+    }
+
+    public function setNumDemandesFriends(int $numDemandesFriends): void
+    {
+        $this->numDemandesFriends = $numDemandesFriends;
+    }
+
+    public function getNumPropositionsRecrutement(): int
+    {
+        return $this->numPropositionsRecrutement;
+    }
+
+    public function setNumPropositionsRecrutement(int $numPropositionsRecrutement): void
+    {
+        $this->numPropositionsRecrutement = $numPropositionsRecrutement;
+    }
+
     /**
      * @return string[]
      */
@@ -366,7 +359,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
-            if (! empty($fieldValue)) {
+            if (!empty($fieldValue)) {
                 $usableValues[] = $fieldValue;
             }
         }
@@ -381,7 +374,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id ?? uniqid("user"));
+            $slug = md5($this->id ?? uniqid('user'));
         }
 
         return $slug;
@@ -390,10 +383,11 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     public static function canonicalize(?string $string = null): string
     {
         if (null === $string) {
-            return "";
+            return '';
         }
 
         $encoding = mb_detect_encoding($string);
+
         return $encoding
             ? mb_convert_case($string, MB_CASE_LOWER, $encoding)
             : mb_convert_case($string, MB_CASE_LOWER);
@@ -435,7 +429,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             // Unserializing a User object from 1.3.x
             unset($data[4], $data[5], $data[6], $data[9], $data[10]);
             $data = array_values($data);
-        } else if (11 === count($data)) {
+        } elseif (11 === count($data)) {
             // Unserializing a User from a dev version somewhere between 2.0-alpha3 and 2.0-beta1
             unset($data[4], $data[7], $data[8]);
             $data = array_values($data);
@@ -516,8 +510,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Gets the last login time.
-     *
-     * @return DateTime|null
      */
     public function getLastLogin(): ?DateTime
     {
@@ -661,8 +653,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Gets the timestamp that the user requested a password reset.
-     *
-     * @return DateTime|null
      */
     public function getPasswordRequestedAt(): ?DateTime
     {
@@ -736,18 +726,17 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
         return true;
     }
+
     public function getAbsoluteAvatar(): ?string
     {
-        return null === $this->avatar || "" === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
+        return '' === $this->avatar ? null : $this->getUploadRootDir().'/'.$this->avatar;
     }
 
-    #[Pure]
     public function getWebAvatar(): ?string
     {
-        return null === $this->avatar || "" === $this->avatar  ? null : $this->getUploadDir().'/'.$this->avatar;
+        return '' === $this->avatar ? null : $this->getUploadDir().'/'.$this->avatar;
     }
 
-    #[Pure]
     protected function getUploadRootDir(): string
     {
         return __DIR__.'/../../../public/'.$this->getUploadDir();
@@ -767,7 +756,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         $this->updatedAt = new DateTime();
 
         if (null !== $this->file) {
-            $this->setAvatar(uniqid(mt_rand(), true).".".$this->file->guessExtension());
+            $this->setAvatar(uniqid((string) mt_rand(), true).'.'.$this->file->guessExtension());
         }
     }
 
@@ -781,8 +770,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             $file = $this->id.'.'.$this->file->guessExtension();
 
             $fileAbsolute = $this->getUploadRootDir().$file;
-            if(file_exists($fileAbsolute))
+            if (file_exists($fileAbsolute)) {
                 unlink($fileAbsolute);
+            }
 
             $this->setAvatar($file);
         }
@@ -790,9 +780,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         // met à jour les anciens pseudos
         $oldUsernamesCanonical = '';
         $oldUsernames = $this->getOldUsernames();
-        if(!empty($oldUsernames)){
+        if (!empty($oldUsernames)) {
             $oldUsernamesCanonical .= ',';
-            foreach($oldUsernames as $oldUsername){
+            foreach ($oldUsernames as $oldUsername) {
                 $oldUsernamesCanonical .= self::canonicalize($oldUsername).',';
             }
         }
@@ -816,8 +806,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Sets file.
-     *
-     * @param UploadedFile|null $file
      */
     public function setFile(?UploadedFile $file = null)
     {
@@ -826,8 +814,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Get file.
-     *
-     * @return UploadedFile
      */
     public function getFile(): UploadedFile
     {
@@ -847,15 +833,14 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     public function removeUpload()
     {
-        if($this->tempAvatar && file_exists($this->tempAvatar)) {
+        if ($this->tempAvatar && file_exists($this->tempAvatar)) {
             unlink($this->tempAvatar);
         }
     }
 
     /**
-     * Set description
+     * Set description.
      *
-     * @param string|null $description
      * @return User
      */
     public function setDescription(?string $description): self
@@ -866,9 +851,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get description
-     *
-     * @return string|null
+     * Get description.
      */
     public function getDescription(): ?string
     {
@@ -876,9 +859,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set avatar
+     * Set avatar.
      *
-     * @param string $avatar
      * @return User
      */
     public function setAvatar(string $avatar): self
@@ -889,9 +871,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get avatar
-     *
-     * @return string 
+     * Get avatar.
      */
     public function getAvatar(): string
     {
@@ -899,7 +879,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Returns the old usernames
+     * Returns the old usernames.
      *
      * @return array The usernames
      */
@@ -909,14 +889,13 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set oldUsername
+     * Set oldUsername.
      *
-     * @param array $oldUsernames
      * @return User
      */
     public function setOldUsernames(array $oldUsernames): self
     {
-        $this->oldUsernames = array();
+        $this->oldUsernames = [];
 
         foreach ($oldUsernames as $oldUsername) {
             $this->addOldUsername($oldUsername);
@@ -926,7 +905,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * add oldusername
+     * add oldusername.
      */
     public function addOldUsername(string $username): self
     {
@@ -938,7 +917,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * remove oldusername
+     * remove oldusername.
      */
     public function removeOldUsername(string $username): self
     {
@@ -951,9 +930,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set oldUsernamesCanonical
+     * Set oldUsernamesCanonical.
      *
-     * @param string $oldUsernamesCanonical
      * @return User
      */
     public function setOldUsernamesCanonical(string $oldUsernamesCanonical): self
@@ -964,9 +942,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get oldUsernamesCanonical
-     *
-     * @return string 
+     * Get oldUsernamesCanonical.
      */
     public function getOldUsernamesCanonical(): string
     {
@@ -974,9 +950,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set autoLogin
+     * Set autoLogin.
      *
-     * @param string|null $autoLogin
      * @return User
      */
     public function setAutoLogin(?string $autoLogin): self
@@ -987,9 +962,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get autoLogin
+     * Get autoLogin.
      *
-     * @return string 
+     * @return string
      */
     public function getAutoLogin(): ?string
     {
@@ -997,9 +972,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set receive_newsletter
+     * Set receive_newsletter.
      *
-     * @param boolean $receiveNewsletter
      * @return User
      */
     public function setReceiveNewsletter(bool $receiveNewsletter): self
@@ -1010,9 +984,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get receive_newsletter
-     *
-     * @return boolean 
+     * Get receive_newsletter.
      */
     public function getReceiveNewsletter(): bool
     {
@@ -1020,9 +992,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set receive_avertissement
+     * Set receive_avertissement.
      *
-     * @param boolean $receiveAvertissement
      * @return User
      */
     public function setReceiveAvertissement(bool $receiveAvertissement): self
@@ -1033,9 +1004,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get receive_avertissement
-     *
-     * @return boolean 
+     * Get receive_avertissement.
      */
     public function getReceiveAvertissement(): bool
     {
@@ -1043,9 +1012,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set locked
+     * Set locked.
      *
-     * @param boolean $locked
      * @return User
      */
     public function setLocked(bool $locked): self
@@ -1056,9 +1024,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get locked
-     *
-     * @return boolean 
+     * Get locked.
      */
     public function getLocked(): bool
     {
@@ -1066,9 +1032,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set old_id
+     * Set old_id.
      *
-     * @param integer $oldId
      * @return User
      */
     public function setOldId(int $oldId): self
@@ -1079,9 +1044,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get old_id
-     *
-     * @return integer 
+     * Get old_id.
      */
     public function getOldId(): int
     {
@@ -1089,9 +1052,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set old_login
+     * Set old_login.
      *
-     * @param string $oldLogin
      * @return User
      */
     public function setOldLogin(string $oldLogin): self
@@ -1102,9 +1064,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get old_login
-     *
-     * @return string 
+     * Get old_login.
      */
     public function getOldLogin(): string
     {
@@ -1112,9 +1072,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set ninja
+     * Set ninja.
      *
-     * @param Ninja|null $ninja
      * @return User
      */
     public function setNinja(?Ninja $ninja = null): self
@@ -1125,9 +1084,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get ninja
-     *
-     * @return Ninja|null
+     * Get ninja.
      */
     public function getNinja(): ?Ninja
     {
@@ -1135,9 +1092,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set clan
+     * Set clan.
      *
-     * @param ClanUtilisateur|null $clan
      * @return User
      */
     public function setClan(?ClanUtilisateur $clan = null): self
@@ -1148,9 +1104,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get clan
-     *
-     * @return ClanUtilisateur|null
+     * Get clan.
      */
     public function getClan(): ?ClanUtilisateur
     {
@@ -1158,9 +1112,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Add recruts
+     * Add recruts.
      *
-     * @param ClanUtilisateur $recruts
      * @return User
      */
     public function addRecrut(ClanUtilisateur $recruts): self
@@ -1171,9 +1124,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Remove recruts
-     *
-     * @param ClanUtilisateur $recruts
+     * Remove recruts.
      */
     public function removeRecrut(ClanUtilisateur $recruts)
     {
@@ -1181,9 +1132,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get recruts
-     *
-     * @return Collection|null
+     * Get recruts.
      */
     public function getRecruts(): ?Collection
     {
@@ -1191,9 +1140,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Set recruts collection
+     * Set recruts collection.
      *
-     * @param Collection $recruts
      * @return User
      */
     public function setRecruts(Collection $recruts): self
@@ -1204,9 +1152,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Add ips
+     * Add ips.
      *
-     * @param Ip $ips
      * @return User
      */
     public function addIp(Ip $ips): self
@@ -1218,9 +1165,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Remove ips
-     *
-     * @param Ip $ips
+     * Remove ips.
      */
     public function removeIp(Ip $ips)
     {
@@ -1228,9 +1173,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get ips
-     *
-     * @return Collection|null
+     * Get ips.
      */
     public function getIps(): ?Collection
     {
@@ -1238,9 +1181,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Add messages
+     * Add messages.
      *
-     * @param Message $message
      * @return User
      */
     public function addMessage(Message $message): self
@@ -1252,9 +1194,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Remove messages
-     *
-     * @param Message $messages
+     * Remove messages.
      */
     public function removeMessage(Message $messages)
     {
@@ -1262,9 +1202,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * Get messages
-     *
-     * @return Collection|null
+     * Get messages.
      */
     public function getMessages(): ?Collection
     {
@@ -1345,10 +1283,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Returns the gender list.
-     *
-     * @return array
      */
-    #[ArrayShape(['gender_unknown' => "string", 'gender_female' => "string", 'gender_male' => "string"])]
     public static function getGenderList(): array
     {
         return [

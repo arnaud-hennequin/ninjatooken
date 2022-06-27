@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Lobby
+ * Lobby.
  *
  * @ORM\Table(name="nt_lobby")
  * @ORM\Entity(repositoryClass="App\Repository\LobbyRepository")
@@ -17,8 +17,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Lobby
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -26,9 +24,7 @@ class Lobby
     private ?int $id = null;
 
     /**
-     * user
-     *
-     * @var User
+     * user.
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\User\User", mappedBy="lobbies")
      * @ORM\JoinTable(name="nt_lobby_user",
@@ -39,63 +35,47 @@ class Lobby
     private Collection $users;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="carte", type="smallint")
      */
     private int $carte = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="partie", type="smallint")
      */
     private int $partie = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="maximum", type="smallint")
      */
     private int $maximum = 2;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jeu", type="smallint")
      */
     private int $jeu = 0;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="privee", type="string", length=30)
      */
     private string $privee = '';
 
     /**
-     * @var float
-     *
      * @ORM\Column(name="version", type="decimal", precision=10, scale=6)
      */
     private float $version = 0;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_debut", type="datetime")
      */
     private DateTime $dateDebut;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_update", type="datetime")
      */
     private DateTime $dateUpdate;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -104,11 +84,8 @@ class Lobby
         $this->setDateUpdate(new DateTime());
     }
 
-
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -116,9 +93,8 @@ class Lobby
     }
 
     /**
-     * Set carte
+     * Set carte.
      *
-     * @param integer $carte
      * @return Lobby
      */
     public function setCarte(int $carte): self
@@ -129,9 +105,7 @@ class Lobby
     }
 
     /**
-     * Get carte
-     *
-     * @return int|null
+     * Get carte.
      */
     public function getCarte(): ?int
     {
@@ -139,9 +113,8 @@ class Lobby
     }
 
     /**
-     * Set partie
+     * Set partie.
      *
-     * @param integer $partie
      * @return Lobby
      */
     public function setPartie(int $partie): self
@@ -152,9 +125,7 @@ class Lobby
     }
 
     /**
-     * Get partie
-     *
-     * @return int|null
+     * Get partie.
      */
     public function getPartie(): ?int
     {
@@ -162,9 +133,8 @@ class Lobby
     }
 
     /**
-     * Set maximum
+     * Set maximum.
      *
-     * @param integer $maximum
      * @return Lobby
      */
     public function setMaximum(int $maximum): self
@@ -175,9 +145,7 @@ class Lobby
     }
 
     /**
-     * Get maximum
-     *
-     * @return int|null
+     * Get maximum.
      */
     public function getMaximum(): ?int
     {
@@ -185,9 +153,8 @@ class Lobby
     }
 
     /**
-     * Set jeu
+     * Set jeu.
      *
-     * @param integer $jeu
      * @return Lobby
      */
     public function setJeu(int $jeu): self
@@ -198,9 +165,7 @@ class Lobby
     }
 
     /**
-     * Get jeu
-     *
-     * @return int|null
+     * Get jeu.
      */
     public function getJeu(): ?int
     {
@@ -208,9 +173,8 @@ class Lobby
     }
 
     /**
-     * Set privee
+     * Set privee.
      *
-     * @param string $privee
      * @return Lobby
      */
     public function setPrivee(string $privee): self
@@ -221,9 +185,7 @@ class Lobby
     }
 
     /**
-     * Get privee
-     *
-     * @return string|null
+     * Get privee.
      */
     public function getPrivee(): ?string
     {
@@ -231,9 +193,8 @@ class Lobby
     }
 
     /**
-     * Set version
+     * Set version.
      *
-     * @param float $version
      * @return Lobby
      */
     public function setVersion(float $version): self
@@ -244,9 +205,7 @@ class Lobby
     }
 
     /**
-     * Get version
-     *
-     * @return float|null
+     * Get version.
      */
     public function getVersion(): ?float
     {
@@ -254,9 +213,8 @@ class Lobby
     }
 
     /**
-     * Set dateDebut
+     * Set dateDebut.
      *
-     * @param DateTime $dateDebut
      * @return Lobby
      */
     public function setDateDebut(DateTime $dateDebut): self
@@ -267,9 +225,7 @@ class Lobby
     }
 
     /**
-     * Get dateDebut
-     *
-     * @return DateTime|null
+     * Get dateDebut.
      */
     public function getDateDebut(): ?DateTime
     {
@@ -277,9 +233,8 @@ class Lobby
     }
 
     /**
-     * Set dateUpdate
+     * Set dateUpdate.
      *
-     * @param DateTime $dateUpdate
      * @return Lobby
      */
     public function setDateUpdate(DateTime $dateUpdate): self
@@ -290,9 +245,7 @@ class Lobby
     }
 
     /**
-     * Get dateUpdate
-     *
-     * @return DateTime|null
+     * Get dateUpdate.
      */
     public function getDateUpdate(): ?DateTime
     {
@@ -327,8 +280,7 @@ class Lobby
     }
 
     /**
-     * Clear users
-     *
+     * Clear users.
      */
     public function clearUsers()
     {

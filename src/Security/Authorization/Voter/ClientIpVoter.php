@@ -3,17 +3,17 @@
 namespace App\Security\Authorization\Voter;
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class ClientIpVoter implements VoterInterface
 {
     protected RequestStack $requestStack;
     protected array $blacklistedIp;
 
-    public function __construct(RequestStack $requestStack, array $blacklistedIp = array())
+    public function __construct(RequestStack $requestStack, array $blacklistedIp = [])
     {
-        $this->requestStack    = $requestStack;
+        $this->requestStack = $requestStack;
         $this->blacklistedIp = $blacklistedIp;
     }
 

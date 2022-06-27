@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\User\Message;
+use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class MessageRepository extends ServiceEntityRepository
 {
@@ -13,7 +14,7 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    public function getSendMessages(UserInterface $user, $nombreParPage=5, $page=1)
+    public function getSendMessages(UserInterface $user, $nombreParPage = 5, $page = 1)
     {
         $page = max(1, $page);
 
@@ -22,7 +23,7 @@ class MessageRepository extends ServiceEntityRepository
             ->andWhere('m.hasDeleted = 0')
             ->setParameter('author', $user)
             ->addOrderBy('m.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage)
             ->getQuery();
 
@@ -56,7 +57,7 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getReceiveMessages(UserInterface $user, $nombreParPage=5, $page=1)
+    public function getReceiveMessages(UserInterface $user, $nombreParPage = 5, $page = 1)
     {
         $page = max(1, $page);
 
@@ -67,7 +68,7 @@ class MessageRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->addGroupBy('m.id')
             ->addOrderBy('m.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage)
             ->getQuery();
 

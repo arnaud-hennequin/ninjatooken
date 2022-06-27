@@ -2,13 +2,12 @@
 
 namespace App\Entity\Clan;
 
-use App\Entity\User\User;
+use App\Entity\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * ClanProposition
+ * ClanProposition.
  *
  * @ORM\Table(name="nt_clanproposition")
  * @ORM\Entity(repositoryClass="App\Repository\ClanPropositionRepository")
@@ -16,8 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ClanProposition
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -27,40 +24,32 @@ class ClanProposition
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="recruteur_id", referencedColumnName="id", onDelete="CASCADE")
-     * @var User
      */
-    private User $recruteur;
+    private UserInterface $recruteur;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="postulant_id", referencedColumnName="id", onDelete="CASCADE")
-     * @var User
      */
-    private User $postulant;
+    private UserInterface $postulant;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_changement_etat", type="datetime", nullable=true)
      */
     private ?DateTime $dateChangementEtat;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="etat", type="smallint")
      */
     private int $etat = 0;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -68,9 +57,7 @@ class ClanProposition
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -78,10 +65,7 @@ class ClanProposition
     }
 
     /**
-     * Set dateAjout
-     *
-     * @param DateTime $dateAjout
-     * @return ClanProposition
+     * Set dateAjout.
      */
     public function setDateAjout(DateTime $dateAjout): self
     {
@@ -91,9 +75,7 @@ class ClanProposition
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -101,10 +83,7 @@ class ClanProposition
     }
 
     /**
-     * Set recruteur
-     *
-     * @param User|null $recruteur
-     * @return ClanProposition
+     * Set recruteur.
      */
     public function setRecruteur(?UserInterface $recruteur = null): self
     {
@@ -114,20 +93,15 @@ class ClanProposition
     }
 
     /**
-     * Get recruteur
-     *
-     * @return User|null
+     * Get recruteur.
      */
-    public function getRecruteur(): ?User
+    public function getRecruteur(): ?UserInterface
     {
         return $this->recruteur;
     }
 
     /**
-     * Set postulant
-     *
-     * @param User|null $postulant
-     * @return ClanProposition
+     * Set postulant.
      */
     public function setPostulant(?UserInterface $postulant = null): self
     {
@@ -137,20 +111,15 @@ class ClanProposition
     }
 
     /**
-     * Get postulant
-     *
-     * @return User|null
+     * Get postulant.
      */
-    public function getPostulant(): ?User
+    public function getPostulant(): ?UserInterface
     {
         return $this->postulant;
     }
 
     /**
-     * Set etat
-     *
-     * @param integer $etat
-     * @return ClanProposition
+     * Set etat.
      */
     public function setEtat(int $etat): self
     {
@@ -160,9 +129,7 @@ class ClanProposition
     }
 
     /**
-     * Get etat
-     *
-     * @return int|null
+     * Get etat.
      */
     public function getEtat(): ?int
     {
@@ -170,10 +137,7 @@ class ClanProposition
     }
 
     /**
-     * Set dateChangementEtat
-     *
-     * @param DateTime|null $dateChangementEtat
-     * @return ClanProposition
+     * Set dateChangementEtat.
      */
     public function setDateChangementEtat(?DateTime $dateChangementEtat): self
     {
@@ -183,9 +147,7 @@ class ClanProposition
     }
 
     /**
-     * Get dateChangementEtat
-     *
-     * @return DateTime|null
+     * Get dateChangementEtat.
      */
     public function getDateChangementEtat(): ?DateTime
     {

@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Repository;
 
-use App\Entity\Clan\ClanPostulation;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\Clan\Clan;
+use App\Entity\Clan\ClanPostulation;
+use App\Entity\User\UserInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class ClanPostulationRepository extends ServiceEntityRepository
 {
@@ -18,11 +19,11 @@ class ClanPostulationRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('cp');
 
-        if(isset($clan)){
+        if (isset($clan)) {
             $query->where('cp.clan = :clan')
                 ->setParameter('clan', $clan);
         }
-        if(isset($user)){
+        if (isset($user)) {
             $query->andWhere('cp.postulant = :user')
                 ->setParameter('user', $user);
         }
@@ -33,26 +34,27 @@ class ClanPostulationRepository extends ServiceEntityRepository
 
     public function getByUser(?UserInterface $user = null)
     {
-
-        if(isset($user)){
+        if (isset($user)) {
             $query = $this->createQueryBuilder('cp');
             $query->andWhere('cp.postulant = :user')
                 ->setParameter('user', $user);
+
             return $query->getQuery()->getResult();
         }
+
         return null;
     }
 
     public function getByClan(?Clan $clan = null)
     {
-
-        if(isset($clan)){
+        if (isset($clan)) {
             $query = $this->createQueryBuilder('cp');
             $query->where('cp.clan = :clan')
                 ->setParameter('clan', $clan);
 
             return $query->getQuery()->getResult();
         }
+
         return null;
     }
 }

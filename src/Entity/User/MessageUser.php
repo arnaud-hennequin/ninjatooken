@@ -6,7 +6,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MessageUser
+ * MessageUser.
  *
  * @ORM\Table(name="nt_messageuser")
  * @ORM\Entity(repositoryClass="App\Repository\MessageUserRepository")
@@ -14,8 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 class MessageUser
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -23,31 +21,23 @@ class MessageUser
     private ?int $id = null;
 
     /**
-     * @var Message
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\Message", inversedBy="receivers")
      * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private Message $message;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="destinataire_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private User $destinataire;
+    private ?UserInterface $destinataire;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_read", type="datetime", nullable=true)
      */
     private ?DateTime $dateRead;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="has_deleted", type="boolean")
      */
     private bool $hasDeleted = false;
@@ -55,15 +45,15 @@ class MessageUser
     public function __toString()
     {
         $destination = $this->getDestinataire();
-        if(null !== $destination)
+        if (null !== $destination) {
             return $destination->getUsername();
-		return ' - ';
+        }
+
+        return ' - ';
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -71,10 +61,7 @@ class MessageUser
     }
 
     /**
-     * Set dateRead
-     *
-     * @param DateTime|null $dateRead
-     * @return MessageUser
+     * Set dateRead.
      */
     public function setDateRead(?DateTime $dateRead): self
     {
@@ -84,9 +71,7 @@ class MessageUser
     }
 
     /**
-     * Get dateRead
-     *
-     * @return DateTime|null
+     * Get dateRead.
      */
     public function getDateRead(): ?DateTime
     {
@@ -94,10 +79,7 @@ class MessageUser
     }
 
     /**
-     * Set hasDeleted
-     *
-     * @param boolean $hasDeleted
-     * @return MessageUser
+     * Set hasDeleted.
      */
     public function setHasDeleted(bool $hasDeleted): self
     {
@@ -107,9 +89,7 @@ class MessageUser
     }
 
     /**
-     * Get hasDeleted
-     *
-     * @return bool|null
+     * Get hasDeleted.
      */
     public function getHasDeleted(): ?bool
     {
@@ -117,12 +97,9 @@ class MessageUser
     }
 
     /**
-     * Set destinataire
-     *
-     * @param User|null $destinataire
-     * @return MessageUser
+     * Set destinataire.
      */
-    public function setDestinataire(User $destinataire = null): self
+    public function setDestinataire(UserInterface $destinataire = null): self
     {
         $this->destinataire = $destinataire;
 
@@ -130,20 +107,15 @@ class MessageUser
     }
 
     /**
-     * Get destinataire
-     *
-     * @return User|null
+     * Get destinataire.
      */
-    public function getDestinataire(): ?User
+    public function getDestinataire(): ?UserInterface
     {
         return $this->destinataire;
     }
 
     /**
-     * Set message
-     *
-     * @param Message|null $message
-     * @return MessageUser
+     * Set message.
      */
     public function setMessage(Message $message = null): self
     {
@@ -153,9 +125,7 @@ class MessageUser
     }
 
     /**
-     * Get message
-     *
-     * @return Message|null
+     * Get message.
      */
     public function getMessage(): ?Message
     {

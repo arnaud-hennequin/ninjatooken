@@ -2,102 +2,102 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Admin\AbstractAdmin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class ThreadAdmin extends AbstractAdmin
 {
-
-    protected array $datagridValues = array(
+    protected array $datagridValues = [
         '_sort_order' => 'DESC',
-        '_sort_by' => 'dateAjout'
-    );
+        '_sort_by' => 'dateAjout',
+    ];
 
-    //Fields to be shown on create/edit forms
+    // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->with('General')
-                ->add('nom', TextType::class, array(
-                    'label' => 'Nom'
-                ));
+                ->add('nom', TextType::class, [
+                    'label' => 'Nom',
+                ]);
 
-        if(!$this->isChild())
-            $form->add('forum', ModelListType::class, array(
-                    'btn_add'       => 'Add forum',
-                    'btn_list'      => 'List',
-                    'btn_delete'    => false,
-                ), array(
-                    'placeholder' => 'No forum selected'
-                ));
+        if (!$this->isChild()) {
+            $form->add('forum', ModelListType::class, [
+                    'btn_add' => 'Add forum',
+                    'btn_list' => 'List',
+                    'btn_delete' => false,
+                ], [
+                    'placeholder' => 'No forum selected',
+                ]);
+        }
 
         $form
-                ->add('author', ModelListType::class, array(
-                    'btn_add'       => 'Add author',
-                    'btn_list'      => 'List',
-                    'btn_delete'    => false,
-                ), array(
-                    'placeholder' => 'No author selected'
-                ))
-                ->add('body', TextareaType::class, array(
+                ->add('author', ModelListType::class, [
+                    'btn_add' => 'Add author',
+                    'btn_list' => 'List',
+                    'btn_delete' => false,
+                ], [
+                    'placeholder' => 'No author selected',
+                ])
+                ->add('body', TextareaType::class, [
                     'label' => 'Contenu',
-                    'attr' => array(
+                    'attr' => [
                         'class' => 'tinymce',
-                        'tinymce'=>'{"theme":"simple"}'
-                    )
-                ))
-                ->add('old_id', IntegerType::class, array(
+                        'tinymce' => '{"theme":"simple"}',
+                    ],
+                ])
+                ->add('old_id', IntegerType::class, [
                     'label' => 'Ancien identifiant',
-                    'required' => false
-                ))
-                ->add('isPostit', ChoiceType::class, array(
+                    'required' => false,
+                ])
+                ->add('isPostit', ChoiceType::class, [
                     'label' => 'Afficher en postit',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices'  => array('Oui' => true, 'Non' => false)
-                ))
-                ->add('isCommentable', ChoiceType::class, array(
+                    'choices' => ['Oui' => true, 'Non' => false],
+                ])
+                ->add('isCommentable', ChoiceType::class, [
                     'label' => 'Verrouillé',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices'  => array('Oui' => true, 'Non' => false)
-                ))
-                ->add('isEvent', ChoiceType::class, array(
+                    'choices' => ['Oui' => true, 'Non' => false],
+                ])
+                ->add('isEvent', ChoiceType::class, [
                     'label' => 'Event',
                     'multiple' => false,
                     'expanded' => true,
-                    'choices'  => array('Oui' => true, 'Non' => false)
-                ))
-                ->add('dateEventStart', DateTimeType::class, array(
+                    'choices' => ['Oui' => true, 'Non' => false],
+                ])
+                ->add('dateEventStart', DateTimeType::class, [
                     'label' => 'Début de l\'event',
-                    'required' => false
-                ))
-                ->add('dateEventEnd', DateTimeType::class, array(
+                    'required' => false,
+                ])
+                ->add('dateEventEnd', DateTimeType::class, [
                     'label' => 'Fin de l\'event',
-                    'required' => false
-                ))
-                ->add('urlVideo', UrlType::class, array(
+                    'required' => false,
+                ])
+                ->add('urlVideo', UrlType::class, [
                     'label' => 'url de la vidéo',
-                    'required' => false
-                ))
-                ->add('dateAjout', DateTimeType::class, array(
-                    'label' => 'Date de création'
-                ))
+                    'required' => false,
+                ])
+                ->add('dateAjout', DateTimeType::class, [
+                    'label' => 'Date de création',
+                ])
         ;
     }
 
-    //Fields to be shown on filter forms
+    // Fields to be shown on filter forms
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -105,27 +105,28 @@ class ThreadAdmin extends AbstractAdmin
         ;
     }
 
-    //Fields to be shown on lists
+    // Fields to be shown on lists
     protected function configureListFields(ListMapper $list): void
     {
         $list
             ->addIdentifier('nom')
             ->add('author.username');
 
-        if(!$this->isChild())
+        if (!$this->isChild()) {
             $list->add('forum.nom');
+        }
 
         $list
-            ->add('isCommentable', null, array('editable' => true))
-            ->add('isPostit', null, array('editable' => true))
-            ->add('isEvent', null, array('editable' => true))
+            ->add('isCommentable', null, ['editable' => true])
+            ->add('isPostit', null, ['editable' => true])
+            ->add('isEvent', null, ['editable' => true])
             ->add('dateAjout')
         ;
     }
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
@@ -137,13 +138,12 @@ class ThreadAdmin extends AbstractAdmin
 
         $menu->addChild(
             'Topic',
-            $admin->generateMenuUrl('edit', array('id' => $id))
+            $admin->generateMenuUrl('edit', ['id' => $id])
         );
 
         $menu->addChild(
             'Commentaires',
-            $admin->generateMenuUrl('admin.comment.list', array('id' => $id))
+            $admin->generateMenuUrl('admin.comment.list', ['id' => $id])
         );
-
     }
 }

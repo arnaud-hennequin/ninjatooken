@@ -9,14 +9,11 @@ use Twig\TwigFilter;
 
 class HTMLPurifierExtensionNT extends AbstractExtension
 {
-
     public HTMLPurifier $htmlPurifier;
     private array $purifiers = [];
 
     /**
      * Constructor.
-     *
-     * @param HTMLPurifier $htmlPurifier
      */
     public function __construct(HTMLPurifier $htmlPurifier)
     {
@@ -34,8 +31,6 @@ class HTMLPurifierExtensionNT extends AbstractExtension
      * Filter the input through an HTMLPurifier service.
      *
      * @param string|null $string $string
-     * @param string $profile
-     * @return string
      */
     public function purify(?string $string, string $profile = 'default'): string
     {
@@ -46,13 +41,13 @@ class HTMLPurifierExtensionNT extends AbstractExtension
         $HTMLPurifier = $this->getHTMLPurifierForProfile($profile);
 
         // ajoute certaines définitions
-        if($profile=='full'){
-            if($def = $HTMLPurifier->config->maybeGetRawHTMLDefinition()) {
+        if ('full' == $profile) {
+            if ($def = $HTMLPurifier->config->maybeGetRawHTMLDefinition()) {
                 $def->addAttribute('embed', 'allowfullscreen', 'Enum#true,false');
                 $def->addAttribute('object', 'classid', 'CDATA');
                 $def->addElement(
                     'iframe', 'Inline', 'Flow', 'Common',
-                    array(
+                    [
                         'src' => 'URI#embedded',
                         'width' => 'Length',
                         'height' => 'Length',
@@ -62,33 +57,33 @@ class HTMLPurifierExtensionNT extends AbstractExtension
                         'longdesc' => 'URI',
                         'marginheight' => 'Pixels',
                         'marginwidth' => 'Pixels',
-                    )
+                    ]
                 );
                 $def->addElement(
                     'span', 'Inline', 'Flow', 'Common',
-                    array(
+                    [
                         'align' => 'Enum#left,right,center,justify',
-                    )
+                    ]
                 );
                 $def->addElement(
                     'li', 'Inline', 'Flow', 'Common',
-                    array(
+                    [
                         'align' => 'Enum#left,right,center,justify',
-                    )
+                    ]
                 );
                 $def->addElement(
                     'fieldset',
                     'Block',
                     'Flow',
                     'Common',
-                    array()
+                    []
                 );
                 $def->addElement(
                     'legend',
                     'Block',
                     'Flow',
                     'Common',
-                    array()
+                    []
                 );
             }
         }
@@ -99,8 +94,6 @@ class HTMLPurifierExtensionNT extends AbstractExtension
     /**
      * Get the HTMLPurifier service corresponding to the given profile.
      *
-     * @param string $profile
-     * @return \HTMLPurifier
      * @throws RuntimeException
      */
     private function getHTMLPurifierForProfile(string $profile): \HTMLPurifier

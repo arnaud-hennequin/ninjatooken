@@ -2,41 +2,53 @@
 
 namespace App\Controller;
 
+use App\Entity\Clan\Clan;
+use App\Entity\Clan\ClanPostulation;
+use App\Entity\Clan\ClanProposition;
+use App\Entity\Clan\ClanUtilisateur;
+use App\Entity\Forum\Forum;
+use App\Entity\Forum\Thread;
+use App\Entity\User\Message;
+use App\Entity\User\MessageUser;
+use App\Entity\User\User;
+use App\Entity\User\UserInterface;
+use App\Form\Type\ClanType;
 use App\Listener\ClanPropositionListener;
+use App\Repository\ClanPostulationRepository;
+use App\Repository\ClanPropositionRepository;
+use App\Repository\ClanRepository;
+use App\Repository\ClanUtilisateurRepository;
+use App\Repository\ForumRepository;
+use App\Repository\ThreadRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Clan\Clan;
-use App\Form\Type\ClanType;
-use App\Entity\Clan\ClanUtilisateur;
-use App\Entity\Clan\ClanProposition;
-use App\Entity\Clan\ClanPostulation;
-use App\Entity\Forum\Forum;
-use App\Entity\Forum\Thread;
-use App\Entity\User\User;
-use App\Entity\User\Message;
-use App\Entity\User\MessageUser;
 
 class ClanController extends AbstractController
 {
-    protected FlashBagInterface $flashBag;
-    protected ?UserInterface $user;
+    protected ?FlashBagInterface $flashBag;
+    protected UserInterface|SluggableInterface|null $user;
     protected ?AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(TokenStorageInterface $tokenStorage, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->user = $tokenStorage->getToken() ? $tokenStorage->getToken()->getUser() : null;
-        $this->flashBag = $requestStack->getSession()->getFlashBag();
+        if ($tokenStorage->getToken()?->getUser() instanceof User) {
+            $this->user = $tokenStorage->getToken()->getUser();
+        }
+        if ($requestStack->getSession() instanceof Session) {
+            $this->flashBag = $requestStack->getSession()->getFlashBag();
+        }
         $this->authorizationChecker = $authorizationChecker;
     }
 
@@ -46,17 +58,19 @@ class ClanController extends AbstractController
         $page = max(1, $page);
 
         $order = $request->get('order');
-        if (empty($order))
+        if (empty($order)) {
             $order = 'composition';
+        }
 
+        /** @var ClanRepository $repo */
         $repo = $em->getRepository(Clan::class);
 
         return $this->render('clan/liste.html.twig', [
             'clans' => $repo->getClans($order, $num, $page),
-            'lastClans' => $repo->getClans("date", 10, 1),
+            'lastClans' => $repo->getClans('date', 10, 1),
             'page' => $page,
-            'nombrePage' => ceil($repo->getNumClans()/$num),
-            'order' => $order
+            'nombrePage' => ceil($repo->getNumClans() / $num),
+            'order' => $order,
         ]);
     }
 
@@ -66,24 +80,31 @@ class ClanController extends AbstractController
     public function clan(Clan $clan, EntityManagerInterface $em): Response
     {
         // le forum du clan
-        $forum = $em->getRepository(Forum::class)->getForum($clan->getSlug(), $clan);
+        /** @var ForumRepository $forumRepository */
+        $forumRepository = $em->getRepository(Forum::class);
+        $forum = $forumRepository->getForum($clan->getSlug(), $clan);
         if ($forum) {
             $forum = current($forum);
-            $threads = $em->getRepository(Thread::class)->getThreads($forum, 5, 1);
-            if (count($threads)>0)
+            /** @var ThreadRepository $threadRepository */
+            $threadRepository = $em->getRepository(Thread::class);
+            $threads = $threadRepository->getThreads($forum, 5, 1);
+            if (count($threads) > 0) {
                 $forum->threads = $threads;
-            else
+            } else {
                 $forum->threads = [];
+            }
         }
 
         // l'arborescence des membres
-        $shishou = $em->getRepository(ClanUtilisateur::class)->getMembres($clan, 0, null, 1, 1);
+        /** @var ClanUtilisateurRepository $clanUtilisateurRepository */
+        $clanUtilisateurRepository = $em->getRepository(ClanUtilisateur::class);
+        $shishou = $clanUtilisateurRepository->getMembres($clan, 0, null, 1, 1);
         $membres = [];
         if ($shishou) {
             $shishou = current($shishou);
             $membres = [
                 'recruteur' => $shishou,
-                'recruts' => $this->getRecruts($shishou, $em)
+                'recruts' => $this->getRecruts($shishou, $em),
             ];
         }
 
@@ -94,36 +115,34 @@ class ClanController extends AbstractController
             'clan' => $clan,
             'forum' => $forum,
             'membres' => $membres,
-            'membresListe' => $membresListe
+            'membresListe' => $membresListe,
         ]);
     }
 
     public function clanAjouter(Request $request, TranslatorInterface $translator, ParameterBagInterface $params, EntityManagerInterface $em): Response
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if (!$this->user->getClan()) {
                 $clan = new Clan();
                 $form = $this->createForm(ClanType::class, $clan);
                 if ('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('clan', array_merge(
-                        $request->request->get('clan'),
+                        (array) $request->request->get('clan'),
                         ['description' => $request->get('clan_description')]
                     ));
 
                     $form->handleRequest($request);
 
                     if ($form->isValid()) {
-
                         // permet de générer le fichier
                         $file = $request->files->get('clan');
                         if ($file && isset($file['kamonUpload'])) {
                             $file = $file['kamonUpload'];
                             $extension = strtolower($file->guessExtension());
-                            if (in_array($extension, ['jpeg','jpg','png','gif'])) {
+                            if (in_array($extension, ['jpeg', 'jpg', 'png', 'gif'])) {
                                 $clan->setFile($file);
-                                $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clan->getWebKamon();
+                                $cachedImage = $params->get('kernel.project_dir').'/public/cache/kamon/'.$clan->getWebKamon();
                                 if (file_exists($cachedImage)) {
                                     unlink($cachedImage);
                                 }
@@ -156,25 +175,27 @@ class ClanController extends AbstractController
                         $em->persist($clan);
                         $em->flush();
 
-                        $this->flashBag->add(
+                        $this->flashBag?->add(
                             'notice',
                             $translator->trans('notice.clan.ajoutOk')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                            'clan_nom' => $clan->getSlug()
+                            'clan_nom' => $clan->getSlug(),
                         ]));
                     }
                 }
-            }else{
+            } else {
                 return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                    'clan_nom' => $this->user->getClan()->getClan()->getSlug()
+                    'clan_nom' => $this->user->getClan()->getClan()->getSlug(),
                 ]));
             }
+
             return $this->render('clan/clan.form.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]);
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -183,37 +204,38 @@ class ClanController extends AbstractController
      */
     public function clanEditerSwitch(TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $isShisho = false;
             if ($this->user->getClan()) {
-                if ($this->user->getClan()->getDroit()==0)
+                if (0 == $this->user->getClan()->getDroit()) {
                     $isShisho = true;
+                }
             }
 
-            if ($isShisho || $this->authorizationChecker->isGranted('ROLE_ADMIN') !== false || $this->authorizationChecker->isGranted('ROLE_MODERATOR') !== false) {
-
+            if ($isShisho || false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
                 $clanutilisateur = $utilisateur->getClan();
                 $clan = $this->user->getClan()->getClan();
-                if ($clanutilisateur && $clanutilisateur->getClan()==$clan) {
-
+                if ($clanutilisateur && $clanutilisateur->getClan() == $clan) {
                     $clanutilisateur->setCanEditClan(!$clanutilisateur->getCanEditClan());
                     $em->persist($clanutilisateur);
 
                     $em->flush();
 
-                    $this->flashBag->add(
+                    $this->flashBag?->add(
                         'notice',
                         $translator->trans('notice.clan.editOk')
                     );
                 }
+
                 return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                    'clan_nom' => $clan->getSlug()
+                    'clan_nom' => $clan->getSlug(),
                 ]));
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -222,24 +244,24 @@ class ClanController extends AbstractController
      */
     public function clanModifier(Request $request, TranslatorInterface $translator, ParameterBagInterface $params, Clan $clan, EntityManagerInterface $em): Response
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $canEdit = false;
             $clanutilisateur = $this->user->getClan();
             if ($clanutilisateur) {
-                if ($clanutilisateur->getClan() == $clan && ($clanutilisateur->getCanEditClan() || $clanutilisateur->getDroit()==0))
+                if ($clanutilisateur->getClan() == $clan && ($clanutilisateur->getCanEditClan() || 0 == $clanutilisateur->getDroit())) {
                     $canEdit = true;
+                }
             }
 
-            if ($canEdit || $this->authorizationChecker->isGranted('ROLE_ADMIN') !== false || $this->authorizationChecker->isGranted('ROLE_MODERATOR') !== false) {
+            if ($canEdit || false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
                 $form = $this->createForm(ClanType::class, $clan);
                 if ('POST' === $request->getMethod()) {
                     // cas particulier du formulaire avec tinymce
                     $request->request->set('clan', array_merge(
-                        $request->request->get('clan', []),
+                        (array) $request->request->get('clan'),
                         ['description' => $request->get('clan_description')]
                     ));
-
 
                     $clanWebKamon = $clan->getWebKamon();
                     $form->handleRequest($request);
@@ -247,13 +269,13 @@ class ClanController extends AbstractController
                     if ($form->isValid()) {
                         // permet de générer le fichier
                         $file = $request->files->get('clan');
-                        if ($file !== null && isset($file['kamonUpload'])) {
+                        if (null !== $file && isset($file['kamonUpload'])) {
                             $file = $file['kamonUpload'];
                             $extension = strtolower($file->guessExtension());
-                            if (in_array($extension, ['jpeg','jpg','png','gif'])) {
+                            if (in_array($extension, ['jpeg', 'jpg', 'png', 'gif'])) {
                                 $clan->setFile($file);
                                 if (isset($clanWebKamon) && !empty($clanWebKamon)) {
-                                    $cachedImage = $params->get('kernel.project_dir') . '/public/cache/kamon/' . $clanWebKamon;
+                                    $cachedImage = $params->get('kernel.project_dir').'/public/cache/kamon/'.$clanWebKamon;
                                     if (file_exists($cachedImage)) {
                                         unlink($cachedImage);
                                     }
@@ -264,23 +286,26 @@ class ClanController extends AbstractController
                         $em->persist($clan);
                         $em->flush();
 
-                        $this->flashBag->add(
+                        $this->flashBag?->add(
                             'notice',
                             $translator->trans('notice.clan.editOk')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                            'clan_nom' => $clan->getSlug()
+                            'clan_nom' => $clan->getSlug(),
                         ]));
                     }
                 }
+
                 return $this->render('clan/clan.form.html.twig', [
                     'form' => $form->createView(),
-                    'clan' => $clan
+                    'clan' => $clan,
                 ]);
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -289,12 +314,12 @@ class ClanController extends AbstractController
      */
     public function clanSupprimer(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $clanutilisateur = $this->user->getClan();
-            $canDelete = $clanutilisateur && $clanutilisateur->getClan() == $clan && $clanutilisateur->getDroit() == 0;
+            $canDelete = $clanutilisateur && $clanutilisateur->getClan() == $clan && 0 == $clanutilisateur->getDroit();
 
-            if ($canDelete || $this->authorizationChecker->isGranted('ROLE_ADMIN') !== false || $this->authorizationChecker->isGranted('ROLE_MODERATOR') !== false) {
+            if ($canDelete || false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
                 // enlève les évènement sur clan_utilisateur
                 // on cherche à tous les supprimer et pas à ré-agencer la structure
                 $clan->delete = true;
@@ -302,13 +327,15 @@ class ClanController extends AbstractController
                 $em->remove($clan);
                 $em->flush();
 
-                $this->flashBag->add(
+                $this->flashBag?->add(
                     'notice',
                     $translator->trans('notice.clan.deleteOk')
                 );
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -317,18 +344,18 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurSupprimer(TranslatorInterface $translator, ClanPropositionListener $clanPropositionListener, ClanPropositionListener $clanUtilisateurListener, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-             $userRecruts = $this->user->getRecruts();
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $userRecruts = $this->user->getRecruts();
             $clanutilisateur = $utilisateur->getClan();
             if ($clanutilisateur) {
                 // l'utilisateur actuel est le recruteur du joueur visé, ou est le joueur lui-même !
-                if ( (!empty($userRecruts) && $userRecruts->contains($clanutilisateur)) || $this->user === $utilisateur ) {
+                if ((!empty($userRecruts) && $userRecruts->contains($clanutilisateur)) || $this->user === $utilisateur) {
                     $clan = $clanutilisateur->getClan();
 
                     $evm = $em->getEventManager();
 
                     $membres = $clan->getMembres()->count() - 1;
-                    if ($membres==0) {
+                    if (0 == $membres) {
                         $evm->removeEventListener(['postRemove'], $clanUtilisateurListener);
                         $em->remove($clan);
                     } else {
@@ -338,25 +365,28 @@ class ClanController extends AbstractController
                     }
                     $em->flush();
 
-                    $this->flashBag->add(
+                    $this->flashBag?->add(
                         'notice',
                         $translator->trans('notice.clan.revokeOk')
                     );
 
-                    if ($clan !== null && $membres>0)
+                    if (null !== $clan && $membres > 0) {
                         return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                            'clan_nom' => $clan->getSlug()
+                            'clan_nom' => $clan->getSlug(),
                         ]));
-                    else
+                    } else {
                         return $this->redirect($this->generateUrl('ninja_tooken_clans'));
+                    }
                 }
             }
-            $this->flashBag->add(
+            $this->flashBag?->add(
                 'notice',
                 $translator->trans('notice.clan.revokeKo')
             );
+
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -365,18 +395,17 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurSupprimerShishou(TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->user->getClan()) {
                 $clanutilisateur = $this->user->getClan();
                 // est le shishou
-                if ($clanutilisateur->getDroit() == 0) {
+                if (0 == $clanutilisateur->getDroit()) {
                     $clan = $clanutilisateur->getClan();
 
                     // on vérifie que le joueur visé fait parti du même clan
                     if ($utilisateur->getClan()) {
                         $clanutilisateur_promote = $utilisateur->getClan();
                         if ($clanutilisateur_promote->getClan() == $clan) {
-
                             // permet de remplacer le ninja promu dans la hiérarchie via le listener
                             $em->remove($clanutilisateur_promote);
                             $em->flush();
@@ -388,49 +417,54 @@ class ClanController extends AbstractController
 
                             // échange les recruts avec le shishou actuel
                             $recruts = $this->user->getRecruts();
-                            foreach($recruts as $recrut) {
+                            foreach ($recruts as $recrut) {
                                 $recrut->setRecruteur($utilisateur);
                                 $em->persist($recrut);
                                 $em->persist($utilisateur);
                             }
                             $em->flush();
 
-                            $this->flashBag->add(
+                            $this->flashBag?->add(
                                 'notice',
                                 $translator->trans('notice.clan.promotionOk')
                             );
 
                             return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                                'clan_nom' => $clan->getSlug()
+                                'clan_nom' => $clan->getSlug(),
                             ]));
                         }
                     }
                 }
             }
-            $this->flashBag->add(
+            $this->flashBag?->add(
                 'notice',
                 $translator->trans('notice.clan.promotionKo')
             );
+
             return $this->redirect($this->generateUrl('ninja_tooken_clans'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
     public function clanUtilisateurRecruter(EntityManagerInterface $em): Response
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $clan = $this->user->getClan();
 
+            /** @var ClanPropositionRepository $repo_proposition */
             $repo_proposition = $em->getRepository(ClanProposition::class);
+            /** @var ClanPostulationRepository $repo_demande */
             $repo_demande = $em->getRepository(ClanPostulation::class);
 
             return $this->render('clan/clan.recrutement.html.twig', [
                 'recrutements' => $repo_proposition->getPropositionByRecruteur($this->user),
                 'propositions' => $repo_proposition->getPropositionByPostulant($this->user),
                 'demandes' => $repo_demande->getByUser($this->user),
-                'demandesFrom' => $clan && $clan->getDroit()<3?$repo_demande->getByClan($clan->getClan()):null
+                'demandesFrom' => $clan && $clan->getDroit() < 3 ? $repo_demande->getByClan($clan->getClan()) : null,
             ]);
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -439,22 +473,27 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurRecruterSupprimer(TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->user->getClan()) {
-                $clanProposition = $em->getRepository(ClanProposition::class)->getPropositionByUsers($this->user, $utilisateur);
+                /** @var ClanPropositionRepository $repo */
+                $repo = $em->getRepository(ClanProposition::class);
+                $clanProposition = $repo->getPropositionByUsers($this->user, $utilisateur);
                 if ($clanProposition) {
                     $em->remove($clanProposition);
                     $em->flush();
 
-                    $this->flashBag->add(
+                    $this->flashBag?->add(
                         'notice',
                         $translator->trans('notice.recrutement.cancelOk')
                     );
                 }
+
                 return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -463,11 +502,12 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurRecruterAjouter(Request $request, TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->user->getClan()) {
-                $clanProposition = $em->getRepository(ClanProposition::class)->getPropositionByUsers($this->user, $utilisateur);
+                /** @var ClanPropositionRepository $repo */
+                $repo = $em->getRepository(ClanProposition::class);
+                $clanProposition = $repo->getPropositionByUsers($this->user, $utilisateur);
                 if (!$clanProposition) {
-
                     $clanProposition = new ClanProposition();
                     $clanProposition->setRecruteur($this->user);
                     $clanProposition->setPostulant($utilisateur);
@@ -477,17 +517,17 @@ class ClanController extends AbstractController
                     $message->setNom($translator->trans('mail.recrutement.nouveau.sujet'));
                     $message->setContent($translator->trans('mail.recrutement.nouveau.contenu', [
                         '%userUrl%' => $this->generateUrl('ninja_tooken_user_fiche', [
-                            'user_nom' => $this->user->getSlug()
+                            'user_nom' => $this->user->getSlug(),
                         ]),
                         '%userPseudo%' => $this->user->getUsername(),
                         '%urlRefuser%' => $this->generateUrl('ninja_tooken_clan_recruter_refuser', [
                             'user_nom' => $utilisateur->getSlug(),
-                            'recruteur_nom' => $this->user->getSlug()
+                            'recruteur_nom' => $this->user->getSlug(),
                         ]),
                         '%urlAccepter%' => $this->generateUrl('ninja_tooken_clan_recruter_accepter', [
                             'user_nom' => $utilisateur->getSlug(),
-                            'recruteur_nom' => $this->user->getSlug()
-                        ])
+                            'recruteur_nom' => $this->user->getSlug(),
+                        ]),
                     ]));
 
                     $messageuser = new MessageUser();
@@ -499,20 +539,23 @@ class ClanController extends AbstractController
                     $em->persist($clanProposition);
                     $em->flush();
 
-                    $this->flashBag->add(
+                    $this->flashBag?->add(
                         'notice',
                         $translator->trans('notice.recrutement.addOk')
                     );
-                }else{
-                    $this->flashBag->add(
+                } else {
+                    $this->flashBag?->add(
                         'notice',
                         $translator->trans('notice.recrutement.addKo')
                     );
                 }
+
                 return $this->redirect($request->headers->get('referer'));
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -522,15 +565,17 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurRecruterAccepter(TranslatorInterface $translator, User $utilisateur, User $recruteur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-            $clanProposition = $em->getRepository(ClanProposition::class)->getWaitingPropositionByUsers($recruteur, $utilisateur);
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            /** @var ClanPropositionRepository $repo */
+            $repo = $em->getRepository(ClanProposition::class);
+            $clanProposition = $repo->getWaitingPropositionByUsers($recruteur, $utilisateur);
             if ($clanProposition) {
-                if ($this->user === $utilisateur && $recruteur->getClan() !== null) {
+                if ($this->user === $utilisateur && null !== $recruteur->getClan()) {
                     $clanutilisateur = $recruteur->getClan();
-                    if ($clanutilisateur->getDroit()<3) {
+                    if ($clanutilisateur->getDroit() < 3) {
                         // on supprime l'ancienne liaison
                         $cu = $this->user->getClan();
-                        if ($cu !== null) {
+                        if (null !== $cu) {
                             $this->user->setClan(null);
                             $em->persist($this->user);
                             $em->remove($cu);
@@ -569,19 +614,21 @@ class ClanController extends AbstractController
 
                         $em->flush();
 
-                        $this->flashBag->add(
+                        $this->flashBag?->add(
                             'notice',
                             $translator->trans('notice.recrutement.bienvenue')
                         );
 
                         return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                            'clan_nom' => $clan->getSlug()
+                            'clan_nom' => $clan->getSlug(),
                         ]));
                     }
                 }
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -591,8 +638,10 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurRecruterRefuser(TranslatorInterface $translator, User $utilisateur, User $recruteur, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-            $clanProposition = $em->getRepository(ClanProposition::class)->getWaitingPropositionByUsers($recruteur, $utilisateur);
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            /** @var ClanPropositionRepository $repo */
+            $repo = $em->getRepository(ClanProposition::class);
+            $clanProposition = $repo->getWaitingPropositionByUsers($recruteur, $utilisateur);
             if ($clanProposition) {
                 if ($this->user === $utilisateur) {
                     // on met à jour la proposition
@@ -613,8 +662,10 @@ class ClanController extends AbstractController
                     $em->flush();
                 }
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -623,7 +674,7 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurPostuler(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $canPostule = true;
             if ($this->user->getClan()) {
@@ -635,35 +686,38 @@ class ClanController extends AbstractController
 
             // si c'était hier, on reset la limitation
             if ($this->user->getDateApplication() < new \DateTime('today')) {
-                $this->user->setDateApplication(new \DateTime);
+                $this->user->setDateApplication(new \DateTime());
                 $this->user->setNumberApplication(0);
             }
 
-            $canPostule &= $this->user->getNumberApplication() < User::MAX_APPLICATION_BY_DAY; 
+            $canPostule &= $this->user->getNumberApplication() < User::MAX_APPLICATION_BY_DAY;
 
             // le clan recrute, on peut postuler
             if ($clan->getIsRecruting() && $canPostule) {
-
                 $ok = false;
 
-                $postulation = $em->getRepository(ClanPostulation::class)->getByClanUser($clan, $this->user);
+                /** @var ClanPostulationRepository $repo */
+                $repo = $em->getRepository(ClanPostulation::class);
+                $postulation = $repo->getByClanUser($clan, $this->user);
                 if ($postulation) {
                     // si on avait supprimé la proposition
-                    if ($postulation->getEtat()==1) {
+                    if (1 == $postulation->getEtat()) {
                         if ($postulation->getDateChangementEtat() <= new \DateTime('-1 days')) {
                             $postulation->setEtat(0);
                             $ok = true;
-                        }else
-                            $this->flashBag->add(
+                        } else {
+                            $this->flashBag?->add(
                                 'notice',
                                 $translator->trans('notice.clan.postulationKo2')
                             );
-                    }else
-                        $this->flashBag->add(
+                        }
+                    } else {
+                        $this->flashBag?->add(
                             'notice',
                             $translator->trans('notice.clan.postulationKo1')
                         );
-                }else{
+                    }
+                } else {
                     $postulation = new ClanPostulation();
                     $postulation->setClan($clan);
                     $postulation->setPostulant($this->user);
@@ -677,18 +731,18 @@ class ClanController extends AbstractController
                     $em->persist($postulation);
                     $em->flush();
 
-                    $this->flashBag->add(
+                    $this->flashBag?->add(
                         'notice',
                         $translator->trans('notice.clan.postulationOk')
                     );
                 }
-
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                'clan_nom' => $clan->getSlug()
+                'clan_nom' => $clan->getSlug(),
             ]));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
@@ -697,43 +751,50 @@ class ClanController extends AbstractController
      */
     public function clanUtilisateurPostulerSupprimer(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
     {
-        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED') ) {
-            $postulation = $em->getRepository(ClanPostulation::class)->getByClanUser($clan, $this->user);
-            if ($postulation && $postulation->getEtat()==0) {
+        if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            /** @var ClanPostulationRepository $repo */
+            $repo = $em->getRepository(ClanPostulation::class);
+            $postulation = $repo->getByClanUser($clan, $this->user);
+            if ($postulation && 0 == $postulation->getEtat()) {
                 $postulation->setEtat(1);
                 $em->persist($postulation);
                 $em->flush();
 
-                $this->flashBag->add(
+                $this->flashBag?->add(
                     'notice',
                     $translator->trans('notice.clan.postulationSupprimeOk')
                 );
             }
+
             return $this->redirect($this->generateUrl('ninja_tooken_clan_recruter'));
         }
+
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    function getRecruteur($list = []): array
+    public function getRecruteur($list = []): array
     {
         $membre = [];
         if (isset($list['recruteur'])) {
             $membre[] = $list['recruteur'];
-            foreach($list['recruts'] as $recrut) {
+            foreach ($list['recruts'] as $recrut) {
                 $membre = array_merge($membre, $this->getRecruteur($recrut));
             }
         }
+
         return $membre;
     }
 
-    function getRecruts(ClanUtilisateur $recruteur, EntityManagerInterface $em): array
+    public function getRecruts(ClanUtilisateur $recruteur, EntityManagerInterface $em): array
     {
-        $recruts = $em->getRepository(ClanUtilisateur::class)->getMembres(null, null, $recruteur->getMembre(), 100);
+        /** @var ClanUtilisateurRepository $repo */
+        $repo = $em->getRepository(ClanUtilisateur::class);
+        $recruts = $repo->getMembres(null, null, $recruteur->getMembre(), 100);
         $membres = [];
-        foreach($recruts as $recrut) {
+        foreach ($recruts as $recrut) {
             $membres[] = [
                 'recruteur' => $recrut,
-                'recruts' => $this->getRecruts($recrut, $em)
+                'recruts' => $this->getRecruts($recrut, $em),
             ];
         }
 

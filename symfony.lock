@@ -108,6 +108,18 @@
     "ezyang/htmlpurifier": {
         "version": "v4.12.0"
     },
+    "friendsofphp/php-cs-fixer": {
+        "version": "3.8",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "3.0",
+            "ref": "be2103eb4a20942e28a6dd87736669b757132435"
+        },
+        "files": [
+            ".php-cs-fixer.dist.php"
+        ]
+    },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
@@ -205,8 +217,17 @@
     "phpspec/prophecy": {
         "version": "1.13.0"
     },
+    "phpstan/extension-installer": {
+        "version": "1.1.0"
+    },
     "phpstan/phpdoc-parser": {
         "version": "0.4.14"
+    },
+    "phpstan/phpstan": {
+        "version": "1.5.7"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "1.1.8"
     },
     "phpunit/php-code-coverage": {
         "version": "9.2.6"
@@ -417,16 +438,15 @@
         "version": "v3.4.37"
     },
     "symfony/console": {
-        "version": "3.3",
+        "version": "5.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "5b06148c10d442bf536a4d3017cadb3a99fd9135"
+            "branch": "main",
+            "version": "5.3",
+            "ref": "da0c8be8157600ad34f10ff0c9cc91232522e047"
         },
         "files": [
-            "bin/console",
-            "config/bootstrap.php"
+            "bin/console"
         ]
     },
     "symfony/css-selector": {

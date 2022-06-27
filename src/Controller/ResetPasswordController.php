@@ -134,6 +134,7 @@ class ResetPasswordController extends AbstractController
         // Do not reveal whether a user account was found or not.
         if (!$user) {
             $this->addFlash('warning', 'Aucun utilisateur correspondant trouvé.');
+
             return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
         }
 
@@ -159,13 +160,14 @@ class ResetPasswordController extends AbstractController
                 ->htmlTemplate('user/resetting/email.html.twig')
                 ->context([
                     'resetToken' => $resetToken,
-                    'locale' => $user->getLocale()??"fr"
+                    'locale' => $user->getLocale() ?? 'fr',
                 ])
             ;
 
             $mailer->send($email);
-        } catch (\Exception | TransportExceptionInterface $e) {
+        } catch (\Exception|TransportExceptionInterface $e) {
             $this->addFlash('warning', 'Une erreur est survenue lors de l\'envoi du mail : '.$e->getMessage());
+
             return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
         }
 

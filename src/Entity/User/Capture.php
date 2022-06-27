@@ -4,11 +4,10 @@ namespace App\Entity\User;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Capture
+ * Capture.
  *
  * @ORM\Table(name="nt_capture")
  * @ORM\Entity(repositoryClass="App\Repository\CaptureRepository")
@@ -16,8 +15,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Capture
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -25,16 +22,12 @@ class Capture
     private ?int $id = null;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private User $user;
+    private ?UserInterface $user = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\Url()
@@ -43,8 +36,6 @@ class Capture
     private string $url;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="url_tmb", type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\Url()
@@ -53,8 +44,6 @@ class Capture
     private string $urlTmb;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="delete_hash", type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
@@ -62,14 +51,12 @@ class Capture
     private string $deleteHash;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -77,9 +64,7 @@ class Capture
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -87,10 +72,7 @@ class Capture
     }
 
     /**
-     * Set url
-     *
-     * @param string $url
-     * @return Capture
+     * Set url.
      */
     public function setUrl(string $url): self
     {
@@ -100,9 +82,7 @@ class Capture
     }
 
     /**
-     * Get url
-     *
-     * @return string|null
+     * Get url.
      */
     public function getUrl(): ?string
     {
@@ -110,10 +90,7 @@ class Capture
     }
 
     /**
-     * Set urlTmb
-     *
-     * @param string $urlTmb
-     * @return Capture
+     * Set urlTmb.
      */
     public function setUrlTmb(string $urlTmb): self
     {
@@ -123,9 +100,7 @@ class Capture
     }
 
     /**
-     * Get urlTmb
-     *
-     * @return string|null
+     * Get urlTmb.
      */
     public function getUrlTmb(): ?string
     {
@@ -133,10 +108,7 @@ class Capture
     }
 
     /**
-     * Set deleteHash
-     *
-     * @param string $deleteHash
-     * @return Capture
+     * Set deleteHash.
      */
     public function setDeleteHash(string $deleteHash): self
     {
@@ -146,9 +118,7 @@ class Capture
     }
 
     /**
-     * Get deleteHash
-     *
-     * @return string|null
+     * Get deleteHash.
      */
     public function getDeleteHash(): ?string
     {
@@ -156,10 +126,7 @@ class Capture
     }
 
     /**
-     * Set dateAjout
-     *
-     * @param DateTime $dateAjout
-     * @return Capture
+     * Set dateAjout.
      */
     public function setDateAjout(DateTime $dateAjout): self
     {
@@ -169,9 +136,7 @@ class Capture
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -179,10 +144,7 @@ class Capture
     }
 
     /**
-     * Set user
-     *
-     * @param User|null $user
-     * @return Capture
+     * Set user.
      */
     public function setUser(?UserInterface $user = null): self
     {
@@ -192,11 +154,9 @@ class Capture
     }
 
     /**
-     * Get user
-     *
-     * @return User|null
+     * Get user.
      */
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }

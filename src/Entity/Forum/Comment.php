@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Entity\Forum;
 
+use App\Entity\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,25 +22,20 @@ class Comment
     protected ?int $id = null;
 
     /**
-     * Thread of this comment
+     * Thread of this comment.
      *
-     * @var Thread
      * @ORM\ManyToOne(targetEntity="App\Entity\Forum\Thread", fetch="LAZY")
      * @ORM\JoinColumn(name="thread_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private Thread $thread;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * Comment text
-     *
-     * @var string
+     * Comment text.
      *
      * @ORM\Column(name="body", type="text")
      * @Assert\NotBlank
@@ -47,19 +43,16 @@ class Comment
     private string $body;
 
     /**
-    * Author of the comment
-    *
-    * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
-    * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
-    * @var UserInterface|null
+     * Author of the comment.
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
     private ?UserInterface $author;
 
     /**
-    * @var int|null
-     *
-    * @ORM\Column(name="old_id", type="integer", nullable=true)
-    */
+     * @ORM\Column(name="old_id", type="integer", nullable=true)
+     */
     private ?int $old_id;
 
     public function __construct()
@@ -68,9 +61,7 @@ class Comment
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -78,10 +69,7 @@ class Comment
     }
 
     /**
-     * Set author's name
-     *
-     * @param UserInterface $author
-     * @return Comment
+     * Set author's name.
      */
     public function setAuthor(UserInterface $author): self
     {
@@ -91,48 +79,32 @@ class Comment
     }
 
     /**
-    * Get author's name
-    * 
-    * @return UserInterface
+     * Get author's name.
      */
     public function getAuthor(): UserInterface
     {
         return $this->author;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBody(): ?string
     {
         return $this->body;
     }
 
-    /**
-     * @param  string
-     *
-     * @return Comment
-     */
-    public function setBody($body): self
+    public function setBody(string $body): self
     {
         $this->body = $body;
 
         return $this;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getDateAjout(): ?DateTime
     {
         return $this->dateAjout;
     }
 
     /**
-     * Sets the creation date
-     * @param DateTime $dateAjout
-     *
-     * @return Comment
+     * Sets the creation date.
      */
     public function setDateAjout(DateTime $dateAjout): self
     {
@@ -141,19 +113,11 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Thread|null
-     */
     public function getThread(): ?Thread
     {
         return $this->thread;
     }
 
-    /**
-     * @param Thread $thread
-     *
-     * @return Comment
-     */
     public function setThread(Thread $thread): self
     {
         $this->thread = $thread;
@@ -162,10 +126,7 @@ class Comment
     }
 
     /**
-     * Set old_id
-     *
-     * @param int|null $oldId
-     * @return Comment
+     * Set old_id.
      */
     public function setOldId(?int $oldId): self
     {
@@ -175,9 +136,7 @@ class Comment
     }
 
     /**
-     * Get old_id
-     *
-     * @return int|null
+     * Get old_id.
      */
     public function getOldId(): ?int
     {

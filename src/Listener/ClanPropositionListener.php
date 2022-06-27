@@ -2,13 +2,13 @@
 
 namespace App\Listener;
 
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use App\Entity\Clan\ClanProposition;
 use App\Entity\User\Message;
 use App\Entity\User\MessageUser;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Contracts\Translation\TranslatorInterface;
- 
+
 class ClanPropositionListener
 {
     protected TranslatorInterface $translator;
@@ -22,10 +22,8 @@ class ClanPropositionListener
     public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof ClanProposition)
-        {
-            if($args->hasChangedField('etat'))
-            {
+        if ($entity instanceof ClanProposition) {
+            if ($args->hasChangedField('etat')) {
                 $em = $args->getEntityManager();
                 $uow = $em->getUnitOfWork();
 
@@ -43,7 +41,7 @@ class ClanPropositionListener
     {
         $entity = $args->getEntity();
         if ($entity instanceof ClanProposition) {
-            if ($entity->getEtat() == 0) {
+            if (0 == $entity->getEtat()) {
                 $em = $args->getEntityManager();
 
                 $message = new Message();

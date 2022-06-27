@@ -2,12 +2,12 @@
 
 namespace App\Command;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Ifsnop\Mysqldump as IMysqldump;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Ifsnop\Mysqldump as IMysqldump;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class DoctrineDatabaseBackupCommand extends Command
 {
@@ -38,13 +38,13 @@ class DoctrineDatabaseBackupCommand extends Command
                     'host='.$this->params->get('database_host'),
                     'port='.$this->params->get('database_port'),
                     'dbname='.$this->params->get('database_name'),
-                    'charset=UTF8'
+                    'charset=UTF8',
                 ]),
                 $this->params->get('database_user'),
                 $this->params->get('database_password'),
                 [
-                    'exclude-tables' => ['acl_classes', 'acl_entries', 'acl_object_identities', 'acl_object_identity_ancestors', 'acl_security_identities', 'ajax_chat_bans', 'ajax_chat_invitations', 'ajax_chat_messages', 'ajax_chat_online', 'reset_password_request',' session' ],
-                    'compress' => IMysqldump\Mysqldump::GZIP
+                    'exclude-tables' => ['acl_classes', 'acl_entries', 'acl_object_identities', 'acl_object_identity_ancestors', 'acl_security_identities', 'ajax_chat_bans', 'ajax_chat_invitations', 'ajax_chat_messages', 'ajax_chat_online', 'reset_password_request', ' session'],
+                    'compress' => IMysqldump\Mysqldump::GZIP,
                 ]
             );
             $dir = $this->params->get('kernel.project_dir').'/backup/';
@@ -59,9 +59,9 @@ class DoctrineDatabaseBackupCommand extends Command
             if (file_exists($dir.$previous)) {
                 unlink($dir.$previous);
             }
-
         } catch (\Exception $e) {
             $io->warning('Error during backup '.$e->getMessage());
+
             return Command::FAILURE;
         }
 

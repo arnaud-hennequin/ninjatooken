@@ -2,31 +2,37 @@
 
 namespace App\Utils;
 
-define('AJAX_CHAT_URL',        '/chat/');
-define('AJAX_CHAT_PATH',        dirname(__FILE__) . '/../../vendor/frug/ajax-chat/chat/');
-define('AJAX_CHAT_BANNED',      6);
-define('AJAX_CHAT_CUSTOM',      5);
-define('AJAX_CHAT_CHATBOT',     4);
-define('AJAX_CHAT_ADMIN',       3);
-define('AJAX_CHAT_MODERATOR',   2);
-define('AJAX_CHAT_USER',        1);
-define('AJAX_CHAT_GUEST',       0);
+use LogicException;
 
-require(AJAX_CHAT_PATH.'lib/class/AJAXChat.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatDataBase.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLDataBase.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLQuery.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLiDataBase.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLiQuery.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatEncoding.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatString.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatFileSystem.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatHTTPHeader.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatLanguage.php');
-require(AJAX_CHAT_PATH.'lib/class/AJAXChatTemplate.php');
-require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChat.php');
-require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatShoutBox.php');
-require(AJAX_CHAT_PATH.'lib/class/CustomAJAXChatInterface.php');
+define('AJAX_CHAT_URL', '/chat/');
+define('AJAX_CHAT_PATH', dirname(__FILE__).'/../../vendor/frug/ajax-chat/chat/');
+define('AJAX_CHAT_BANNED', 6);
+define('AJAX_CHAT_CUSTOM', 5);
+define('AJAX_CHAT_CHATBOT', 4);
+define('AJAX_CHAT_ADMIN', 3);
+define('AJAX_CHAT_MODERATOR', 2);
+define('AJAX_CHAT_USER', 1);
+define('AJAX_CHAT_GUEST', 0);
+
+require AJAX_CHAT_PATH.'lib/class/AJAXChat.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatDataBase.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLDataBase.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLQuery.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLiDataBase.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatMySQLiQuery.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatEncoding.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatString.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatFileSystem.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatHTTPHeader.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatLanguage.php';
+require AJAX_CHAT_PATH.'lib/class/AJAXChatTemplate.php';
+require AJAX_CHAT_PATH.'lib/class/CustomAJAXChat.php';
+require AJAX_CHAT_PATH.'lib/class/CustomAJAXChatShoutBox.php';
+require AJAX_CHAT_PATH.'lib/class/CustomAJAXChatInterface.php';
+
+if (!class_exists(\CustomAJAXChat::class)) {
+    throw new LogicException("Unable to load class: \CustomAJAXChat.");
+}
 
 class Chat extends \CustomAJAXChat
 {
@@ -40,8 +46,8 @@ class Chat extends \CustomAJAXChat
                 'user' => 'root',
                 'pass' => '',
                 'name' => 'chat',
-                'type' => NULL,
-                'link' => NULL,
+                'type' => null,
+                'link' => null,
             ],
             'dbTableNames' => [
                 'online' => 'ajax_chat_online',
@@ -157,16 +163,16 @@ class Chat extends \CustomAJAXChat
             'styleDefault' => 'prosilver',
             'contentEncoding' => 'UTF-8',
             'sourceEncoding' => 'UTF-8',
-            'contentType' => NULL,
+            'contentType' => null,
             'sessionName' => 'ajax_chat',
             'sessionKeyPrefix' => 'ajaxChat',
             'sessionCookieLifeTime' => 365,
             'sessionCookiePath' => '/',
-            'sessionCookieDomain' => NULL,
-            'sessionCookieSecure' => NULL,
+            'sessionCookieDomain' => null,
+            'sessionCookieSecure' => null,
             'defaultChannelName' => 'Public',
             'defaultChannelID' => 0,
-            'limitChannelList' => NULL,
+            'limitChannelList' => null,
             'privateChannelDiff' => 500000000,
             'privateMessageDiff' => 1000000000,
             'allowPrivateChannels' => true,
@@ -176,7 +182,7 @@ class Chat extends \CustomAJAXChat
             'forceAutoLogin' => false,
             'showChannelMessages' => true,
             'chatClosed' => false,
-            'timeZoneOffset' => NULL,
+            'timeZoneOffset' => null,
             'openingHour' => 0,
             'closingHour' => 24,
             'openingWeekDays' => [
@@ -203,7 +209,7 @@ class Chat extends \CustomAJAXChat
             'inactiveTimeout' => 2,
             'inactiveCheckInterval' => 5,
             'requestMessagesPriorChannelEnter' => true,
-            'requestMessagesPriorChannelEnterList' => NULL,
+            'requestMessagesPriorChannelEnterList' => null,
             'requestMessagesTimeDiff' => 24,
             'requestMessagesLimit' => 10,
             'maxUsersLoggedIn' => 100,
@@ -219,12 +225,12 @@ class Chat extends \CustomAJAXChat
             'logsPurgeLogs' => false,
             'logsPurgeTimeDiff' => 365,
             'logsUserAccess' => false,
-            'logsUserAccessChannelList' => NULL,
+            'logsUserAccessChannelList' => null,
             'socketServerEnabled' => false,
-            'socketServerHost' => NULL,
+            'socketServerHost' => null,
             'socketServerIP' => '127.0.0.1',
             'socketServerPort' => 1935,
-            'socketServerChatID' => 0
+            'socketServerChatID' => 0,
         ];
 
         $this->_config = array_merge($default, $params);
@@ -237,14 +243,14 @@ class Chat extends \CustomAJAXChat
     public function getValidLoginUserData()
     {
         if (!empty($this->_userData)) {
-            if ($this->_userData['userID'] == 425) {// SOXSOXSOX VEUT PAS ÊTRE MODO SUR LE CHAT
-                $userRole   = AJAX_CHAT_USER;
-            } else if (in_array('ROLE_ADMIN', $this->_userData['userRole']) || in_array('ROLE_SUPER_ADMIN', $this->_userData['userRole'])) {
-                $userRole   = AJAX_CHAT_ADMIN;
-            } else if (in_array('ROLE_MODERATOR', $this->_userData['userRole']) || $this->_userData['userID']==22405) {
-                $userRole   = AJAX_CHAT_MODERATOR;
+            if (425 == $this->_userData['userID']) {// SOXSOXSOX VEUT PAS ÊTRE MODO SUR LE CHAT
+                $userRole = AJAX_CHAT_USER;
+            } elseif (in_array('ROLE_ADMIN', $this->_userData['userRole']) || in_array('ROLE_SUPER_ADMIN', $this->_userData['userRole'])) {
+                $userRole = AJAX_CHAT_ADMIN;
+            } elseif (in_array('ROLE_MODERATOR', $this->_userData['userRole']) || 22405 == $this->_userData['userID']) {
+                $userRole = AJAX_CHAT_MODERATOR;
             } else {
-                $userRole   = AJAX_CHAT_USER;
+                $userRole = AJAX_CHAT_USER;
             }
 
             $userData = $this->_userData;
@@ -252,91 +258,97 @@ class Chat extends \CustomAJAXChat
 
             return $userData;
         }
+
         return $this->getGuestUser();
     }
 
-    function &getChannels(): array
+    public function &getChannels(): array
     {
-        if($this->_channels === null) {
+        if (null === $this->_channels) {
             $this->_channels = $this->getAllChannels();
         }
+
         return $this->_channels;
     }
 
-    function &getAllChannels(): array
+    public function &getAllChannels(): array
     {
-        if($this->_allChannels === null) {
+        if (null === $this->_allChannels) {
             // Get all existing channels:
             $customChannels = $this->getCustomChannels();
-            
+
             $defaultChannelFound = false;
-            
-            foreach($customChannels as $key=>$value) {
+
+            foreach ($customChannels as $key => $value) {
                 $forumName = $this->trimChannelName($value);
-                
+
                 $this->_allChannels[$forumName] = $key;
-                
-                if($key == $this->getConfig('defaultChannelID')) {
+
+                if ($key == $this->getConfig('defaultChannelID')) {
                     $defaultChannelFound = true;
                 }
             }
-            
-            if(!$defaultChannelFound) {
+
+            if (!$defaultChannelFound) {
                 // Add the default channel as first array element to the channel list:
                 $this->_allChannels = array_merge(
-                    array(
-                        $this->trimChannelName($this->getConfig('defaultChannelName'))=>$this->getConfig('defaultChannelID')
-                    ),
+                    [
+                        $this->trimChannelName($this->getConfig('defaultChannelName')) => $this->getConfig('defaultChannelID'),
+                    ],
                     $this->_allChannels
                 );
             }
         }
+
         return $this->_allChannels;
     }
 
-    function &getCustomUsers(): array
+    public function &getCustomUsers(): array
     {
         $users = [
             [
                 'userRole' => AJAX_CHAT_GUEST,
                 'userName' => null,
                 'password' => null,
-                'channels' => [0]
-            ]
+                'channels' => [0],
+            ],
         ];
+
         return $users;
     }
 
-    function &getCustomChannels(): array
+    public function &getCustomChannels(): array
     {
         $channels = ['NinjaTooken'];
+
         return $channels;
     }
 
-
-    function parseCustomCommands($text, $textParts): bool
+    public function parseCustomCommands($text, $textParts): bool
     {
-        switch($textParts[0]) {
+        switch ($textParts[0]) {
             // Away from keyboard message:
             case '/afk':
                 $this->setUserName('/afk '.$this->getUserName());
                 $this->updateOnlineList();
                 $this->addInfoMessage($this->getUserName(), 'userName');
                 $this->setSessionVar('AwayFromKeyboard', true);
+
                 return true;
             default:
                    return false;
         }
     }
 
-    function onNewMessage($text): bool
+    public function onNewMessage($text): bool
     {
-        if($this->getSessionVar('AwayFromKeyboard')) {
+        if ($this->getSessionVar('AwayFromKeyboard')) {
             $this->setUserName($this->subString($this->getUserName(), 5));
             $this->updateOnlineList();
             $this->addInfoMessage($this->getUserName(), 'userName');
             $this->setSessionVar('AwayFromKeyboard', false);
         }
+
         return true;
     }
 }

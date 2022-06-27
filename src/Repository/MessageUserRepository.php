@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\User\MessageUser;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use App\Entity\User\User;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class MessageUserRepository extends ServiceEntityRepository
@@ -13,7 +14,7 @@ class MessageUserRepository extends ServiceEntityRepository
         parent::__construct($registry, MessageUser::class);
     }
 
-    public function getReceiveMessages(User $user, $nombreParPage=5, $page=1)
+    public function getReceiveMessages(User $user, $nombreParPage = 5, $page = 1)
     {
         $page = max(1, $page);
 
@@ -25,7 +26,7 @@ class MessageUserRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->addGroupBy('m.id')
             ->addOrderBy('m.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage)
             ->getQuery();
 

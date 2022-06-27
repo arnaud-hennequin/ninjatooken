@@ -6,11 +6,10 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="nt_message")
  * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
@@ -18,8 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Message
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -27,15 +24,11 @@ class Message
     private ?int $id = null;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private ?int $old_id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="nom", type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
@@ -43,31 +36,23 @@ class Message
     private string $nom;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="content", type="text")
      * @Assert\NotBlank()
      */
     private string $content;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * @var UserInterface|null
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="messages", fetch="EAGER")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private ?UserInterface $author;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="has_deleted", type="boolean")
      */
     private bool $hasDeleted = false;
@@ -78,7 +63,7 @@ class Message
     private Collection $receivers;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -87,9 +72,7 @@ class Message
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -97,9 +80,8 @@ class Message
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
-     * @param string $nom
      * @return Message
      */
     public function setNom(string $nom): self
@@ -110,9 +92,7 @@ class Message
     }
 
     /**
-     * Get nom
-     *
-     * @return string|null
+     * Get nom.
      */
     public function getNom(): ?string
     {
@@ -120,9 +100,8 @@ class Message
     }
 
     /**
-     * Set content
+     * Set content.
      *
-     * @param string $content
      * @return Message
      */
     public function setContent(string $content): self
@@ -133,9 +112,7 @@ class Message
     }
 
     /**
-     * Get content
-     *
-     * @return string|null
+     * Get content.
      */
     public function getContent(): ?string
     {
@@ -143,9 +120,8 @@ class Message
     }
 
     /**
-     * Set dateAjout
+     * Set dateAjout.
      *
-     * @param DateTime $dateAjout
      * @return Message
      */
     public function setDateAjout(DateTime $dateAjout): self
@@ -156,9 +132,7 @@ class Message
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -166,10 +140,7 @@ class Message
     }
 
     /**
-     * Set author
-     *
-     * @param UserInterface|null $author
-     * @return Message
+     * Set author.
      */
     public function setAuthor(?UserInterface $author): Message
     {
@@ -179,9 +150,7 @@ class Message
     }
 
     /**
-     * Get author
-     *
-     * @return UserInterface|null
+     * Get author.
      */
     public function getAuthor(): ?UserInterface
     {
@@ -189,9 +158,8 @@ class Message
     }
 
     /**
-     * Set hasDeleted
+     * Set hasDeleted.
      *
-     * @param boolean $hasDeleted
      * @return Message
      */
     public function setHasDeleted(bool $hasDeleted): self
@@ -202,9 +170,7 @@ class Message
     }
 
     /**
-     * Get hasDeleted
-     *
-     * @return bool|null
+     * Get hasDeleted.
      */
     public function getHasDeleted(): ?bool
     {
@@ -212,9 +178,8 @@ class Message
     }
 
     /**
-     * Set old_id
+     * Set old_id.
      *
-     * @param int|null $oldId
      * @return Message
      */
     public function setOldId(?int $oldId): self
@@ -225,9 +190,7 @@ class Message
     }
 
     /**
-     * Get old_id
-     *
-     * @return int|null
+     * Get old_id.
      */
     public function getOldId(): ?int
     {
@@ -235,9 +198,8 @@ class Message
     }
 
     /**
-     * Add receivers
+     * Add receivers.
      *
-     * @param MessageUser $receiver
      * @return Message
      */
     public function addReceiver(MessageUser $receiver): self
@@ -249,9 +211,7 @@ class Message
     }
 
     /**
-     * Remove receivers
-     *
-     * @param MessageUser $receiver
+     * Remove receivers.
      */
     public function removeReceiver(MessageUser $receiver)
     {
@@ -260,9 +220,7 @@ class Message
     }
 
     /**
-     * Get receivers
-     *
-     * @return Collection
+     * Get receivers.
      */
     public function getReceivers(): Collection
     {

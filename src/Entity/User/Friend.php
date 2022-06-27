@@ -4,10 +4,9 @@ namespace App\Entity\User;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Friend
+ * Friend.
  *
  * @ORM\Table(name="nt_friend")
  * @ORM\Entity(repositoryClass="App\Repository\FriendRepository")
@@ -15,8 +14,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Friend
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -24,44 +21,34 @@ class Friend
     private ?int $id = null;
 
     /**
-     * @var UserInterface|null
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private ?UserInterface $user;
 
     /**
-     * @var UserInterface|null
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
      * @ORM\JoinColumn(name="friend_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private ?UserInterface $friend;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="is_blocked", type="boolean")
      */
     private bool $isBlocked = false;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="is_confirmed", type="boolean")
      */
     private bool $isConfirmed = false;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -69,20 +56,16 @@ class Friend
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-
     /**
-     * Set isBlocked
+     * Set isBlocked.
      *
-     * @param boolean $isBlocked
      * @return Friend
      */
     public function setIsBlocked(bool $isBlocked): self
@@ -93,9 +76,7 @@ class Friend
     }
 
     /**
-     * Get isBlocked
-     *
-     * @return bool|null
+     * Get isBlocked.
      */
     public function getIsBlocked(): ?bool
     {
@@ -103,9 +84,8 @@ class Friend
     }
 
     /**
-     * Set isConfirmed
+     * Set isConfirmed.
      *
-     * @param boolean $isConfirmed
      * @return Friend
      */
     public function setIsConfirmed(bool $isConfirmed): self
@@ -116,9 +96,7 @@ class Friend
     }
 
     /**
-     * Get isConfirmed
-     *
-     * @return bool|null
+     * Get isConfirmed.
      */
     public function getIsConfirmed(): ?bool
     {
@@ -126,9 +104,8 @@ class Friend
     }
 
     /**
-     * Set dateAjout
+     * Set dateAjout.
      *
-     * @param DateTime $dateAjout
      * @return Friend
      */
     public function setDateAjout(DateTime $dateAjout): self
@@ -139,9 +116,7 @@ class Friend
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -149,9 +124,10 @@ class Friend
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User|null $user
+     *
      * @return Friend
      */
     public function setUser(?UserInterface $user = null): self
@@ -162,9 +138,7 @@ class Friend
     }
 
     /**
-     * Get user
-     *
-     * @return UserInterface|null
+     * Get user.
      */
     public function getUser(): ?UserInterface
     {
@@ -172,9 +146,8 @@ class Friend
     }
 
     /**
-     * Set friend
+     * Set friend.
      *
-     * @param UserInterface|null $friend
      * @return Friend
      */
     public function setFriend(?UserInterface $friend = null): self
@@ -185,9 +158,7 @@ class Friend
     }
 
     /**
-     * Get friend
-     *
-     * @return UserInterface|null
+     * Get friend.
      */
     public function getFriend(): ?UserInterface
     {

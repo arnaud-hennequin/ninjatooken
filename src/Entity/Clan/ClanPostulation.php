@@ -2,13 +2,12 @@
 
 namespace App\Entity\Clan;
 
-use App\Entity\User\User;
+use App\Entity\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * ClanPostulation
+ * ClanPostulation.
  *
  * @ORM\Table(name="nt_clanpostulation")
  * @ORM\Entity(repositoryClass="App\Repository\ClanPostulationRepository")
@@ -16,8 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ClanPostulation
 {
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -27,9 +24,8 @@ class ClanPostulation
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(name="postulant_id", referencedColumnName="id", onDelete="CASCADE")
-     * @var User
      */
-    private User $postulant;
+    private ?UserInterface $postulant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", fetch="EAGER")
@@ -38,28 +34,22 @@ class ClanPostulation
     private ?Clan $clan;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_changement_etat", type="datetime", nullable=true)
      */
     private ?DateTime $dateChangementEtat;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="etat", type="smallint")
      */
     private int $etat = 0;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -68,9 +58,7 @@ class ClanPostulation
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -78,10 +66,7 @@ class ClanPostulation
     }
 
     /**
-     * Set dateAjout
-     *
-     * @param DateTime $dateAjout
-     * @return ClanPostulation
+     * Set dateAjout.
      */
     public function setDateAjout(DateTime $dateAjout): self
     {
@@ -91,9 +76,7 @@ class ClanPostulation
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -101,10 +84,7 @@ class ClanPostulation
     }
 
     /**
-     * Set postulant
-     *
-     * @param User|null $postulant
-     * @return ClanPostulation
+     * Set postulant.
      */
     public function setPostulant(?UserInterface $postulant = null): self
     {
@@ -114,20 +94,15 @@ class ClanPostulation
     }
 
     /**
-     * Get postulant
-     *
-     * @return User|null
+     * Get postulant.
      */
-    public function getPostulant(): ?User
+    public function getPostulant(): ?UserInterface
     {
         return $this->postulant;
     }
 
     /**
-     * Set clan
-     *
-     * @param Clan|null $clan
-     * @return ClanPostulation
+     * Set clan.
      */
     public function setClan(?Clan $clan = null): self
     {
@@ -137,9 +112,7 @@ class ClanPostulation
     }
 
     /**
-     * Get clan
-     *
-     * @return Clan|null
+     * Get clan.
      */
     public function getClan(): ?Clan
     {
@@ -147,10 +120,7 @@ class ClanPostulation
     }
 
     /**
-     * Set etat
-     *
-     * @param integer $etat
-     * @return ClanPostulation
+     * Set etat.
      */
     public function setEtat(int $etat): self
     {
@@ -160,9 +130,7 @@ class ClanPostulation
     }
 
     /**
-     * Get etat
-     *
-     * @return int|null
+     * Get etat.
      */
     public function getEtat(): ?int
     {
@@ -170,10 +138,7 @@ class ClanPostulation
     }
 
     /**
-     * Set dateChangementEtat
-     *
-     * @param DateTime|null $dateChangementEtat
-     * @return ClanPostulation
+     * Set dateChangementEtat.
      */
     public function setDateChangementEtat(?DateTime $dateChangementEtat): self
     {
@@ -183,9 +148,7 @@ class ClanPostulation
     }
 
     /**
-     * Get dateChangementEtat
-     *
-     * @return DateTime|null
+     * Get dateChangementEtat.
      */
     public function getDateChangementEtat(): ?DateTime
     {

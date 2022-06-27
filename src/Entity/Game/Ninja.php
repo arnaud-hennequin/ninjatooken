@@ -3,21 +3,18 @@
 namespace App\Entity\Game;
 
 use App\Entity\User\User;
+use App\Entity\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Ninja
+ * Ninja.
  *
  * @ORM\Table(name="nt_ninja")
  * @ORM\Entity(repositoryClass="App\Repository\NinjaRepository")
  */
 class Ninja
 {
-
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -25,299 +22,215 @@ class Ninja
     private ?int $id = null;
 
     /**
-    * user of the ninja
-    *
-    * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="ninja")
+     * user of the ninja.
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="ninja")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-    * @var User
-    */
-    private User $user;
+     */
+    private UserInterface $user;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="aptitude_force", type="smallint")
      */
     private int $aptitudeForce = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="aptitude_vitesse", type="smallint")
      */
     private int $aptitudeVitesse = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="aptitude_vie", type="smallint")
      */
     private int $aptitudeVie = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="aptitude_chakra", type="smallint")
      */
     private int $aptitudeChakra = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_boule", type="smallint")
      */
     private int $jutsuBoule = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_double_saut", type="smallint")
      */
     private int $jutsuDoubleSaut = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_bouclier", type="smallint")
      */
     private int $jutsuBouclier = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_marcher_mur", type="smallint")
      */
     private int $jutsuMarcherMur = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_deflagration", type="smallint")
      */
     private int $jutsuDeflagration = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_transformation_aqueuse", type="smallint")
      */
     private int $jutsuTransformationAqueuse = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_metamorphose", type="smallint")
      */
     private int $jutsuMetamorphose = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_multishoot", type="smallint")
      */
     private int $jutsuMultishoot = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_invisibilite", type="smallint")
      */
     private int $jutsuInvisibilite = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_resistance_explosion", type="smallint")
      */
     private int $jutsuResistanceExplosion = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_phoenix", type="smallint")
      */
     private int $jutsuPhoenix = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_vague", type="smallint")
      */
     private int $jutsuVague = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_pieux", type="smallint")
      */
     private int $jutsuPieux = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_teleportation", type="smallint")
      */
     private int $jutsuTeleportation = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_tornade", type="smallint")
      */
     private int $jutsuTornade = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_kusanagi", type="smallint")
      */
     private int $jutsuKusanagi = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_acier_renforce", type="smallint")
      */
     private int $jutsuAcierRenforce = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_chakra_vie", type="smallint")
      */
     private int $jutsuChakraVie = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_fujin", type="smallint")
      */
     private int $jutsuFujin = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_raijin", type="smallint")
      */
     private int $jutsuRaijin = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_sarutahiko", type="smallint")
      */
     private int $jutsuSarutahiko = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_susanoo", type="smallint")
      */
     private int $jutsuSusanoo = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="jutsu_kagutsuchi", type="smallint")
      */
     private int $jutsuKagutsuchi = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="grade", type="smallint")
      */
     private int $grade = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="experience", type="bigint")
      */
     private int $experience = 0;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="classe", type="string", length=25)
      */
-    private string $classe = "";
+    private string $classe = '';
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="masque", type="smallint")
      */
     private int $masque = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="masque_couleur", type="smallint")
      */
     private int $masqueCouleur = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="masque_detail", type="smallint")
      */
     private int $masqueDetail = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="costume", type="smallint")
      */
     private int $costume = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="costume_couleur", type="smallint")
      */
     private int $costumeCouleur = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="costume_detail", type="smallint")
      */
     private int $costumeDetail = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="mission_assassinnat", type="smallint")
      */
     private int $missionAssassinnat = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="mission_course", type="smallint")
      */
     private int $missionCourse = 0;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="accomplissement", type="string", length=25)
      */
-    private string $accomplissement = "0000000000000000000000000";
+    private string $accomplissement = '0000000000000000000000000';
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return (string) $this->getId();
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -325,10 +238,7 @@ class Ninja
     }
 
     /**
-     * Set aptitudeForce
-     *
-     * @param integer $aptitudeForce
-     * @return Ninja
+     * Set aptitudeForce.
      */
     public function setAptitudeForce(int $aptitudeForce): self
     {
@@ -338,9 +248,7 @@ class Ninja
     }
 
     /**
-     * Get aptitudeForce
-     *
-     * @return int|null
+     * Get aptitudeForce.
      */
     public function getAptitudeForce(): ?int
     {
@@ -348,10 +256,7 @@ class Ninja
     }
 
     /**
-     * Set aptitudeVitesse
-     *
-     * @param integer $aptitudeVitesse
-     * @return Ninja
+     * Set aptitudeVitesse.
      */
     public function setAptitudeVitesse(int $aptitudeVitesse): self
     {
@@ -361,9 +266,7 @@ class Ninja
     }
 
     /**
-     * Get aptitudeVitesse
-     *
-     * @return int|null
+     * Get aptitudeVitesse.
      */
     public function getAptitudeVitesse(): ?int
     {
@@ -371,10 +274,7 @@ class Ninja
     }
 
     /**
-     * Set aptitudeVie
-     *
-     * @param integer $aptitudeVie
-     * @return Ninja
+     * Set aptitudeVie.
      */
     public function setAptitudeVie(int $aptitudeVie): self
     {
@@ -384,9 +284,7 @@ class Ninja
     }
 
     /**
-     * Get aptitudeVie
-     *
-     * @return int|null
+     * Get aptitudeVie.
      */
     public function getAptitudeVie(): ?int
     {
@@ -394,10 +292,7 @@ class Ninja
     }
 
     /**
-     * Set aptitudeChakra
-     *
-     * @param integer $aptitudeChakra
-     * @return Ninja
+     * Set aptitudeChakra.
      */
     public function setAptitudeChakra(int $aptitudeChakra): self
     {
@@ -407,9 +302,7 @@ class Ninja
     }
 
     /**
-     * Get aptitudeChakra
-     *
-     * @return int|null
+     * Get aptitudeChakra.
      */
     public function getAptitudeChakra(): ?int
     {
@@ -417,10 +310,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuBoule
-     *
-     * @param integer $jutsuBoule
-     * @return Ninja
+     * Set jutsuBoule.
      */
     public function setJutsuBoule(int $jutsuBoule): self
     {
@@ -430,9 +320,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuBoule
-     *
-     * @return int|null
+     * Get jutsuBoule.
      */
     public function getJutsuBoule(): ?int
     {
@@ -440,10 +328,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuDoubleSaut
-     *
-     * @param integer $jutsuDoubleSaut
-     * @return Ninja
+     * Set jutsuDoubleSaut.
      */
     public function setJutsuDoubleSaut(int $jutsuDoubleSaut): self
     {
@@ -453,9 +338,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuDoubleSaut
-     *
-     * @return int|null
+     * Get jutsuDoubleSaut.
      */
     public function getJutsuDoubleSaut(): ?int
     {
@@ -463,10 +346,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuBouclier
-     *
-     * @param integer $jutsuBouclier
-     * @return Ninja
+     * Set jutsuBouclier.
      */
     public function setJutsuBouclier(int $jutsuBouclier): self
     {
@@ -476,9 +356,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuBouclier
-     *
-     * @return int|null
+     * Get jutsuBouclier.
      */
     public function getJutsuBouclier(): ?int
     {
@@ -486,10 +364,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuMarcherMur
-     *
-     * @param integer $jutsuMarcherMur
-     * @return Ninja
+     * Set jutsuMarcherMur.
      */
     public function setJutsuMarcherMur(int $jutsuMarcherMur): self
     {
@@ -499,9 +374,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuMarcherMur
-     *
-     * @return int|null
+     * Get jutsuMarcherMur.
      */
     public function getJutsuMarcherMur(): ?int
     {
@@ -509,10 +382,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuDeflagration
-     *
-     * @param integer $jutsuDeflagration
-     * @return Ninja
+     * Set jutsuDeflagration.
      */
     public function setJutsuDeflagration(int $jutsuDeflagration): self
     {
@@ -522,9 +392,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuDeflagration
-     *
-     * @return int|null
+     * Get jutsuDeflagration.
      */
     public function getJutsuDeflagration(): ?int
     {
@@ -532,10 +400,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuTransformationAqueuse
-     *
-     * @param integer $jutsuTransformationAqueuse
-     * @return Ninja
+     * Set jutsuTransformationAqueuse.
      */
     public function setJutsuTransformationAqueuse(int $jutsuTransformationAqueuse): self
     {
@@ -545,9 +410,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuTransformationAqueuse
-     *
-     * @return int|null
+     * Get jutsuTransformationAqueuse.
      */
     public function getJutsuTransformationAqueuse(): ?int
     {
@@ -555,10 +418,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuMetamorphose
-     *
-     * @param integer $jutsuMetamorphose
-     * @return Ninja
+     * Set jutsuMetamorphose.
      */
     public function setJutsuMetamorphose(int $jutsuMetamorphose): self
     {
@@ -568,9 +428,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuMetamorphose
-     *
-     * @return int|null
+     * Get jutsuMetamorphose.
      */
     public function getJutsuMetamorphose(): ?int
     {
@@ -578,10 +436,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuMultishoot
-     *
-     * @param integer $jutsuMultishoot
-     * @return Ninja
+     * Set jutsuMultishoot.
      */
     public function setJutsuMultishoot(int $jutsuMultishoot): self
     {
@@ -591,9 +446,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuMultishoot
-     *
-     * @return int|null
+     * Get jutsuMultishoot.
      */
     public function getJutsuMultishoot(): ?int
     {
@@ -601,10 +454,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuInvisibilite
-     *
-     * @param integer $jutsuInvisibilite
-     * @return Ninja
+     * Set jutsuInvisibilite.
      */
     public function setJutsuInvisibilite(int $jutsuInvisibilite): self
     {
@@ -614,9 +464,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuInvisibilite
-     *
-     * @return int|null
+     * Get jutsuInvisibilite.
      */
     public function getJutsuInvisibilite(): ?int
     {
@@ -624,10 +472,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuResistanceExplosion
-     *
-     * @param integer $jutsuResistanceExplosion
-     * @return Ninja
+     * Set jutsuResistanceExplosion.
      */
     public function setJutsuResistanceExplosion(int $jutsuResistanceExplosion): self
     {
@@ -637,9 +482,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuResistanceExplosion
-     *
-     * @return int|null
+     * Get jutsuResistanceExplosion.
      */
     public function getJutsuResistanceExplosion(): ?int
     {
@@ -647,10 +490,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuPhoenix
-     *
-     * @param integer $jutsuPhoenix
-     * @return Ninja
+     * Set jutsuPhoenix.
      */
     public function setJutsuPhoenix(int $jutsuPhoenix): self
     {
@@ -660,9 +500,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuPhoenix
-     *
-     * @return int|null
+     * Get jutsuPhoenix.
      */
     public function getJutsuPhoenix(): ?int
     {
@@ -670,10 +508,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuVague
-     *
-     * @param integer $jutsuVague
-     * @return Ninja
+     * Set jutsuVague.
      */
     public function setJutsuVague(int $jutsuVague): self
     {
@@ -683,9 +518,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuVague
-     *
-     * @return int|null
+     * Get jutsuVague.
      */
     public function getJutsuVague(): ?int
     {
@@ -693,10 +526,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuPieux
-     *
-     * @param integer $jutsuPieux
-     * @return Ninja
+     * Set jutsuPieux.
      */
     public function setJutsuPieux(int $jutsuPieux): self
     {
@@ -706,9 +536,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuPieux
-     *
-     * @return int|null
+     * Get jutsuPieux.
      */
     public function getJutsuPieux(): ?int
     {
@@ -716,10 +544,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuTeleportation
-     *
-     * @param integer $jutsuTeleportation
-     * @return Ninja
+     * Set jutsuTeleportation.
      */
     public function setJutsuTeleportation(int $jutsuTeleportation): self
     {
@@ -729,9 +554,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuTeleportation
-     *
-     * @return int|null
+     * Get jutsuTeleportation.
      */
     public function getJutsuTeleportation(): ?int
     {
@@ -739,10 +562,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuTornade
-     *
-     * @param integer $jutsuTornade
-     * @return Ninja
+     * Set jutsuTornade.
      */
     public function setJutsuTornade(int $jutsuTornade): self
     {
@@ -752,9 +572,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuTornade
-     *
-     * @return int|null
+     * Get jutsuTornade.
      */
     public function getJutsuTornade(): ?int
     {
@@ -762,10 +580,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuKusanagi
-     *
-     * @param integer $jutsuKusanagi
-     * @return Ninja
+     * Set jutsuKusanagi.
      */
     public function setJutsuKusanagi(int $jutsuKusanagi): self
     {
@@ -775,9 +590,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuKusanagi
-     *
-     * @return int|null
+     * Get jutsuKusanagi.
      */
     public function getJutsuKusanagi(): ?int
     {
@@ -785,10 +598,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuAcierRenforce
-     *
-     * @param integer $jutsuAcierRenforce
-     * @return Ninja
+     * Set jutsuAcierRenforce.
      */
     public function setJutsuAcierRenforce(int $jutsuAcierRenforce): self
     {
@@ -798,9 +608,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuAcierRenforce
-     *
-     * @return int|null
+     * Get jutsuAcierRenforce.
      */
     public function getJutsuAcierRenforce(): ?int
     {
@@ -808,10 +616,7 @@ class Ninja
     }
 
     /**
-     * Set jutsuChakraVie
-     *
-     * @param integer $jutsuChakraVie
-     * @return Ninja
+     * Set jutsuChakraVie.
      */
     public function setJutsuChakraVie(int $jutsuChakraVie): self
     {
@@ -821,9 +626,7 @@ class Ninja
     }
 
     /**
-     * Get jutsuChakraVie
-     *
-     * @return int|null
+     * Get jutsuChakraVie.
      */
     public function getJutsuChakraVie(): ?int
     {
@@ -831,10 +634,7 @@ class Ninja
     }
 
     /**
-     * Set grade
-     *
-     * @param integer $grade
-     * @return Ninja
+     * Set grade.
      */
     public function setGrade(int $grade): self
     {
@@ -844,9 +644,7 @@ class Ninja
     }
 
     /**
-     * Get grade
-     *
-     * @return int|null
+     * Get grade.
      */
     public function getGrade(): ?int
     {
@@ -854,10 +652,7 @@ class Ninja
     }
 
     /**
-     * Set experience
-     *
-     * @param integer $experience
-     * @return Ninja
+     * Set experience.
      */
     public function setExperience(int $experience): self
     {
@@ -867,9 +662,7 @@ class Ninja
     }
 
     /**
-     * Get experience
-     *
-     * @return int|null
+     * Get experience.
      */
     public function getExperience(): ?int
     {
@@ -877,10 +670,7 @@ class Ninja
     }
 
     /**
-     * Set classe
-     *
-     * @param string $classe
-     * @return Ninja
+     * Set classe.
      */
     public function setClasse(string $classe): self
     {
@@ -890,9 +680,7 @@ class Ninja
     }
 
     /**
-     * Get classe
-     *
-     * @return string|null
+     * Get classe.
      */
     public function getClasse(): ?string
     {
@@ -900,10 +688,7 @@ class Ninja
     }
 
     /**
-     * Set user
-     *
-     * @param User|null $user
-     * @return Ninja
+     * Set user.
      */
     public function setUser(?UserInterface $user = null): self
     {
@@ -913,20 +698,15 @@ class Ninja
     }
 
     /**
-     * Get user
-     *
-     * @return User|null
+     * Get user.
      */
-    public function getUser(): ?User
+    public function getUser(): ?UserInterface
     {
         return $this->user;
     }
 
     /**
-     * Set masque
-     *
-     * @param integer $masque
-     * @return Ninja
+     * Set masque.
      */
     public function setMasque(int $masque): self
     {
@@ -936,9 +716,7 @@ class Ninja
     }
 
     /**
-     * Get masque
-     *
-     * @return int|null
+     * Get masque.
      */
     public function getMasque(): ?int
     {
@@ -946,10 +724,7 @@ class Ninja
     }
 
     /**
-     * Set masqueCouleur
-     *
-     * @param integer $masqueCouleur
-     * @return Ninja
+     * Set masqueCouleur.
      */
     public function setMasqueCouleur(int $masqueCouleur): self
     {
@@ -959,9 +734,7 @@ class Ninja
     }
 
     /**
-     * Get masqueCouleur
-     *
-     * @return int|null
+     * Get masqueCouleur.
      */
     public function getMasqueCouleur(): ?int
     {
@@ -969,10 +742,7 @@ class Ninja
     }
 
     /**
-     * Set masqueDetail
-     *
-     * @param integer $masqueDetail
-     * @return Ninja
+     * Set masqueDetail.
      */
     public function setMasqueDetail(int $masqueDetail): self
     {
@@ -982,9 +752,7 @@ class Ninja
     }
 
     /**
-     * Get masqueDetail
-     *
-     * @return int|null
+     * Get masqueDetail.
      */
     public function getMasqueDetail(): ?int
     {
@@ -992,10 +760,7 @@ class Ninja
     }
 
     /**
-     * Set costume
-     *
-     * @param integer $costume
-     * @return Ninja
+     * Set costume.
      */
     public function setCostume(int $costume): self
     {
@@ -1005,9 +770,7 @@ class Ninja
     }
 
     /**
-     * Get costume
-     *
-     * @return int|null
+     * Get costume.
      */
     public function getCostume(): ?int
     {
@@ -1015,10 +778,7 @@ class Ninja
     }
 
     /**
-     * Set costumeCouleur
-     *
-     * @param integer $costumeCouleur
-     * @return Ninja
+     * Set costumeCouleur.
      */
     public function setCostumeCouleur(int $costumeCouleur): self
     {
@@ -1028,9 +788,7 @@ class Ninja
     }
 
     /**
-     * Get costumeCouleur
-     *
-     * @return int|null
+     * Get costumeCouleur.
      */
     public function getCostumeCouleur(): ?int
     {
@@ -1038,10 +796,7 @@ class Ninja
     }
 
     /**
-     * Set costumeDetail
-     *
-     * @param integer $costumeDetail
-     * @return Ninja
+     * Set costumeDetail.
      */
     public function setCostumeDetail(int $costumeDetail): self
     {
@@ -1051,9 +806,7 @@ class Ninja
     }
 
     /**
-     * Get costumeDetail
-     *
-     * @return int|null
+     * Get costumeDetail.
      */
     public function getCostumeDetail(): ?int
     {
@@ -1061,10 +814,7 @@ class Ninja
     }
 
     /**
-     * Set missionAssassinnat
-     *
-     * @param integer $missionAssassinnat
-     * @return Ninja
+     * Set missionAssassinnat.
      */
     public function setMissionAssassinnat(int $missionAssassinnat): self
     {
@@ -1074,9 +824,7 @@ class Ninja
     }
 
     /**
-     * Get missionAssassinnat
-     *
-     * @return int|null
+     * Get missionAssassinnat.
      */
     public function getMissionAssassinnat(): ?int
     {
@@ -1084,10 +832,7 @@ class Ninja
     }
 
     /**
-     * Set missionCourse
-     *
-     * @param integer $missionCourse
-     * @return Ninja
+     * Set missionCourse.
      */
     public function setMissionCourse(int $missionCourse): self
     {
@@ -1097,9 +842,7 @@ class Ninja
     }
 
     /**
-     * Get missionCourse
-     *
-     * @return int|null
+     * Get missionCourse.
      */
     public function getMissionCourse(): ?int
     {
@@ -1107,10 +850,7 @@ class Ninja
     }
 
     /**
-     * Set accomplissement
-     *
-     * @param string $accomplissement
-     * @return Ninja
+     * Set accomplissement.
      */
     public function setAccomplissement(string $accomplissement): self
     {
@@ -1120,9 +860,7 @@ class Ninja
     }
 
     /**
-     * Get accomplissement
-     *
-     * @return string|null
+     * Get accomplissement.
      */
     public function getAccomplissement(): ?string
     {
@@ -1130,22 +868,17 @@ class Ninja
     }
 
     /**
-     * Set jutsuFujin
-     *
-     * @param integer $jutsuFujin
-     * @return Ninja
+     * Set jutsuFujin.
      */
     public function setJutsuFujin(int $jutsuFujin): self
     {
         $this->jutsuFujin = $jutsuFujin;
-    
+
         return $this;
     }
 
     /**
-     * Get jutsuFujin
-     *
-     * @return int|null
+     * Get jutsuFujin.
      */
     public function getJutsuFujin(): ?int
     {
@@ -1153,22 +886,17 @@ class Ninja
     }
 
     /**
-     * Set jutsuRaijin
-     *
-     * @param integer $jutsuRaijin
-     * @return Ninja
+     * Set jutsuRaijin.
      */
     public function setJutsuRaijin(int $jutsuRaijin): self
     {
         $this->jutsuRaijin = $jutsuRaijin;
-    
+
         return $this;
     }
 
     /**
-     * Get jutsuRaijin
-     *
-     * @return int|null
+     * Get jutsuRaijin.
      */
     public function getJutsuRaijin(): ?int
     {
@@ -1176,22 +904,17 @@ class Ninja
     }
 
     /**
-     * Set jutsuSarutahiko
-     *
-     * @param integer $jutsuSarutahiko
-     * @return Ninja
+     * Set jutsuSarutahiko.
      */
     public function setJutsuSarutahiko(int $jutsuSarutahiko): self
     {
         $this->jutsuSarutahiko = $jutsuSarutahiko;
-    
+
         return $this;
     }
 
     /**
-     * Get jutsuSarutahiko
-     *
-     * @return int|null
+     * Get jutsuSarutahiko.
      */
     public function getJutsuSarutahiko(): ?int
     {
@@ -1199,22 +922,17 @@ class Ninja
     }
 
     /**
-     * Set jutsuSusanoo
-     *
-     * @param integer $jutsuSusanoo
-     * @return Ninja
+     * Set jutsuSusanoo.
      */
     public function setJutsuSusanoo(int $jutsuSusanoo): self
     {
         $this->jutsuSusanoo = $jutsuSusanoo;
-    
+
         return $this;
     }
 
     /**
-     * Get jutsuSusanoo
-     *
-     * @return int|null
+     * Get jutsuSusanoo.
      */
     public function getJutsuSusanoo(): ?int
     {
@@ -1222,22 +940,17 @@ class Ninja
     }
 
     /**
-     * Set jutsuKagutsuchi
-     *
-     * @param integer $jutsuKagutsuchi
-     * @return Ninja
+     * Set jutsuKagutsuchi.
      */
     public function setJutsuKagutsuchi(int $jutsuKagutsuchi): self
     {
         $this->jutsuKagutsuchi = $jutsuKagutsuchi;
-    
+
         return $this;
     }
 
     /**
-     * Get jutsuKagutsuchi
-     *
-     * @return int|null
+     * Get jutsuKagutsuchi.
      */
     public function getJutsuKagutsuchi(): ?int
     {

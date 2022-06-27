@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ChatController extends AbstractController
 {
-
     public function index(): Response
     {
         $channelName = 'ninjatooken';
@@ -17,19 +16,19 @@ class ChatController extends AbstractController
         $twitchOnline = false;
         $channelTitle = '';
         $streamTitle = '';
-        if ($json_array && $json_array['stream'] != NULL) {
+        if ($json_array && null != $json_array['stream']) {
             $channelTitle = $json_array['stream']['channel']['display_name'];
             $streamTitle = $json_array['stream']['channel']['status'];
             $twitchOnline = true;
         }
 
-        return $this->render('chat/chat.html.twig', array(
+        return $this->render('chat/chat.html.twig', [
             'twitchOnline' => $twitchOnline,
             'channelTitle' => $channelTitle,
             'streamTitle' => $streamTitle,
             'channelName' => $channelName,
             'discordServerId' => $this->getParameter('discord')['serverId'],
-            'discordChannelId' => $this->getParameter('discord')['channelId']
-        ));
+            'discordChannelId' => $this->getParameter('discord')['channelId'],
+        ]);
     }
 }

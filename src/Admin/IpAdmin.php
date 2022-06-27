@@ -2,17 +2,17 @@
 
 namespace App\Admin;
 
+use App\Form\Type\IpType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 class IpAdmin extends AbstractAdmin
 {
-
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection
@@ -22,9 +22,6 @@ class IpAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $filter
-     */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -35,39 +32,30 @@ class IpAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $list
-     */
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->addIdentifier('ip', null, array('label' => 'IP'))
-            ->add('createdAt', null, array('label' => 'Créé le'))
-            ->add('updatedAt', null, array('label' => 'Mis à jour le'))
+            ->addIdentifier('ip', null, ['label' => 'IP'])
+            ->add('createdAt', null, ['label' => 'Créé le'])
+            ->add('updatedAt', null, ['label' => 'Mis à jour le'])
         ;
     }
 
-    /**
-     * @param FormMapper $form
-     */
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('ip', 'ip', array(
-                'label' => 'IP'
-            ))
-            ->add('createdAt', DateTimeType::class, array(
-                'label' => 'Créé le'
-            ))
-            ->add('updatedAt', DateTimeType::class, array(
-                'label' => 'Mis à jour le'
-            ))
+            ->add('ip', IpType::class, [
+                'label' => 'IP',
+            ])
+            ->add('createdAt', DateTimeType::class, [
+                'label' => 'Créé le',
+            ])
+            ->add('updatedAt', DateTimeType::class, [
+                'label' => 'Mis à jour le',
+            ])
         ;
     }
 
-    /**
-     * @param ShowMapper $show
-     */
     protected function configureShowFields(ShowMapper $show): void
     {
         $show

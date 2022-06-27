@@ -2,17 +2,16 @@
 
 namespace App\Admin;
 
-use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 class DetectionAdmin extends AbstractAdmin
 {
-
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->clearExcept(array('list'));
+        $collection->clearExcept(['list']);
 
-        $matches = array('ninjatooken', 'user', 'detection');
+        $matches = ['ninjatooken', 'user', 'detection'];
 
         if ($this->isChild()) { // the admin class is a child, prefix it with the parent route name
             $this->baseRoutePattern = sprintf('%s/{id}/%s',
@@ -24,7 +23,6 @@ class DetectionAdmin extends AbstractAdmin
                 $this->urlize($matches[2])
             );
         } else {
-
             $this->baseRoutePattern = sprintf('/%s/%s/%s',
                 $this->urlize($matches[0], '-'),
                 $this->urlize($matches[1], '-'),
@@ -37,7 +35,5 @@ class DetectionAdmin extends AbstractAdmin
                 $this->urlize($matches[2])
             );
         }
-
     }
-
 }

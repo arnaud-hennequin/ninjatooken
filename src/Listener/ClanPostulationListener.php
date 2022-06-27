@@ -2,13 +2,13 @@
 
 namespace App\Listener;
 
-use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Event\LifecycleEventArgs;
 use App\Entity\Clan\ClanPostulation;
 use App\Entity\User\Message;
 use App\Entity\User\MessageUser;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Contracts\Translation\TranslatorInterface;
- 
+
 class ClanPostulationListener
 {
     protected TranslatorInterface $translator;
@@ -24,8 +24,7 @@ class ClanPostulationListener
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
 
-        if ($entity instanceof ClanPostulation)
-        {
+        if ($entity instanceof ClanPostulation) {
             $this->sendMessage($entity, $em);
         }
     }
@@ -34,10 +33,8 @@ class ClanPostulationListener
     public function preUpdate(PreUpdateEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof ClanPostulation)
-        {
-            if($args->hasChangedField('etat'))
-            {
+        if ($entity instanceof ClanPostulation) {
+            if ($args->hasChangedField('etat')) {
                 $em = $args->getEntityManager();
                 $uow = $em->getUnitOfWork();
 
@@ -53,19 +50,20 @@ class ClanPostulationListener
     }
 
     // envoi un message à tous les recruteurs potentiels
-    public function sendMessage(ClanPostulation $clanProposition, $em){
+    public function sendMessage(ClanPostulation $clanProposition, $em)
+    {
         $message = new Message();
 
         $message->setAuthor($clanProposition->getPostulant());
         $message->setNom($this->translator->trans('mail.recrutement.nouveau.sujet'));
 
-        $content = $this->translator->trans('description.recrutement.postulation'.($clanProposition->getEtat()==0?'Add':'Remove'));
+        $content = $this->translator->trans('description.recrutement.postulation'.(0 == $clanProposition->getEtat() ? 'Add' : 'Remove'));
         $message->setContent($content);
 
         // envoi aux membres du clan pouvant recruter
         $membres = $clanProposition->getClan()->getMembres();
-        foreach($membres as $membre){
-            if($membre->getDroit()<3){
+        foreach ($membres as $membre) {
+            if ($membre->getDroit() < 3) {
                 $messageuser = new MessageUser();
                 $messageuser->setDestinataire($membre->getMembre());
                 $message->addReceiver($messageuser);

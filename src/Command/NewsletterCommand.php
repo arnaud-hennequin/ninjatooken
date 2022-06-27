@@ -1,23 +1,25 @@
 <?php
+
 namespace App\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NewsletterCommand extends Command
 {
-    private TranslatorInterface $translator;
+    private Translator $translator;
     private MailerInterface $mailer;
     private Address $from;
     private LoggerInterface $logger;
@@ -26,7 +28,9 @@ class NewsletterCommand extends Command
 
     public function __construct(TranslatorInterface $translator, MailerInterface $mailer, ParameterBagInterface $params, LoggerInterface $logger, UrlGeneratorInterface $router, EntityManagerInterface $em)
     {
-        $this->translator = $translator;
+        if ($translator instanceof Translator) {
+            $this->translator = $translator;
+        }
         $this->mailer = $mailer;
         $this->logger = $logger;
         $this->router = $router;
@@ -63,9 +67,9 @@ class NewsletterCommand extends Command
 
         // boucle sur les différents utilisateurs
         if ($input->getOption('all')) {
-            $restrict = "";
+            $restrict = '';
         } else {
-            $restrict = " old_id=641 AND";
+            $restrict = ' old_id=641 AND';
         }
 
         $request = 'SELECT id, username, email, auto_login, locale FROM nt_user WHERE'.$restrict.' enabled=1 AND locked=0 ORDER BY id ASC LIMIT ';
@@ -77,12 +81,9 @@ class NewsletterCommand extends Command
         $result = $stmt->executeQuery();
         $users = $result->fetchAllAssociative();
 
-        while (count($users)>0) {
-
+        while (count($users) > 0) {
             foreach ($users as $user) {
-
                 try {
-
                     $username = $user['username'];
                     $email = $user['email'];
 
@@ -112,28 +113,25 @@ class NewsletterCommand extends Command
                             'mail' => $email,
                             'username' => $username,
                             'autologin' => $auto_login,
-                            '_locale' => $locale
+                            '_locale' => $locale,
                         ])
                     ;
 
                     $this->mailer->send($templateEmail);
 
-                    $io->writeln($i." ".$username.' ('.$email.')');
+                    $io->writeln($i.' '.$username.' ('.$email.')');
 
                     $this->logger->info($username.' ('.$email.')');
-
                 } catch (\Exception $e) {
-
-                    $io->writeln("<error>".$i." ".$username.' ('.$email.')</error>');
+                    $io->writeln('<error>'.$i.' '.$username.' ('.$email.')</error>');
                     $this->logger->error($username.' ('.$email.') '.$e->getMessage());
-
                 }
 
-                $i++;
+                ++$i;
             }
 
             $start += $num;
-            
+
             $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
             $request = $stmt->executeQuery();
             $users = $request->fetchAllAssociative();

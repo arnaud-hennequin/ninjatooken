@@ -1,8 +1,9 @@
 <?php
 /**
- * rzeka.net framework (http://framework.rzeka.net/)
+ * rzeka.net framework (http://framework.rzeka.net/).
  *
- * @link http://framework.rzeka.net/
+ * @see http://framework.rzeka.net/
+ *
  * @copyright (c) 2013, rzeka.net
  * @license http://framework.rzeka.net/license New BSD License
  */
@@ -14,35 +15,28 @@ use Exception;
 class Akismet implements AkismetInterface
 {
     /**
-     * URL to query
-     *
-     * @var string
+     * URL to query.
      */
     private string $apiUrl;
 
     /**
-     * User Agent string sent in query
-     *
-     * @var string
+     * User Agent string sent in query.
      */
     private string $userAgent;
 
     /**
-     * The front page or home URL of the instance making the request
-     *
-     * @var string
+     * The front page or home URL of the instance making the request.
      */
     private string $url;
 
     /**
-     * Last error message. It's null if there is no error
-     *
-     * @var string
+     * Last error message. It's null if there is no error.
      */
-    private string $error;
+    private ?string $error;
 
     /**
-     * Constructor checks if cURL extension exists and sets API url
+     * Constructor checks if cURL extension exists and sets API url.
+     *
      * @throws Exception
      */
     public function __construct()
@@ -55,22 +49,22 @@ class Akismet implements AkismetInterface
     }
 
     /**
-     * Checks if Akismet API key is valid
+     * Checks if Akismet API key is valid.
      *
      * @param string $apiKey Akismet API key
-     * @param string $url The front page or home URL of the instance making the request
-     * @return boolean
+     * @param string $url    The front page or home URL of the instance making the request
      */
     public function keyCheck(string $apiKey, string $url): bool
     {
-        $check = $this->query(array(
+        $check = $this->query([
             'key' => $apiKey,
-            'blog' => $url
-        ), self::PATH_KEY, self::RETURN_VALID);
+            'blog' => $url,
+        ], self::PATH_KEY, self::RETURN_VALID);
 
-        if ($check === true) {
+        if (true === $check) {
             $this->url = $url;
             $this->apiUrl = sprintf('http://%s.%s/%s/', $apiKey, self::AKISMET_URL, self::AKISMET_API_VERSION);
+
             return true;
         } else {
             return false;
@@ -78,16 +72,17 @@ class Akismet implements AkismetInterface
     }
 
     /**
-     * Marks message as ham (not-spam)
+     * Marks message as ham (not-spam).
      *
      * @param array $comment Message data. Required keys:<br />
-     *      permalink - the permanent location of the entry the comment was submitted to<br />
-     *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *      comment_author - name submitted with the comment<br />
-     *      comment_author_email - email address submitted with the comment<br />
-     *      comment_author_url - URL submitted with comment<br />
-     *      comment_content - the content that was submitted
-     * @return boolean True if messahe has been marked as ham
+     *                       permalink - the permanent location of the entry the comment was submitted to<br />
+     *                       comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                       comment_author - name submitted with the comment<br />
+     *                       comment_author_email - email address submitted with the comment<br />
+     *                       comment_author_url - URL submitted with comment<br />
+     *                       comment_content - the content that was submitted
+     *
+     * @return bool True if messahe has been marked as ham
      */
     public function sendHam(array $comment): bool
     {
@@ -95,16 +90,17 @@ class Akismet implements AkismetInterface
     }
 
     /**
-     * Marks message as spam
+     * Marks message as spam.
      *
      * @param array $comment Message data. Required keys:<br />
-     *      permalink - the permanent location of the entry the comment was submitted to<br />
-     *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *      comment_author - name submitted with the comment<br />
-     *      comment_author_email - email address submitted with the comment<br />
-     *      comment_author_url - URL submitted with comment<br />
-     *      comment_content - the content that was submitted
-     * @return boolean True if message has been marked as spam
+     *                       permalink - the permanent location of the entry the comment was submitted to<br />
+     *                       comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                       comment_author - name submitted with the comment<br />
+     *                       comment_author_email - email address submitted with the comment<br />
+     *                       comment_author_url - URL submitted with comment<br />
+     *                       comment_content - the content that was submitted
+     *
+     * @return bool True if message has been marked as spam
      */
     public function sendSpam(array $comment): bool
     {
@@ -112,16 +108,17 @@ class Akismet implements AkismetInterface
     }
 
     /**
-     * Check if message is spam or not
+     * Check if message is spam or not.
      *
      * @param array $comment Message data. Required keys:<br />
-     *      permalink - the permanent location of the entry the comment was submitted to<br />
-     *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *      comment_author - name submitted with the comment<br />
-     *      comment_author_email - email address submitted with the comment<br />
-     *      comment_author_url - URL submitted with comment<br />
-     *      comment_content - the content that was submitted
-     * @return boolean True if message is spam, false otherwise
+     *                       permalink - the permanent location of the entry the comment was submitted to<br />
+     *                       comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                       comment_author - name submitted with the comment<br />
+     *                       comment_author_email - email address submitted with the comment<br />
+     *                       comment_author_url - URL submitted with comment<br />
+     *                       comment_content - the content that was submitted
+     *
+     * @return bool True if message is spam, false otherwise
      */
     public function check(array $comment): bool
     {
@@ -129,18 +126,19 @@ class Akismet implements AkismetInterface
     }
 
     /**
-     * Makes query to Akismet API and checks the response
+     * Makes query to Akismet API and checks the response.
      *
-     * @param array $comment Message data. Required keys:<br />
-     *      permalink - the permanent location of the entry the comment was submitted to<br />
-     *      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *      comment_author - name submitted with the comment<br />
-     *      comment_author_email - email address submitted with the comment<br />
-     *      comment_author_url - URL submitted with comment<br />
-     *      comment_content - the content that was submitted
-     * @param string $path API method to use self::PATH_*
-     * @param string $expect Expected response self::RETURN_*
-     * @return boolean True is response is same as expected
+     * @param array  $comment Message data. Required keys:<br />
+     *                        permalink - the permanent location of the entry the comment was submitted to<br />
+     *                        comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                        comment_author - name submitted with the comment<br />
+     *                        comment_author_email - email address submitted with the comment<br />
+     *                        comment_author_url - URL submitted with comment<br />
+     *                        comment_content - the content that was submitted
+     * @param string $path    API method to use self::PATH_*
+     * @param string $expect  Expected response self::RETURN_*
+     *
+     * @return bool True is response is same as expected
      */
     private function query(array $comment, string $path = self::PATH_CHECK, string $expect = self::RETURN_TRUE): bool
     {
@@ -148,30 +146,30 @@ class Akismet implements AkismetInterface
 
         $conn = curl_init();
 
-        if ($path !== self::PATH_KEY) {
+        if (self::PATH_KEY !== $path) {
             $comment['blog'] = $this->url;
-            if (!array_key_exists('user_ip', $comment)) { //set the user ip if not sent
+            if (!array_key_exists('user_ip', $comment)) { // set the user ip if not sent
                 $comment['user_ip'] = $_SERVER['REMOTE_ADDR'];
             }
 
-            if (!array_key_exists('user_agent', $comment)) { //set the ua string if not sent
+            if (!array_key_exists('user_agent', $comment)) { // set the ua string if not sent
                 $comment['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
             }
 
-            if (!array_key_exists('referrer', $comment)) { //set the referer if not set
+            if (!array_key_exists('referrer', $comment)) { // set the referer if not set
                 $comment['referrer'] = $_SERVER['HTTP_REFERER'];
             }
         }
 
-        $settings = array(
+        $settings = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_URL => sprintf('%s%s', $this->apiUrl, $path),
             CURLOPT_USERAGENT => $this->userAgent,
             CURLOPT_POST => true,
             CURLOPT_FAILONERROR => true,
             CURLOPT_POSTFIELDS => http_build_query($comment),
-            CURLOPT_HEADER => true
-        );
+            CURLOPT_HEADER => true,
+        ];
 
         curl_setopt_array($conn, $settings);
         $response = explode("\n", curl_exec($conn));
@@ -180,19 +178,18 @@ class Akismet implements AkismetInterface
             return true;
         } else {
             foreach ($response as $header) {
-                if (stripos($header, 'X-akismet-debug-help') === 0) {
+                if (0 === stripos($header, 'X-akismet-debug-help')) {
                     $this->error = trim($header);
                 }
             }
+
             return false;
         }
     }
 
     /**
      * Sets User Agent string for connection
-     * Akismet asks to set UA string like: AppName/Version | PluginName/Version
-     *
-     * @param string $userAgent
+     * Akismet asks to set UA string like: AppName/Version | PluginName/Version.
      */
     public function setUserAgent(string $userAgent)
     {
@@ -200,7 +197,7 @@ class Akismet implements AkismetInterface
     }
 
     /**
-     * Gets last error occurred
+     * Gets last error occurred.
      *
      * @return string Returns null if there's no error
      */

@@ -5,39 +5,32 @@ namespace App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
-* Group
-*
-* @ORM\Table(name="nt_group")
-* @ORM\Entity
-*/
+ * Group.
+ *
+ * @ORM\Table(name="nt_group")
+ * @ORM\Entity
+ */
 class Group
 {
     /**
-    * @ORM\Id
-    * @ORM\Column(type="integer")
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     private ?int $id = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     protected string $name;
 
     /**
-     * @var array
-     *
      * @ORM\Column(type="array")
      */
     protected array $roles;
 
     /**
      * Group constructor.
-     *
-     * @param string $name
-     * @param array $roles
      */
     public function __construct(string $name, array $roles = [])
     {

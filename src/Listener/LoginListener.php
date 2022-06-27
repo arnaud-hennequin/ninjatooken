@@ -2,11 +2,12 @@
 
 namespace App\Listener;
 
-use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
 use App\Entity\User\Ip;
+use App\Entity\User\User;
+use Doctrine\Bundle\DoctrineBundle\Registry as Doctrine;
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class LoginListener
 {
@@ -14,34 +15,30 @@ class LoginListener
     private ObjectManager $em;
 
     /**
-     * Constructor
-     *
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param Doctrine $doctrine
+     * Constructor.
      */
-    public function __construct( AuthorizationCheckerInterface $authorizationChecker , Doctrine $doctrine )
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, Doctrine $doctrine)
     {
         $this->authorizationChecker = $authorizationChecker;
         $this->em = $doctrine->getManager();
     }
 
     /**
-    * Do the magic.
-    *
-    * @param InteractiveLoginEvent $event
-    */
+     * Do the magic.
+     */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            /** @var User $user */
             $user = $event->getAuthenticationToken()->getUser();
             $request = $event->getRequest();
 
             $currentIp = ip2long($request->getClientIp());
 
             $ip = $this->em->getRepository(Ip::class)
-                ->findOneBy(array('ip' => $currentIp, 'user' => $user));
+                ->findOneBy(['ip' => $currentIp, 'user' => $user]);
 
-            if(!$ip){
+            if (!$ip) {
                 $ip = new Ip();
                 $ip->setIp($currentIp);
                 $ip->setUser($user);

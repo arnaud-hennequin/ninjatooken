@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\User\Friend;
+use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class FriendRepository extends ServiceEntityRepository
 {
@@ -14,7 +15,7 @@ class FriendRepository extends ServiceEntityRepository
         parent::__construct($registry, Friend::class);
     }
 
-    public function getFriends(UserInterface $user, $nombreParPage=5, $page=1)
+    public function getFriends(UserInterface $user, $nombreParPage = 5, $page = 1)
     {
         $page = max(1, $page);
 
@@ -24,14 +25,14 @@ class FriendRepository extends ServiceEntityRepository
             ->andWhere('f.isBlocked = false')
             ->setParameter('user', $user)
             ->addOrderBy('f.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage)
             ->distinct(true);
 
         return $query->getQuery()->getResult();
     }
 
-    public function getDemandes(UserInterface $user, $nombreParPage=5, $page=1): Paginator
+    public function getDemandes(UserInterface $user, $nombreParPage = 5, $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -41,7 +42,7 @@ class FriendRepository extends ServiceEntityRepository
             ->andWhere('f.isBlocked = false')
             ->setParameter('user', $user)
             ->addOrderBy('f.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage);
 
         return new Paginator($query);
@@ -62,7 +63,6 @@ class FriendRepository extends ServiceEntityRepository
 
     public function getNumDemandes(UserInterface $user)
     {
-
         $query = $this->createQueryBuilder('f')
             ->select('COUNT(f)')
             ->where('f.user = :user')
@@ -76,7 +76,6 @@ class FriendRepository extends ServiceEntityRepository
 
     public function getNumBlocked(UserInterface $user)
     {
-
         $query = $this->createQueryBuilder('f')
             ->select('COUNT(f)')
             ->where('f.user = :user')
@@ -87,7 +86,7 @@ class FriendRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getBlocked(UserInterface $user, $nombreParPage=5, $page=1): Paginator
+    public function getBlocked(UserInterface $user, $nombreParPage = 5, $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -96,39 +95,49 @@ class FriendRepository extends ServiceEntityRepository
             ->andWhere('f.isBlocked = true')
             ->setParameter('user', $user)
             ->addOrderBy('f.dateAjout', 'DESC')
-            ->setFirstResult(($page-1) * $nombreParPage)
+            ->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage);
 
         return new Paginator($query);
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function deleteAllBlocked(?UserInterface $user = null): bool
     {
-        if($user){
+        if ($user) {
             $query = $this->createQueryBuilder('f')
                 ->delete('App\Entity\User\Friend', 'f')
                 ->where('f.user = :user')
                 ->andWhere('f.isBlocked = true')
                 ->setParameter('user', $user)
                 ->getQuery();
-     
-            return 1 === $query->getScalarResult();
+
+            return 1 === $query->getSingleScalarResult();
         }
+
         return false;
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function deleteAllDemandes(?UserInterface $user = null): bool
     {
-        if($user){
+        if ($user) {
             $query = $this->createQueryBuilder('f')
                 ->delete('App\Entity\User\Friend', 'f')
                 ->where('f.user = :user')
                 ->andWhere('f.isConfirmed = false')
                 ->setParameter('user', $user)
                 ->getQuery();
-     
-            return 1 === $query->getScalarResult();
+
+            return 1 === $query->getSingleScalarResult();
         }
+
         return false;
     }
 }

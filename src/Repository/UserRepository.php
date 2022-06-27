@@ -3,12 +3,12 @@
 namespace App\Repository;
 
 use App\Entity\User\User;
+use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function get_class;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use function get_class;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -23,18 +23,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
-    public function findUserByOldPseudo($pseudo = "", $id = 0)
+    public function findUserByOldPseudo($pseudo = '', $id = 0)
     {
         $query = $this->createQueryBuilder('u')
             ->where('u.enabled = :enabled')
             ->setParameter('enabled', true);
 
-        if(!empty($pseudo)){
+        if (!empty($pseudo)) {
             $query->andWhere('u.oldUsernamesCanonical LIKE :pseudo')
                 ->setParameter('pseudo', ','.$pseudo.',');
         }
 
-        if(!empty($id)){
+        if (!empty($id)) {
             $query->andWhere('u.id <> :id')
                 ->setParameter('id', $id);
         }
@@ -43,17 +43,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function searchUser($q = "", $num = 10, $allData = true)
+    public function searchUser($q = '', $num = 10, $allData = true)
     {
         $query = $this->createQueryBuilder('u');
 
-        if(!$allData)
+        if (!$allData) {
             $query->select('u.username as text, u.id');
+        }
 
         $query->where('u.locked = :locked')
             ->setParameter('locked', false);
 
-        if(!empty($q)){
+        if (!empty($q)) {
             $query->andWhere('u.username LIKE :q')
                 ->setParameter('q', $q.'%');
         }
@@ -65,18 +66,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query->getQuery()->getResult();
     }
 
-    public function getMultiAccount($ip = "", $username = ""){
-
-        if(empty($ip) && empty($username))
+    public function getMultiAccount($ip = '', $username = '')
+    {
+        if (empty($ip) && empty($username)) {
             return [];
+        }
 
-        if(!empty($username)){
+        if (!empty($username)) {
             $query = $this
                 ->createQueryBuilder('u')
                 ->select('ip.ip')
                 ->join('u.ips', 'ip');
 
-            if(!empty($ip)){
+            if (!empty($ip)) {
                 $query
                     ->andWhere('ip.ip = :ip')
                     ->setParameter('ip', $ip);
@@ -87,13 +89,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('username', $username);
 
             $ips = $query->getQuery()->getResult();
-            if(count($ips)>0)
+            if (count($ips) > 0) {
                 $ips = array_values($ips[0]);
-            else
-                $ips = array($ip);
-        }else
-            $ips = array($ip);
-
+            } else {
+                $ips = [$ip];
+            }
+        } else {
+            $ips = [$ip];
+        }
 
         $query = $this->createQueryBuilder('u')
             ->join('u.ips', 'ip')
@@ -103,13 +106,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setFirstResult(0)
             ->setMaxResults(20);
 
-
         return $query->getQuery()->getResult();
     }
 
-    public function getMultiAccountByUser($user = null){
-
-        if(isset($user)){
+    public function getMultiAccountByUser($user = null)
+    {
+        if (isset($user)) {
             $query = $this
                 ->createQueryBuilder('u')
                 ->select('ip.ip')
@@ -118,7 +120,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ->setParameter('user', $user);
 
             $ips = $query->getQuery()->getResult();
-            if(!empty($ips)){
+            if (!empty($ips)) {
                 $ips = array_values($ips[0]);
 
                 $query = $this->createQueryBuilder('u')
@@ -132,6 +134,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 return $query->getQuery()->getResult();
             }
         }
+
         return [];
     }
 
@@ -150,7 +153,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * Find user by his email
+     * Find user by his email.
      */
     public function findUserByEmail($email): array
     {
@@ -158,7 +161,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * Find user by his username
+     * Find user by his username.
      */
     public function findUserByUsername($username): array
     {
@@ -166,7 +169,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * Find user by his email or username
+     * Find user by his email or username.
      */
     public function findUserByUsernameOrEmail($usernameOrEmail): array
     {

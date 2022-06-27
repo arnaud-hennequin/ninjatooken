@@ -8,17 +8,16 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Serializable;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Ignore;
 
 /**
- * Clan
+ * Clan.
  *
  * @ORM\Table(name="nt_clan")
  * @ORM\HasLifecycleCallbacks
@@ -29,8 +28,6 @@ class Clan implements SluggableInterface, Serializable
     use SluggableTrait;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -38,8 +35,6 @@ class Clan implements SluggableInterface, Serializable
     private ?int $id = null;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private ?int $old_id;
@@ -56,8 +51,6 @@ class Clan implements SluggableInterface, Serializable
     private ?Collection $forums;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="nom", type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
@@ -65,32 +58,24 @@ class Clan implements SluggableInterface, Serializable
     private string $nom;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="tag", type="string", length=5, nullable=true)
      * @Assert\Length(max=5)
      */
     private ?string $tag = null;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="accroche", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
     private ?string $accroche = null;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="text")
      * @Assert\NotBlank()
      */
     private string $description;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      * @Assert\Url()
@@ -98,44 +83,32 @@ class Clan implements SluggableInterface, Serializable
     private ?string $url = null;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="kamon", type="string", length=255, nullable=true)
      * @Assert\Length(max=255)
      */
-    private ?string $kamon = "";
+    private ?string $kamon = '';
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="kamon_upload", type="string", length=255, nullable=true)
      */
     private ?string $kamonUpload = null;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private ?DateTime $updatedAt = null;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="online", type="boolean")
      */
     private bool $online = true;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="is_recruting", type="boolean")
      */
     private bool $isRecruting = true;
@@ -143,7 +116,6 @@ class Clan implements SluggableInterface, Serializable
     /**
      * @Ignore()
      */
-
     private ?string $tempKamon = null;
 
     /**
@@ -151,14 +123,13 @@ class Clan implements SluggableInterface, Serializable
      */
     public ?UploadedFile $file = null;
 
-
     /**
      * @Ignore()
      */
     public bool $delete = false;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -168,7 +139,8 @@ class Clan implements SluggableInterface, Serializable
         $this->setDateAjout(new DateTime());
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->nom;
     }
 
@@ -183,7 +155,7 @@ class Clan implements SluggableInterface, Serializable
             $this->accroche,
             $this->description,
             $this->url,
-            $this->id
+            $this->id,
         ]);
     }
 
@@ -216,7 +188,7 @@ class Clan implements SluggableInterface, Serializable
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
-            if (! empty($fieldValue)) {
+            if (!empty($fieldValue)) {
                 $usableValues[] = $fieldValue;
             }
         }
@@ -231,7 +203,7 @@ class Clan implements SluggableInterface, Serializable
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id);
+            $slug = md5((string) $this->id);
         }
 
         return $slug;
@@ -239,16 +211,14 @@ class Clan implements SluggableInterface, Serializable
 
     public function getAbsoluteKamon(): ?string
     {
-        return null === $this->kamonUpload || "" === $this->kamonUpload ? null : $this->getUploadRootDir().'/'.$this->kamonUpload;
+        return '' === $this->kamonUpload ? null : $this->getUploadRootDir().'/'.$this->kamonUpload;
     }
 
-    #[Pure]
     public function getWebKamon(): ?string
     {
-        return null === $this->kamonUpload || "" === $this->kamonUpload  ? null : $this->getUploadDir().'/'.$this->kamonUpload;
+        return '' === $this->kamonUpload ? null : $this->getUploadDir().'/'.$this->kamonUpload;
     }
 
-    #[Pure]
     protected function getUploadRootDir(): string
     {
         return __DIR__.'/../../../public/'.$this->getUploadDir();
@@ -268,7 +238,7 @@ class Clan implements SluggableInterface, Serializable
         $this->updatedAt = new DateTime();
 
         if (null !== $this->file) {
-            $this->setKamonUpload(uniqid(mt_rand(), true).".".$this->file->guessExtension());
+            $this->setKamonUpload(uniqid((string) mt_rand(), true).'.'.$this->file->guessExtension());
         }
     }
 
@@ -283,7 +253,7 @@ class Clan implements SluggableInterface, Serializable
             $file = $this->id.'.'.$this->file->guessExtension();
 
             $fileAbsolute = $this->getUploadRootDir().$file;
-            if(file_exists($fileAbsolute)) {
+            if (file_exists($fileAbsolute)) {
                 unlink($fileAbsolute);
             }
 
@@ -319,15 +289,13 @@ class Clan implements SluggableInterface, Serializable
      */
     public function removeUpload()
     {
-        if($this->tempKamon && file_exists($this->tempKamon)) {
+        if ($this->tempKamon && file_exists($this->tempKamon)) {
             unlink($this->tempKamon);
         }
     }
 
     /**
      * Sets file.
-     *
-     * @param UploadedFile|null $file
      */
     public function setFile(?UploadedFile $file = null)
     {
@@ -336,8 +304,6 @@ class Clan implements SluggableInterface, Serializable
 
     /**
      * Get file.
-     *
-     * @return UploadedFile|null
      */
     public function getFile(): ?UploadedFile
     {
@@ -345,9 +311,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * Get id.
      */
     public function getId(): int
     {
@@ -355,9 +319,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
-     * @param string|null $nom
      * @return Clan
      */
     public function setNom(?string $nom): self
@@ -368,9 +331,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get nom
-     *
-     * @return string|null
+     * Get nom.
      */
     public function getNom(): ?string
     {
@@ -378,9 +339,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set tag
+     * Set tag.
      *
-     * @param string|null $tag
      * @return Clan
      */
     public function setTag(?string $tag): self
@@ -391,9 +351,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get tag
-     *
-     * @return string|null
+     * Get tag.
      */
     public function getTag(): ?string
     {
@@ -401,9 +359,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set description
+     * Set description.
      *
-     * @param string|null $description
      * @return Clan
      */
     public function setDescription(?string $description): self
@@ -414,9 +371,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get description
-     *
-     * @return string|null
+     * Get description.
      */
     public function getDescription(): ?string
     {
@@ -424,9 +379,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set accroche
+     * Set accroche.
      *
-     * @param string|null $accroche
      * @return Clan
      */
     public function setAccroche(?string $accroche): self
@@ -437,9 +391,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get accroche
-     *
-     * @return string|null
+     * Get accroche.
      */
     public function getAccroche(): ?string
     {
@@ -447,9 +399,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set url
+     * Set url.
      *
-     * @param string $url
      * @return Clan
      */
     public function setUrl(string $url): self
@@ -460,9 +411,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get url
-     *
-     * @return string|null
+     * Get url.
      */
     public function getUrl(): ?string
     {
@@ -470,9 +419,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set kamon
+     * Set kamon.
      *
-     * @param string|null $kamon
      * @return Clan
      */
     public function setKamon(?string $kamon): self
@@ -483,9 +431,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get kamon
-     *
-     * @return string|null
+     * Get kamon.
      */
     public function getKamon(): ?string
     {
@@ -493,9 +439,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set dateAjout
+     * Set dateAjout.
      *
-     * @param DateTime $dateAjout
      * @return Clan
      */
     public function setDateAjout(DateTime $dateAjout): self
@@ -506,9 +451,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -516,9 +459,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set online
+     * Set online.
      *
-     * @param boolean $online
      * @return Clan
      */
     public function setOnline(bool $online): self
@@ -529,9 +471,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get online
-     *
-     * @return bool|null
+     * Get online.
      */
     public function getOnline(): ?bool
     {
@@ -539,9 +479,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set old_id
+     * Set old_id.
      *
-     * @param integer $oldId
      * @return Clan
      */
     public function setOldId(int $oldId): self
@@ -552,9 +491,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get old_id
-     *
-     * @return int|null
+     * Get old_id.
      */
     public function getOldId(): ?int
     {
@@ -562,9 +499,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Add membres
+     * Add membres.
      *
-     * @param ClanUtilisateur $membre
      * @return Clan
      */
     public function addMembre(ClanUtilisateur $membre): self
@@ -576,9 +512,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Remove membres
-     *
-     * @param ClanUtilisateur $membre
+     * Remove membres.
      */
     public function removeMembre(ClanUtilisateur $membre)
     {
@@ -586,9 +520,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get membres
-     *
-     * @return Collection|null
+     * Get membres.
      */
     public function getMembres(): ?Collection
     {
@@ -596,9 +528,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set isRecruting
+     * Set isRecruting.
      *
-     * @param boolean $isRecruting
      * @return Clan
      */
     public function setIsRecruting(bool $isRecruting): self
@@ -609,9 +540,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get isRecruting
-     *
-     * @return bool|null
+     * Get isRecruting.
      */
     public function getIsRecruting(): ?bool
     {
@@ -619,9 +548,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Add forums
+     * Add forums.
      *
-     * @param Forum $forums
      * @return Clan
      */
     public function addForum(Forum $forums): self
@@ -633,9 +561,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Remove forums
-     *
-     * @param Forum $forums
+     * Remove forums.
      */
     public function removeForum(Forum $forums)
     {
@@ -643,9 +569,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get forums
-     *
-     * @return Collection|null
+     * Get forums.
      */
     public function getForums(): ?Collection
     {
@@ -653,9 +577,8 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Set kamonUpload
+     * Set kamonUpload.
      *
-     * @param string $kamonUpload
      * @return Clan
      */
     public function setKamonUpload(string $kamonUpload): self
@@ -666,9 +589,7 @@ class Clan implements SluggableInterface, Serializable
     }
 
     /**
-     * Get kamonUpload
-     *
-     * @return string|null
+     * Get kamonUpload.
      */
     public function getKamonUpload(): ?string
     {

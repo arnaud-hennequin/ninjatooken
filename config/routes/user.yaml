@@ -80,6 +80,16 @@ ninja_tooken_user_parametres_confirm_mail:
     path:  /compte/parametres/confirm-mail
     controller: App\Controller\UserController::parametresConfirmMail
 
+ninja_tooken_user_registration_confirm:
+    path: /confirm/{token?}
+    controller: App\Controller\UserController::confirm
+    methods: [GET]
+
+ninja_tooken_user_registration_confirmed:
+    path: /confirmed
+    controller: App\Controller\UserController::confirmed
+    methods: [GET]
+
 ninja_tooken_user_parametres_update_password:
     path:  /compte/parametres/update-password
     controller: App\Controller\UserController::parametresUpdatePassword

@@ -2,6 +2,7 @@
 
 namespace App\Listener;
 
+use App\Entity\User\MessageUser;
 use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -10,8 +11,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Twig\Environment;
-use App\Entity\User\MessageUser;
- 
+
 class MessageUserListener
 {
     protected ParameterBagInterface $params;
@@ -31,11 +31,11 @@ class MessageUserListener
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
 
-        if ($entity instanceof MessageUser && $entity->getDestinataire() !== null) {
+        if ($entity instanceof MessageUser && null !== $entity->getDestinataire()) {
             $destinataire = $entity->getDestinataire();
 
             // envoyer un message d'avertissement par mail
-            if ($destinataire->getReceiveAvertissement() && $destinataire->getConfirmationToken() === null && $destinataire->getDateMessage() < new DateTime('today')) {
+            if ($destinataire->getReceiveAvertissement() && null === $destinataire->getConfirmationToken() && $destinataire->getDateMessage() < new DateTime('today')) {
                 $message = $entity->getMessage();
                 $user = $message->getAuthor();
 
@@ -48,13 +48,14 @@ class MessageUserListener
                         ->context([
                             'user' => $user,
                             'message' => $message,
-                            'locale' => $destinataire->getLocale()
+                            'locale' => $destinataire->getLocale(),
                         ])
                     ;
                     $this->mailer->send($messageMail);
-                } catch (TransportExceptionInterface) {}
+                } catch (TransportExceptionInterface) {
+                }
 
-                $destinataire->setDateMessage(new DateTime);
+                $destinataire->setDateMessage(new DateTime());
                 $em->persist($destinataire);
                 $em->flush();
             }

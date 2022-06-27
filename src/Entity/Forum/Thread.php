@@ -1,12 +1,12 @@
 <?php
+
 namespace App\Entity\Forum;
 
-use App\Entity\User\User;
+use App\Entity\User\UserInterface;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,8 +20,6 @@ class Thread implements SluggableInterface
     use SluggableTrait;
 
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -29,55 +27,41 @@ class Thread implements SluggableInterface
     protected ?int $id = null;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private ?int $old_id;
 
     /**
-     * Tells if the thread is viewable on top of list
-     *
-     * @var bool
+     * Tells if the thread is viewable on top of list.
      *
      * @ORM\Column(name="is_postit", type="boolean")
      */
     private bool $isPostit = false;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="is_event", type="boolean")
      */
     private bool $isEvent = false;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_event_start", type="date", nullable=true)
      */
     private ?DateTime $dateEventStart;
 
     /**
-     * @var DateTime|null
-     *
      * @ORM\Column(name="date_event_end", type="date", nullable=true)
      */
     private ?DateTime $dateEventEnd;
 
     /**
-     * Tells if new comments can be added in this thread
-     *
-     * @var bool
+     * Tells if new comments can be added in this thread.
      *
      * @ORM\Column(name="is_commentable", type="boolean")
      */
     private bool $isCommentable = true;
 
     /**
-     * forum
-     *
-     * @var Forum
+     * forum.
      *
      * @ORM\ManyToOne(targetEntity="Forum", fetch="EAGER")
      * @ORM\JoinColumn(name="forum_id", referencedColumnName="id", onDelete="CASCADE")
@@ -85,8 +69,6 @@ class Thread implements SluggableInterface
     private Forum $forum;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="nom", type="string", length=255)
      * @Assert\Length(max=255)
      * @Assert\NotBlank()
@@ -94,65 +76,53 @@ class Thread implements SluggableInterface
     private string $nom;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="body", type="text")
      * @Assert\NotBlank()
      */
     protected string $body;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="url_video", type="string", length=255, nullable=true)
      */
     private ?string $urlVideo;
 
     /**
-    * Author of the comment
-    *
-    * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
+     * Author of the comment.
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
-    * @var UserInterface|null
      */
     private ?UserInterface $author;
 
     /**
-     * Denormalized number of comments
-     *
-     * @var integer
+     * Denormalized number of comments.
      *
      * @ORM\Column(name="num_comments", type="integer")
      */
     private int $numComments = 0;
 
     /**
-     * Denormalized date of the last comment
-     *
-     * @var DateTime|null
+     * Denormalized date of the last comment.
      *
      * @ORM\Column(name="last_comment_at", type="datetime", nullable=true)
      */
     private ?DateTime $lastCommentAt;
 
     /**
-     * Denormalized author of the last comment
+     * Denormalized author of the last comment.
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
      * @ORM\JoinColumn(name="lastCommentBy_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * @var User|null
      */
-    private ?User $lastCommentBy;
+    private ?UserInterface $lastCommentBy;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -160,7 +130,8 @@ class Thread implements SluggableInterface
         $this->setLastCommentAt(new DateTime());
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->nom;
     }
 
@@ -181,7 +152,7 @@ class Thread implements SluggableInterface
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
-            if (! empty($fieldValue)) {
+            if (!empty($fieldValue)) {
                 $usableValues[] = $fieldValue;
             }
         }
@@ -196,16 +167,14 @@ class Thread implements SluggableInterface
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id ?? uniqid("thread"));
+            $slug = md5($this->id ?? uniqid('thread'));
         }
 
         return $slug;
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -213,10 +182,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set nom
-     *
-     * @param string $nom
-     * @return Thread
+     * Set nom.
      */
     public function setNom(string $nom): self
     {
@@ -226,9 +192,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get nom
-     *
-     * @return string|null
+     * Get nom.
      */
     public function getNom(): ?string
     {
@@ -236,10 +200,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set forum
-     *
-     * @param Forum|null $forum
-     * @return Thread
+     * Set forum.
      */
     public function setForum(Forum $forum = null): self
     {
@@ -249,9 +210,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get forum
-     *
-     * @return Forum|null
+     * Get forum.
      */
     public function getForum(): ?Forum
     {
@@ -259,10 +218,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set body
-     *
-     * @param string $body
-     * @return Thread
+     * Set body.
      */
     public function setBody(string $body): self
     {
@@ -272,9 +228,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get body
-     *
-     * @return string|null
+     * Get body.
      */
     public function getBody(): ?string
     {
@@ -282,10 +236,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set urlVideo
-     *
-     * @param string $urlVideo
-     * @return Thread
+     * Set urlVideo.
      */
     public function setUrlVideo(string $urlVideo): self
     {
@@ -295,9 +246,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get urlVideo
-     *
-     * @return string|null
+     * Get urlVideo.
      */
     public function getUrlVideo(): ?string
     {
@@ -305,10 +254,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set old_id
-     *
-     * @param integer $oldId
-     * @return Thread
+     * Set old_id.
      */
     public function setOldId(int $oldId): self
     {
@@ -318,9 +264,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get old_id
-     *
-     * @return int|null
+     * Get old_id.
      */
     public function getOldId(): ?int
     {
@@ -328,10 +272,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set dateAjout
-     *
-     * @param DateTime $dateAjout
-     * @return Thread
+     * Set dateAjout.
      */
     public function setDateAjout(DateTime $dateAjout): self
     {
@@ -341,9 +282,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -351,10 +290,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set isEvent
-     *
-     * @param boolean $isEvent
-     * @return Thread
+     * Set isEvent.
      */
     public function setIsEvent(bool $isEvent): self
     {
@@ -364,9 +300,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get isEvent
-     *
-     * @return bool|null
+     * Get isEvent.
      */
     public function getIsEvent(): ?bool
     {
@@ -374,9 +308,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set author's name
-     *
-     * @param UserInterface|null $author
+     * Set author's name.
      */
     public function setAuthor(?UserInterface $author)
     {
@@ -384,21 +316,15 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get author's name
-     *
-     * @return UserInterface|null
+     * Get author's name.
      */
     public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
 
-
     /**
-     * Set isPostit
-     *
-     * @param boolean $isPostit
-     * @return Thread
+     * Set isPostit.
      */
     public function setIsPostit(bool $isPostit): self
     {
@@ -408,9 +334,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get isPostit
-     *
-     * @return bool|null
+     * Get isPostit.
      */
     public function getIsPostit(): ?bool
     {
@@ -418,12 +342,9 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set lastCommentBy
-     *
-     * @param User|null $lastCommentBy
-     * @return Thread
+     * Set lastCommentBy.
      */
-    public function setLastCommentBy(User $lastCommentBy = null): self
+    public function setLastCommentBy(?UserInterface $lastCommentBy = null): self
     {
         $this->lastCommentBy = $lastCommentBy;
 
@@ -431,19 +352,15 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get lastCommentBy
-     *
-     * @return User|null
+     * Get lastCommentBy.
      */
-    public function getLastCommentBy(): ?User
+    public function getLastCommentBy(): ?UserInterface
     {
         return $this->lastCommentBy;
     }
 
     /**
-     * Gets the number of comments
-     *
-     * @return int|null
+     * Gets the number of comments.
      */
     public function getNumComments(): ?int
     {
@@ -451,9 +368,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Sets the number of comments
-     *
-     * @param integer $numComments
+     * Sets the number of comments.
      */
     public function setNumComments(int $numComments)
     {
@@ -464,7 +379,8 @@ class Thread implements SluggableInterface
      * Increments the number of comments by the supplied
      * value.
      *
-     * @param integer $by Value to increment comments by
+     * @param int $by Value to increment comments by
+     *
      * @return int|null The new comment total
      */
     public function incrementNumComments(int $by = 1): ?int
@@ -472,29 +388,24 @@ class Thread implements SluggableInterface
         return $this->numComments += $by;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getLastCommentAt(): ?DateTime
     {
         return $this->lastCommentAt;
     }
 
     /**
-     * @param DateTime
      * @return Thread
      */
-    public function setLastCommentAt($lastCommentAt): self
+    public function setLastCommentAt(DateTime $lastCommentAt): self
     {
         $this->lastCommentAt = $lastCommentAt;
-        
+
         return $this;
     }
 
     /**
-     * Set dateEventStart
+     * Set dateEventStart.
      *
-     * @param DateTime|null $dateEventStart
      * @return Thread
      */
     public function setDateEventStart(?DateTime $dateEventStart): self
@@ -505,9 +416,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get dateEventStart
-     *
-     * @return DateTime|null
+     * Get dateEventStart.
      */
     public function getDateEventStart(): ?DateTime
     {
@@ -515,9 +424,8 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set dateEventEnd
+     * Set dateEventEnd.
      *
-     * @param DateTime|null $dateEventEnd
      * @return Thread
      */
     public function setDateEventEnd(?DateTime $dateEventEnd): self
@@ -528,9 +436,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get dateEventEnd
-     *
-     * @return DateTime|null
+     * Get dateEventEnd.
      */
     public function getDateEventEnd(): ?DateTime
     {
@@ -538,9 +444,8 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Set isCommentable
+     * Set isCommentable.
      *
-     * @param boolean $isCommentable
      * @return Thread
      */
     public function setIsCommentable(bool $isCommentable): self
@@ -551,9 +456,7 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * Get isCommentable
-     *
-     * @return bool|null
+     * Get isCommentable.
      */
     public function getIsCommentable(): ?bool
     {

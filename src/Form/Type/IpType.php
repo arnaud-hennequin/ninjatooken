@@ -2,10 +2,10 @@
 
 namespace App\Form\Type;
 
+use App\Form\DataTransformer\IpToLongTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Form\DataTransformer\IpToLongTransformer;
 
 class IpType extends AbstractType
 {
@@ -17,8 +17,8 @@ class IpType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'invalid_message' => 'The selected issue does not exist',
-        ));
+        ]);
     }
 }

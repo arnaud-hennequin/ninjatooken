@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\Game\Lobby;
@@ -12,7 +13,7 @@ class LobbyRepository extends ServiceEntityRepository
         parent::__construct($registry, Lobby::class);
     }
 
-    public function getRecent($nombre=3, $page=1)
+    public function getRecent($nombre = 3, $page = 1)
     {
         $page = max(1, $page);
 
@@ -23,12 +24,16 @@ class LobbyRepository extends ServiceEntityRepository
             ->setParameter('date', new \DateTime('-10 minutes'))
             ->orderBy('a.dateDebut', 'DESC');
 
-        $query->setFirstResult(($page-1) * $nombre)
+        $query->setFirstResult(($page - 1) * $nombre)
             ->setMaxResults($nombre);
 
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function deleteOld(): bool
     {
         $query = $this->createQueryBuilder('a')
@@ -37,6 +42,6 @@ class LobbyRepository extends ServiceEntityRepository
             ->setParameter('date', new \DateTime('-10 minutes'))
             ->getQuery();
 
-        return 1 === $query->getScalarResult();
+        return 1 === $query->getSingleScalarResult();
     }
 }

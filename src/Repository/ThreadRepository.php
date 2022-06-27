@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Repository;
 
+use App\Entity\Forum\Forum;
 use App\Entity\Forum\Thread;
+use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use App\Entity\Forum\Forum;
-use App\Entity\User\User;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ThreadRepository extends ServiceEntityRepository
@@ -15,7 +16,7 @@ class ThreadRepository extends ServiceEntityRepository
         parent::__construct($registry, Thread::class);
     }
 
-    public function getThreads(Forum $forum, $nombreParPage=5, $page=1): Paginator
+    public function getThreads(Forum $forum, $nombreParPage = 5, $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -26,13 +27,13 @@ class ThreadRepository extends ServiceEntityRepository
             ->addOrderBy('t.lastCommentAt', 'DESC')
             ->getQuery();
 
-        $query->setFirstResult(($page-1) * $nombreParPage)
+        $query->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage);
 
         return new Paginator($query);
     }
 
-    public function getEvents($nombreParPage=5, $page=1): Paginator
+    public function getEvents($nombreParPage = 5, $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -43,51 +44,56 @@ class ThreadRepository extends ServiceEntityRepository
             ->addOrderBy('t.lastCommentAt', 'DESC')
             ->getQuery();
 
-        $query->setFirstResult(($page-1) * $nombreParPage)
+        $query->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage);
 
         return new Paginator($query);
     }
 
-    public function searchThreads(User $user=null, Forum $forum=null, $q = "", $nombreParPage=5, $page=1)
+    public function searchThreads(User $user = null, Forum $forum = null, $q = '', $nombreParPage = 5, $page = 1)
     {
         $query = $this->createQueryBuilder('t')
             ->addOrderBy('t.isPostit', 'DESC')
             ->addOrderBy('t.lastCommentAt', 'DESC');
 
-        if(!empty($q)){
+        if (!empty($q)) {
             $query->andWhere('t.nom LIKE :q')
                 ->andWhere('t.body LIKE :q')
                 ->setParameter('q', '%'.$q.'%');
         }
 
-        if(isset($user)){
+        if (isset($user)) {
             $query->andWhere('t.author = :user')
                 ->setParameter('user', $user);
         }
 
-        if(isset($forum)){
+        if (isset($forum)) {
             $query->andWhere('t.forum = :forum')
                 ->setParameter('forum', $forum);
         }
 
-        $query->setFirstResult(($page-1) * $nombreParPage)
+        $query->setFirstResult(($page - 1) * $nombreParPage)
             ->setMaxResults($nombreParPage);
 
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     */
     public function deleteThreadsByForum(Forum $forum = null): bool
     {
-        if($forum){
+        if ($forum) {
             $query = $this->createQueryBuilder('t')
                 ->delete('App\Entity\Forum\Thread', 't')
                 ->where('t.forum = :forum')
                 ->setParameter('forum', $forum)
                 ->getQuery();
-     
-            return 1 === $query->getScalarResult();
+
+            return 1 === $query->getSingleScalarResult();
         }
+
         return false;
     }
 }

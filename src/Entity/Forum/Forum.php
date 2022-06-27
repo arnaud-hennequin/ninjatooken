@@ -10,7 +10,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
- * Forum
+ * Forum.
  *
  * @ORM\Table(name="nt_forum")
  * @ORM\Entity(repositoryClass="App\Repository\ForumRepository")
@@ -20,8 +20,6 @@ class Forum implements SluggableInterface
     use SluggableTrait;
 
     /**
-     * @var integer|null
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -29,43 +27,31 @@ class Forum implements SluggableInterface
     private ?int $id = null;
 
     /**
-     * @var int|null
-     *
      * @ORM\Column(name="old_id", type="integer", nullable=true)
      */
     private ?int $old_id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private string $nom;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="ordre", type="smallint")
      */
     private int $ordre = 0;
 
     /**
-     * @var bool
-     *
      * @ORM\Column(name="can_user_create_thread", type="boolean")
      */
     private bool $canUserCreateThread = true;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="num_threads", type="integer")
      */
     private int $numThreads = 0;
 
     /**
-     * @var DateTime
-     *
      * @ORM\Column(name="date_ajout", type="datetime")
      */
     private DateTime $dateAjout;
@@ -76,14 +62,15 @@ class Forum implements SluggableInterface
     private ?Clan $clan;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->setDateAjout(new DateTime());
     }
 
-    public function __toString(){
+    public function __toString()
+    {
         return $this->nom;
     }
 
@@ -104,7 +91,7 @@ class Forum implements SluggableInterface
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
-            if (! empty($fieldValue)) {
+            if (!empty($fieldValue)) {
                 $usableValues[] = $fieldValue;
             }
         }
@@ -119,16 +106,14 @@ class Forum implements SluggableInterface
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id);
+            $slug = md5((string) $this->id);
         }
 
         return $slug;
     }
 
     /**
-     * Get id
-     *
-     * @return int|null
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -136,9 +121,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Set nom
+     * Set nom.
      *
-     * @param string $nom
      * @return Forum
      */
     public function setNom(string $nom): self
@@ -149,9 +133,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Get nom
-     *
-     * @return string|null
+     * Get nom.
      */
     public function getNom(): ?string
     {
@@ -159,9 +141,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Set ordre
+     * Set ordre.
      *
-     * @param integer $ordre
      * @return Forum
      */
     public function setOrdre(int $ordre): self
@@ -172,9 +153,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Get ordre
-     *
-     * @return int|null
+     * Get ordre.
      */
     public function getOrdre(): ?int
     {
@@ -182,9 +161,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Set dateAjout
+     * Set dateAjout.
      *
-     * @param DateTime $dateAjout
      * @return Forum
      */
     public function setDateAjout(DateTime $dateAjout): self
@@ -195,9 +173,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Get dateAjout
-     *
-     * @return DateTime|null
+     * Get dateAjout.
      */
     public function getDateAjout(): ?DateTime
     {
@@ -205,9 +181,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Set old_id
+     * Set old_id.
      *
-     * @param int|null $oldId
      * @return Forum
      */
     public function setOldId(?int $oldId): self
@@ -218,9 +193,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Get old_id
-     *
-     * @return int|null
+     * Get old_id.
      */
     public function getOldId(): ?int
     {
@@ -228,9 +201,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Gets the number of threads
-     *
-     * @return int|null
+     * Gets the number of threads.
      */
     public function getNumThreads(): ?int
     {
@@ -238,9 +209,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Sets the number of threads
+     * Sets the number of threads.
      *
-     * @param integer $threads
      * @return Forum
      */
     public function setNumThreads(int $threads): self
@@ -254,7 +224,8 @@ class Forum implements SluggableInterface
      * Increments the number of threads by the supplied
      * value.
      *
-     * @param integer $by Value to increment threads by
+     * @param int $by Value to increment threads by
+     *
      * @return int|null The new thread total
      */
     public function incrementNumThreads(int $by = 1): ?int
@@ -263,9 +234,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Set clan
+     * Set clan.
      *
-     * @param Clan|null $clan
      * @return Forum
      */
     public function setClan(Clan $clan = null): self
@@ -276,9 +246,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Get clan
-     *
-     * @return Clan|null
+     * Get clan.
      */
     public function getClan(): ?Clan
     {
@@ -286,9 +254,8 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Set canUserCreateThread
+     * Set canUserCreateThread.
      *
-     * @param boolean $canUserCreateThread
      * @return Forum
      */
     public function setCanUserCreateThread(bool $canUserCreateThread): self
@@ -299,9 +266,7 @@ class Forum implements SluggableInterface
     }
 
     /**
-     * Get canUserCreateThread
-     *
-     * @return bool|null
+     * Get canUserCreateThread.
      */
     public function getCanUserCreateThread(): ?bool
     {
