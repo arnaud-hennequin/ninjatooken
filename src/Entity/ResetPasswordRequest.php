@@ -16,6 +16,13 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     use ResetPasswordRequestTrait;
 
     /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private ?int $id = null;
+
+    /**
      * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
@@ -25,6 +32,14 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
     {
         $this->user = $user;
         $this->initialize($expiresAt, $selector, $hashedToken);
+    }
+
+    /**
+     * Get id.
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getUser(): object
