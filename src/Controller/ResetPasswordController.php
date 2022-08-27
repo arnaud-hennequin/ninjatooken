@@ -126,7 +126,7 @@ class ResetPasswordController extends AbstractController
             'email' => $emailFormData,
         ]);
         if (!$user) {
-            $user = $$userRepository->findOneBy([
+            $user = $userRepository->findOneBy([
                 'username' => $emailFormData,
             ]);
         }

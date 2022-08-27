@@ -27,7 +27,7 @@ class Ninja
      * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="ninja")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private UserInterface $user;
+    private ?UserInterface $user;
 
     /**
      * @ORM\Column(name="aptitude_force", type="smallint")
