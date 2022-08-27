@@ -126,7 +126,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Game\Ninja", mappedBy="user", cascade={"persist", "remove"}, fetch="EAGER")
      */
-    private ?Ninja $ninja;
+    private ?Ninja $ninja = null;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Clan\ClanUtilisateur", mappedBy="membre", cascade={"persist", "remove"}, fetch="EAGER")
