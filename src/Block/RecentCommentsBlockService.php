@@ -25,7 +25,7 @@ class RecentCommentsBlockService extends AbstractBlockService
         parent::__construct($twig);
     }
 
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $query = $this->em->getRepository(Comment::class)
             ->createQueryBuilder('c')
@@ -42,10 +42,6 @@ class RecentCommentsBlockService extends AbstractBlockService
             'block' => $blockContext->getBlock(),
             'pager' => $pager,
         ];
-
-        if ('admin' === $blockContext->getSetting('mode')) {
-            return $this->renderPrivateResponse($blockContext->getTemplate(), $parameters, $response);
-        }
 
         return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
     }
@@ -66,9 +62,6 @@ class RecentCommentsBlockService extends AbstractBlockService
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

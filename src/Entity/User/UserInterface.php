@@ -5,15 +5,13 @@ namespace App\Entity\User;
 use App\Entity\Clan\ClanUtilisateur;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterface
 {
-    public function getUserIdentifier(): ?string;
+    public function getUserIdentifier(): string;
 
     public function getLevel(): ?int;
 
@@ -71,7 +69,7 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     /**
      * Gets the last login time.
      */
-    public function getLastLogin(): ?DateTime;
+    public function getLastLogin(): ?\DateTime;
 
     public function getConfirmationToken(): ?string;
 
@@ -105,16 +103,16 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function setPlainPassword(?string $password): User;
 
-    public function setLastLogin(?DateTime $time = null): User;
+    public function setLastLogin(?\DateTime $time = null): User;
 
     public function setConfirmationToken(?string $confirmationToken): User;
 
-    public function setPasswordRequestedAt(?DateTime $date = null): User;
+    public function setPasswordRequestedAt(?\DateTime $date = null): User;
 
     /**
      * Gets the timestamp that the user requested a password reset.
      */
-    public function getPasswordRequestedAt(): ?DateTime;
+    public function getPasswordRequestedAt(): ?\DateTime;
 
     public function isPasswordRequestNonExpired(int $ttl): bool;
 
@@ -136,20 +134,14 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function getWebAvatar(): ?string;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist(): void;
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdate(): void;
 
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
+    #[ORM\PostPersist]
+    #[ORM\PostUpdate]
     public function upload();
 
     /**
@@ -162,14 +154,10 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
      */
     public function getFile(): UploadedFile;
 
-    /**
-     * @ORM\PreRemove()
-     */
+    #[ORM\PreRemove]
     public function storeFilenameForRemove();
 
-    /**
-     * @ORM\PostRemove()
-     */
+    #[ORM\PostRemove]
     public function removeUpload();
 
     /**
@@ -231,8 +219,6 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     /**
      * Get autoLogin.
-     *
-     * @return string
      */
     public function getAutoLogin(): ?string;
 
@@ -356,13 +342,13 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
      */
     public function getMessages(): ?Collection;
 
-    public function setCreatedAt(?DateTime $createdAt = null): User;
+    public function setCreatedAt(?\DateTime $createdAt = null): User;
 
-    public function getCreatedAt(): ?DateTime;
+    public function getCreatedAt(): ?\DateTime;
 
-    public function setUpdatedAt(?DateTime $updatedAt = null): User;
+    public function setUpdatedAt(?\DateTime $updatedAt = null): User;
 
-    public function getUpdatedAt(): ?DateTime;
+    public function getUpdatedAt(): ?\DateTime;
 
     public function setBiography(?string $biography): User;
 
@@ -382,9 +368,9 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function getEnabled(): ?bool;
 
-    public function getDateOfBirth(): ?DateTimeInterface;
+    public function getDateOfBirth(): ?\DateTimeInterface;
 
-    public function setDateOfBirth(?DateTimeInterface $dateOfBirth): User;
+    public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): User;
 
     /**
      * @return Collection|Lobby[]
@@ -395,15 +381,15 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function removeLobby(Lobby $lobby): User;
 
-    public function getDateApplication(): ?DateTimeInterface;
+    public function getDateApplication(): ?\DateTimeInterface;
 
-    public function setDateApplication(?DateTimeInterface $dateApplication): User;
+    public function setDateApplication(?\DateTimeInterface $dateApplication): User;
 
     public function getNumberApplication(): ?int;
 
     public function setNumberApplication(?int $numberApplication): User;
 
-    public function getDateMessage(): ?DateTimeInterface;
+    public function getDateMessage(): ?\DateTimeInterface;
 
-    public function setDateMessage(?DateTimeInterface $dateMessage): User;
+    public function setDateMessage(?\DateTimeInterface $dateMessage): User;
 }

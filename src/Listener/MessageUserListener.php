@@ -3,7 +3,6 @@
 namespace App\Listener;
 
 use App\Entity\User\MessageUser;
-use DateTime;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -35,7 +34,7 @@ class MessageUserListener
             $destinataire = $entity->getDestinataire();
 
             // envoyer un message d'avertissement par mail
-            if ($destinataire->getReceiveAvertissement() && null === $destinataire->getConfirmationToken() && $destinataire->getDateMessage() < new DateTime('today')) {
+            if ($destinataire->getReceiveAvertissement() && null === $destinataire->getConfirmationToken() && $destinataire->getDateMessage() < new \DateTime('today')) {
                 $message = $entity->getMessage();
                 $user = $message->getAuthor();
 
@@ -55,7 +54,7 @@ class MessageUserListener
                 } catch (TransportExceptionInterface) {
                 }
 
-                $destinataire->setDateMessage(new DateTime());
+                $destinataire->setDateMessage(new \DateTime());
                 $em->persist($destinataire);
                 $em->flush();
             }

@@ -22,7 +22,6 @@ use App\Repository\MessageRepository;
 use App\Repository\UserRepository;
 use App\Utils\GameData;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -30,6 +29,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
@@ -90,20 +90,26 @@ class UserController extends AbstractController
             $userRepository = $em->getRepository(User::class);
             // user already exists
             if ($userRepository->findBy(['emailCanonical' => $user->getEmailCanonical()])) {
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.mailModifierKo')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.mailModifierKo')
+                    );
+                }
 
                 return $this->render('user/registration/register.html.twig', [
                     'form' => $form->createView(),
                 ]);
             }
             if ($userRepository->findBy(['usernameCanonical' => $user->getUsernameCanonical()])) {
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.pseudoUtilise')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.pseudoUtilise')
+                    );
+                }
 
                 return $this->render('user/registration/register.html.twig', [
                     'form' => $form->createView(),
@@ -140,7 +146,7 @@ class UserController extends AbstractController
         // get the error if any (works with forward and redirect -- see below)
         if ($request->attributes->has($authErrorKey)) {
             $error = $request->attributes->get($authErrorKey);
-        } elseif (null !== $session && $session->has($authErrorKey)) {
+        } elseif ($session->has($authErrorKey)) {
             $error = $session->get($authErrorKey);
             $session->remove($authErrorKey);
         } else {
@@ -163,9 +169,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
+    #[Route(path: '/logout', name: 'app_logout')]
     public function logout()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
@@ -203,16 +207,19 @@ class UserController extends AbstractController
                     // si l'utilisateur a déjà été connecté avant le dernier garbage collector
                     if (null === $user->getUpdatedAt() || (new \DateTime())->getTimestamp() - $user->getUpdatedAt()->getTimestamp() > ini_get('session.gc_maxlifetime')) {
                         // lance la connexion
-                        $token = new UsernamePasswordToken($user, $user->getPassword(), ['main'], $user->getRoles());
+                        $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
                         $tokenStorage->setToken($token);
                         $event = new InteractiveLoginEvent($request, $token);
                         $eventDispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
                     }
                 } else {
-                    $request->getSession()->getFlashBag()->add(
-                        'notice',
-                        $translator->trans('notice.autologinKO')
-                    );
+                    $session = $request->getSession();
+                    if ($session instanceof FlashBagAwareSessionInterface) {
+                        $session->getFlashBag()->add(
+                            'notice',
+                            $translator->trans('notice.autologinKO')
+                        );
+                    }
                 }
             }
         }
@@ -221,9 +228,6 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
     }
 
-    /**
-     * @ParamConverter("user", class="App\Entity\User\User", options={"mapping": {"email":"email"}})
-     */
     public function desinscription(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, ?User $user): RedirectResponse
     {
         if (null !== $user) {
@@ -232,21 +236,23 @@ class UserController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            $request->getSession()->getFlashBag()->add(
-                'notice',
-                $translator->trans('notice.desinscriptionOK')
-            );
+            $session = $request->getSession();
+            if ($session instanceof FlashBagAwareSessionInterface) {
+                $session->getFlashBag()->add(
+                    'notice',
+                    $translator->trans('notice.desinscriptionOK')
+                );
+            }
         }
 
         // redirige sur l'accueil
         return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
     }
 
-    /**
-     * @ParamConverter("user", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     */
-    public function fiche(User $user, EntityManagerInterface $em, $page = 1): Response
+    public function fiche(string $user_nom, EntityManagerInterface $em, $page = 1): Response
     {
+        $user = $em->getRepository(User::class)->findOneBy(['slug' => $user_nom]);
+
         // amis
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -329,17 +335,20 @@ class UserController extends AbstractController
                             $em->flush();
                         }
 
-                        $request->getSession()->getFlashBag()->add(
-                            'notice',
-                            $translator->trans('notice.messageEnvoiOk')
-                        );
+                        $session = $request->getSession();
+                        if ($session instanceof FlashBagAwareSessionInterface) {
+                            $session->getFlashBag()->add(
+                                'notice',
+                                $translator->trans('notice.messageEnvoiOk')
+                            );
+                        }
 
                         return $this->redirect($this->generateUrl($reception ? 'ninja_tooken_user_messagerie' : 'ninja_tooken_user_messagerie_envoi', [
                             'page' => $page,
                         ]));
                     }
                 }
-                // lecture - suppression
+            // lecture - suppression
             } else {
                 // cherche un message à afficher
                 $id = (int) $request->get('id');
@@ -363,10 +372,13 @@ class UserController extends AbstractController
                                     $em->persist($receiver);
                                     $em->flush();
 
-                                    $request->getSession()->getFlashBag()->add(
-                                        'notice',
-                                        $translator->trans('notice.messageSuppressionOk')
-                                    );
+                                    $session = $request->getSession();
+                                    if ($session instanceof FlashBagAwareSessionInterface) {
+                                        $session->getFlashBag()->add(
+                                            'notice',
+                                            $translator->trans('notice.messageSuppressionOk')
+                                        );
+                                    }
 
                                     return $this->redirect($this->generateUrl('ninja_tooken_user_messagerie', [
                                         'page' => $page,
@@ -381,16 +393,19 @@ class UserController extends AbstractController
                                 }
                             }
                         }
-                        // en envoi : suppression du message
+                    // en envoi : suppression du message
                     } elseif ($isDeleteMessage) {
                         $message->setHasDeleted(true);
                         $em->persist($message);
                         $em->flush();
 
-                        $request->getSession()->getFlashBag()->add(
-                            'notice',
-                            $translator->trans('notice.messageSuppressionOk')
-                        );
+                        $session = $request->getSession();
+                        if ($session instanceof FlashBagAwareSessionInterface) {
+                            $session->getFlashBag()->add(
+                                'notice',
+                                $translator->trans('notice.messageSuppressionOk')
+                            );
+                        }
 
                         return $this->redirect($this->generateUrl('ninja_tooken_user_messagerie_envoi', [
                             'page' => $page,
@@ -415,7 +430,9 @@ class UserController extends AbstractController
                 $total = $repo_message->getNumSendMessages($this->user);
             }
 
-            return $this->render('user/messagerie.html.twig', [
+            return $this->render(
+                'user/messagerie.html.twig',
+                [
                     'messages' => $messages,
                     'page' => $page,
                     'nombrePage' => ceil($total / $num),
@@ -490,23 +507,32 @@ class UserController extends AbstractController
                                     $this->user->setUsername($pseudo);
                                     $this->user->addOldUsername($oPseudo);
                                 } else {
-                                    $request->getSession()->getFlashBag()->add(
+                                    $session = $request->getSession();
+                                    if ($session instanceof FlashBagAwareSessionInterface) {
+                                        $session->getFlashBag()->add(
+                                            'notice',
+                                            $translator->trans('notice.pseudoUtilise')
+                                        );
+                                    }
+                                }
+                            } else {
+                                $session = $request->getSession();
+                                if ($session instanceof FlashBagAwareSessionInterface) {
+                                    $session->getFlashBag()->add(
                                         'notice',
                                         $translator->trans('notice.pseudoUtilise')
                                     );
                                 }
-                            } else {
-                                $request->getSession()->getFlashBag()->add(
-                                    'notice',
-                                    $translator->trans('notice.pseudoUtilise')
-                                );
                             }
                         }
                     } else {
-                        $request->getSession()->getFlashBag()->add(
-                            'notice',
-                            $translator->trans('notice.pseudoMax')
-                        );
+                        $session = $request->getSession();
+                        if ($session instanceof FlashBagAwareSessionInterface) {
+                            $session->getFlashBag()->add(
+                                'notice',
+                                $translator->trans('notice.pseudoMax')
+                            );
+                        }
                     }
 
                     // modification d'email
@@ -521,10 +547,13 @@ class UserController extends AbstractController
                                 }
                                 $this->user->setEmail($email);
                             } else {
-                                $request->getSession()->getFlashBag()->add(
-                                    'notice',
-                                    $translator->trans('notice.mailModifierKo')
-                                );
+                                $session = $request->getSession();
+                                if ($session instanceof FlashBagAwareSessionInterface) {
+                                    $session->getFlashBag()->add(
+                                        'notice',
+                                        $translator->trans('notice.mailModifierKo')
+                                    );
+                                }
                             }
                         }
                     }
@@ -539,10 +568,13 @@ class UserController extends AbstractController
                     $this->user->setReceiveNewsletter(1 == (int) $request->get('news'));
                     $this->user->setReceiveAvertissement(1 == (int) $request->get('mail'));
 
-                    $request->getSession()->getFlashBag()->add(
-                        'notice',
-                        $translator->trans('notice.parametreModifierOk')
-                    );
+                    $session = $request->getSession();
+                    if ($session instanceof FlashBagAwareSessionInterface) {
+                        $session->getFlashBag()->add(
+                            'notice',
+                            $translator->trans('notice.parametreModifierOk')
+                        );
+                    }
 
                     $update = true;
                 }
@@ -585,10 +617,13 @@ class UserController extends AbstractController
                 $em->persist($this->user);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.avatarModifierOk')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.avatarModifierOk')
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
@@ -620,10 +655,13 @@ class UserController extends AbstractController
 
                 $this->mailer->send($messageMail);
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.mailConfirmationOk')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.mailConfirmationOk')
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
@@ -678,10 +716,13 @@ class UserController extends AbstractController
                 $this->user->setPassword($encodedPassword);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.motPasseModifierOk')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.motPasseModifierOk')
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_parametres'));
@@ -801,9 +842,6 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("friend", class="App\Entity\User\Friend")
-     */
     public function amisConfirmer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -812,10 +850,13 @@ class UserController extends AbstractController
                 $em->persist($friend);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.amiAjoutOk', ['%utilisateur%' => $friend->getFriend()->getUsername()])
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.amiAjoutOk', ['%utilisateur%' => $friend->getFriend()->getUsername()])
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis'));
@@ -824,9 +865,6 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("friend", class="App\Entity\User\Friend")
-     */
     public function amisBloquer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -835,10 +873,13 @@ class UserController extends AbstractController
                 $em->persist($friend);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.amiBlockOk', ['%utilisateur%' => $friend->getFriend()->getUsername()])
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.amiBlockOk', ['%utilisateur%' => $friend->getFriend()->getUsername()])
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
@@ -847,9 +888,6 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("friend", class="App\Entity\User\Friend")
-     */
     public function amisDebloquer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -858,10 +896,13 @@ class UserController extends AbstractController
                 $em->persist($friend);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.amiUnblockOk', ['%utilisateur%' => $friend->getFriend()->getUsername()])
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.amiUnblockOk', ['%utilisateur%' => $friend->getFriend()->getUsername()])
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis'));
@@ -870,9 +911,6 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("friend", class="App\Entity\User\Friend")
-     */
     public function amisSupprimer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -880,10 +918,13 @@ class UserController extends AbstractController
                 $em->remove($friend);
                 $em->flush();
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.amiSupprimerOk')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.amiSupprimerOk')
+                    );
+                }
             }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
@@ -900,10 +941,13 @@ class UserController extends AbstractController
 
             $repo->deleteAllBlocked($this->user);
 
-            $request->getSession()->getFlashBag()->add(
-                'notice',
-                $translator->trans('notice.amiSupprimerAllOk')
-            );
+            $session = $request->getSession();
+            if ($session instanceof FlashBagAwareSessionInterface) {
+                $session->getFlashBag()->add(
+                    'notice',
+                    $translator->trans('notice.amiSupprimerAllOk')
+                );
+            }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
         }
@@ -919,10 +963,13 @@ class UserController extends AbstractController
 
             $repo->deleteAllDemandes($this->user);
 
-            $request->getSession()->getFlashBag()->add(
-                'notice',
-                $translator->trans('notice.amiSupprimerAllOk')
-            );
+            $session = $request->getSession();
+            if ($session instanceof FlashBagAwareSessionInterface) {
+                $session->getFlashBag()->add(
+                    'notice',
+                    $translator->trans('notice.amiSupprimerAllOk')
+                );
+            }
 
             return $this->redirect($this->generateUrl('ninja_tooken_user_amis_blocked'));
         }
@@ -950,9 +997,6 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("capture", class="App\Entity\User\Capture")
-     */
     public function capturesSupprimer(Request $request, TranslatorInterface $translator, Capture $capture, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -961,10 +1005,10 @@ class UserController extends AbstractController
                 /** @var string $imgur */
                 $imgur = $this->getParameter('imgur');
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_HEADER, 0);
-                curl_setopt($ch, CURLOPT_VERBOSE, 0);
+                curl_setopt($ch, CURLOPT_HEADER, false);
+                curl_setopt($ch, CURLOPT_VERBOSE, false);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible;)');
                 curl_setopt($ch, CURLOPT_URL, 'https://api.imgur.com/3/image/'.$capture->getDeleteHash());
@@ -973,10 +1017,13 @@ class UserController extends AbstractController
                 if (curl_exec($ch)) {
                     $em->remove($capture);
                     $em->flush();
-                    $request->getSession()->getFlashBag()->add(
-                        'notice',
-                        $translator->trans('notice.captureSupprimerOk')
-                    );
+                    $session = $request->getSession();
+                    if ($session instanceof FlashBagAwareSessionInterface) {
+                        $session->getFlashBag()->add(
+                            'notice',
+                            $translator->trans('notice.captureSupprimerOk')
+                        );
+                    }
                 }
             }
 

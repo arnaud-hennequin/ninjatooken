@@ -2,12 +2,11 @@
 
 namespace App\Utils;
 
-use DOMDocument;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class GameData
 {
-    private DOMDocument $document;
+    private \DOMDocument $document;
     private string|false $xml;
 
     private int $experienceRelatif;
@@ -20,13 +19,13 @@ class GameData
     {
         $file = $parameterBag->get('kernel.project_dir').'/public/unity/game.xml';
         $this->xml = file_get_contents($file);
-        $this->document = new DOMDocument();
+        $this->document = new \DOMDocument();
         $this->document->loadXml('<root>'.$this->xml.'</root>');
 
         $this->domExperience = $this->document->getElementsByTagName('experience')->item(0)->getElementsByTagName('x');
     }
 
-    public function getDocument(): DOMDocument
+    public function getDocument(): \DOMDocument
     {
         return $this->document;
     }

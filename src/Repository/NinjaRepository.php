@@ -75,13 +75,13 @@ class NinjaRepository extends ServiceEntityRepository
     {
         return '-';
         // deactivate / time consumer
-       /* $query = $this->createQueryBuilder('a')
-            ->select('COUNT(a)')
-            ->leftJoin('App\Entity\User\User', 'u', 'WITH', 'a.user = u.id')
-            ->where('u.locked = 0')
-            ->andWhere('a.experience > :experience')
-            ->setParameter('experience', $experience);
+        /* $query = $this->createQueryBuilder('a')
+             ->select('COUNT(a)')
+             ->leftJoin('App\Entity\User\User', 'u', 'WITH', 'a.user = u.id')
+             ->where('u.locked = 0')
+             ->andWhere('a.experience > :experience')
+             ->setParameter('experience', $experience);
 
-        return $query->getQuery()->getSingleScalarResult() + 1;*/
+         return $query->getQuery()->getSingleScalarResult() + 1;*/
     }
 }

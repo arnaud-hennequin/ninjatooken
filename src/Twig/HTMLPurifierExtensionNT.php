@@ -3,7 +3,6 @@
 namespace App\Twig;
 
 use App\Utils\HTMLPurifier;
-use RuntimeException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -46,7 +45,10 @@ class HTMLPurifierExtensionNT extends AbstractExtension
                 $def->addAttribute('embed', 'allowfullscreen', 'Enum#true,false');
                 $def->addAttribute('object', 'classid', 'CDATA');
                 $def->addElement(
-                    'iframe', 'Inline', 'Flow', 'Common',
+                    'iframe',
+                    'Inline',
+                    'Flow',
+                    'Common',
                     [
                         'src' => 'URI#embedded',
                         'width' => 'Length',
@@ -60,13 +62,19 @@ class HTMLPurifierExtensionNT extends AbstractExtension
                     ]
                 );
                 $def->addElement(
-                    'span', 'Inline', 'Flow', 'Common',
+                    'span',
+                    'Inline',
+                    'Flow',
+                    'Common',
                     [
                         'align' => 'Enum#left,right,center,justify',
                     ]
                 );
                 $def->addElement(
-                    'li', 'Inline', 'Flow', 'Common',
+                    'li',
+                    'Inline',
+                    'Flow',
+                    'Common',
                     [
                         'align' => 'Enum#left,right,center,justify',
                     ]
@@ -94,18 +102,12 @@ class HTMLPurifierExtensionNT extends AbstractExtension
     /**
      * Get the HTMLPurifier service corresponding to the given profile.
      *
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     private function getHTMLPurifierForProfile(string $profile): \HTMLPurifier
     {
         if (!isset($this->purifiers[$profile])) {
-            $purifier = $this->htmlPurifier->get($profile);
-
-            if (!$purifier instanceof \HTMLPurifier) {
-                throw new RuntimeException(sprintf('Service "exercise_html_purifier.%s" is not an HTMLPurifier instance.', $profile));
-            }
-
-            $this->purifiers[$profile] = $purifier;
+            $this->purifiers[$profile] = $this->htmlPurifier->get($profile);
         }
 
         return $this->purifiers[$profile];

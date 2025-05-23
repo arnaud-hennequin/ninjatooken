@@ -14,14 +14,14 @@ use App\Repository\CommentRepository;
 use App\Repository\ForumRepository;
 use App\Repository\ThreadRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -38,7 +38,7 @@ class ForumController extends AbstractController
         if ($tokenStorage->getToken()?->getUser() instanceof User) {
             $this->user = $tokenStorage->getToken()->getUser();
         }
-        if ($requestStack->getSession() instanceof Session) {
+        if ($requestStack->getSession() instanceof FlashBagAwareSessionInterface) {
             $this->flashBag = $requestStack->getSession()->getFlashBag();
         }
         $this->authorizationChecker = $authorizationChecker;
@@ -140,10 +140,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function eventModifier(Request $request, TranslatorInterface $translator, Thread $thread, EntityManagerInterface $em): Response
+    public function eventModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($thread->getAuthor() === $this->user || false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
@@ -202,10 +199,7 @@ class ForumController extends AbstractController
         return $this->render('forum/forum.html.twig', ['forums' => $forums]);
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     */
-    public function topic(Forum $forum, EntityManagerInterface $em, $page): Response
+    public function topic(#[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, EntityManagerInterface $em, $page): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -222,11 +216,7 @@ class ForumController extends AbstractController
         ]);
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function thread(Forum $forum, Thread $thread, EntityManagerInterface $em, $page): Response
+    public function thread(#[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em, $page): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -247,10 +237,7 @@ class ForumController extends AbstractController
         ]);
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     */
-    public function threadAjouter(Request $request, TranslatorInterface $translator, Forum $forum, EntityManagerInterface $em): Response
+    public function threadAjouter(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $forum->getCanUserCreateThread()) {
@@ -293,11 +280,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function threadModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): Response
+    public function threadModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $thread->getAuthor() === $this->user) {
@@ -338,11 +321,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function threadVerrouiller(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): RedirectResponse
+    public function threadVerrouiller(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum)) {
@@ -365,11 +344,7 @@ class ForumController extends AbstractController
         ]));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function threadPostit(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): RedirectResponse
+    public function threadPostit(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum)) {
@@ -392,11 +367,7 @@ class ForumController extends AbstractController
         ]));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function threadSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em): Response
+    public function threadSupprimer(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $thread->getAuthor() === $this->user) {
@@ -413,16 +384,16 @@ class ForumController extends AbstractController
                 if (!$forum->getClan()) {
                     if ($isEvent) {
                         return $this->redirect($this->generateUrl('ninja_tooken_event'));
-                    } else {
-                        return $this->redirect($this->generateUrl('ninja_tooken_topic', [
-                            'forum_nom' => $forum->getSlug(),
-                        ]));
                     }
-                } else {
-                    return $this->redirect($this->generateUrl('ninja_tooken_clan', [
-                        'clan_nom' => $forum->getClan()->getSlug(),
+
+                    return $this->redirect($this->generateUrl('ninja_tooken_topic', [
+                        'forum_nom' => $forum->getSlug(),
                     ]));
                 }
+
+                return $this->redirect($this->generateUrl('ninja_tooken_clan', [
+                    'clan_nom' => $forum->getClan()->getSlug(),
+                ]));
             }
         }
 
@@ -432,11 +403,7 @@ class ForumController extends AbstractController
         ]));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     */
-    public function commentAjouter(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, EntityManagerInterface $em, $page): RedirectResponse
+    public function commentAjouter(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em, $page): RedirectResponse
     {
         $page = max(1, $page);
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -475,12 +442,7 @@ class ForumController extends AbstractController
         ]));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     * @ParamConverter("comment", class="App\Entity\Forum\Comment", options={"mapping": {"comment_id":"id"}})
-     */
-    public function commentModifier(Request $request, TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, EntityManagerInterface $em, $page): Response
+    public function commentModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, Comment $comment, EntityManagerInterface $em, $page): Response
     {
         $page = max(1, $page);
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -531,12 +493,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("forum", class="App\Entity\Forum\Forum", options={"mapping": {"forum_nom":"slug"}})
-     * @ParamConverter("thread", class="App\Entity\Forum\Thread", options={"mapping": {"thread_nom":"slug"}})
-     * @ParamConverter("comment", class="App\Entity\Forum\Comment", options={"mapping": {"comment_id":"id"}})
-     */
-    public function commentSupprimer(TranslatorInterface $translator, Forum $forum, Thread $thread, Comment $comment, EntityManagerInterface $em, $page): RedirectResponse
+    public function commentSupprimer(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, Comment $comment, EntityManagerInterface $em, $page): RedirectResponse
     {
         $page = max(1, $page);
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -546,7 +503,7 @@ class ForumController extends AbstractController
 
                 $this->flashBag?->add(
                     'notice',
-                     $translator->trans('notice.comment.deleteOk')
+                    $translator->trans('notice.comment.deleteOk')
                 );
             }
         }
@@ -558,7 +515,7 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function recentComments(CommentRepository $commentRepository, $max = 10, Forum $forum = null): Response
+    public function recentComments(CommentRepository $commentRepository, $max = 10, #[MapEntity(mapping: ['forum_nom' => 'slug'])] ?Forum $forum = null): Response
     {
         return $this->render('forum/comments/recentList.html.twig', [
             'comments' => $commentRepository->getRecentComments($forum, null, $max),
@@ -592,7 +549,7 @@ class ForumController extends AbstractController
         ]);
     }
 
-    public function globalRight(Forum $forum = null): bool
+    private function globalRight(?Forum $forum = null): bool
     {
         if ($this->user && $this->authorizationChecker) {
             if (false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {

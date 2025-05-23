@@ -74,7 +74,7 @@ Source code of the game (made with Unity 3D) is kept at https://gitlab.com/arnau
 
 ### Built With
 
-* [Symfony 5.4](https://symfony.com/)
+* [Symfony 6.4](https://symfony.com/)
 * [Sonata Project](https://sonata-project.org/)
 * [LiipImagineBundle](https://github.com/liip/LiipImagineBundle)
 * [Imgur API](https://api.imgur.com/)

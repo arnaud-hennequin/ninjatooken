@@ -2,62 +2,47 @@
 
 namespace App\Entity\Clan;
 
+use App\Entity\User\User;
 use App\Entity\User\UserInterface;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ClanUtilisateur.
- *
- * @ORM\Table(name="nt_clanutilisateur")
- * @ORM\Entity(repositoryClass="App\Repository\ClanUtilisateurRepository")
  */
+#[ORM\Table(name: 'nt_clanutilisateur')]
+#[ORM\Entity(repositoryClass: \App\Repository\ClanUtilisateurRepository::class)]
 class ClanUtilisateur
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="clan", cascade={"persist"}, fetch="LAZY")
-     */
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'clan', cascade: ['persist'], fetch: 'LAZY')]
     private ?UserInterface $membre = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="recruts", cascade={"persist"}, fetch="LAZY")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'recruts', cascade: ['persist'], fetch: 'LAZY')]
     private ?UserInterface $recruteur = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="membres", cascade={"persist"}, fetch="LAZY")
-     * @ORM\JoinColumn(name="clan_id", referencedColumnName="id", onDelete="cascade")
-     */
+    #[ORM\JoinColumn(name: 'clan_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    #[ORM\ManyToOne(targetEntity: Clan::class, inversedBy: 'membres', cascade: ['persist'], fetch: 'LAZY')]
     private ?Clan $clan = null;
 
-    /**
-     * @ORM\Column(name="droit", type="smallint")
-     */
+    #[ORM\Column(name: 'droit', type: 'smallint')]
     private int $droit = 0;
 
-    /**
-     * @ORM\Column(name="can_edit_clan", type="boolean")
-     */
+    #[ORM\Column(name: 'can_edit_clan', type: 'boolean')]
     private bool $canEditClan = false;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     /**
@@ -107,7 +92,7 @@ class ClanUtilisateur
     /**
      * Set dateAjout.
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -117,7 +102,7 @@ class ClanUtilisateur
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -166,7 +151,7 @@ class ClanUtilisateur
     /**
      * Set clan.
      */
-    public function setClan(Clan $clan = null): self
+    public function setClan(?Clan $clan = null): self
     {
         $this->clan = $clan;
 

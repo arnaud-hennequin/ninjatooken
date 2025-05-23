@@ -2,57 +2,43 @@
 
 namespace App\Entity\User;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Friend.
- *
- * @ORM\Table(name="nt_friend")
- * @ORM\Entity(repositoryClass="App\Repository\FriendRepository")
  */
+#[ORM\Table(name: 'nt_friend')]
+#[ORM\Entity(repositoryClass: \App\Repository\FriendRepository::class)]
 class Friend
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     private ?UserInterface $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="friend_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\JoinColumn(name: 'friend_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     private ?UserInterface $friend;
 
-    /**
-     * @ORM\Column(name="is_blocked", type="boolean")
-     */
+    #[ORM\Column(name: 'is_blocked', type: 'boolean')]
     private bool $isBlocked = false;
 
-    /**
-     * @ORM\Column(name="is_confirmed", type="boolean")
-     */
+    #[ORM\Column(name: 'is_confirmed', type: 'boolean')]
     private bool $isConfirmed = false;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     /**
@@ -65,8 +51,6 @@ class Friend
 
     /**
      * Set isBlocked.
-     *
-     * @return Friend
      */
     public function setIsBlocked(bool $isBlocked): self
     {
@@ -85,8 +69,6 @@ class Friend
 
     /**
      * Set isConfirmed.
-     *
-     * @return Friend
      */
     public function setIsConfirmed(bool $isConfirmed): self
     {
@@ -105,10 +87,8 @@ class Friend
 
     /**
      * Set dateAjout.
-     *
-     * @return Friend
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -118,7 +98,7 @@ class Friend
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -127,8 +107,6 @@ class Friend
      * Set user.
      *
      * @param User|null $user
-     *
-     * @return Friend
      */
     public function setUser(?UserInterface $user = null): self
     {
@@ -147,8 +125,6 @@ class Friend
 
     /**
      * Set friend.
-     *
-     * @return Friend
      */
     public function setFriend(?UserInterface $friend = null): self
     {

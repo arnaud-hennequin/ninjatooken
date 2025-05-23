@@ -3,8 +3,6 @@
 namespace App\Entity\Clan;
 
 use App\Entity\Forum\Forum;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,114 +15,83 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Clan.
- *
- * @ORM\Table(name="nt_clan")
- * @ORM\HasLifecycleCallbacks
- * @ORM\Entity(repositoryClass="App\Repository\ClanRepository")
  */
+#[ORM\Table(name: 'nt_clan')]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: \App\Repository\ClanRepository::class)]
 class Clan implements SluggableInterface
 {
     use SluggableTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="old_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
     private ?int $old_id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Clan\ClanUtilisateur", mappedBy="clan", cascade={"remove"})
-     * @ORM\OrderBy({"dateAjout" = "ASC"})
+     * @var ?Collection<ClanUtilisateur>
      */
+    #[ORM\OneToMany(targetEntity: ClanUtilisateur::class, mappedBy: 'clan', cascade: ['remove'])]
+    #[ORM\OrderBy(['dateAjout' => 'ASC'])]
     private ?Collection $membres;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Forum\Forum", mappedBy="clan", cascade={"persist","remove"})
+     * @var ?Collection<Forum>
      */
+    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'clan', cascade: ['persist', 'remove'])]
     private ?Collection $forums;
 
-    /**
-     * @ORM\Column(name="nom", type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private string $nom;
 
-    /**
-     * @ORM\Column(name="tag", type="string", length=5, nullable=true)
-     * @Assert\Length(max=5)
-     */
+    #[ORM\Column(name: 'tag', type: 'string', length: 5, nullable: true)]
+    #[Assert\Length(max: 5)]
     private ?string $tag = null;
 
-    /**
-     * @ORM\Column(name="accroche", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
-     */
+    #[ORM\Column(name: 'accroche', type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $accroche = null;
 
-    /**
-     * @ORM\Column(name="description", type="text")
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'description', type: 'text')]
+    #[Assert\NotBlank]
     private string $description;
 
-    /**
-     * @ORM\Column(name="url", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
-     * @Assert\Url()
-     */
+    #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Url]
     private ?string $url = null;
 
-    /**
-     * @ORM\Column(name="kamon", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
-     */
+    #[ORM\Column(name: 'kamon', type: 'string', length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
     private ?string $kamon = '';
 
-    /**
-     * @ORM\Column(name="kamon_upload", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'kamon_upload', type: 'string', length: 255, nullable: true)]
     private ?string $kamonUpload = null;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     */
-    private ?DateTime $updatedAt = null;
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    private ?\DateTime $updatedAt = null;
 
-    /**
-     * @ORM\Column(name="online", type="boolean")
-     */
+    #[ORM\Column(name: 'online', type: 'boolean')]
     private bool $online = true;
 
-    /**
-     * @ORM\Column(name="is_recruting", type="boolean")
-     */
+    #[ORM\Column(name: 'is_recruting', type: 'boolean')]
     private bool $isRecruting = true;
 
-    /**
-     * @Ignore()
-     */
+    #[Ignore]
     private ?string $tempKamon = null;
 
-    /**
-     * @Ignore()
-     */
+    #[Ignore]
     public ?UploadedFile $file = null;
 
-    /**
-     * @Ignore()
-     */
+    #[Ignore]
     public bool $delete = false;
 
     /**
@@ -135,7 +102,7 @@ class Clan implements SluggableInterface
         $this->membres = new ArrayCollection();
         $this->forums = new ArrayCollection();
 
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     public function __toString()
@@ -143,9 +110,6 @@ class Clan implements SluggableInterface
         return $this->nom;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function serialize(): ?string
     {
         return serialize([
@@ -160,14 +124,14 @@ class Clan implements SluggableInterface
 
     public function unserialize($data)
     {
-        list(
+        [
             $this->nom,
             $this->tag,
             $this->accroche,
             $this->description,
             $this->url,
             $this->id
-        ) = unserialize($data);
+        ] = unserialize($data);
     }
 
     /**
@@ -228,25 +192,21 @@ class Clan implements SluggableInterface
         return 'kamon';
     }
 
-    /**
-     * @ORM\PrePersist()
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
-        $this->dateAjout = new DateTime();
-        $this->updatedAt = new DateTime();
+        $this->dateAjout = new \DateTime();
+        $this->updatedAt = new \DateTime();
 
         if (null !== $this->file) {
             $this->setKamonUpload(uniqid((string) mt_rand(), true).'.'.$this->file->guessExtension());
         }
     }
 
-    /**
-     * @ORM\PreUpdate()
-     */
+    #[ORM\PreUpdate]
     public function preUpdate()
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = new \DateTime();
 
         if (null !== $this->file) {
             $file = $this->id.'.'.$this->file->guessExtension();
@@ -260,10 +220,8 @@ class Clan implements SluggableInterface
         }
     }
 
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
+    #[ORM\PostPersist]
+    #[ORM\PostUpdate]
     public function upload()
     {
         if (null === $this->file) {
@@ -275,17 +233,13 @@ class Clan implements SluggableInterface
         unset($this->file);
     }
 
-    /**
-     * @ORM\PreRemove()
-     */
+    #[ORM\PreRemove]
     public function storeFilenameForRemove()
     {
         $this->tempKamon = $this->getAbsoluteKamon();
     }
 
-    /**
-     * @ORM\PostRemove()
-     */
+    #[ORM\PostRemove]
     public function removeUpload()
     {
         if ($this->tempKamon && file_exists($this->tempKamon)) {
@@ -319,8 +273,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set nom.
-     *
-     * @return Clan
      */
     public function setNom(?string $nom): self
     {
@@ -339,8 +291,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set tag.
-     *
-     * @return Clan
      */
     public function setTag(?string $tag): self
     {
@@ -359,8 +309,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set description.
-     *
-     * @return Clan
      */
     public function setDescription(?string $description): self
     {
@@ -379,8 +327,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set accroche.
-     *
-     * @return Clan
      */
     public function setAccroche(?string $accroche): self
     {
@@ -399,8 +345,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set url.
-     *
-     * @return Clan
      */
     public function setUrl(string $url): self
     {
@@ -419,8 +363,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set kamon.
-     *
-     * @return Clan
      */
     public function setKamon(?string $kamon): self
     {
@@ -439,10 +381,8 @@ class Clan implements SluggableInterface
 
     /**
      * Set dateAjout.
-     *
-     * @return Clan
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -452,15 +392,13 @@ class Clan implements SluggableInterface
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
 
     /**
      * Set online.
-     *
-     * @return Clan
      */
     public function setOnline(bool $online): self
     {
@@ -479,8 +417,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set old_id.
-     *
-     * @return Clan
      */
     public function setOldId(int $oldId): self
     {
@@ -499,8 +435,6 @@ class Clan implements SluggableInterface
 
     /**
      * Add membres.
-     *
-     * @return Clan
      */
     public function addMembre(ClanUtilisateur $membre): self
     {
@@ -528,8 +462,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set isRecruting.
-     *
-     * @return Clan
      */
     public function setIsRecruting(bool $isRecruting): self
     {
@@ -548,8 +480,6 @@ class Clan implements SluggableInterface
 
     /**
      * Add forums.
-     *
-     * @return Clan
      */
     public function addForum(Forum $forums): self
     {
@@ -577,8 +507,6 @@ class Clan implements SluggableInterface
 
     /**
      * Set kamonUpload.
-     *
-     * @return Clan
      */
     public function setKamonUpload(string $kamonUpload): self
     {
@@ -595,12 +523,12 @@ class Clan implements SluggableInterface
         return $this->kamonUpload;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): self
+    public function setUpdatedAt(\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

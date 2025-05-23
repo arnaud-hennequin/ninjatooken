@@ -3,7 +3,6 @@
 namespace App\Entity\Forum;
 
 use App\Entity\Clan\Clan;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -11,54 +10,37 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * Forum.
- *
- * @ORM\Table(name="nt_forum")
- * @ORM\Entity(repositoryClass="App\Repository\ForumRepository")
  */
+#[ORM\Table(name: 'nt_forum')]
+#[ORM\Entity(repositoryClass: \App\Repository\ForumRepository::class)]
 class Forum implements SluggableInterface
 {
     use SluggableTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="old_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
     private ?int $old_id;
 
-    /**
-     * @ORM\Column(name="nom", type="string", length=255)
-     */
+    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
     private string $nom;
 
-    /**
-     * @ORM\Column(name="ordre", type="smallint")
-     */
+    #[ORM\Column(name: 'ordre', type: 'smallint')]
     private int $ordre = 0;
 
-    /**
-     * @ORM\Column(name="can_user_create_thread", type="boolean")
-     */
+    #[ORM\Column(name: 'can_user_create_thread', type: 'boolean')]
     private bool $canUserCreateThread = true;
 
-    /**
-     * @ORM\Column(name="num_threads", type="integer")
-     */
+    #[ORM\Column(name: 'num_threads', type: 'integer')]
     private int $numThreads = 0;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", inversedBy="forums", fetch="EAGER")
-     */
+    #[ORM\ManyToOne(targetEntity: Clan::class, inversedBy: 'forums', fetch: 'EAGER')]
     private ?Clan $clan;
 
     /**
@@ -66,7 +48,7 @@ class Forum implements SluggableInterface
      */
     public function __construct()
     {
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     public function __toString()
@@ -122,8 +104,6 @@ class Forum implements SluggableInterface
 
     /**
      * Set nom.
-     *
-     * @return Forum
      */
     public function setNom(string $nom): self
     {
@@ -142,8 +122,6 @@ class Forum implements SluggableInterface
 
     /**
      * Set ordre.
-     *
-     * @return Forum
      */
     public function setOrdre(int $ordre): self
     {
@@ -162,10 +140,8 @@ class Forum implements SluggableInterface
 
     /**
      * Set dateAjout.
-     *
-     * @return Forum
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -175,15 +151,13 @@ class Forum implements SluggableInterface
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
 
     /**
      * Set old_id.
-     *
-     * @return Forum
      */
     public function setOldId(?int $oldId): self
     {
@@ -210,8 +184,6 @@ class Forum implements SluggableInterface
 
     /**
      * Sets the number of threads.
-     *
-     * @return Forum
      */
     public function setNumThreads(int $threads): self
     {
@@ -235,10 +207,8 @@ class Forum implements SluggableInterface
 
     /**
      * Set clan.
-     *
-     * @return Forum
      */
-    public function setClan(Clan $clan = null): self
+    public function setClan(?Clan $clan = null): self
     {
         $this->clan = $clan;
 
@@ -255,8 +225,6 @@ class Forum implements SluggableInterface
 
     /**
      * Set canUserCreateThread.
-     *
-     * @return Forum
      */
     public function setCanUserCreateThread(bool $canUserCreateThread): self
     {

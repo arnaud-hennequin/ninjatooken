@@ -2,50 +2,37 @@
 
 namespace App\Entity\Clan;
 
+use App\Entity\User\User;
 use App\Entity\User\UserInterface;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ClanPostulation.
- *
- * @ORM\Table(name="nt_clanpostulation")
- * @ORM\Entity(repositoryClass="App\Repository\ClanPostulationRepository")
  */
+#[ORM\Table(name: 'nt_clanpostulation')]
+#[ORM\Entity(repositoryClass: \App\Repository\ClanPostulationRepository::class)]
 class ClanPostulation
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
-     * @ORM\JoinColumn(name="postulant_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private ?UserInterface $postulant;
+    #[ORM\JoinColumn(name: 'postulant_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    private User|UserInterface|null $postulant;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Clan\Clan", fetch="EAGER")
-     * @ORM\JoinColumn(name="clan_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\JoinColumn(name: 'clan_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Clan::class, fetch: 'EAGER')]
     private ?Clan $clan;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
-    /**
-     * @ORM\Column(name="date_changement_etat", type="datetime", nullable=true)
-     */
-    private ?DateTime $dateChangementEtat;
+    #[ORM\Column(name: 'date_changement_etat', type: 'datetime', nullable: true)]
+    private ?\DateTime $dateChangementEtat;
 
-    /**
-     * @ORM\Column(name="etat", type="smallint")
-     */
+    #[ORM\Column(name: 'etat', type: 'smallint')]
     private int $etat = 0;
 
     /**
@@ -53,8 +40,8 @@ class ClanPostulation
      */
     public function __construct()
     {
-        $this->setDateChangementEtat(new DateTime());
-        $this->setDateAjout(new DateTime());
+        $this->setDateChangementEtat(new \DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     /**
@@ -68,7 +55,7 @@ class ClanPostulation
     /**
      * Set dateAjout.
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -78,7 +65,7 @@ class ClanPostulation
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -140,7 +127,7 @@ class ClanPostulation
     /**
      * Set dateChangementEtat.
      */
-    public function setDateChangementEtat(?DateTime $dateChangementEtat): self
+    public function setDateChangementEtat(?\DateTime $dateChangementEtat): self
     {
         $this->dateChangementEtat = $dateChangementEtat;
 
@@ -150,7 +137,7 @@ class ClanPostulation
     /**
      * Get dateChangementEtat.
      */
-    public function getDateChangementEtat(): ?DateTime
+    public function getDateChangementEtat(): ?\DateTime
     {
         return $this->dateChangementEtat;
     }

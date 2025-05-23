@@ -8,220 +8,138 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Ninja.
- *
- * @ORM\Table(name="nt_ninja")
- * @ORM\Entity(repositoryClass="App\Repository\NinjaRepository")
  */
+#[ORM\Table(name: 'nt_ninja')]
+#[ORM\Entity(repositoryClass: \App\Repository\NinjaRepository::class)]
 class Ninja
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
     /**
      * user of the ninja.
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\User\User", inversedBy="ninja")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'ninja')]
     private ?UserInterface $user;
 
-    /**
-     * @ORM\Column(name="aptitude_force", type="smallint")
-     */
+    #[ORM\Column(name: 'aptitude_force', type: 'smallint')]
     private int $aptitudeForce = 0;
 
-    /**
-     * @ORM\Column(name="aptitude_vitesse", type="smallint")
-     */
+    #[ORM\Column(name: 'aptitude_vitesse', type: 'smallint')]
     private int $aptitudeVitesse = 0;
 
-    /**
-     * @ORM\Column(name="aptitude_vie", type="smallint")
-     */
+    #[ORM\Column(name: 'aptitude_vie', type: 'smallint')]
     private int $aptitudeVie = 0;
 
-    /**
-     * @ORM\Column(name="aptitude_chakra", type="smallint")
-     */
+    #[ORM\Column(name: 'aptitude_chakra', type: 'smallint')]
     private int $aptitudeChakra = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_boule", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_boule', type: 'smallint')]
     private int $jutsuBoule = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_double_saut", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_double_saut', type: 'smallint')]
     private int $jutsuDoubleSaut = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_bouclier", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_bouclier', type: 'smallint')]
     private int $jutsuBouclier = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_marcher_mur", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_marcher_mur', type: 'smallint')]
     private int $jutsuMarcherMur = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_deflagration", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_deflagration', type: 'smallint')]
     private int $jutsuDeflagration = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_transformation_aqueuse", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_transformation_aqueuse', type: 'smallint')]
     private int $jutsuTransformationAqueuse = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_metamorphose", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_metamorphose', type: 'smallint')]
     private int $jutsuMetamorphose = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_multishoot", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_multishoot', type: 'smallint')]
     private int $jutsuMultishoot = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_invisibilite", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_invisibilite', type: 'smallint')]
     private int $jutsuInvisibilite = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_resistance_explosion", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_resistance_explosion', type: 'smallint')]
     private int $jutsuResistanceExplosion = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_phoenix", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_phoenix', type: 'smallint')]
     private int $jutsuPhoenix = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_vague", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_vague', type: 'smallint')]
     private int $jutsuVague = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_pieux", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_pieux', type: 'smallint')]
     private int $jutsuPieux = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_teleportation", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_teleportation', type: 'smallint')]
     private int $jutsuTeleportation = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_tornade", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_tornade', type: 'smallint')]
     private int $jutsuTornade = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_kusanagi", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_kusanagi', type: 'smallint')]
     private int $jutsuKusanagi = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_acier_renforce", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_acier_renforce', type: 'smallint')]
     private int $jutsuAcierRenforce = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_chakra_vie", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_chakra_vie', type: 'smallint')]
     private int $jutsuChakraVie = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_fujin", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_fujin', type: 'smallint')]
     private int $jutsuFujin = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_raijin", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_raijin', type: 'smallint')]
     private int $jutsuRaijin = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_sarutahiko", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_sarutahiko', type: 'smallint')]
     private int $jutsuSarutahiko = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_susanoo", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_susanoo', type: 'smallint')]
     private int $jutsuSusanoo = 0;
 
-    /**
-     * @ORM\Column(name="jutsu_kagutsuchi", type="smallint")
-     */
+    #[ORM\Column(name: 'jutsu_kagutsuchi', type: 'smallint')]
     private int $jutsuKagutsuchi = 0;
 
-    /**
-     * @ORM\Column(name="grade", type="smallint")
-     */
+    #[ORM\Column(name: 'grade', type: 'smallint')]
     private int $grade = 0;
 
-    /**
-     * @ORM\Column(name="experience", type="bigint")
-     */
+    #[ORM\Column(name: 'experience', type: 'bigint')]
     private int $experience = 0;
 
-    /**
-     * @ORM\Column(name="classe", type="string", length=25)
-     */
+    #[ORM\Column(name: 'classe', type: 'string', length: 25)]
     private string $classe = '';
 
-    /**
-     * @ORM\Column(name="masque", type="smallint")
-     */
+    #[ORM\Column(name: 'masque', type: 'smallint')]
     private int $masque = 0;
 
-    /**
-     * @ORM\Column(name="masque_couleur", type="smallint")
-     */
+    #[ORM\Column(name: 'masque_couleur', type: 'smallint')]
     private int $masqueCouleur = 0;
 
-    /**
-     * @ORM\Column(name="masque_detail", type="smallint")
-     */
+    #[ORM\Column(name: 'masque_detail', type: 'smallint')]
     private int $masqueDetail = 0;
 
-    /**
-     * @ORM\Column(name="costume", type="smallint")
-     */
+    #[ORM\Column(name: 'costume', type: 'smallint')]
     private int $costume = 0;
 
-    /**
-     * @ORM\Column(name="costume_couleur", type="smallint")
-     */
+    #[ORM\Column(name: 'costume_couleur', type: 'smallint')]
     private int $costumeCouleur = 0;
 
-    /**
-     * @ORM\Column(name="costume_detail", type="smallint")
-     */
+    #[ORM\Column(name: 'costume_detail', type: 'smallint')]
     private int $costumeDetail = 0;
 
-    /**
-     * @ORM\Column(name="mission_assassinnat", type="smallint")
-     */
+    #[ORM\Column(name: 'mission_assassinnat', type: 'smallint')]
     private int $missionAssassinnat = 0;
 
-    /**
-     * @ORM\Column(name="mission_course", type="smallint")
-     */
+    #[ORM\Column(name: 'mission_course', type: 'smallint')]
     private int $missionCourse = 0;
 
-    /**
-     * @ORM\Column(name="accomplissement", type="string", length=25)
-     */
+    #[ORM\Column(name: 'accomplissement', type: 'string', length: 25)]
     private string $accomplissement = '0000000000000000000000000';
 
     public function __toString()

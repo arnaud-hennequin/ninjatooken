@@ -44,9 +44,6 @@ class UserAdmin extends AbstractAdmin
         parent::__construct($code, $class, $baseControllerName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -59,9 +56,6 @@ class UserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -71,9 +65,6 @@ class UserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -97,9 +88,6 @@ class UserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -138,7 +126,7 @@ class UserAdmin extends AbstractAdmin
                 ->add('dateOfBirth', BirthdayType::class, [
                     'required' => false,
                     'label' => 'Date de naissance',
-                 ])
+                ])
                 ->add('description', TextareaType::class, [
                     'required' => false,
                     'label' => 'Description',
@@ -156,11 +144,11 @@ class UserAdmin extends AbstractAdmin
                 ->add('locale', LocaleType::class, [
                     'required' => false,
                     'label' => 'Langue',
-                 ])
+                ])
                 ->add('timezone', TimezoneType::class, [
                     'required' => false,
                     'label' => 'Fuseau horaire',
-                 ])
+                ])
             ->end()
             ->with('Ninja')
                 ->add('ninja', AdminType::class, ['label' => false], ['edit' => 'inline'])
@@ -175,10 +163,7 @@ class UserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function preRemove(object $object = null): void
+    public function preRemove(?object $object = null): void
     {
         // enlève les évènement sur clan_proposition
         // on évite d'envoyer des messages qui seront supprimés
@@ -190,10 +175,7 @@ class UserAdmin extends AbstractAdmin
         $this->entityManager->getEventManager()->removeEventListener(['postRemove'], $this->commentListener);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function postRemove(object $object = null): void
+    public function postRemove(?object $object = null): void
     {
         $conn = $this->entityManager->getConnection();
 
@@ -208,9 +190,6 @@ class UserAdmin extends AbstractAdmin
         $conn->executeUpdate('UPDATE nt_thread as t SET t.last_comment_at=t.date_ajout WHERE t.last_comment_at IS NULL');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {

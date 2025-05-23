@@ -15,7 +15,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         parent::__construct($registry, ClanProposition::class);
     }
 
-    public function getPropositionByUsers(?UserInterface $recruteur = null, User $postulant = null)
+    public function getPropositionByUsers(?UserInterface $recruteur = null, ?User $postulant = null)
     {
         $query = $this->createQueryBuilder('cp');
 
@@ -32,7 +32,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getWaitingPropositionByUsers(?UserInterface $recruteur = null, User $postulant = null)
+    public function getWaitingPropositionByUsers(?UserInterface $recruteur = null, ?User $postulant = null)
     {
         $query = $this->createQueryBuilder('cp')
             ->where('cp.etat = 0');

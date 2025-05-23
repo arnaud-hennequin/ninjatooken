@@ -6,27 +6,20 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Group.
- *
- * @ORM\Table(name="nt_group")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'nt_group')]
+#[ORM\Entity]
 class Group
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=255)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 255)]
     protected string $name;
 
-    /**
-     * @ORM\Column(type="array")
-     */
+    #[ORM\Column(type: 'array')]
     protected array $roles;
 
     /**

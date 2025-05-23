@@ -32,7 +32,7 @@ class CommentListener
         if ($entity instanceof Comment) {
             // si la vérification akismet est activée
             if ($this->akismetActive) {
-                if (null !== $entity->getThread() && null !== $entity->getAuthor()) {
+                if (null !== $entity->getThread()) {
                     $request = $this->requestStack->getCurrentRequest();
                     $akismet = new Akismet();
                     $akismet->setUserAgent('rzeka.net/1.0.0 | Akismet/1.0.0');
@@ -67,7 +67,7 @@ class CommentListener
         $em = $args->getEntityManager();
 
         if ($entity instanceof Comment) {
-            if (null !== $entity->getThread() && null !== $entity->getAuthor()) {
+            if (null !== $entity->getThread()) {
                 $thread = $entity->getThread();
                 $thread->setLastCommentBy($entity->getAuthor());
                 $thread->incrementNumComments();
@@ -86,7 +86,7 @@ class CommentListener
 
         if ($entity instanceof Comment) {
             // retire du thread
-            if (null !== $entity->getThread() && null !== $entity->getAuthor()) {
+            if (null !== $entity->getThread()) {
                 $thread = $entity->getThread();
                 $thread->incrementNumComments(-1);
                 // met à jour les références vers le message précédent

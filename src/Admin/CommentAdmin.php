@@ -25,12 +25,12 @@ class CommentAdmin extends AbstractAdmin
 
         if (!$this->isChild()) {
             $form->add('thread', ModelListType::class, [
-                    'btn_add' => 'Add thread',
-                    'btn_list' => 'List',
-                    'btn_delete' => false,
-                ], [
-                    'placeholder' => 'No thread selected',
-                ]);
+                'btn_add' => 'Add thread',
+                'btn_list' => 'List',
+                'btn_delete' => false,
+            ], [
+                'placeholder' => 'No thread selected',
+            ]);
         }
 
         $form

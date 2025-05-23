@@ -50,7 +50,7 @@ class ThreadRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-    public function searchThreads(User $user = null, Forum $forum = null, $q = '', $nombreParPage = 5, $page = 1)
+    public function searchThreads(?User $user = null, ?Forum $forum = null, $q = '', $nombreParPage = 5, $page = 1)
     {
         $query = $this->createQueryBuilder('t')
             ->addOrderBy('t.isPostit', 'DESC')
@@ -82,7 +82,7 @@ class ThreadRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
-    public function deleteThreadsByForum(Forum $forum = null): bool
+    public function deleteThreadsByForum(?Forum $forum = null): bool
     {
         if ($forum) {
             $query = $this->createQueryBuilder('t')

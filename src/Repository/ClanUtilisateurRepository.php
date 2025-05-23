@@ -16,7 +16,7 @@ class ClanUtilisateurRepository extends ServiceEntityRepository
         parent::__construct($registry, ClanUtilisateur::class);
     }
 
-    public function getMembres(Clan $clan = null, $droit = null, UserInterface $recruteur = null, $nombreParPage = 100, $page = 1)
+    public function getMembres(?Clan $clan = null, $droit = null, ?UserInterface $recruteur = null, $nombreParPage = 100, $page = 1)
     {
         $page = max(1, $page);
 
@@ -43,7 +43,7 @@ class ClanUtilisateurRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getMembreByClanUser(Clan $clan = null, User $user = null)
+    public function getMembreByClanUser(?Clan $clan = null, ?User $user = null)
     {
         $query = $this->createQueryBuilder('cu');
 
@@ -64,7 +64,7 @@ class ClanUtilisateurRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
-    public function removeByClan(Clan $clan = null): bool
+    public function removeByClan(?Clan $clan = null): bool
     {
         if ($clan) {
             $query = $this->createQueryBuilder('cu')

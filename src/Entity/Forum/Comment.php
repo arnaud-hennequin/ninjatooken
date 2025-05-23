@@ -2,62 +2,50 @@
 
 namespace App\Entity\Forum;
 
+use App\Entity\User\User;
 use App\Entity\User\UserInterface;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="nt_comment")
- * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
- */
+#[ORM\Table(name: 'nt_comment')]
+#[ORM\Entity(repositoryClass: \App\Repository\CommentRepository::class)]
 class Comment
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
     /**
      * Thread of this comment.
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Forum\Thread", fetch="LAZY")
-     * @ORM\JoinColumn(name="thread_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private Thread $thread;
+    #[ORM\JoinColumn(name: 'thread_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Thread::class, fetch: 'LAZY')]
+    private ?Thread $thread;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
     /**
      * Comment text.
-     *
-     * @ORM\Column(name="body", type="text")
-     * @Assert\NotBlank
      */
+    #[ORM\Column(name: 'body', type: 'text')]
+    #[Assert\NotBlank]
     private string $body;
 
     /**
      * Author of the comment.
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'LAZY')]
     private ?UserInterface $author;
 
-    /**
-     * @ORM\Column(name="old_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
     private ?int $old_id;
 
     public function __construct()
     {
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     /**
@@ -98,7 +86,7 @@ class Comment
         return $this;
     }
 
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -106,7 +94,7 @@ class Comment
     /**
      * Sets the creation date.
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 

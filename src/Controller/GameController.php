@@ -299,7 +299,7 @@ class GameController extends AbstractController
                 $xml[] = [
                     'val' => (float) str_replace('a', '.', $v->getAttribute('val')),
                     'lvl' => (int) $v->getAttribute('niveau'),
-                 ];
+                ];
             }
             $capacites[$k]['xml'] = json_encode($xml);
         }

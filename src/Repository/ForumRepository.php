@@ -14,7 +14,7 @@ class ForumRepository extends ServiceEntityRepository
         parent::__construct($registry, Forum::class);
     }
 
-    public function getForum($slug = '', Clan $clan = null, $nombreParPage = 20, $page = 1)
+    public function getForum($slug = '', ?Clan $clan = null, $nombreParPage = 20, $page = 1)
     {
         $page = max(1, $page);
 

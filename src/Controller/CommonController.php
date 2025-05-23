@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -34,7 +35,8 @@ class CommonController extends AbstractController
             'threads' => $threadRepository->findBy(
                 ['forum' => $forumRepository->findOneBy(['slug' => 'nouveautes'])],
                 ['dateAjout' => 'DESC'],
-                $num, 0
+                $num,
+                0
             ),
         ]);
     }
@@ -112,10 +114,13 @@ class CommonController extends AbstractController
                 } catch (TransportExceptionInterface $e) {
                 }
 
-                $request->getSession()->getFlashBag()->add(
-                    'notice',
-                    $translator->trans('notice.contact')
-                );
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.contact')
+                    );
+                }
             }
         }
 

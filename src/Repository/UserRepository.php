@@ -3,10 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\User\User;
-use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use function get_class;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
@@ -141,10 +139,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    public function upgradePassword(UserInterface $user, string $newHashedPassword): void
+    public function upgradePassword(\Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
         $user->setPassword($newHashedPassword);
@@ -174,10 +172,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findUserByUsernameOrEmail($usernameOrEmail): array
     {
         if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
-            $user = $this->findUserByEmail($usernameOrEmail);
-            if (null !== $user) {
-                return $user;
-            }
+            return $this->findUserByEmail($usernameOrEmail);
         }
 
         return $this->findUserByUsername($usernameOrEmail);

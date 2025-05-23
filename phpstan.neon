@@ -1,12 +1,3 @@
-# These are custom rules, check-out: https://www.strangebuzz.com/en/blog/creating-custom-phpstan-rules-for-your-symfony-project
-rules:
-    - PHPStan\Rules\Symfony\ContainerInterfacePrivateServiceRule
-    - PHPStan\Rules\Symfony\ContainerInterfaceUnknownServiceRule
-    - PHPStan\Rules\Symfony\UndefinedArgumentRule
-    - PHPStan\Rules\Symfony\InvalidArgumentDefaultValueRule
-    - PHPStan\Rules\Symfony\UndefinedOptionRule
-    - PHPStan\Rules\Symfony\InvalidOptionDefaultValueRule
-
 parameters:
     level: 5
     paths:
@@ -15,18 +6,14 @@ parameters:
         - tests
         - public
     symfony:
-        container_xml_path: var/cache/dev/App_KernelDevDebugContainer.xml
-
-    # https://phpstan.org/config-reference#vague-typehints
-    checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType:           true # https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type
-
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    scanDirectories:
+        - var/cache/dev/Symfony/Config
+    scanFiles:
+        - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
+    doctrine:
+        allowNullablePropertyForRequiredField: true
     ignoreErrors:
 
     excludePaths:
         - src/Utils/Chat.php
-
-    # I don't use the Symfony PHPUnit bridge in this project, but if you do, you
-    # probably will have to add the following bootstrap file:
-    #bootstrapFiles:
-        #- %rootDir%/../../vendor/bin/.phpunit/phpunit/vendor/autoload.php

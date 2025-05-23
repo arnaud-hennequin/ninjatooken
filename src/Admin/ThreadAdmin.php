@@ -34,12 +34,12 @@ class ThreadAdmin extends AbstractAdmin
 
         if (!$this->isChild()) {
             $form->add('forum', ModelListType::class, [
-                    'btn_add' => 'Add forum',
-                    'btn_list' => 'List',
-                    'btn_delete' => false,
-                ], [
-                    'placeholder' => 'No forum selected',
-                ]);
+                'btn_add' => 'Add forum',
+                'btn_list' => 'List',
+                'btn_delete' => false,
+            ], [
+                'placeholder' => 'No forum selected',
+            ]);
         }
 
         $form
@@ -124,9 +124,6 @@ class ThreadAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureTabMenu(MenuItemInterface $menu, string $action, ?AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {

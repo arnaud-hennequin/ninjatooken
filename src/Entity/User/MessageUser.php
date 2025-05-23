@@ -2,44 +2,32 @@
 
 namespace App\Entity\User;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MessageUser.
- *
- * @ORM\Table(name="nt_messageuser")
- * @ORM\Entity(repositoryClass="App\Repository\MessageUserRepository")
  */
+#[ORM\Table(name: 'nt_messageuser')]
+#[ORM\Entity(repositoryClass: \App\Repository\MessageUserRepository::class)]
 class MessageUser
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\Message", inversedBy="receivers")
-     * @ORM\JoinColumn(name="message_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private Message $message;
+    #[ORM\JoinColumn(name: 'message_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Message::class, inversedBy: 'receivers')]
+    private ?Message $message;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="destinataire_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\JoinColumn(name: 'destinataire_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     private ?UserInterface $destinataire;
 
-    /**
-     * @ORM\Column(name="date_read", type="datetime", nullable=true)
-     */
-    private ?DateTime $dateRead;
+    #[ORM\Column(name: 'date_read', type: 'datetime', nullable: true)]
+    private ?\DateTime $dateRead;
 
-    /**
-     * @ORM\Column(name="has_deleted", type="boolean")
-     */
+    #[ORM\Column(name: 'has_deleted', type: 'boolean')]
     private bool $hasDeleted = false;
 
     public function __toString()
@@ -63,7 +51,7 @@ class MessageUser
     /**
      * Set dateRead.
      */
-    public function setDateRead(?DateTime $dateRead): self
+    public function setDateRead(?\DateTime $dateRead): self
     {
         $this->dateRead = $dateRead;
 
@@ -73,7 +61,7 @@ class MessageUser
     /**
      * Get dateRead.
      */
-    public function getDateRead(): ?DateTime
+    public function getDateRead(): ?\DateTime
     {
         return $this->dateRead;
     }
@@ -99,7 +87,7 @@ class MessageUser
     /**
      * Set destinataire.
      */
-    public function setDestinataire(UserInterface $destinataire = null): self
+    public function setDestinataire(?UserInterface $destinataire = null): self
     {
         $this->destinataire = $destinataire;
 
@@ -117,7 +105,7 @@ class MessageUser
     /**
      * Set message.
      */
-    public function setMessage(Message $message = null): self
+    public function setMessage(?Message $message = null): self
     {
         $this->message = $message;
 

@@ -22,7 +22,6 @@ use App\Repository\ForumRepository;
 use App\Repository\ThreadRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -46,7 +45,7 @@ class ClanController extends AbstractController
         if ($tokenStorage->getToken()?->getUser() instanceof User) {
             $this->user = $tokenStorage->getToken()->getUser();
         }
-        if ($requestStack->getSession() instanceof Session) {
+        if ($requestStack->getSession() instanceof FlashBagAwareSessionInterface) {
             $this->flashBag = $requestStack->getSession()->getFlashBag();
         }
         $this->authorizationChecker = $authorizationChecker;
@@ -74,9 +73,6 @@ class ClanController extends AbstractController
         ]);
     }
 
-    /**
-     * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
-     */
     public function clan(Clan $clan, EntityManagerInterface $em): Response
     {
         // le forum du clan
@@ -199,9 +195,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     */
     public function clanEditerSwitch(TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -239,9 +232,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
-     */
     public function clanModifier(Request $request, TranslatorInterface $translator, ParameterBagInterface $params, Clan $clan, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -309,9 +299,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
-     */
     public function clanSupprimer(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -339,9 +326,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     */
     public function clanUtilisateurSupprimer(TranslatorInterface $translator, ClanPropositionListener $clanPropositionListener, ClanPropositionListener $clanUtilisateurListener, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -374,9 +358,9 @@ class ClanController extends AbstractController
                         return $this->redirect($this->generateUrl('ninja_tooken_clan', [
                             'clan_nom' => $clan->getSlug(),
                         ]));
-                    } else {
-                        return $this->redirect($this->generateUrl('ninja_tooken_clans'));
                     }
+
+                    return $this->redirect($this->generateUrl('ninja_tooken_clans'));
                 }
             }
             $this->flashBag?->add(
@@ -390,9 +374,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     */
     public function clanUtilisateurSupprimerShishou(TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -468,9 +449,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     */
     public function clanUtilisateurRecruterSupprimer(TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -497,9 +475,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     */
     public function clanUtilisateurRecruterAjouter(Request $request, TranslatorInterface $translator, User $utilisateur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -559,10 +534,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     * @ParamConverter("recruteur", class="App\Entity\User\User", options={"mapping": {"recruteur_nom":"slug"}})
-     */
     public function clanUtilisateurRecruterAccepter(TranslatorInterface $translator, User $utilisateur, User $recruteur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -632,10 +603,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("utilisateur", class="App\Entity\User\User", options={"mapping": {"user_nom":"slug"}})
-     * @ParamConverter("recruteur", class="App\Entity\User\User", options={"mapping": {"recruteur_nom":"slug"}})
-     */
     public function clanUtilisateurRecruterRefuser(TranslatorInterface $translator, User $utilisateur, User $recruteur, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -669,9 +636,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
-     */
     public function clanUtilisateurPostuler(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -746,9 +710,6 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    /**
-     * @ParamConverter("clan", class="App\Entity\Clan\Clan", options={"mapping": {"clan_nom":"slug"}})
-     */
     public function clanUtilisateurPostulerSupprimer(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {

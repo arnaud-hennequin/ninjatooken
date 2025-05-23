@@ -2,8 +2,6 @@
 
 namespace App\Utils;
 
-use LogicException;
-
 define('AJAX_CHAT_URL', '/chat/');
 define('AJAX_CHAT_PATH', dirname(__FILE__).'/../../vendor/frug/ajax-chat/chat/');
 define('AJAX_CHAT_BANNED', 6);
@@ -31,7 +29,7 @@ require AJAX_CHAT_PATH.'lib/class/CustomAJAXChatShoutBox.php';
 require AJAX_CHAT_PATH.'lib/class/CustomAJAXChatInterface.php';
 
 if (!class_exists(\CustomAJAXChat::class)) {
-    throw new LogicException("Unable to load class: \CustomAJAXChat.");
+    throw new \LogicException("Unable to load class: \CustomAJAXChat.");
 }
 
 class Chat extends \CustomAJAXChat
@@ -336,7 +334,7 @@ class Chat extends \CustomAJAXChat
 
                 return true;
             default:
-                   return false;
+                return false;
         }
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * rzeka.net framework (http://framework.rzeka.net/).
  *
@@ -9,8 +10,6 @@
  */
 
 namespace App\Utils;
-
-use Exception;
 
 class Akismet implements AkismetInterface
 {
@@ -37,12 +36,12 @@ class Akismet implements AkismetInterface
     /**
      * Constructor checks if cURL extension exists and sets API url.
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct()
     {
         if (!function_exists('curl_init')) {
-            throw new Exception('Akismet cURL connector requires cURL extension');
+            throw new \Exception('Akismet cURL connector requires cURL extension');
         }
 
         $this->apiUrl = sprintf('http://%s/%s/', self::AKISMET_URL, self::AKISMET_API_VERSION);
@@ -66,9 +65,9 @@ class Akismet implements AkismetInterface
             $this->apiUrl = sprintf('http://%s.%s/%s/', $apiKey, self::AKISMET_URL, self::AKISMET_API_VERSION);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -176,15 +175,14 @@ class Akismet implements AkismetInterface
 
         if (trim(end($response)) == $expect) {
             return true;
-        } else {
-            foreach ($response as $header) {
-                if (0 === stripos($header, 'X-akismet-debug-help')) {
-                    $this->error = trim($header);
-                }
-            }
-
-            return false;
         }
+        foreach ($response as $header) {
+            if (0 === stripos($header, 'X-akismet-debug-help')) {
+                $this->error = trim($header);
+            }
+        }
+
+        return false;
     }
 
     /**

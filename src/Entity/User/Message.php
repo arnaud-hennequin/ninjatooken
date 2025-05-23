@@ -2,7 +2,6 @@
 
 namespace App\Entity\User;
 
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,56 +9,42 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Message.
- *
- * @ORM\Table(name="nt_message")
- * @ORM\Entity(repositoryClass="App\Repository\MessageRepository")
  */
+#[ORM\Table(name: 'nt_message')]
+#[ORM\Entity(repositoryClass: \App\Repository\MessageRepository::class)]
 class Message
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="old_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
     private ?int $old_id;
 
-    /**
-     * @ORM\Column(name="nom", type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private string $nom;
 
-    /**
-     * @ORM\Column(name="content", type="text")
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'content', type: 'text')]
+    #[Assert\NotBlank]
     private string $content;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="messages", fetch="EAGER")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'messages', fetch: 'EAGER')]
     private ?UserInterface $author;
 
-    /**
-     * @ORM\Column(name="has_deleted", type="boolean")
-     */
+    #[ORM\Column(name: 'has_deleted', type: 'boolean')]
     private bool $hasDeleted = false;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User\MessageUser", mappedBy="message", cascade={"remove"}, fetch="EAGER")
+     * @var Collection<MessageUser>
      */
+    #[ORM\OneToMany(targetEntity: MessageUser::class, mappedBy: 'message', cascade: ['remove'], fetch: 'EAGER')]
     private Collection $receivers;
 
     /**
@@ -68,7 +53,7 @@ class Message
     public function __construct()
     {
         $this->receivers = new ArrayCollection();
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     /**
@@ -81,8 +66,6 @@ class Message
 
     /**
      * Set nom.
-     *
-     * @return Message
      */
     public function setNom(string $nom): self
     {
@@ -101,8 +84,6 @@ class Message
 
     /**
      * Set content.
-     *
-     * @return Message
      */
     public function setContent(string $content): self
     {
@@ -121,10 +102,8 @@ class Message
 
     /**
      * Set dateAjout.
-     *
-     * @return Message
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -134,7 +113,7 @@ class Message
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -159,8 +138,6 @@ class Message
 
     /**
      * Set hasDeleted.
-     *
-     * @return Message
      */
     public function setHasDeleted(bool $hasDeleted): self
     {
@@ -179,8 +156,6 @@ class Message
 
     /**
      * Set old_id.
-     *
-     * @return Message
      */
     public function setOldId(?int $oldId): self
     {
@@ -199,8 +174,6 @@ class Message
 
     /**
      * Add receivers.
-     *
-     * @return Message
      */
     public function addReceiver(MessageUser $receiver): self
     {

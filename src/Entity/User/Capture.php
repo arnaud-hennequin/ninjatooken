@@ -2,65 +2,51 @@
 
 namespace App\Entity\User;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Capture.
- *
- * @ORM\Table(name="nt_capture")
- * @ORM\Entity(repositoryClass="App\Repository\CaptureRepository")
  */
+#[ORM\Table(name: 'nt_capture')]
+#[ORM\Entity(repositoryClass: \App\Repository\CaptureRepository::class)]
 class Capture
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?UserInterface $user = null;
 
-    /**
-     * @ORM\Column(name="url", type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\Url()
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'url', type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Url]
+    #[Assert\NotBlank]
     private string $url;
 
-    /**
-     * @ORM\Column(name="url_tmb", type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\Url()
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'url_tmb', type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\Url]
+    #[Assert\NotBlank]
     private string $urlTmb;
 
-    /**
-     * @ORM\Column(name="delete_hash", type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'delete_hash', type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private string $deleteHash;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->setDateAjout(new DateTime());
+        $this->setDateAjout(new \DateTime());
     }
 
     /**
@@ -128,7 +114,7 @@ class Capture
     /**
      * Set dateAjout.
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -138,7 +124,7 @@ class Capture
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }

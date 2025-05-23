@@ -26,7 +26,8 @@ class NinjaTookenExceptionListener
         }
 
         // personnalise notre objet réponse pour afficher les détails de notre exception
-        $response = new Response($this->twig->render('exception.html.twig', [
+        $response = new Response(
+            $this->twig->render('exception.html.twig', [
                 'status_code' => $code,
                 'status_text' => Response::$statusTexts[$code] ?? '',
                 'exception' => $exception,

@@ -23,21 +23,25 @@ class CommentUserAdmin extends AbstractAdmin
         $matches = ['ninjatooken', 'user', 'comment'];
 
         if ($this->isChild()) { // the admin class is a child, prefix it with the parent route name
-            $this->baseRoutePattern = sprintf('%s/{id}/%s',
+            $this->baseRoutePattern = sprintf(
+                '%s/{id}/%s',
                 $this->getParent()->getBaseRoutePattern(),
                 $this->urlize($matches[2], '-')
             );
-            $this->baseRouteName = sprintf('%s_%s',
+            $this->baseRouteName = sprintf(
+                '%s_%s',
                 $this->getParent()->getBaseRouteName(),
                 $this->urlize($matches[2])
             );
         } else {
-            $this->baseRoutePattern = sprintf('/%s/%s/%s',
+            $this->baseRoutePattern = sprintf(
+                '/%s/%s/%s',
                 $this->urlize($matches[0], '-'),
                 $this->urlize($matches[1], '-'),
                 $this->urlize($matches[2], '-')
             );
-            $this->baseRouteName = sprintf('admin_%s_%s_%s',
+            $this->baseRouteName = sprintf(
+                'admin_%s_%s_%s',
                 $this->urlize($matches[0]),
                 $this->urlize($matches[1]),
                 $this->urlize($matches[2])
@@ -60,12 +64,12 @@ class CommentUserAdmin extends AbstractAdmin
 
         if (!$this->isChild()) {
             $form->add('author', ModelListType::class, [
-                    'btn_add' => 'Add author',
-                    'btn_list' => 'List',
-                    'btn_delete' => false,
-                ], [
-                    'placeholder' => 'No author selected',
-                ]);
+                'btn_add' => 'Add author',
+                'btn_list' => 'List',
+                'btn_delete' => false,
+            ], [
+                'placeholder' => 'No author selected',
+            ]);
         }
 
         $form

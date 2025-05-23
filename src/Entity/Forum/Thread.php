@@ -2,123 +2,95 @@
 
 namespace App\Entity\Forum;
 
+use App\Entity\User\User;
 use App\Entity\User\UserInterface;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="nt_thread")
- * @ORM\Entity(repositoryClass="App\Repository\ThreadRepository")
- */
+#[ORM\Table(name: 'nt_thread')]
+#[ORM\Entity(repositoryClass: \App\Repository\ThreadRepository::class)]
 class Thread implements SluggableInterface
 {
     use SluggableTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="old_id", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
     private ?int $old_id;
 
     /**
      * Tells if the thread is viewable on top of list.
-     *
-     * @ORM\Column(name="is_postit", type="boolean")
      */
+    #[ORM\Column(name: 'is_postit', type: 'boolean')]
     private bool $isPostit = false;
 
-    /**
-     * @ORM\Column(name="is_event", type="boolean")
-     */
+    #[ORM\Column(name: 'is_event', type: 'boolean')]
     private bool $isEvent = false;
 
-    /**
-     * @ORM\Column(name="date_event_start", type="date", nullable=true)
-     */
-    private ?DateTime $dateEventStart;
+    #[ORM\Column(name: 'date_event_start', type: 'date', nullable: true)]
+    private ?\DateTime $dateEventStart;
 
-    /**
-     * @ORM\Column(name="date_event_end", type="date", nullable=true)
-     */
-    private ?DateTime $dateEventEnd;
+    #[ORM\Column(name: 'date_event_end', type: 'date', nullable: true)]
+    private ?\DateTime $dateEventEnd;
 
     /**
      * Tells if new comments can be added in this thread.
-     *
-     * @ORM\Column(name="is_commentable", type="boolean")
      */
+    #[ORM\Column(name: 'is_commentable', type: 'boolean')]
     private bool $isCommentable = true;
 
     /**
      * forum.
-     *
-     * @ORM\ManyToOne(targetEntity="Forum", fetch="EAGER")
-     * @ORM\JoinColumn(name="forum_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private Forum $forum;
+    #[ORM\JoinColumn(name: 'forum_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Forum::class, fetch: 'EAGER')]
+    private ?Forum $forum;
 
-    /**
-     * @ORM\Column(name="nom", type="string", length=255)
-     * @Assert\Length(max=255)
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
     private string $nom;
 
-    /**
-     * @ORM\Column(name="date_ajout", type="datetime")
-     */
-    private DateTime $dateAjout;
+    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    private \DateTime $dateAjout;
 
-    /**
-     * @ORM\Column(name="body", type="text")
-     * @Assert\NotBlank()
-     */
+    #[ORM\Column(name: 'body', type: 'text')]
+    #[Assert\NotBlank]
     protected string $body;
 
-    /**
-     * @ORM\Column(name="url_video", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'url_video', type: 'string', length: 255, nullable: true)]
     private ?string $urlVideo;
 
     /**
      * Author of the comment.
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'LAZY')]
     private ?UserInterface $author;
 
     /**
      * Denormalized number of comments.
-     *
-     * @ORM\Column(name="num_comments", type="integer")
      */
+    #[ORM\Column(name: 'num_comments', type: 'integer')]
     private int $numComments = 0;
 
     /**
      * Denormalized date of the last comment.
-     *
-     * @ORM\Column(name="last_comment_at", type="datetime", nullable=true)
      */
-    private ?DateTime $lastCommentAt;
+    #[ORM\Column(name: 'last_comment_at', type: 'datetime', nullable: true)]
+    private ?\DateTime $lastCommentAt;
 
     /**
      * Denormalized author of the last comment.
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User")
-     * @ORM\JoinColumn(name="lastCommentBy_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
+    #[ORM\JoinColumn(name: 'lastCommentBy_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?UserInterface $lastCommentBy;
 
     /**
@@ -126,8 +98,8 @@ class Thread implements SluggableInterface
      */
     public function __construct()
     {
-        $this->setDateAjout(new DateTime());
-        $this->setLastCommentAt(new DateTime());
+        $this->setDateAjout(new \DateTime());
+        $this->setLastCommentAt(new \DateTime());
     }
 
     public function __toString()
@@ -202,7 +174,7 @@ class Thread implements SluggableInterface
     /**
      * Set forum.
      */
-    public function setForum(Forum $forum = null): self
+    public function setForum(?Forum $forum = null): self
     {
         $this->forum = $forum;
 
@@ -274,7 +246,7 @@ class Thread implements SluggableInterface
     /**
      * Set dateAjout.
      */
-    public function setDateAjout(DateTime $dateAjout): self
+    public function setDateAjout(\DateTime $dateAjout): self
     {
         $this->dateAjout = $dateAjout;
 
@@ -284,7 +256,7 @@ class Thread implements SluggableInterface
     /**
      * Get dateAjout.
      */
-    public function getDateAjout(): ?DateTime
+    public function getDateAjout(): ?\DateTime
     {
         return $this->dateAjout;
     }
@@ -388,15 +360,12 @@ class Thread implements SluggableInterface
         return $this->numComments += $by;
     }
 
-    public function getLastCommentAt(): ?DateTime
+    public function getLastCommentAt(): ?\DateTime
     {
         return $this->lastCommentAt;
     }
 
-    /**
-     * @return Thread
-     */
-    public function setLastCommentAt(DateTime $lastCommentAt): self
+    public function setLastCommentAt(\DateTime $lastCommentAt): self
     {
         $this->lastCommentAt = $lastCommentAt;
 
@@ -405,10 +374,8 @@ class Thread implements SluggableInterface
 
     /**
      * Set dateEventStart.
-     *
-     * @return Thread
      */
-    public function setDateEventStart(?DateTime $dateEventStart): self
+    public function setDateEventStart(?\DateTime $dateEventStart): self
     {
         $this->dateEventStart = $dateEventStart;
 
@@ -418,17 +385,15 @@ class Thread implements SluggableInterface
     /**
      * Get dateEventStart.
      */
-    public function getDateEventStart(): ?DateTime
+    public function getDateEventStart(): ?\DateTime
     {
         return $this->dateEventStart;
     }
 
     /**
      * Set dateEventEnd.
-     *
-     * @return Thread
      */
-    public function setDateEventEnd(?DateTime $dateEventEnd): self
+    public function setDateEventEnd(?\DateTime $dateEventEnd): self
     {
         $this->dateEventEnd = $dateEventEnd;
 
@@ -438,15 +403,13 @@ class Thread implements SluggableInterface
     /**
      * Get dateEventEnd.
      */
-    public function getDateEventEnd(): ?DateTime
+    public function getDateEventEnd(): ?\DateTime
     {
         return $this->dateEventEnd;
     }
 
     /**
      * Set isCommentable.
-     *
-     * @return Thread
      */
     public function setIsCommentable(bool $isCommentable): self
     {

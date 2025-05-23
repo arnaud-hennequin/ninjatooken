@@ -5,8 +5,6 @@ namespace App\Entity\User;
 use App\Entity\Clan\ClanUtilisateur;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,14 +15,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-/**
- * @ORM\Table(name="nt_user")
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\HasLifecycleCallbacks
- *
- * @UniqueEntity(fields="usernameCanonical", errorPath="username", message="ninja_tooken_user.username.already_used", groups={"Registration", "Profile"})
- * @UniqueEntity(fields="emailCanonical", errorPath="email", message="ninja_tooken_user.email.already_used", groups={"Registration", "Profile"})
- */
+#[ORM\Table(name: 'nt_user')]
+#[ORM\Entity(repositoryClass: \App\Repository\UserRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: 'usernameCanonical', errorPath: 'username', message: 'ninja_tooken_user.username.already_used', groups: ['Registration', 'Profile'])]
+#[UniqueEntity(fields: 'emailCanonical', errorPath: 'email', message: 'ninja_tooken_user.email.already_used', groups: ['Registration', 'Profile'])]
 class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUserInterface
 {
     use SluggableTrait;
@@ -38,60 +33,42 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     public const ROLE_DEFAULT = 'ROLE_USER';
     public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected DateTime $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    protected \DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected DateTime $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: 'datetime')]
+    protected \DateTime $updatedAt;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $username;
 
-    /**
-     * @ORM\Column(name="username_canonical", type="string", length=255, unique=true)
-     */
+    #[ORM\Column(name: 'username_canonical', type: 'string', length: 255, unique: true)]
     protected string $usernameCanonical;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $email;
 
-    /**
-     * @ORM\Column(name="email_canonical", type="string", length=255, unique=true)
-     */
+    #[ORM\Column(name: 'email_canonical', type: 'string', length: 255, unique: true)]
     protected string $emailCanonical;
 
-    /**
-     * @ORM\Column(name="enabled", type="boolean")
-     */
+    #[ORM\Column(name: 'enabled', type: 'boolean')]
     protected bool $enabled;
 
     /**
      * The salt to use for hashing.
-     *
-     * @ORM\Column(type="string", length=255)
      */
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $salt;
 
     /**
      * Encrypted password. Must be persisted.
-     *
-     * @ORM\Column(type="string", length=255)
      */
+    #[ORM\Column(type: 'string', length: 255)]
     protected string $password;
 
     /**
@@ -99,161 +76,115 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     protected ?string $plainPassword;
 
-    /**
-     * @ORM\Column(name="last_login", type="datetime", nullable=true)
-     */
-    protected ?DateTime $lastLogin;
+    #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
+    protected ?\DateTime $lastLogin;
 
     /**
      * Random string sent to the user email address in order to verify it.
-     *
-     * @ORM\Column(name="confirmation_token", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'confirmation_token', type: 'string', length: 255, nullable: true)]
     protected ?string $confirmationToken;
 
-    /**
-     * @ORM\Column(name="password_requested_at", type="datetime", nullable=true)
-     */
-    protected ?DateTime $passwordRequestedAt;
+    #[ORM\Column(name: 'password_requested_at', type: 'datetime', nullable: true)]
+    protected ?\DateTime $passwordRequestedAt;
 
     protected ?Collection $groups = null;
 
-    /**
-     * @ORM\Column(type="array")
-     */
+    #[ORM\Column(type: 'array')]
     protected array $roles;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Game\Ninja", mappedBy="user", cascade={"persist", "remove"}, fetch="EAGER")
-     */
+    #[ORM\OneToOne(targetEntity: Ninja::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EAGER')]
     private ?Ninja $ninja = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Clan\ClanUtilisateur", mappedBy="membre", cascade={"persist", "remove"}, fetch="EAGER")
-     */
+    #[ORM\OneToOne(targetEntity: ClanUtilisateur::class, mappedBy: 'membre', cascade: ['persist', 'remove'], fetch: 'EAGER')]
     private ?ClanUtilisateur $clan;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Clan\ClanUtilisateur", mappedBy="recruteur", cascade={"persist", "remove"}, fetch="LAZY")
-     * @ORM\OrderBy({"dateAjout" = "ASC"})
+     * @var Collection<ClanUtilisateur>
      */
+    #[ORM\OneToMany(targetEntity: ClanUtilisateur::class, mappedBy: 'recruteur', cascade: ['persist', 'remove'], fetch: 'LAZY')]
+    #[ORM\OrderBy(['dateAjout' => 'ASC'])]
     private Collection $recruts;
 
-    /**
-     * @ORM\Column(name="old_id", type="integer", nullable=true)
-     */
-    private int $old_id;
+    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    private ?int $old_id;
 
-    /**
-     * @ORM\Column(name="old_login", type="string", length=255, nullable=true)
-     */
-    private string $old_login;
+    #[ORM\Column(name: 'old_login', type: 'string', length: 255, nullable: true)]
+    private ?string $old_login;
 
-    /**
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     private ?string $description;
 
-    /**
-     * @ORM\Column(name="avatar", type="string", length=255, nullable=true)
-     */
-    private string $avatar;
+    #[ORM\Column(name: 'avatar', type: 'string', length: 255, nullable: true)]
+    private ?string $avatar;
 
     // propriété utilisé temporairement pour la suppression
     private ?string $tempAvatar = null;
     private ?UploadedFile $file = null;
 
-    /**
-     * @ORM\Column(name="receive_newsletter", type="boolean")
-     */
+    #[ORM\Column(name: 'receive_newsletter', type: 'boolean')]
     private bool $receiveNewsletter = false;
 
-    /**
-     * @ORM\Column(name="receive_avertissement", type="boolean")
-     */
+    #[ORM\Column(name: 'receive_avertissement', type: 'boolean')]
     private bool $receiveAvertissement = false;
 
-    /**
-     * @ORM\Column(name="locked", type="boolean")
-     */
+    #[ORM\Column(name: 'locked', type: 'boolean')]
     private bool $locked = false;
 
-    /**
-     * @ORM\Column(name="old_usernames", type="array")
-     */
+    #[ORM\Column(name: 'old_usernames', type: 'array')]
     private array $oldUsernames;
 
-    /**
-     * @ORM\Column(name="old_usernames_canonical", type="string")
-     */
+    #[ORM\Column(name: 'old_usernames_canonical', type: 'string')]
     private string $oldUsernamesCanonical;
 
-    /**
-     * @ORM\Column(name="auto_login", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'auto_login', type: 'string', length: 255, nullable: true)]
     private ?string $autoLogin;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User\Ip", mappedBy="user", cascade={"persist", "remove"}, fetch="LAZY")
+     * @var Collection<Ip>
      */
+    #[ORM\OneToMany(targetEntity: Ip::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'LAZY')]
     private Collection $ips;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User\Message", mappedBy="author", fetch="LAZY")
+     * @var Collection<Message>
      */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'author', fetch: 'LAZY')]
     private Collection $messages;
 
     protected string $twoStepVerificationCode;
 
-    /**
-     * @ORM\Column(name="date_of_birth", type="datetime", nullable=true)
-     */
-    protected ?DateTimeInterface $dateOfBirth;
+    #[ORM\Column(name: 'date_of_birth', type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $dateOfBirth;
 
-    /**
-     * @ORM\Column(name="biography", type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(name: 'biography', type: 'string', length: 255, nullable: true)]
     protected ?string $biography;
 
-    /**
-     * @ORM\Column(name="gender", type="string", length=1, nullable=true)
-     */
-    protected string $gender = self::GENDER_UNKNOWN; // set the default to unknown
+    #[ORM\Column(name: 'gender', type: 'string', length: 1, nullable: true)]
+    protected ?string $gender = self::GENDER_UNKNOWN; // set the default to unknown
 
-    /**
-     * @ORM\Column(name="locale", type="string", length=8, nullable=true)
-     */
-    protected string $locale;
+    #[ORM\Column(name: 'locale', type: 'string', length: 8, nullable: true)]
+    protected ?string $locale;
 
-    /**
-     * @ORM\Column(name="timezone", type="string", length=64, nullable=true)
-     */
-    protected string $timezone;
+    #[ORM\Column(name: 'timezone', type: 'string', length: 64, nullable: true)]
+    protected ?string $timezone;
 
-    /**
-     * @ORM\Column(name="date_application", type="datetime", nullable=true)
-     */
-    protected ?DateTimeInterface $dateApplication;
+    #[ORM\Column(name: 'date_application', type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $dateApplication;
 
-    /**
-     * @ORM\Column(name="date_message", type="datetime", nullable=true)
-     */
-    protected ?DateTimeInterface $dateMessage;
+    #[ORM\Column(name: 'date_message', type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $dateMessage;
 
-    /**
-     * @ORM\Column(name="number_application", type="integer", nullable=true)
-     */
+    #[ORM\Column(name: 'number_application', type: 'integer', nullable: true)]
     protected ?int $numberApplication;
 
     /**
-     * lobby.
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Game\Lobby", inversedBy="users")
-     * @ORM\JoinTable(name="nt_lobby_user",
-     *      inverseJoinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id", onDelete="cascade")},
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")}
-     * )
+     * @var Collection<Lobby>
      */
+    #[ORM\JoinTable(name: 'nt_lobby_user')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    #[ORM\InverseJoinColumn(name: 'lobby_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    #[ORM\ManyToMany(targetEntity: Lobby::class, inversedBy: 'users')]
     private Collection $lobbies;
 
     private ?int $level = null;
@@ -297,7 +228,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->getUserIdentifier();
     }
 
-    public function getUserIdentifier(): ?string
+    public function getUserIdentifier(): string
     {
         return $this->getUsername();
     }
@@ -435,7 +366,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             $data = array_values($data);
         }
 
-        list(
+        [
             $this->password,
             $this->salt,
             $this->usernameCanonical,
@@ -444,7 +375,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             $this->id,
             $this->email,
             $this->emailCanonical
-        ) = $data;
+        ] = $data;
     }
 
     public function eraseCredentials()
@@ -511,7 +442,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Gets the last login time.
      */
-    public function getLastLogin(): ?DateTime
+    public function getLastLogin(): ?\DateTime
     {
         return $this->lastLogin;
     }
@@ -630,7 +561,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function setLastLogin(?DateTime $time = null): self
+    public function setLastLogin(?\DateTime $time = null): self
     {
         $this->lastLogin = $time;
 
@@ -644,7 +575,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function setPasswordRequestedAt(?DateTime $date = null): self
+    public function setPasswordRequestedAt(?\DateTime $date = null): self
     {
         $this->passwordRequestedAt = $date;
 
@@ -654,15 +585,15 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Gets the timestamp that the user requested a password reset.
      */
-    public function getPasswordRequestedAt(): ?DateTime
+    public function getPasswordRequestedAt(): ?\DateTime
     {
         return $this->passwordRequestedAt;
     }
 
     public function isPasswordRequestNonExpired(int $ttl): bool
     {
-        return $this->getPasswordRequestedAt() instanceof DateTime &&
-               $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
+        return $this->getPasswordRequestedAt() instanceof \DateTime
+               && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
     public function setRoles(array $roles): self
@@ -747,25 +678,21 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return 'avatar';
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist(): void
     {
-        $this->createdAt = new DateTime();
-        $this->updatedAt = new DateTime();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
 
         if (null !== $this->file) {
             $this->setAvatar(uniqid((string) mt_rand(), true).'.'.$this->file->guessExtension());
         }
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdate(): void
     {
-        $this->updatedAt = new DateTime();
+        $this->updatedAt = new \DateTime();
         if (null !== $this->file) {
             $file = $this->id.'.'.$this->file->guessExtension();
 
@@ -789,10 +716,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         $this->setOldUsernamesCanonical($oldUsernamesCanonical);
     }
 
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
+    #[ORM\PostPersist]
+    #[ORM\PostUpdate]
     public function upload()
     {
         if (null === $this->file) {
@@ -820,17 +745,13 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->file;
     }
 
-    /**
-     * @ORM\PreRemove()
-     */
+    #[ORM\PreRemove]
     public function storeFilenameForRemove()
     {
         $this->tempAvatar = $this->getAbsoluteAvatar();
     }
 
-    /**
-     * @ORM\PostRemove()
-     */
+    #[ORM\PostRemove]
     public function removeUpload()
     {
         if ($this->tempAvatar && file_exists($this->tempAvatar)) {
@@ -840,8 +761,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set description.
-     *
-     * @return User
      */
     public function setDescription(?string $description): self
     {
@@ -860,8 +779,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set avatar.
-     *
-     * @return User
      */
     public function setAvatar(string $avatar): self
     {
@@ -890,8 +807,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set oldUsername.
-     *
-     * @return User
      */
     public function setOldUsernames(array $oldUsernames): self
     {
@@ -931,8 +846,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set oldUsernamesCanonical.
-     *
-     * @return User
      */
     public function setOldUsernamesCanonical(string $oldUsernamesCanonical): self
     {
@@ -951,8 +864,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set autoLogin.
-     *
-     * @return User
      */
     public function setAutoLogin(?string $autoLogin): self
     {
@@ -963,8 +874,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Get autoLogin.
-     *
-     * @return string
      */
     public function getAutoLogin(): ?string
     {
@@ -973,8 +882,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set receive_newsletter.
-     *
-     * @return User
      */
     public function setReceiveNewsletter(bool $receiveNewsletter): self
     {
@@ -993,8 +900,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set receive_avertissement.
-     *
-     * @return User
      */
     public function setReceiveAvertissement(bool $receiveAvertissement): self
     {
@@ -1013,8 +918,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set locked.
-     *
-     * @return User
      */
     public function setLocked(bool $locked): self
     {
@@ -1033,8 +936,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set old_id.
-     *
-     * @return User
      */
     public function setOldId(int $oldId): self
     {
@@ -1053,8 +954,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set old_login.
-     *
-     * @return User
      */
     public function setOldLogin(string $oldLogin): self
     {
@@ -1073,8 +972,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set ninja.
-     *
-     * @return User
      */
     public function setNinja(?Ninja $ninja = null): self
     {
@@ -1093,8 +990,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set clan.
-     *
-     * @return User
      */
     public function setClan(?ClanUtilisateur $clan = null): self
     {
@@ -1113,8 +1008,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Add recruts.
-     *
-     * @return User
      */
     public function addRecrut(ClanUtilisateur $recruts): self
     {
@@ -1141,8 +1034,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set recruts collection.
-     *
-     * @return User
      */
     public function setRecruts(Collection $recruts): self
     {
@@ -1153,8 +1044,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Add ips.
-     *
-     * @return User
      */
     public function addIp(Ip $ips): self
     {
@@ -1182,8 +1071,6 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Add messages.
-     *
-     * @return User
      */
     public function addMessage(Message $message): self
     {
@@ -1209,26 +1096,26 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->messages;
     }
 
-    public function setCreatedAt(?DateTime $createdAt = null): self
+    public function setCreatedAt(?\DateTime $createdAt = null): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt = null): self
+    public function setUpdatedAt(?\DateTime $updatedAt = null): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -1298,12 +1185,12 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this->enabled;
     }
 
-    public function getDateOfBirth(): ?DateTimeInterface
+    public function getDateOfBirth(): ?\DateTimeInterface
     {
         return $this->dateOfBirth;
     }
 
-    public function setDateOfBirth(?DateTimeInterface $dateOfBirth): self
+    public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): self
     {
         $this->dateOfBirth = $dateOfBirth;
 
@@ -1334,12 +1221,12 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getDateApplication(): ?DateTimeInterface
+    public function getDateApplication(): ?\DateTimeInterface
     {
         return $this->dateApplication;
     }
 
-    public function setDateApplication(?DateTimeInterface $dateApplication): self
+    public function setDateApplication(?\DateTimeInterface $dateApplication): self
     {
         $this->dateApplication = $dateApplication;
 
@@ -1358,12 +1245,12 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getDateMessage(): ?DateTimeInterface
+    public function getDateMessage(): ?\DateTimeInterface
     {
         return $this->dateMessage;
     }
 
-    public function setDateMessage(?DateTimeInterface $dateMessage): self
+    public function setDateMessage(?\DateTimeInterface $dateMessage): self
     {
         $this->dateMessage = $dateMessage;
 

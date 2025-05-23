@@ -14,7 +14,6 @@ use App\Repository\FriendRepository;
 use App\Repository\LobbyRepository;
 use App\Utils\GameData;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
@@ -119,7 +118,7 @@ class UnityController extends AbstractController
                             $data = $ninja->getGrade();
                         }
                         break;
-                    // mise à jour du compteur de mission
+                        // mise à jour du compteur de mission
                     case 'm':
                         $t = $request->get('t');
                         if ($this->isCryptingOk($a.$t)) {
@@ -140,7 +139,7 @@ class UnityController extends AbstractController
                             }
                         }
                         break;
-                    // mise à jour des achievements
+                        // mise à jour des achievements
                     case 'a':
                         $l = $request->get('l');
                         if ($this->isCryptingOk($a.$l)) {
@@ -151,7 +150,7 @@ class UnityController extends AbstractController
                             $data = '1';
                         }
                         break;
-                    // mise à jour de la skin
+                        // mise à jour de la skin
                     case 's':
                         $l = $request->get('l');
                         if ($this->isCryptingOk($a.$l)) {
@@ -170,7 +169,7 @@ class UnityController extends AbstractController
                             }
                         }
                         break;
-                    // mise à jour de la classe
+                        // mise à jour de la classe
                     case 'c':
                         $c = $request->get('c');
                         $classe = $ninja->getClasse();
@@ -189,7 +188,7 @@ class UnityController extends AbstractController
                             $data = '1';
                         }
                         break;
-                    // mise à jour de l'expérience
+                        // mise à jour de l'expérience
                     case 'e':
                         $e = (int) $request->get('e');
                         $data = $ninja->getExperience();
@@ -201,7 +200,7 @@ class UnityController extends AbstractController
                             $data = $ninja->getExperience();
                         }
                         break;
-                    // mise à jour des niveaux
+                        // mise à jour des niveaux
                     case 'l':
                         $l = $request->get('l');
                         if ($this->isCryptingOk($a.$l)) {
@@ -300,10 +299,10 @@ class UnityController extends AbstractController
                                         $levels[25] = 0;
                                         $levels[26] = 0;
                                     }
-                                    $ninja->setAptitudeForce($levels[0]);
-                                    $ninja->setAptitudeVitesse($levels[1]);
-                                    $ninja->setAptitudeVie($levels[2]);
-                                    $ninja->setAptitudeChakra($levels[3]);
+                                    $ninja->setAptitudeForce((int) $levels[0]);
+                                    $ninja->setAptitudeVitesse((int) $levels[1]);
+                                    $ninja->setAptitudeVie((int) $levels[2]);
+                                    $ninja->setAptitudeChakra((int) $levels[3]);
                                     $ninja->setJutsuBoule(min(30, $levels[4]));
                                     $ninja->setJutsuDoubleSaut(min(30, $levels[5]));
                                     $ninja->setJutsuBouclier(min(30, $levels[6]));
@@ -335,7 +334,7 @@ class UnityController extends AbstractController
                             }
                         }
                         break;
-                    // check le cheat
+                        // check le cheat
                     case 't':
                         $t = $request->get('t');
                         $l = $request->get('l');
@@ -379,66 +378,61 @@ class UnityController extends AbstractController
                                             $vitesse += 5;
                                         }
 
-                                        if ($force == $levels[0] &&
-                                            $vitesse == $levels[1] &&
-                                            $ninjaCheck->getAptitudeVie() == $levels[2] &&
-                                            $ninjaCheck->getAptitudeChakra() == $levels[3] &&
-                                            $ninjaCheck->getJutsuBoule() == $levels[4] &&
-                                            $ninjaCheck->getJutsuDoubleSaut() == $levels[5] &&
-                                            $ninjaCheck->getJutsuBouclier() == $levels[6] &&
-                                            $marcherMur == $levels[7] &&
-                                            $ninjaCheck->getJutsuDeflagration() == $levels[8] &&
-                                            (
+                                        if ($force == $levels[0]
+                                            && $vitesse == $levels[1]
+                                            && $ninjaCheck->getAptitudeVie() == $levels[2]
+                                            && $ninjaCheck->getAptitudeChakra() == $levels[3]
+                                            && $ninjaCheck->getJutsuBoule() == $levels[4]
+                                            && $ninjaCheck->getJutsuDoubleSaut() == $levels[5]
+                                            && $ninjaCheck->getJutsuBouclier() == $levels[6]
+                                            && $marcherMur == $levels[7]
+                                            && $ninjaCheck->getJutsuDeflagration() == $levels[8]
+                                            && (
                                                 (
-                                                    'feu' == $ninjaCheck->getClasse() &&
-                                                    $ninjaCheck->getJutsuResistanceExplosion() == $levels[13] &&
-                                                    $ninjaCheck->getJutsuPhoenix() == $levels[14] &&
-                                                    $ninjaCheck->getJutsuKagutsuchi() == $levels[26]
+                                                    'feu' == $ninjaCheck->getClasse()
+                                                    && $ninjaCheck->getJutsuResistanceExplosion() == $levels[13]
+                                                    && $ninjaCheck->getJutsuPhoenix() == $levels[14]
+                                                    && $ninjaCheck->getJutsuKagutsuchi() == $levels[26]
                                                 )
-                                                ||
-                                                (
-                                                    'eau' == $ninjaCheck->getClasse() &&
-                                                    $ninjaCheck->getJutsuTransformationAqueuse() == $levels[9] &&
-                                                    $ninjaCheck->getJutsuVague() == $levels[15] &&
-                                                    $ninjaCheck->getJutsuSusanoo() == $levels[25]
+                                                || (
+                                                    'eau' == $ninjaCheck->getClasse()
+                                                    && $ninjaCheck->getJutsuTransformationAqueuse() == $levels[9]
+                                                    && $ninjaCheck->getJutsuVague() == $levels[15]
+                                                    && $ninjaCheck->getJutsuSusanoo() == $levels[25]
                                                 )
-                                                ||
-                                                (
-                                                    'terre' == $ninjaCheck->getClasse() &&
-                                                    $ninjaCheck->getJutsuMetamorphose() == $levels[10] &&
-                                                    $ninjaCheck->getJutsuPieux() == $levels[16] &&
-                                                    $ninjaCheck->getJutsuSarutahiko() == $levels[24]
+                                                || (
+                                                    'terre' == $ninjaCheck->getClasse()
+                                                    && $ninjaCheck->getJutsuMetamorphose() == $levels[10]
+                                                    && $ninjaCheck->getJutsuPieux() == $levels[16]
+                                                    && $ninjaCheck->getJutsuSarutahiko() == $levels[24]
                                                 )
-                                                ||
-                                                (
-                                                    'foudre' == $ninjaCheck->getClasse() &&
-                                                    $ninjaCheck->getJutsuMultishoot() == $levels[11] &&
-                                                    $ninjaCheck->getJutsuTeleportation() == $levels[17] &&
-                                                    $ninjaCheck->getJutsuRaijin() == $levels[23]
+                                                || (
+                                                    'foudre' == $ninjaCheck->getClasse()
+                                                    && $ninjaCheck->getJutsuMultishoot() == $levels[11]
+                                                    && $ninjaCheck->getJutsuTeleportation() == $levels[17]
+                                                    && $ninjaCheck->getJutsuRaijin() == $levels[23]
                                                 )
-                                                ||
-                                                (
-                                                    'vent' == $ninjaCheck->getClasse() &&
-                                                    $ninjaCheck->getJutsuInvisibilite() == $levels[12] &&
-                                                    $ninjaCheck->getJutsuTornade() == $levels[18] &&
-                                                    $ninjaCheck->getJutsuFujin() == $levels[22]
+                                                || (
+                                                    'vent' == $ninjaCheck->getClasse()
+                                                    && $ninjaCheck->getJutsuInvisibilite() == $levels[12]
+                                                    && $ninjaCheck->getJutsuTornade() == $levels[18]
+                                                    && $ninjaCheck->getJutsuFujin() == $levels[22]
                                                 )
-                                            ) &&
-                                            $ninjaCheck->getJutsuKusanagi() == $levels[19] &&
-                                            $ninjaCheck->getJutsuAcierRenforce() == $levels[20] &&
-                                            $ninjaCheck->getJutsuChakraVie() == $levels[21] &&
+                                            )
+                                            && $ninjaCheck->getJutsuKusanagi() == $levels[19]
+                                            && $ninjaCheck->getJutsuAcierRenforce() == $levels[20]
+                                            && $ninjaCheck->getJutsuChakraVie() == $levels[21]
 
-                                            $niveau == $levels[27]
+                                            && $niveau == $levels[27]
                                         ) {
                                             $data = '1';
                                         }
                                     }
-                                    // peut être un visiteur : on laisse ouvert pour les petits niveaux
+                                // peut être un visiteur : on laisse ouvert pour les petits niveaux
                                 } else {
                                     $num = 0;
-                                    /** @var int $v */
                                     foreach ($levels as $v) {
-                                        $num += $v;
+                                        $num += (int) $v;
                                     }
                                     if ($num < 35) {
                                         $data = '1';
@@ -500,13 +494,13 @@ class UnityController extends AbstractController
                                         $lobby->addUser($userCheck);
                                         $em->persist($lobby);
                                         $em->flush();
-                                    } catch (Exception) {
+                                    } catch (\Exception) {
                                     }
                                 }
                             }
                         }
                         break;
-                    // apparition du yokai
+                        // apparition du yokai
                     case 'y':
                         if ($this->isCryptingOk($a)) {
                             $step = 15; // toutes les n minutes (fixe)
@@ -520,7 +514,7 @@ class UnityController extends AbstractController
                             $data = date('Y-m-d H:i:s').'|'.date('Y-m-d H:i:s', $dateApparition);
                         }
                         break;
-                    // ajoute un amis
+                        // ajoute un amis
                     case 'f':
                         $l = $request->get('l');
                         if ($this->isCryptingOk($a.$l)) {
@@ -555,16 +549,16 @@ class UnityController extends AbstractController
                             }
                         }
                         break;
-                    // upload vers imgur
+                        // upload vers imgur
                     case 'i':
                         $fileupload = $request->get('fileupload');
                         if ($this->isCryptingOk($a)) {
                             $clientId = $this->getParameter('imgur')['clientId'];
                             $ch = curl_init();
-                            curl_setopt($ch, CURLOPT_HEADER, 0);
-                            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+                            curl_setopt($ch, CURLOPT_HEADER, false);
+                            curl_setopt($ch, CURLOPT_VERBOSE, false);
                             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible;)');
                             curl_setopt($ch, CURLOPT_URL, 'https://api.imgur.com/3/image');
@@ -593,13 +587,13 @@ class UnityController extends AbstractController
                                             $em->flush();
                                             $data = '1';
                                         }
-                                    } catch (Exception) {
+                                    } catch (\Exception) {
                                     }
                                 }
                             }
                         }
                         break;
-                    // mise à jour du lobby
+                        // mise à jour du lobby
                     case 'lu':
                         $partie = $request->get('partie');
                         $maxPlayer = $request->get('maxPlayer');
@@ -655,7 +649,7 @@ class UnityController extends AbstractController
                             }
                         }
                         break;
-                    // suppression du lobby
+                        // suppression du lobby
                     case 'ld':
                         if ($this->isCryptingOk($a)) {
                             $lobby = $em->getRepository(Lobby::class)
@@ -679,7 +673,7 @@ class UnityController extends AbstractController
                             $data = '1';
                         }
                         break;
-                    // amis dans le lobby
+                        // amis dans le lobby
                     case 'lf':
                         if ($this->isCryptingOk($a)) {
                             /** @var LobbyRepository $lobbyRepository */
@@ -700,7 +694,7 @@ class UnityController extends AbstractController
                                 ->setFirstResult(0)
                                 ->setMaxResults(100)
                                 ->getQuery();
-                            $content = '<'.'?xml version="1.0" encoding="UTF-8"?'.'>';
+                            $content = '<?xml version="1.0" encoding="UTF-8"?>';
                             $content .= '<root>';
                             $content .= '<games>';
                             $friends = $friends->getScalarResult();
@@ -734,7 +728,7 @@ class UnityController extends AbstractController
     public function connect(Request $request, AuthorizationCheckerInterface $authorizationChecker, Packages $assetsManager, CacheManager $cacheManager, TokenStorageInterface $tokenStorage, GameData $gameData, EntityManagerInterface $em): Response
     {
         // initialisation
-        $content = '<'.'?xml version="1.0" encoding="UTF-8"'.'?><root>';
+        $content = '<?xml version="1.0" encoding="UTF-8"?><root>';
         $retour = '0';
         $friendsUsername = [];
 

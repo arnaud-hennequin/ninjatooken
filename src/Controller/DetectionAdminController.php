@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class DetectionAdminController extends Controller
 {
-    public function list(EntityManagerInterface $em, Request $request = null): Response
+    public function list(EntityManagerInterface $em, ?Request $request = null): Response
     {
         if (false === $this->admin->isGranted('LIST')) {
             throw new AccessDeniedException();

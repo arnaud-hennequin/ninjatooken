@@ -2,47 +2,35 @@
 
 namespace App\Entity\User;
 
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Group.
- *
- * @ORM\Table(name="nt_ip")
- * @ORM\Entity
  */
+#[ORM\Table(name: 'nt_ip')]
+#[ORM\Entity]
 class Ip
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(name="ip", type="integer", options={"unsigned"=true})
-     */
+    #[ORM\Column(name: 'ip', type: 'integer', options: ['unsigned' => true])]
     private int $ip;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private DateTime $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    private \DateTime $createdAt;
 
-    /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     */
-    private ?DateTime $updatedAt;
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    private ?\DateTime $updatedAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User\User", inversedBy="ips")
-     */
-    private User $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ips')]
+    private ?User $user;
 
     public function __construct()
     {
-        $this->setCreatedAt(new DateTime());
+        $this->setCreatedAt(new \DateTime());
     }
 
     /**
@@ -55,8 +43,6 @@ class Ip
 
     /**
      * Set ip.
-     *
-     * @return Ip
      */
     public function setIp(int $ip): self
     {
@@ -75,10 +61,8 @@ class Ip
 
     /**
      * Set createdAt.
-     *
-     * @return Ip
      */
-    public function setCreatedAt(DateTime $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -88,17 +72,15 @@ class Ip
     /**
      * Get createdAt.
      */
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
 
     /**
      * Set updatedAt.
-     *
-     * @return Ip
      */
-    public function setUpdatedAt(?DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -108,7 +90,7 @@ class Ip
     /**
      * Get updatedAt.
      */
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -117,10 +99,8 @@ class Ip
      * Set user.
      *
      * @param User|null $user
-     *
-     * @return Ip
      */
-    public function setUser(UserInterface $user = null): self
+    public function setUser(?UserInterface $user = null): self
     {
         $this->user = $user;
 

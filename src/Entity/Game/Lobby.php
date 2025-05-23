@@ -3,76 +3,54 @@
 namespace App\Entity\Game;
 
 use App\Entity\User\User;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Lobby.
- *
- * @ORM\Table(name="nt_lobby")
- * @ORM\Entity(repositoryClass="App\Repository\LobbyRepository")
  */
+#[ORM\Table(name: 'nt_lobby')]
+#[ORM\Entity(repositoryClass: \App\Repository\LobbyRepository::class)]
 class Lobby
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
     /**
-     * user.
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\User\User", mappedBy="lobbies")
-     * @ORM\JoinTable(name="nt_lobby_user",
-     *      joinColumns={@ORM\JoinColumn(name="lobby_id", referencedColumnName="id", onDelete="cascade")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")}
-     * )
+     * @var Collection<User>
      */
-    private Collection $users;
+    #[ORM\JoinTable(name: 'nt_lobby_user')]
+    #[ORM\JoinColumn(name: 'lobby_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    #[ORM\InverseJoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'lobbies')]
+    private ?Collection $users;
 
-    /**
-     * @ORM\Column(name="carte", type="smallint")
-     */
+    #[ORM\Column(name: 'carte', type: 'smallint')]
     private int $carte = 0;
 
-    /**
-     * @ORM\Column(name="partie", type="smallint")
-     */
+    #[ORM\Column(name: 'partie', type: 'smallint')]
     private int $partie = 0;
 
-    /**
-     * @ORM\Column(name="maximum", type="smallint")
-     */
+    #[ORM\Column(name: 'maximum', type: 'smallint')]
     private int $maximum = 2;
 
-    /**
-     * @ORM\Column(name="jeu", type="smallint")
-     */
+    #[ORM\Column(name: 'jeu', type: 'smallint')]
     private int $jeu = 0;
 
-    /**
-     * @ORM\Column(name="privee", type="string", length=30)
-     */
+    #[ORM\Column(name: 'privee', type: 'string', length: 30)]
     private string $privee = '';
 
-    /**
-     * @ORM\Column(name="version", type="decimal", precision=10, scale=6)
-     */
+    #[ORM\Column(name: 'version', type: 'decimal', precision: 10, scale: 6)]
     private float $version = 0;
 
-    /**
-     * @ORM\Column(name="date_debut", type="datetime")
-     */
-    private DateTime $dateDebut;
+    #[ORM\Column(name: 'date_debut', type: 'datetime')]
+    private \DateTime $dateDebut;
 
-    /**
-     * @ORM\Column(name="date_update", type="datetime")
-     */
-    private DateTime $dateUpdate;
+    #[ORM\Column(name: 'date_update', type: 'datetime')]
+    private \DateTime $dateUpdate;
 
     /**
      * Constructor.
@@ -80,8 +58,8 @@ class Lobby
     public function __construct()
     {
         $this->users = new ArrayCollection();
-        $this->setDateDebut(new DateTime());
-        $this->setDateUpdate(new DateTime());
+        $this->setDateDebut(new \DateTime());
+        $this->setDateUpdate(new \DateTime());
     }
 
     /**
@@ -94,8 +72,6 @@ class Lobby
 
     /**
      * Set carte.
-     *
-     * @return Lobby
      */
     public function setCarte(int $carte): self
     {
@@ -114,8 +90,6 @@ class Lobby
 
     /**
      * Set partie.
-     *
-     * @return Lobby
      */
     public function setPartie(int $partie): self
     {
@@ -134,8 +108,6 @@ class Lobby
 
     /**
      * Set maximum.
-     *
-     * @return Lobby
      */
     public function setMaximum(int $maximum): self
     {
@@ -154,8 +126,6 @@ class Lobby
 
     /**
      * Set jeu.
-     *
-     * @return Lobby
      */
     public function setJeu(int $jeu): self
     {
@@ -174,8 +144,6 @@ class Lobby
 
     /**
      * Set privee.
-     *
-     * @return Lobby
      */
     public function setPrivee(string $privee): self
     {
@@ -194,8 +162,6 @@ class Lobby
 
     /**
      * Set version.
-     *
-     * @return Lobby
      */
     public function setVersion(float $version): self
     {
@@ -214,10 +180,8 @@ class Lobby
 
     /**
      * Set dateDebut.
-     *
-     * @return Lobby
      */
-    public function setDateDebut(DateTime $dateDebut): self
+    public function setDateDebut(\DateTime $dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
@@ -227,17 +191,15 @@ class Lobby
     /**
      * Get dateDebut.
      */
-    public function getDateDebut(): ?DateTime
+    public function getDateDebut(): ?\DateTime
     {
         return $this->dateDebut;
     }
 
     /**
      * Set dateUpdate.
-     *
-     * @return Lobby
      */
-    public function setDateUpdate(DateTime $dateUpdate): self
+    public function setDateUpdate(\DateTime $dateUpdate): self
     {
         $this->dateUpdate = $dateUpdate;
 
@@ -247,7 +209,7 @@ class Lobby
     /**
      * Get dateUpdate.
      */
-    public function getDateUpdate(): ?DateTime
+    public function getDateUpdate(): ?\DateTime
     {
         return $this->dateUpdate;
     }

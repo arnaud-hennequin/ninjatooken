@@ -1,4 +1,5 @@
 <?php
+
 /**
  * rzeka.net framework (http://framework.rzeka.net/).
  *
