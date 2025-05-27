@@ -1,0 +1,59 @@
+services:
+  php:
+    build:
+      context: ./
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - ./:/var/www/ninjatooken/
+    ports:
+      - 9000:9000
+    depends_on:
+      - mariadb
+    networks:
+      - nt_local
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/ninjatooken/
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - nt_local
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - 3306:3306
+    command: --init-file /data/application/init.sql
+    volumes:
+      - ./docker/mariadb/init.sql:/data/application/init.sql
+      - db_data:/var/lib/mysql
+    networks:
+      - nt_local
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mariadb # Nom du conteneur MariaDB
+      PMA_PORT: 3306    # Port interne utilisé par phpMyAdmin
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - 8081:80 # Accès à phpMyAdmin via le port 8081
+    depends_on:
+      - mariadb
+
+volumes:
+  db_data:
+
+networks:
+  nt_local:

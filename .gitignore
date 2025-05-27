@@ -36,8 +36,6 @@ spool/*
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-clic.csv
-open.csv
 todo.txt
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
