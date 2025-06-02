@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -44,6 +45,7 @@ class ForumController extends AbstractController
         $this->authorizationChecker = $authorizationChecker;
     }
 
+    #[Route('/{_locale}/message.php', name: 'ninja_tooken_message_old')]
     public function oldMessage(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): RedirectResponse
     {
         $thread = $em->getRepository('App\Entity\Forum\Thread')->findOneBy(['old_id' => (int) $request->get('ID')]);
@@ -65,6 +67,7 @@ class ForumController extends AbstractController
         ]));
     }
 
+    #[Route('/{_locale}/forum.php', name: 'ninja_tooken_forum_old')]
     public function oldForum(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): RedirectResponse
     {
         $forum = $em->getRepository('App\Entity\Forum\Forum')->findOneBy(['old_id' => (int) $request->get('ID')]);
@@ -82,6 +85,7 @@ class ForumController extends AbstractController
     /**
      * @throws \Exception
      */
+    #[Route('/{_locale}/event/{page}', name: 'ninja_tooken_event', methods: ['GET'], defaults: ['page' => 1], requirements: ['page' => '\d*'])]
     public function event(EntityManagerInterface $em, int $page = 1): Response
     {
         $num = $this->getParameter('numReponse');
@@ -102,6 +106,7 @@ class ForumController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/event/ajouter/', name: 'ninja_tooken_event_ajouter')]
     public function eventAjouter(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -145,6 +150,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/event/{thread_nom}/modifier/', name: 'ninja_tooken_event_modifier')]
     public function eventModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
     {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -185,6 +191,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/forum', name: 'ninja_tooken_forum')]
     public function forum(EntityManagerInterface $em): Response
     {
         /** @var ThreadRepository $threadRepository */
@@ -202,6 +209,7 @@ class ForumController extends AbstractController
         return $this->render('forum/forum.html.twig', ['forums' => $forums]);
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{page}', name: 'ninja_tooken_topic', methods: ['GET'], defaults: ['page' => 1], requirements: ['page' => '\d*'])]
     public function topic(
         #[MapEntity(mapping: ['forum_nom' => 'slug'])]
         Forum $forum,
@@ -223,6 +231,7 @@ class ForumController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/{page}', name: 'ninja_tooken_thread', methods: ['GET'], defaults: ['page' => 1], requirements: ['page' => '\d*'])]
     public function thread(
         #[MapEntity(mapping: ['forum_nom' => 'slug'])]
         Forum $forum,
@@ -250,6 +259,7 @@ class ForumController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/ajouter/', name: 'ninja_tooken_thread_ajouter')]
     public function threadAjouter(
         Request $request,
         TranslatorInterface $translator,
@@ -298,6 +308,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/modifier/', name: 'ninja_tooken_thread_modifier')]
     public function threadModifier(
         Request $request,
         TranslatorInterface $translator,
@@ -346,6 +357,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/lock/', name: 'ninja_tooken_thread_verrouiller')]
     public function threadVerrouiller(
         TranslatorInterface $translator,
         #[MapEntity(mapping: ['forum_nom' => 'slug'])]
@@ -375,6 +387,7 @@ class ForumController extends AbstractController
         ]));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/postit/', name: 'ninja_tooken_thread_postit')]
     public function threadPostit(
         TranslatorInterface $translator,
         #[MapEntity(mapping: ['forum_nom' => 'slug'])]
@@ -404,6 +417,7 @@ class ForumController extends AbstractController
         ]));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/supprimer/', name: 'ninja_tooken_thread_supprimer')]
     public function threadSupprimer(
         TranslatorInterface $translator,
         #[MapEntity(mapping: ['forum_nom' => 'slug'])]
@@ -446,6 +460,7 @@ class ForumController extends AbstractController
         ]));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/ajouter/{page}', name: 'ninja_tooken_comment_ajouter', requirements: ['page' => '\d*'])]
     public function commentAjouter(
         Request $request,
         TranslatorInterface $translator,
@@ -493,6 +508,7 @@ class ForumController extends AbstractController
         ]));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/{comment_id}/modifier/{page}', name: 'ninja_tooken_comment_modifier')]
     public function commentModifier(
         Request $request,
         TranslatorInterface $translator,
@@ -553,6 +569,7 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/forum/{forum_nom}/{thread_nom}/{comment_id}/supprimer/{page}', name: 'ninja_tooken_comment_supprimer')]
     public function commentSupprimer(
         TranslatorInterface $translator,
         #[MapEntity(mapping: ['forum_nom' => 'slug'])]

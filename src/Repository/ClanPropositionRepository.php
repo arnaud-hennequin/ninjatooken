@@ -94,7 +94,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
                 ->setParameter('postulant', $postulant)
                 ->getQuery();
 
-            return $query->getSingleScalarResult();
+            return (int) $query->getSingleScalarResult();
         }
 
         return 0;

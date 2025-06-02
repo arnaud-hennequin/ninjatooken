@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\User\Message;
 use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -54,6 +56,10 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumSendMessages(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('m')
@@ -63,7 +69,7 @@ class MessageRepository extends ServiceEntityRepository
             ->setParameter('author', $user)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
     /**
@@ -103,6 +109,10 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumReceiveMessages(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('m')
@@ -113,9 +123,13 @@ class MessageRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumNewMessages(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('m')
@@ -128,6 +142,6 @@ class MessageRepository extends ServiceEntityRepository
             ->setParameter('hasDeleted', false)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 }

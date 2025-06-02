@@ -16,17 +16,20 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CommonController extends AbstractController
 {
+    #[Route('/{_locale}/adimages/', name: 'add_blocker')]
     public function addBlocker(): Response
     {
         return new Response('<html lang="fr"><body>add</body></html>');
     }
 
+    #[Route('/{_locale}/', name: 'ninja_tooken_homepage')]
     public function index(ThreadRepository $threadRepository, ForumRepository $forumRepository, ParameterBagInterface $parameterBag): Response
     {
         $num = $parameterBag->get('numReponse');
@@ -41,6 +44,7 @@ class CommonController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/jouer', name: 'ninja_tooken_jouer')]
     public function jouer(ParameterBagInterface $parameterBag): Response
     {
         $response = $this->render('common/jouer.html.twig', [
@@ -51,41 +55,49 @@ class CommonController extends AbstractController
         return $response;
     }
 
+    #[Route('/{_locale}/guide-du-ninja', name: 'ninja_tooken_manuel')]
     public function manuel(): Response
     {
         return $this->render('common/manuel.html.twig');
     }
 
+    #[Route('/{_locale}/regles-respecter', name: 'ninja_tooken_reglement')]
     public function reglement(): Response
     {
         return $this->render('common/reglement.html.twig');
     }
 
+    #[Route('/{_locale}/chat', name: 'ninja_tooken_chat')]
     public function chat(): Response
     {
         return $this->render('common/chat.html.twig');
     }
 
+    #[Route('/{_locale}/faq-generale', name: 'ninja_tooken_faq_generale')]
     public function faqGenerale(): Response
     {
         return $this->render('common/faqGenerale.html.twig');
     }
 
+    #[Route('/{_locale}/faq-technique', name: 'ninja_tooken_faq_technique')]
     public function faqTechnique(): Response
     {
         return $this->render('common/faqTechnique.html.twig');
     }
 
+    #[Route('/{_locale}/team', name: 'ninja_tooken_team')]
     public function team(): Response
     {
         return $this->render('common/team.html.twig');
     }
 
+    #[Route('/{_locale}/mentions-legales', name: 'ninja_tooken_mentions_legales')]
     public function mentionsLegales(): Response
     {
         return $this->render('common/mentionsLegales.html.twig');
     }
 
+    #[Route('/{_locale}/nous-contacter', name: 'ninja_tooken_contact')]
     public function contact(Request $request, TranslatorInterface $translator, MailerInterface $mailer, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag): Response
     {
         if ('POST' === $request->getMethod()) {
@@ -127,6 +139,7 @@ class CommonController extends AbstractController
         return $this->render('common/contact.html.twig');
     }
 
+    #[Route('/{_locale}/search', name: 'ninja_tooken_search')]
     public function search(Request $request, ThreadRepository $threadRepository, CommentRepository $commentRepository, ClanRepository $clanRepository, UserRepository $userRepository, ParameterBagInterface $parameterBag): Response
     {
         $num = $parameterBag->get('numReponse');

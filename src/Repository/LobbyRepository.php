@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Game\Lobby;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,8 +21,8 @@ class LobbyRepository extends ServiceEntityRepository
     /**
      * @return array<int, Lobby>
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function getRecent(int $nombre = 3, int $page = 1): array
     {
@@ -40,8 +42,8 @@ class LobbyRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     public function deleteOld(): bool
     {

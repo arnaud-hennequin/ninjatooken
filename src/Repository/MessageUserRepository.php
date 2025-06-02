@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\User\MessageUser;
 use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -59,6 +61,10 @@ class MessageUserRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumReceiveMessages(User $user): int
     {
         $query = $this->createQueryBuilder('mu')
@@ -70,6 +76,6 @@ class MessageUserRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 }

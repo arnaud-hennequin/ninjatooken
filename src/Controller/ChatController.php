@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ChatController extends AbstractController
 {
+    #[Route('/chat/', name: 'ninja_tooken_chat_homepage')]
     public function index(): Response
     {
         $channelName = 'ninjatooken';

@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\User\Friend;
 use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -57,6 +59,10 @@ class FriendRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumFriends(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('f')
@@ -67,9 +73,13 @@ class FriendRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumDemandes(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('f')
@@ -80,9 +90,13 @@ class FriendRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumBlocked(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('f')
@@ -92,7 +106,7 @@ class FriendRepository extends ServiceEntityRepository
             ->setParameter('user', $user)
             ->getQuery();
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
     /**
@@ -114,8 +128,8 @@ class FriendRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     public function deleteAllBlocked(?UserInterface $user = null): bool
     {
@@ -134,8 +148,8 @@ class FriendRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
     public function deleteAllDemandes(?UserInterface $user = null): bool
     {

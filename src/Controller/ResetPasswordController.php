@@ -35,6 +35,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Display & process form to request a password reset.
      */
+    #[Route('/{_locale}/request', name: 'ninja_tooken_user_resetting_request', methods: ['GET', 'POST'])]
     public function request(Request $request, MailerInterface $mailer, UserRepository $userRepository): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -55,6 +56,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Confirmation page after a user has requested a password reset.
      */
+    #[Route('/{_locale}/check-email', name: 'ninja_tooken_user_resetting_check_email', methods: ['GET'])]
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
@@ -70,6 +72,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
+    #[Route('/{_locale}/reset/{token?}', name: 'ninja_tooken_user_resetting_reset', methods: ['GET', 'POST'])]
     public function reset(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em, ?string $token = null): Response
     {
         if ($token) {

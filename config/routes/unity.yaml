@@ -1,7 +1,0 @@
-ninja_tooken_game_unity_update:
-    path:  /unity/xml/game/update
-    controller: App\Controller\UnityController::update
-
-ninja_tooken_game_unity_connect:
-    path:  /unity/xml/game/connect
-    controller: App\Controller\UnityController::connect

@@ -1,7 +1,0 @@
-ninja_tooken_chat_homepage:
-    path:  /{_locale}/chat/
-    controller: App\Controller\ChatController::index
-    requirements:
-        _locale: en|fr
-    defaults:
-        _locale: fr

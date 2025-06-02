@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Game\Ninja;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -44,6 +46,10 @@ class NinjaRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getNumNinjas(string $classe = ''): int
     {
         $query = $this->createQueryBuilder('n')
@@ -61,9 +67,13 @@ class NinjaRepository extends ServiceEntityRepository
         $query->enableResultCache();
         $query->useQueryCache(true);
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getSumExperience(): int
     {
         $query = $this->createQueryBuilder('n')
@@ -74,7 +84,7 @@ class NinjaRepository extends ServiceEntityRepository
         $query->enableResultCache();
         $query->useQueryCache(true);
 
-        return $query->getSingleScalarResult();
+        return (int) $query->getSingleScalarResult();
     }
 
     public function getClassement(int $experience = 0): string

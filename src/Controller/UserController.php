@@ -64,6 +64,7 @@ class UserController extends AbstractController
         $this->mailer = $mailer;
     }
 
+    #[Route('/{_locale}/utilisateur.php', name: 'ninja_tooken_user_old')]
     public function oldUser(Request $request, TranslatorInterface $translator, EntityManagerInterface $em): RedirectResponse
     {
         /** @var UserRepository $userRepository */
@@ -80,6 +81,7 @@ class UserController extends AbstractController
         ]));
     }
 
+    #[Route('/{_locale}/register', name: 'ninja_tooken_user_registration_register', methods: ['GET', 'POST'])]
     public function register(Request $request, TranslatorInterface $translator, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em): Response
     {
         $user = new User();
@@ -136,6 +138,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/login', name: 'ninja_tooken_user_security_login', methods: ['GET', 'POST'])]
     public function login(Request $request): Response
     {
         $session = $request->getSession();
@@ -198,6 +201,7 @@ class UserController extends AbstractController
         return $this->render('user/connected.html.twig', ['user' => $user]);
     }
 
+    #[Route('/{_locale}/auto/{autologin}', name: 'ninja_tooken_user_autologin', methods: ['GET', 'POST'])]
     public function autologin(
         Request $request,
         TranslatorInterface $translator,
@@ -233,6 +237,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
     }
 
+    #[Route('/{_locale}/desinscription/{email}', name: 'ninja_tooken_user_desinscription', methods: ['GET', 'POST'])]
     public function desinscription(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, ?User $user): RedirectResponse
     {
         if (null !== $user) {
@@ -254,6 +259,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
     }
 
+    #[Route('/{_locale}/fiche/{user_nom}/{page}', name: 'ninja_tooken_user_fiche', requirements: ['page' => '\d*'], defaults: ['page' => 1], methods: ['GET'])]
     public function fiche(string $user_nom, EntityManagerInterface $em, int $page = 1): Response
     {
         $user = $em->getRepository(User::class)->findOneBy(['username' => $user_nom]);
@@ -275,6 +281,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/compte/messagerie/envoi/{page}', name: 'ninja_tooken_user_messagerie_envoi', methods: ['GET'], defaults: ['page' => 1], requirements: ['page' => '\d*'])]
     public function messagerieEnvoi(
         Request $request,
         TranslatorInterface $translator,
@@ -286,6 +293,7 @@ class UserController extends AbstractController
         return $this->getMessagerie($request, $translator, $em, $userRepository, $authorizationChecker, $page, false);
     }
 
+    #[Route('/{_locale}/compte/messagerie/{page}', name: 'ninja_tooken_user_messagerie', methods: ['GET'], defaults: ['page' => 1], requirements: ['page' => '\d*'])]
     public function messagerie(
         Request $request,
         TranslatorInterface $translator,
@@ -389,7 +397,7 @@ class UserController extends AbstractController
                     // en réception
                     if ($reception) {
                         foreach ($message->getReceivers() as $receiver) {
-                            if ($receiver->getDestinataire() == $this->user) {
+                            if ($receiver->getDestinataire() === $this->user) {
                                 // suppression du message
                                 if ($isDeleteMessage) {
                                     $receiver->setHasDeleted(true);
@@ -470,6 +478,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/messagerie/user/find', name: 'ninja_tooken_user_find', methods: ['GET'])]
     public function userFind(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $response = new JsonResponse();
@@ -490,6 +499,8 @@ class UserController extends AbstractController
         return $response;
     }
 
+    #[Route('/{_locale}/compte/parametres', name: 'ninja_tooken_user_parametres')]
+    #[Route('/{_locale}/compte/parametres', name: 'ninja_tooken_user_profile_show')]
     public function parametres(AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -507,6 +518,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/parametres/update', name: 'ninja_tooken_user_parametres_update')]
     public function parametresUpdate(
         Request $request,
         TranslatorInterface $translator,
@@ -620,6 +632,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/parametres/update-avatar', name: 'ninja_tooken_user_parametres_update_avatar')]
     public function parametresUpdateAvatar(
         Request $request,
         TranslatorInterface $translator,
@@ -665,6 +678,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/parametres/confirm-mail', name: 'ninja_tooken_user_parametres_confirm_mail')]
     public function parametresConfirmMail(
         Request $request,
         TranslatorInterface $translator,
@@ -708,6 +722,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/confirm/{token?}', name: 'ninja_tooken_user_registration_confirm', methods: ['GET'])]
     public function confirm(
         UserRepository $userRepository,
         EntityManagerInterface $em,
@@ -730,6 +745,7 @@ class UserController extends AbstractController
         ));
     }
 
+    #[Route('/{_locale}/confirmed', name: 'ninja_tooken_user_registration_confirmed', methods: ['GET'])]
     public function confirmed(): Response
     {
         $user = $this->getUser();
@@ -742,6 +758,7 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/compte/parametres/update-password', name: 'ninja_tooken_user_parametres_update_password')]
     public function parametresUpdatePassword(
         Request $request,
         TranslatorInterface $translator,
@@ -781,6 +798,7 @@ class UserController extends AbstractController
     /**
      * @throws \Doctrine\DBAL\Exception
      */
+    #[Route('/{_locale}/compte/parametres/delete-account', name: 'ninja_tooken_user_parametres_delete_account')]
     public function parametresDeleteAccount(
         ClanPropositionListener $clanPropositionListener,
         ThreadListener $threadListener,
@@ -825,6 +843,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/{page}', name: 'ninja_tooken_user_amis', requirements: ['page' => '\d*'], defaults: ['page' => 1], methods: ['GET'])]
     public function amis(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -848,6 +867,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/demande/{page}', name: 'ninja_tooken_user_amis_demande', requirements: ['page' => '\d*'], defaults: ['page' => 1], methods: ['GET'])]
     public function amisDemande(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -871,6 +891,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/bloquer/{page}', name: 'ninja_tooken_user_amis_blocked', requirements: ['page' => '\d*'], defaults: ['page' => 1], methods: ['GET'])]
     public function amisBlocked(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -894,6 +915,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/confirm/{id}', name: 'ninja_tooken_user_amis_confirmer', requirements: ['id' => '\d*'])]
     public function amisConfirmer(
         Request $request,
         TranslatorInterface $translator,
@@ -922,6 +944,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/block/{id}', name: 'ninja_tooken_user_amis_bloquer', requirements: ['id' => '\d*'])]
     public function amisBloquer(
         Request $request,
         TranslatorInterface $translator,
@@ -950,6 +973,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/debloquer/{id}', name: 'ninja_tooken_user_amis_debloquer', requirements: ['id' => '\d*'])]
     public function amisDebloquer(
         Request $request,
         TranslatorInterface $translator,
@@ -978,6 +1002,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/supprimer/{id}', name: 'ninja_tooken_user_amis_supprimer', requirements: ['id' => '\d*'])]
     public function amisSupprimer(
         Request $request,
         TranslatorInterface $translator,
@@ -1005,6 +1030,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/block/supprimer-all', name: 'ninja_tooken_user_amis_bloquer_supprimer_tout')]
     public function amisBlockedSupprimer(
         Request $request,
         TranslatorInterface $translator,
@@ -1031,6 +1057,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/amis/demande/supprimer-all', name: 'ninja_tooken_user_amis_demande_supprimer_tout')]
     public function amisDemandeSupprimer(
         Request $request,
         TranslatorInterface $translator,
@@ -1057,6 +1084,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/captures/{page}', name: 'ninja_tooken_user_captures', requirements: ['page' => '\d*'], defaults: ['page' => 1], methods: ['GET'])]
     public function captures(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
@@ -1077,6 +1105,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
+    #[Route('/{_locale}/compte/captures/{id}/supprimer/', name: 'ninja_tooken_user_captures_supprimer')]
     public function capturesSupprimer(
         Request $request,
         TranslatorInterface $translator,

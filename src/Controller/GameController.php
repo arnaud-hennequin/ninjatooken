@@ -10,12 +10,14 @@ use App\Utils\GameData;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GameController extends AbstractController
 {
+    #[Route('/{_locale}/parties-en-cours', name: 'ninja_tooken_game_parties')]
     public function parties(LobbyRepository $lobbyRepository): Response
     {
         return $this->render('game/parties.html.twig', [
@@ -23,6 +25,7 @@ class GameController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/calculateur-jutsus', name: 'ninja_tooken_game_calculateur')]
     public function calculateur(TranslatorInterface $translator, GameData $gameData, AuthorizationCheckerInterface $authorizationChecker, TokenStorageInterface $tokenStorage): Response
     {
         $level = 0;
@@ -337,17 +340,18 @@ class GameController extends AbstractController
         ]);
     }
 
+    #[Route('/{_locale}/classement/{page}', name: 'ninja_tooken_game_classement', requirements: ['page' => '\d*'], defaults: ['page' => 1], methods: ['GET'])]
     public function classement(Request $request, NinjaRepository $ninjaRepository, int $page = 1): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
-        $order = $request->get('order');
+        $order = $request->query->getString('order');
         if (empty($order)) {
             $order = 'experience';
         }
 
-        $filter = $request->get('filter');
+        $filter = $request->query->getString('filter');
 
         $total = $ninjaRepository->getNumNinjas();
 

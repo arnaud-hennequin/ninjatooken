@@ -63,7 +63,7 @@ class ClanRepository extends ServiceEntityRepository
             ->setParameter('online', true)
             ->select('COUNT(c)');
 
-        return $query->getQuery()->getSingleScalarResult();
+        return (int) $query->getQuery()->getSingleScalarResult();
     }
 
     /**
