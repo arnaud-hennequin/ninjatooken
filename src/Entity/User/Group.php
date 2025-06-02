@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,18 +13,23 @@ use Doctrine\ORM\Mapping as ORM;
 class Group
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 255)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255)]
     protected string $name;
 
-    #[ORM\Column(type: 'array')]
+    /**
+     * @var array<int, string>
+     */
+    #[ORM\Column(type: Types::ARRAY)]
     protected array $roles;
 
     /**
      * Group constructor.
+     *
+     * @param array<int, string> $roles
      */
     public function __construct(string $name, array $roles = [])
     {
@@ -31,7 +37,7 @@ class Group
         $this->roles = $roles;
     }
 
-    public function addRole($role): self
+    public function addRole(string $role): self
     {
         if (!$this->hasRole($role)) {
             $this->roles[] = strtoupper($role);
@@ -50,17 +56,20 @@ class Group
         return $this->name;
     }
 
-    public function hasRole($role): bool
+    public function hasRole(string $role): bool
     {
         return in_array(strtoupper($role), $this->roles, true);
     }
 
+    /**
+     * @return ?array<int, string>
+     */
     public function getRoles(): ?array
     {
         return $this->roles;
     }
 
-    public function removeRole($role): self
+    public function removeRole(string $role): self
     {
         if (false !== $key = array_search(strtoupper($role), $this->roles, true)) {
             unset($this->roles[$key]);
@@ -70,13 +79,16 @@ class Group
         return $this;
     }
 
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
+    /**
+     * @param array<int, string> $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;

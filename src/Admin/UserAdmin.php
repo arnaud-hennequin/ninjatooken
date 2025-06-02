@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\User\User;
 use App\Listener\ClanPropositionListener;
 use App\Listener\CommentListener;
 use App\Listener\ThreadListener;
@@ -23,12 +24,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 
+/**
+ * @extends AbstractAdmin<User>
+ */
 class UserAdmin extends AbstractAdmin
 {
-    protected array $formOptions = [
-        'validation_groups' => 'Profile',
-    ];
-
     protected ClanPropositionListener $clanPropositionListener;
     protected ThreadListener $threadListener;
     protected CommentListener $commentListener;

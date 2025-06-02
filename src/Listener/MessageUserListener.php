@@ -25,7 +25,7 @@ class MessageUserListener
     }
 
     // message d'avertissement
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();

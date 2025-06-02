@@ -7,6 +7,9 @@ use App\Entity\Forum\Forum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Forum>
+ */
 class ForumRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -14,8 +17,15 @@ class ForumRepository extends ServiceEntityRepository
         parent::__construct($registry, Forum::class);
     }
 
-    public function getForum($slug = '', ?Clan $clan = null, $nombreParPage = 20, $page = 1)
-    {
+    /**
+     * @return array<int, Forum>
+     */
+    public function getForum(
+        string $slug = '',
+        ?Clan $clan = null,
+        int $nombreParPage = 20,
+        int $page = 1,
+    ): array {
         $page = max(1, $page);
 
         $query = $this->createQueryBuilder('f');

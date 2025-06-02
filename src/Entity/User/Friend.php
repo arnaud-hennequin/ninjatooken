@@ -2,16 +2,18 @@
 
 namespace App\Entity\User;
 
+use App\Repository\FriendRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Friend.
  */
 #[ORM\Table(name: 'nt_friend')]
-#[ORM\Entity(repositoryClass: \App\Repository\FriendRepository::class)]
+#[ORM\Entity(repositoryClass: FriendRepository::class)]
 class Friend
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -24,13 +26,13 @@ class Friend
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     private ?UserInterface $friend;
 
-    #[ORM\Column(name: 'is_blocked', type: 'boolean')]
+    #[ORM\Column(name: 'is_blocked', type: Types::BOOLEAN)]
     private bool $isBlocked = false;
 
-    #[ORM\Column(name: 'is_confirmed', type: 'boolean')]
+    #[ORM\Column(name: 'is_confirmed', type: Types::BOOLEAN)]
     private bool $isConfirmed = false;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
     /**

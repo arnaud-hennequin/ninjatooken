@@ -10,10 +10,13 @@ class GameData
     private string|false $xml;
 
     private int $experienceRelatif;
-    private $levelActuel;
-    private $levelSuivant;
+    private ?\DOMElement $levelActuel;
+    private ?\DOMElement $levelSuivant;
 
-    private $domExperience;
+    /**
+     * @var \DOMNodeList<\DOMElement>
+     */
+    private \DOMNodeList $domExperience;
 
     public function __construct(ParameterBagInterface $parameterBag)
     {
@@ -38,7 +41,12 @@ class GameData
     public function setExperience(int $experience = 0, int $dan = 0): GameData
     {
         $k = 0;
-        $this->experienceRelatif = $experience - $dan * $this->domExperience->item($this->domExperience->length - 2)->getAttribute('val');
+        /** @var ?\DOMElement $nodeElement */
+        $nodeElement = $this->domExperience->item($this->domExperience->length - 2);
+        if ($nodeElement !== null) {
+            $this->experienceRelatif = $experience - $dan * (int) $nodeElement->getAttribute('val');
+        }
+        /** @var \DOMElement $exp */
         foreach ($this->domExperience as $exp) {
             if ($exp->getAttribute('val') <= $this->experienceRelatif) {
                 ++$k;
@@ -46,19 +54,23 @@ class GameData
                 break;
             }
         }
-        $this->levelActuel = $this->domExperience->item($k > 0 ? $k - 1 : 0);
-        $this->levelSuivant = $this->domExperience->item($k);
+        /** @var ?\DOMElement $domElement */
+        $domElement = $this->domExperience->item($k > 0 ? $k - 1 : 0);
+        $this->levelActuel = $domElement;
+        /** @var ?\DOMElement $domElement */
+        $domElement = $this->domExperience->item($k);
+        $this->levelSuivant = $domElement;
 
         return $this;
     }
 
-    public function getLevelActuel()
+    public function getLevelActuel(): int
     {
-        return $this->levelActuel->getAttribute('niveau');
+        return (int) $this->levelActuel->getAttribute('niveau');
     }
 
     public function getRatio(): float|int
     {
-        return ($this->experienceRelatif - $this->levelActuel->getAttribute('val')) / ($this->levelSuivant->getAttribute('val') - $this->levelActuel->getAttribute('val')) * 100;
+        return ($this->experienceRelatif - (int) $this->levelActuel?->getAttribute('val')) / ((int) $this->levelSuivant?->getAttribute('val') - (int) $this->levelActuel?->getAttribute('val')) * 100;
     }
 }

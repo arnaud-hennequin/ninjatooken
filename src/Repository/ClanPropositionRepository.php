@@ -8,6 +8,9 @@ use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ClanProposition>
+ */
 class ClanPropositionRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -15,7 +18,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         parent::__construct($registry, ClanProposition::class);
     }
 
-    public function getPropositionByUsers(?UserInterface $recruteur = null, ?User $postulant = null)
+    public function getPropositionByUsers(?UserInterface $recruteur = null, ?User $postulant = null): ?ClanProposition
     {
         $query = $this->createQueryBuilder('cp');
 
@@ -32,7 +35,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getWaitingPropositionByUsers(?UserInterface $recruteur = null, ?User $postulant = null)
+    public function getWaitingPropositionByUsers(?UserInterface $recruteur = null, ?User $postulant = null): ?ClanProposition
     {
         $query = $this->createQueryBuilder('cp')
             ->where('cp.etat = 0');
@@ -50,7 +53,10 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getPropositionByRecruteur(?UserInterface $recruteur = null)
+    /**
+     * @return ?array<int, ClanProposition>
+     */
+    public function getPropositionByRecruteur(?UserInterface $recruteur = null): ?array
     {
         if (isset($recruteur)) {
             $query = $this->createQueryBuilder('cp');
@@ -64,7 +70,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getPropositionByPostulant(?UserInterface $postulant = null)
+    public function getPropositionByPostulant(?UserInterface $postulant = null): ?ClanProposition
     {
         if (isset($postulant)) {
             $query = $this->createQueryBuilder('cp');
@@ -78,7 +84,7 @@ class ClanPropositionRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getNumPropositionsByPostulant(?UserInterface $postulant = null)
+    public function getNumPropositionsByPostulant(?UserInterface $postulant = null): int
     {
         if (isset($postulant)) {
             $query = $this->createQueryBuilder('cp')

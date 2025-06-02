@@ -2,9 +2,13 @@
 
 namespace App\Admin;
 
+use App\Entity\User\User;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
+/**
+ * @extends AbstractAdmin<User>
+ */
 class DetectionAdmin extends AbstractAdmin
 {
     protected function configureRoutes(RouteCollectionInterface $collection): void

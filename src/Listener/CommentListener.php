@@ -24,7 +24,7 @@ class CommentListener
     }
 
     // vérification akismet du commentaire
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
@@ -61,25 +61,23 @@ class CommentListener
     }
 
     // met à jour le thread
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
 
-        if ($entity instanceof Comment) {
-            if (null !== $entity->getThread()) {
-                $thread = $entity->getThread();
-                $thread->setLastCommentBy($entity->getAuthor());
-                $thread->incrementNumComments();
-                $thread->setLastCommentAt($entity->getDateAjout());
-                $em->persist($thread);
-                $em->flush();
-            }
+        if (($entity instanceof Comment) && null !== $entity->getThread()) {
+            $thread = $entity->getThread();
+            $thread->setLastCommentBy($entity->getAuthor());
+            $thread->incrementNumComments();
+            $thread->setLastCommentAt($entity->getDateAjout());
+            $em->persist($thread);
+            $em->flush();
         }
     }
 
     // met à jour le thread
-    public function postRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
@@ -90,22 +88,20 @@ class CommentListener
                 $thread = $entity->getThread();
                 $thread->incrementNumComments(-1);
                 // met à jour les références vers le message précédent
-                if (0 == $thread->getNumComments()) {
+                if (0 === $thread->getNumComments()) {
                     $thread->setLastCommentBy(null);
                     $thread->setLastCommentAt($thread->getDateAjout());
-                } else {
-                    if ($thread->getLastCommentBy() === $entity->getAuthor() && $thread->getLastCommentAt() == $entity->getDateAjout()) {
-                        /** @var CommentRepository $commentRepository */
-                        $commentRepository = $em->getRepository(Comment::class);
-                        $lastComment = $commentRepository->getCommentsByThread($thread, 1, 1);
-                        if ($lastComment) {
-                            $lastComment = current($lastComment);
-                            $thread->setLastCommentBy($lastComment->getAuthor());
-                            $thread->setLastCommentAt($lastComment->getDateAjout());
-                        } else {
-                            $thread->setLastCommentBy(null);
-                            $thread->setLastCommentAt($thread->getDateAjout());
-                        }
+                } elseif ($thread->getLastCommentBy() === $entity->getAuthor() && $thread->getLastCommentAt() == $entity->getDateAjout()) {
+                    /** @var CommentRepository $commentRepository */
+                    $commentRepository = $em->getRepository(Comment::class);
+                    $lastComment = $commentRepository->getCommentsByThread($thread, 1, 1);
+                    if ($lastComment) {
+                        $lastComment = current($lastComment);
+                        $thread->setLastCommentBy($lastComment->getAuthor());
+                        $thread->setLastCommentAt($lastComment->getDateAjout());
+                    } else {
+                        $thread->setLastCommentBy(null);
+                        $thread->setLastCommentAt($thread->getDateAjout());
                     }
                 }
                 $em->persist($thread);

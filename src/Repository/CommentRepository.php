@@ -10,6 +10,9 @@ use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Comment>
+ */
 class CommentRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -17,7 +20,10 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function getCommentsByThread(Thread $thread, $nombreParPage = 5, $page = 1)
+    /**
+     * @return array<int, Comment>
+     */
+    public function getCommentsByThread(Thread $thread, int $nombreParPage = 5, int $page = 1): array
     {
         $page = max(1, $page);
 
@@ -38,17 +44,20 @@ class CommentRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getRecentComments(?Forum $forum = null, ?UserInterface $user = null, $num = 0)
+    /**
+     * @return array<int, Comment>
+     */
+    public function getRecentComments(?Forum $forum = null, ?UserInterface $user = null, int $num = 0): array
     {
         $query = $this->createQueryBuilder('c')
             ->orderBy('c.dateAjout', 'DESC');
 
-        if (!empty($forum)) {
+        if ($forum !== null) {
             $query->leftJoin('App\Entity\Forum\Thread', 't', 'WITH', 'c.thread = t.id')
                 ->andWhere('t.forum = :forum')
                 ->setParameter('forum', $forum);
         }
-        if (!empty($user)) {
+        if ($user !== null) {
             $query->andWhere('c.author = :user')
                 ->setParameter('user', $user);
         }
@@ -58,7 +67,10 @@ class CommentRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getCommentsByAuthor(User $user, $nombreParPage = 10, $page = 1)
+    /**
+     * @return array<int, Comment>
+     */
+    public function getCommentsByAuthor(User $user, int $nombreParPage = 10, int $page = 1): array
     {
         $page = max(1, $page);
 
@@ -73,8 +85,16 @@ class CommentRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function searchComments(?User $user = null, ?Forum $forum = null, $q = '', $nombreParPage = 5, $page = 1)
-    {
+    /**
+     * @return array<int, Comment>
+     */
+    public function searchComments(
+        ?User $user = null,
+        ?Forum $forum = null,
+        string $q = '',
+        int $nombreParPage = 5,
+        int $page = 1,
+    ): array {
         $query = $this->createQueryBuilder('c')
             ->addOrderBy('c.dateAjout', 'DESC');
 

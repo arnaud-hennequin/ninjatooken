@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\User\Ip;
 use App\Form\Type\IpType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -11,6 +12,9 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
+/**
+ * @extends AbstractAdmin<Ip>
+ */
 class IpAdmin extends AbstractAdmin
 {
     protected function configureRoutes(RouteCollectionInterface $collection): void

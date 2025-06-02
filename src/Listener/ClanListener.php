@@ -11,7 +11,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class ClanListener
 {
     // supprime les propositions
-    public function preRemove(LifecycleEventArgs $args)
+    public function preRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         if ($entity instanceof Clan) {
@@ -26,7 +26,7 @@ class ClanListener
                 foreach ($membres as $membre) {
                     // supprime les propositions de recrutement
                     $propositions = $repo_proposition->getPropositionByRecruteur($membre->getMembre());
-                    if ($propositions) {
+                    if ($propositions !== null) {
                         foreach ($propositions as $proposition) {
                             $em->remove($proposition);
                             $flush = true;

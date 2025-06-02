@@ -15,7 +15,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class ClanUtilisateurListener
 {
     // supprime la liaison vers le clan
-    public function preRemove(LifecycleEventArgs $args)
+    public function preRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         if ($entity instanceof ClanUtilisateur) {
@@ -25,24 +25,24 @@ class ClanUtilisateurListener
             $em = $args->getEntityManager();
 
             // réaffectation des recruts
-            $previousUser = $entity->getMembre(); // User
-            $previousRecruts = $previousUser->getRecruts(); // ClanUtilisateur[]
-            if (count($previousRecruts) > 0) {
+            $previousUser = $entity->getMembre();
+            $previousRecruts = $previousUser->getRecruts();
+            if ($previousUser !== null && $previousRecruts !== null && count($previousRecruts) > 0) {
                 // le remplaçant (la plus ancienne recrut)
                 $substitute = $this->getOldest($previousRecruts, $previousUser); // User
 
                 // ré-affecte les liaisons des recruts
-                if ($substitute) {
+                if ($substitute !== null) {
                     // les droits du membre supprimé
                     $previousDroit = $entity->getDroit();
 
                     // parcourt les recruts du remplaçant et met à jour les droits
-                    $substituteRecruts = $substitute->getRecruts(); // ClanUtilisateur[]
-                    if (count($substituteRecruts) > 0) {
+                    $substituteRecruts = $substitute->getRecruts();
+                    if ($substituteRecruts !== null && count($substituteRecruts) > 0) {
                         // parcourt les recruts du remplaçant et les ré-assigne
                         foreach ($substituteRecruts as $substituteRecrut) {
                             $substituteRecrutMembre = $substituteRecrut->getMembre();
-                            if ($substituteRecrutMembre != $substitute) {
+                            if ($substituteRecrutMembre !== $substitute) {
                                 $substituteRecrut->setDroit($previousDroit + 1);
 
                                 // met à jour si avait des recruts
@@ -60,7 +60,7 @@ class ClanUtilisateurListener
                     // parcourt les recruts de l'ancien utilisateur et les ré-assigne au remplaçant
                     foreach ($previousRecruts as $previousRecrut) {
                         $previousRecrutMembre = $previousRecrut->getMembre();
-                        if ($previousRecrutMembre != $substitute && $previousRecrutMembre != $previousUser) {
+                        if ($previousRecrutMembre !== $substitute && $previousRecrutMembre !== $previousUser) {
                             $previousRecrut->setRecruteur($substitute);
                             $previousRecrut->setDroit($previousDroit + 1);
 
@@ -94,7 +94,10 @@ class ClanUtilisateurListener
         }
     }
 
-    public function getOldest(Collection $recruts, UserInterface $recruteur)
+    /**
+     * @param Collection<int, ClanUtilisateur> $recruts
+     */
+    public function getOldest(Collection $recruts, UserInterface $recruteur): ?UserInterface
     {
         /** @var ClanUtilisateur $recrut */
         foreach ($recruts as $recrut) {
@@ -108,7 +111,7 @@ class ClanUtilisateurListener
     }
 
     // met à jour les recruts et supprime les propositions
-    public function postRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         if ($entity instanceof ClanUtilisateur) {
@@ -131,7 +134,7 @@ class ClanUtilisateurListener
     }
 
     // supprime la postulation sur le même clan
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();

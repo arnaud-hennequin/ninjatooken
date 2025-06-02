@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\User\Capture;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,6 +12,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @extends AbstractAdmin<Capture>
+ */
 class CaptureAdmin extends AbstractAdmin
 {
     protected function configureDatagridFilters(DatagridMapper $filter): void

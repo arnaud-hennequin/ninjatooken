@@ -9,6 +9,9 @@ use Twig\TwigFilter;
 class HTMLPurifierExtensionNT extends AbstractExtension
 {
     public HTMLPurifier $htmlPurifier;
+    /**
+     * @var array<string, HTMLPurifier>
+     */
     private array $purifiers = [];
 
     /**

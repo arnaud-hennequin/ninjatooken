@@ -2,8 +2,10 @@
 
 namespace App\Entity\User;
 
+use App\Repository\MessageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,40 +13,40 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Message.
  */
 #[ORM\Table(name: 'nt_message')]
-#[ORM\Entity(repositoryClass: \App\Repository\MessageRepository::class)]
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
 
-    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[ORM\Column(name: 'nom', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private string $nom;
 
-    #[ORM\Column(name: 'content', type: 'text')]
+    #[ORM\Column(name: 'content', type: Types::TEXT)]
     #[Assert\NotBlank]
     private string $content;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'messages', fetch: 'EAGER')]
+    #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'messages')]
     private ?UserInterface $author;
 
-    #[ORM\Column(name: 'has_deleted', type: 'boolean')]
+    #[ORM\Column(name: 'has_deleted', type: Types::BOOLEAN)]
     private bool $hasDeleted = false;
 
     /**
-     * @var Collection<MessageUser>
+     * @var Collection<int, MessageUser>
      */
-    #[ORM\OneToMany(targetEntity: MessageUser::class, mappedBy: 'message', cascade: ['remove'], fetch: 'EAGER')]
+    #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageUser::class, cascade: ['remove'], fetch: 'EAGER')]
     private Collection $receivers;
 
     /**
@@ -186,14 +188,14 @@ class Message
     /**
      * Remove receivers.
      */
-    public function removeReceiver(MessageUser $receiver)
+    public function removeReceiver(MessageUser $receiver): void
     {
         $this->receivers->removeElement($receiver);
         $receiver->setMessage(null);
     }
 
     /**
-     * Get receivers.
+     * @return Collection<int, MessageUser>
      */
     public function getReceivers(): Collection
     {

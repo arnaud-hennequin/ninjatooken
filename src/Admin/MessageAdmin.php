@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\User\Message;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -14,13 +15,11 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @extends AbstractAdmin<Message>
+ */
 class MessageAdmin extends AbstractAdmin
 {
-    protected array $datagridValues = [
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'dateAjout',
-    ];
-
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

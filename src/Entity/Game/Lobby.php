@@ -3,53 +3,54 @@
 namespace App\Entity\Game;
 
 use App\Entity\User\User;
+use App\Repository\LobbyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Lobby.
  */
 #[ORM\Table(name: 'nt_lobby')]
-#[ORM\Entity(repositoryClass: \App\Repository\LobbyRepository::class)]
+#[ORM\Entity(repositoryClass: LobbyRepository::class)]
 class Lobby
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
     /**
-     * @var Collection<User>
+     * @var ArrayCollection<int, User>
      */
     #[ORM\JoinTable(name: 'nt_lobby_user')]
     #[ORM\JoinColumn(name: 'lobby_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\InverseJoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'lobbies')]
-    private ?Collection $users;
+    private ArrayCollection $users;
 
-    #[ORM\Column(name: 'carte', type: 'smallint')]
+    #[ORM\Column(name: 'carte', type: Types::SMALLINT)]
     private int $carte = 0;
 
-    #[ORM\Column(name: 'partie', type: 'smallint')]
+    #[ORM\Column(name: 'partie', type: Types::SMALLINT)]
     private int $partie = 0;
 
-    #[ORM\Column(name: 'maximum', type: 'smallint')]
+    #[ORM\Column(name: 'maximum', type: Types::SMALLINT)]
     private int $maximum = 2;
 
-    #[ORM\Column(name: 'jeu', type: 'smallint')]
+    #[ORM\Column(name: 'jeu', type: Types::SMALLINT)]
     private int $jeu = 0;
 
-    #[ORM\Column(name: 'privee', type: 'string', length: 30)]
+    #[ORM\Column(name: 'privee', type: Types::STRING, length: 30)]
     private string $privee = '';
 
-    #[ORM\Column(name: 'version', type: 'decimal', precision: 10, scale: 6)]
-    private float $version = 0;
+    #[ORM\Column(name: 'version', type: Types::DECIMAL, precision: 10, scale: 6)]
+    private string $version = '0';
 
-    #[ORM\Column(name: 'date_debut', type: 'datetime')]
+    #[ORM\Column(name: 'date_debut', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateDebut;
 
-    #[ORM\Column(name: 'date_update', type: 'datetime')]
+    #[ORM\Column(name: 'date_update', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateUpdate;
 
     /**
@@ -165,7 +166,7 @@ class Lobby
      */
     public function setVersion(float $version): self
     {
-        $this->version = $version;
+        $this->version = (string) $version;
 
         return $this;
     }
@@ -173,9 +174,9 @@ class Lobby
     /**
      * Get version.
      */
-    public function getVersion(): ?float
+    public function getVersion(): float
     {
-        return $this->version;
+        return (float) $this->version;
     }
 
     /**
@@ -215,9 +216,9 @@ class Lobby
     }
 
     /**
-     * @return Collection|User[]
+     * @return ?ArrayCollection<int,User>
      */
-    public function getUsers(): ?Collection
+    public function getUsers(): ?ArrayCollection
     {
         return $this->users;
     }
@@ -244,7 +245,7 @@ class Lobby
     /**
      * Clear users.
      */
-    public function clearUsers()
+    public function clearUsers(): void
     {
         $this->users->clear();
     }

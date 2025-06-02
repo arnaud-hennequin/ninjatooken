@@ -33,7 +33,7 @@ class CommonController extends AbstractController
 
         return $this->render('common/index.html.twig', [
             'threads' => $threadRepository->findBy(
-                ['forum' => $forumRepository->findOneBy(['slug' => 'nouveautes'])],
+                ['forum' => $forumRepository->findOneBy(['nom' => 'nouveautes'])],
                 ['dateAjout' => 'DESC'],
                 $num,
                 0

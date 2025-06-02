@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Forum\Thread;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -16,13 +17,11 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
+/**
+ * @extends AbstractAdmin<Thread>
+ */
 class ThreadAdmin extends AbstractAdmin
 {
-    protected array $datagridValues = [
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'dateAjout',
-    ];
-
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $form): void
     {

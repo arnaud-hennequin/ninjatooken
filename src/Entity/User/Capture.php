@@ -2,6 +2,8 @@
 
 namespace App\Entity\User;
 
+use App\Repository\CaptureRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -9,10 +11,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Capture.
  */
 #[ORM\Table(name: 'nt_capture')]
-#[ORM\Entity(repositoryClass: \App\Repository\CaptureRepository::class)]
+#[ORM\Entity(repositoryClass: CaptureRepository::class)]
 class Capture
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -21,24 +23,24 @@ class Capture
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?UserInterface $user = null;
 
-    #[ORM\Column(name: 'url', type: 'string', length: 255)]
+    #[ORM\Column(name: 'url', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\Url]
     #[Assert\NotBlank]
     private string $url;
 
-    #[ORM\Column(name: 'url_tmb', type: 'string', length: 255)]
+    #[ORM\Column(name: 'url_tmb', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\Url]
     #[Assert\NotBlank]
     private string $urlTmb;
 
-    #[ORM\Column(name: 'delete_hash', type: 'string', length: 255)]
+    #[ORM\Column(name: 'delete_hash', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private string $deleteHash;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
     /**

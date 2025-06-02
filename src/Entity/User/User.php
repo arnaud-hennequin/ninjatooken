@@ -5,8 +5,9 @@ namespace App\Entity\User;
 use App\Entity\Clan\ClanUtilisateur;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -16,59 +17,59 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Table(name: 'nt_user')]
-#[ORM\Entity(repositoryClass: \App\Repository\UserRepository::class)]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: 'usernameCanonical', errorPath: 'username', message: 'ninja_tooken_user.username.already_used', groups: ['Registration', 'Profile'])]
-#[UniqueEntity(fields: 'emailCanonical', errorPath: 'email', message: 'ninja_tooken_user.email.already_used', groups: ['Registration', 'Profile'])]
+#[UniqueEntity(fields: 'usernameCanonical', message: 'ninja_tooken_user.username.already_used', errorPath: 'username', groups: ['Registration', 'Profile'])]
+#[UniqueEntity(fields: 'emailCanonical', message: 'ninja_tooken_user.email.already_used', errorPath: 'email', groups: ['Registration', 'Profile'])]
 class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUserInterface
 {
     use SluggableTrait;
 
-    public const GENDER_FEMALE = 'f';
-    public const GENDER_MALE = 'm';
-    public const GENDER_UNKNOWN = 'u';
+    public const string GENDER_FEMALE = 'f';
+    public const string GENDER_MALE = 'm';
+    public const string GENDER_UNKNOWN = 'u';
 
-    public const MAX_APPLICATION_BY_DAY = 3;
+    public const int MAX_APPLICATION_BY_DAY = 3;
 
-    public const ROLE_DEFAULT = 'ROLE_USER';
-    public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    public const string ROLE_DEFAULT = 'ROLE_USER';
+    public const string ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
     protected \DateTime $createdAt;
 
-    #[ORM\Column(name: 'updated_at', type: 'datetime')]
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
     protected \DateTime $updatedAt;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $username;
 
-    #[ORM\Column(name: 'username_canonical', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(name: 'username_canonical', type: Types::STRING, length: 255, unique: true)]
     protected string $usernameCanonical;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $email;
 
-    #[ORM\Column(name: 'email_canonical', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(name: 'email_canonical', type: Types::STRING, length: 255, unique: true)]
     protected string $emailCanonical;
 
-    #[ORM\Column(name: 'enabled', type: 'boolean')]
+    #[ORM\Column(name: 'enabled', type: Types::BOOLEAN)]
     protected bool $enabled;
 
     /**
      * The salt to use for hashing.
      */
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $salt;
 
     /**
      * Encrypted password. Must be persisted.
      */
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $password;
 
     /**
@@ -76,116 +77,123 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     protected ?string $plainPassword;
 
-    #[ORM\Column(name: 'last_login', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'last_login', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTime $lastLogin;
 
     /**
      * Random string sent to the user email address in order to verify it.
      */
-    #[ORM\Column(name: 'confirmation_token', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'confirmation_token', type: Types::STRING, length: 255, nullable: true)]
     protected ?string $confirmationToken;
 
-    #[ORM\Column(name: 'password_requested_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'password_requested_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTime $passwordRequestedAt;
 
-    protected ?Collection $groups = null;
+    /**
+     * @var ?ArrayCollection<int, Group>
+     */
+    protected ?ArrayCollection $groups = null;
 
-    #[ORM\Column(type: 'array')]
+    /** @var array<int, string> $roles */
+    #[ORM\Column(type: Types::ARRAY)]
     protected array $roles;
 
-    #[ORM\OneToOne(targetEntity: Ninja::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\OneToOne(mappedBy: 'user', targetEntity: Ninja::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
     private ?Ninja $ninja = null;
 
-    #[ORM\OneToOne(targetEntity: ClanUtilisateur::class, mappedBy: 'membre', cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    #[ORM\OneToOne(mappedBy: 'membre', targetEntity: ClanUtilisateur::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
     private ?ClanUtilisateur $clan;
 
     /**
-     * @var Collection<ClanUtilisateur>
+     * @var ArrayCollection<int, ClanUtilisateur>
      */
-    #[ORM\OneToMany(targetEntity: ClanUtilisateur::class, mappedBy: 'recruteur', cascade: ['persist', 'remove'], fetch: 'LAZY')]
+    #[ORM\OneToMany(mappedBy: 'recruteur', targetEntity: ClanUtilisateur::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
     #[ORM\OrderBy(['dateAjout' => 'ASC'])]
-    private Collection $recruts;
+    private ArrayCollection $recruts;
 
-    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
 
-    #[ORM\Column(name: 'old_login', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'old_login', type: Types::STRING, length: 255, nullable: true)]
     private ?string $old_login;
 
-    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
     private ?string $description;
 
-    #[ORM\Column(name: 'avatar', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'avatar', type: Types::STRING, length: 255, nullable: true)]
     private ?string $avatar;
 
     // propriété utilisé temporairement pour la suppression
     private ?string $tempAvatar = null;
     private ?UploadedFile $file = null;
 
-    #[ORM\Column(name: 'receive_newsletter', type: 'boolean')]
+    #[ORM\Column(name: 'receive_newsletter', type: Types::BOOLEAN)]
     private bool $receiveNewsletter = false;
 
-    #[ORM\Column(name: 'receive_avertissement', type: 'boolean')]
+    #[ORM\Column(name: 'receive_avertissement', type: Types::BOOLEAN)]
     private bool $receiveAvertissement = false;
 
-    #[ORM\Column(name: 'locked', type: 'boolean')]
+    #[ORM\Column(name: 'locked', type: Types::BOOLEAN)]
     private bool $locked = false;
 
-    #[ORM\Column(name: 'old_usernames', type: 'array')]
+    /**
+     * @var array<int, string> $oldUsernames
+     */
+    #[ORM\Column(name: 'old_usernames', type: Types::ARRAY)]
     private array $oldUsernames;
 
-    #[ORM\Column(name: 'old_usernames_canonical', type: 'string')]
+    #[ORM\Column(name: 'old_usernames_canonical', type: Types::STRING)]
     private string $oldUsernamesCanonical;
 
-    #[ORM\Column(name: 'auto_login', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'auto_login', type: Types::STRING, length: 255, nullable: true)]
     private ?string $autoLogin;
 
     /**
-     * @var Collection<Ip>
+     * @var ArrayCollection<int, Ip>
      */
-    #[ORM\OneToMany(targetEntity: Ip::class, mappedBy: 'user', cascade: ['persist', 'remove'], fetch: 'LAZY')]
-    private Collection $ips;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Ip::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
+    private ArrayCollection $ips;
 
     /**
-     * @var Collection<Message>
+     * @var ArrayCollection<int, Message>
      */
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'author', fetch: 'LAZY')]
-    private Collection $messages;
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class, fetch: 'LAZY')]
+    private ArrayCollection $messages;
 
     protected string $twoStepVerificationCode;
 
-    #[ORM\Column(name: 'date_of_birth', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'date_of_birth', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $dateOfBirth;
 
-    #[ORM\Column(name: 'biography', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'biography', type: Types::STRING, length: 255, nullable: true)]
     protected ?string $biography;
 
-    #[ORM\Column(name: 'gender', type: 'string', length: 1, nullable: true)]
+    #[ORM\Column(name: 'gender', type: Types::STRING, length: 1, nullable: true)]
     protected ?string $gender = self::GENDER_UNKNOWN; // set the default to unknown
 
-    #[ORM\Column(name: 'locale', type: 'string', length: 8, nullable: true)]
+    #[ORM\Column(name: 'locale', type: Types::STRING, length: 8, nullable: true)]
     protected ?string $locale;
 
-    #[ORM\Column(name: 'timezone', type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(name: 'timezone', type: Types::STRING, length: 64, nullable: true)]
     protected ?string $timezone;
 
-    #[ORM\Column(name: 'date_application', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'date_application', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $dateApplication;
 
-    #[ORM\Column(name: 'date_message', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'date_message', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $dateMessage;
 
-    #[ORM\Column(name: 'number_application', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'number_application', type: Types::INTEGER, nullable: true)]
     protected ?int $numberApplication;
 
     /**
-     * @var Collection<Lobby>
+     * @var ArrayCollection<int, Lobby>
      */
     #[ORM\JoinTable(name: 'nt_lobby_user')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\InverseJoinColumn(name: 'lobby_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\ManyToMany(targetEntity: Lobby::class, inversedBy: 'users')]
-    private Collection $lobbies;
+    private ArrayCollection $lobbies;
 
     private ?int $level = null;
 
@@ -274,7 +282,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getSluggableFields(): array
     {
@@ -286,7 +294,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return true;
     }
 
-    public function generateSlugValue($values): string
+    public function generateSlugValue(array $values): string
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
@@ -352,9 +360,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         ]);
     }
 
-    public function unserialize($serialized)
+    public function unserialize(string $serialized): void
     {
-        $data = unserialize($serialized);
+        $data = unserialize($serialized, ['allowed_classes' => false]);
 
         if (13 === count($data)) {
             // Unserializing a User object from 1.3.x
@@ -378,7 +386,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         ] = $data;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         $this->plainPassword = null;
     }
@@ -466,7 +474,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return array_values(array_unique($roles));
     }
 
-    public function hasRole($role): bool
+    public function hasRole(string $role): bool
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
     }
@@ -596,6 +604,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
                && $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }
 
+    /**
+     * @param array<int, string> $roles
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = [];
@@ -607,11 +618,17 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    public function getGroups(): Collection
+    /**
+     * @return ArrayCollection<int, Group>
+     */
+    public function getGroups(): ArrayCollection
     {
         return $this->groups ?: $this->groups = new ArrayCollection();
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getGroupNames(): array
     {
         $names = [];
@@ -624,7 +641,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     public function hasGroup(string $name): bool
     {
-        return in_array($name, $this->getGroupNames());
+        return in_array($name, $this->getGroupNames(), true);
     }
 
     public function addGroup(Group $group): self
@@ -718,7 +735,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     #[ORM\PostPersist]
     #[ORM\PostUpdate]
-    public function upload()
+    public function upload(): void
     {
         if (null === $this->file) {
             return;
@@ -732,7 +749,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Sets file.
      */
-    public function setFile(?UploadedFile $file = null)
+    public function setFile(?UploadedFile $file = null): void
     {
         $this->file = $file;
     }
@@ -746,13 +763,13 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     }
 
     #[ORM\PreRemove]
-    public function storeFilenameForRemove()
+    public function storeFilenameForRemove(): void
     {
         $this->tempAvatar = $this->getAbsoluteAvatar();
     }
 
     #[ORM\PostRemove]
-    public function removeUpload()
+    public function removeUpload(): void
     {
         if ($this->tempAvatar && file_exists($this->tempAvatar)) {
             unlink($this->tempAvatar);
@@ -798,7 +815,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Returns the old usernames.
      *
-     * @return array The usernames
+     * @return array<int, string> The usernames
      */
     public function getOldUsernames(): array
     {
@@ -807,6 +824,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Set oldUsername.
+     *
+     * @param array<int, string> $oldUsernames
      */
     public function setOldUsernames(array $oldUsernames): self
     {
@@ -1019,23 +1038,27 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Remove recruts.
      */
-    public function removeRecrut(ClanUtilisateur $recruts)
+    public function removeRecrut(ClanUtilisateur $recruts): void
     {
         $this->recruts->removeElement($recruts);
     }
 
     /**
      * Get recruts.
+     *
+     * @return ?ArrayCollection<int, ClanUtilisateur>
      */
-    public function getRecruts(): ?Collection
+    public function getRecruts(): ?ArrayCollection
     {
         return $this->recruts;
     }
 
     /**
      * Set recruts collection.
+     *
+     * @param ArrayCollection<int, ClanUtilisateur> $recruts
      */
-    public function setRecruts(Collection $recruts): self
+    public function setRecruts(ArrayCollection $recruts): self
     {
         $this->recruts = $recruts;
 
@@ -1056,7 +1079,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Remove ips.
      */
-    public function removeIp(Ip $ips)
+    public function removeIp(Ip $ips): void
     {
         $this->ips->removeElement($ips);
     }
@@ -1064,7 +1087,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get ips.
      */
-    public function getIps(): ?Collection
+    public function getIps(): ?ArrayCollection
     {
         return $this->ips;
     }
@@ -1083,7 +1106,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Remove messages.
      */
-    public function removeMessage(Message $messages)
+    public function removeMessage(Message $messages): void
     {
         $this->messages->removeElement($messages);
     }
@@ -1091,7 +1114,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     /**
      * Get messages.
      */
-    public function getMessages(): ?Collection
+    public function getMessages(): ?ArrayCollection
     {
         return $this->messages;
     }
@@ -1170,6 +1193,8 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     /**
      * Returns the gender list.
+     *
+     * @return array<string, string>
      */
     public static function getGenderList(): array
     {
@@ -1197,10 +1222,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         return $this;
     }
 
-    /**
-     * @return Collection|Lobby[]
-     */
-    public function getLobbies(): ?Collection
+    public function getLobbies(): ?ArrayCollection
     {
         return $this->lobbies;
     }

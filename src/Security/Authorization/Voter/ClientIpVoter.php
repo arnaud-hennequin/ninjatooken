@@ -8,13 +8,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
 class ClientIpVoter implements VoterInterface
 {
-    protected RequestStack $requestStack;
-    protected array $blacklistedIp;
-
-    public function __construct(RequestStack $requestStack, array $blacklistedIp = [])
-    {
-        $this->requestStack = $requestStack;
-        $this->blacklistedIp = $blacklistedIp;
+    /**
+     * @param array<int, string> $blacklistedIp
+     */
+    public function __construct(
+        protected RequestStack $requestStack,
+        protected array $blacklistedIp = [],
+    ) {
     }
 
     public function supportsAttribute(): bool

@@ -852,8 +852,8 @@ class UnityController extends AbstractController
     }
 
     // fonction de cryptage
-    private function isCryptingOk($val = ''): bool
+    private function isCryptingOk(string $val = ''): bool
     {
-        return $this->crypt == hash('sha256', $this->cryptUnity.$this->phpsessid.$this->time.$val.$this->idUtilisateur.$this->phpsessid.$this->gameversion, false);
+        return $this->crypt === hash('sha256', $this->cryptUnity.$this->phpsessid.$this->time.$val.$this->idUtilisateur.$this->phpsessid.$this->gameversion, false);
     }
 }

@@ -19,7 +19,7 @@ class ClanPropositionListener
     }
 
     // met à jour la date de changement de l'état
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getEntity();
         if ($entity instanceof ClanProposition) {
@@ -37,11 +37,11 @@ class ClanPropositionListener
     }
 
     // averti de l'annulation d'une proposition
-    public function postRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         if ($entity instanceof ClanProposition) {
-            if (0 == $entity->getEtat()) {
+            if (0 === $entity->getEtat()) {
                 $em = $args->getEntityManager();
 
                 $message = new Message();

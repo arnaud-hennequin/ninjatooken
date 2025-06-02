@@ -4,6 +4,7 @@ namespace App\Entity\Forum;
 
 use App\Entity\User\User;
 use App\Entity\User\UserInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -16,33 +17,33 @@ class Thread implements SluggableInterface
 {
     use SluggableTrait;
 
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
 
     /**
      * Tells if the thread is viewable on top of list.
      */
-    #[ORM\Column(name: 'is_postit', type: 'boolean')]
+    #[ORM\Column(name: 'is_postit', type: Types::BOOLEAN)]
     private bool $isPostit = false;
 
-    #[ORM\Column(name: 'is_event', type: 'boolean')]
+    #[ORM\Column(name: 'is_event', type: Types::BOOLEAN)]
     private bool $isEvent = false;
 
-    #[ORM\Column(name: 'date_event_start', type: 'date', nullable: true)]
+    #[ORM\Column(name: 'date_event_start', type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $dateEventStart;
 
-    #[ORM\Column(name: 'date_event_end', type: 'date', nullable: true)]
+    #[ORM\Column(name: 'date_event_end', type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $dateEventEnd;
 
     /**
      * Tells if new comments can be added in this thread.
      */
-    #[ORM\Column(name: 'is_commentable', type: 'boolean')]
+    #[ORM\Column(name: 'is_commentable', type: Types::BOOLEAN)]
     private bool $isCommentable = true;
 
     /**
@@ -52,19 +53,19 @@ class Thread implements SluggableInterface
     #[ORM\ManyToOne(targetEntity: Forum::class, fetch: 'EAGER')]
     private ?Forum $forum;
 
-    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[ORM\Column(name: 'nom', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private string $nom;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
-    #[ORM\Column(name: 'body', type: 'text')]
+    #[ORM\Column(name: 'body', type: Types::TEXT)]
     #[Assert\NotBlank]
     protected string $body;
 
-    #[ORM\Column(name: 'url_video', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'url_video', type: Types::STRING, length: 255, nullable: true)]
     private ?string $urlVideo;
 
     /**
@@ -77,13 +78,13 @@ class Thread implements SluggableInterface
     /**
      * Denormalized number of comments.
      */
-    #[ORM\Column(name: 'num_comments', type: 'integer')]
+    #[ORM\Column(name: 'num_comments', type: Types::INTEGER)]
     private int $numComments = 0;
 
     /**
      * Denormalized date of the last comment.
      */
-    #[ORM\Column(name: 'last_comment_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'last_comment_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $lastCommentAt;
 
     /**
@@ -120,7 +121,12 @@ class Thread implements SluggableInterface
         return true;
     }
 
-    public function generateSlugValue($values): ?string
+    /**
+     * @param array<int, mixed> $values
+     *
+     * @throws \Knp\DoctrineBehaviors\Exception\SluggableException
+     */
+    public function generateSlugValue(array $values): ?string
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
@@ -282,7 +288,7 @@ class Thread implements SluggableInterface
     /**
      * Set author's name.
      */
-    public function setAuthor(?UserInterface $author)
+    public function setAuthor(?UserInterface $author): void
     {
         $this->author = $author;
     }
@@ -342,7 +348,7 @@ class Thread implements SluggableInterface
     /**
      * Sets the number of comments.
      */
-    public function setNumComments(int $numComments)
+    public function setNumComments(int $numComments): void
     {
         $this->numComments = $numComments;
     }

@@ -9,6 +9,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Thread>
+ */
 class ThreadRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -16,7 +19,10 @@ class ThreadRepository extends ServiceEntityRepository
         parent::__construct($registry, Thread::class);
     }
 
-    public function getThreads(Forum $forum, $nombreParPage = 5, $page = 1): Paginator
+    /**
+     * @return Paginator<Thread>
+     */
+    public function getThreads(Forum $forum, int $nombreParPage = 5, int $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -33,7 +39,10 @@ class ThreadRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-    public function getEvents($nombreParPage = 5, $page = 1): Paginator
+    /**
+     * @return Paginator<Thread>
+     */
+    public function getEvents(int $nombreParPage = 5, int $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -50,8 +59,16 @@ class ThreadRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-    public function searchThreads(?User $user = null, ?Forum $forum = null, $q = '', $nombreParPage = 5, $page = 1)
-    {
+    /**
+     * @return array<int, Thread>
+     */
+    public function searchThreads(
+        ?User $user = null,
+        ?Forum $forum = null,
+        string $q = '',
+        int $nombreParPage = 5,
+        int $page = 1,
+    ): array {
         $query = $this->createQueryBuilder('t')
             ->addOrderBy('t.isPostit', 'DESC')
             ->addOrderBy('t.lastCommentAt', 'DESC');

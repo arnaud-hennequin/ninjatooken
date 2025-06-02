@@ -2,6 +2,7 @@
 
 namespace App\Entity\User;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,17 +13,17 @@ use Doctrine\ORM\Mapping as ORM;
 class Ip
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'ip', type: 'integer', options: ['unsigned' => true])]
+    #[ORM\Column(name: 'ip', type: Types::INTEGER, options: ['unsigned' => true])]
     private int $ip;
 
-    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
     private \DateTime $createdAt;
 
-    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ips')]

@@ -7,6 +7,9 @@ use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Message>
+ */
 class MessageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -14,7 +17,10 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-    public function getSendMessages(UserInterface $user, $nombreParPage = 5, $page = 1)
+    /**
+     * @return array<int, Message>
+     */
+    public function getSendMessages(UserInterface $user, int $nombreParPage = 5, int $page = 1): array
     {
         $page = max(1, $page);
 
@@ -30,7 +36,10 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getFirstSendMessage(UserInterface $user)
+    /**
+     * @return array<int, Message>
+     */
+    public function getFirstSendMessage(UserInterface $user): array
     {
         $query = $this->createQueryBuilder('m')
             ->where('m.author = :author')
@@ -45,7 +54,7 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getNumSendMessages(UserInterface $user)
+    public function getNumSendMessages(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('m')
             ->select('COUNT(m)')
@@ -57,7 +66,10 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getReceiveMessages(UserInterface $user, $nombreParPage = 5, $page = 1)
+    /**
+     * @return array<int, Message>
+     */
+    public function getReceiveMessages(UserInterface $user, int $nombreParPage = 5, int $page = 1): array
     {
         $page = max(1, $page);
 
@@ -75,7 +87,7 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getFirstReceiveMessage(UserInterface $user)
+    public function getFirstReceiveMessage(UserInterface $user): Message
     {
         $query = $this->createQueryBuilder('m')
             ->leftJoin('m.receivers', 'mu')
@@ -91,7 +103,7 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getNumReceiveMessages(UserInterface $user)
+    public function getNumReceiveMessages(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('m')
             ->leftJoin('m.receivers', 'mu')
@@ -104,7 +116,7 @@ class MessageRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getNumNewMessages(UserInterface $user)
+    public function getNumNewMessages(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('m')
             ->select('COUNT(m)')

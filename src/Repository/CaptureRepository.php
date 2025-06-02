@@ -8,6 +8,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Capture>
+ */
 class CaptureRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -15,7 +18,10 @@ class CaptureRepository extends ServiceEntityRepository
         parent::__construct($registry, Capture::class);
     }
 
-    public function getCaptures(UserInterface $user, $nombreParPage = 5, $page = 1): Paginator
+    /**
+     * @return Paginator<Capture>
+     */
+    public function getCaptures(UserInterface $user, int $nombreParPage = 5, int $page = 1): Paginator
     {
         $page = max(1, $page);
 

@@ -6,6 +6,9 @@ use App\Entity\Game\Lobby;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Lobby>
+ */
 class LobbyRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -13,7 +16,13 @@ class LobbyRepository extends ServiceEntityRepository
         parent::__construct($registry, Lobby::class);
     }
 
-    public function getRecent($nombre = 3, $page = 1)
+    /**
+     * @return array<int, Lobby>
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getRecent(int $nombre = 3, int $page = 1): array
     {
         $page = max(1, $page);
 

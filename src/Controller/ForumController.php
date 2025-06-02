@@ -79,7 +79,10 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function event(EntityManagerInterface $em, $page): Response
+    /**
+     * @throws \Exception
+     */
+    public function event(EntityManagerInterface $em, int $page = 1): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -87,7 +90,9 @@ class ForumController extends AbstractController
         /** @var ThreadRepository $threadRepository */
         $threadRepository = $em->getRepository(Thread::class);
         $threads = $threadRepository->getEvents($num, $page);
-        $forum = $threads->getIterator()->current()->getForum();
+        /** @var Thread $thread */
+        $thread = $threads->getIterator()->current();
+        $forum = $thread->getForum();
 
         return $this->render('forum/event.html.twig', [
             'forum' => $forum,
@@ -190,17 +195,19 @@ class ForumController extends AbstractController
         $forums = [];
         foreach ($allForums as $forum) {
             $threads = $threadRepository->getThreads($forum, 5, 1);
-            if (count($threads) > 0) {
-                $forum->threads = $threads;
-                $forums[] = $forum;
-            }
+            $forum->setNumThreads(count($threads));
+            $forums[] = $forum;
         }
 
         return $this->render('forum/forum.html.twig', ['forums' => $forums]);
     }
 
-    public function topic(#[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, EntityManagerInterface $em, $page): Response
-    {
+    public function topic(
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        EntityManagerInterface $em,
+        int $page = 1
+    ): Response {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
@@ -216,8 +223,14 @@ class ForumController extends AbstractController
         ]);
     }
 
-    public function thread(#[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em, $page): Response
-    {
+    public function thread(
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em,
+        int $page = 1
+    ): Response {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
 
@@ -237,8 +250,13 @@ class ForumController extends AbstractController
         ]);
     }
 
-    public function threadAjouter(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, EntityManagerInterface $em): Response
-    {
+    public function threadAjouter(
+        Request $request,
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        EntityManagerInterface $em
+    ): Response {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $forum->getCanUserCreateThread()) {
                 $thread = new Thread();
@@ -280,8 +298,15 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function threadModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
-    {
+    public function threadModifier(
+        Request $request,
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em
+    ): Response {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $thread->getAuthor() === $this->user) {
                 $form = $this->createForm(ThreadType::class, $thread);
@@ -321,8 +346,14 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function threadVerrouiller(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): RedirectResponse
-    {
+    public function threadVerrouiller(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em
+    ): RedirectResponse {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum)) {
                 $thread->setIsCommentable(
@@ -344,8 +375,14 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function threadPostit(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): RedirectResponse
-    {
+    public function threadPostit(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em
+    ): RedirectResponse {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum)) {
                 $thread->setIsPostit(
@@ -367,8 +404,14 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function threadSupprimer(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
-    {
+    public function threadSupprimer(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em
+    ): Response {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $thread->getAuthor() === $this->user) {
                 $isEvent = $thread->getIsEvent();
@@ -403,8 +446,16 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function commentAjouter(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em, $page): RedirectResponse
-    {
+    public function commentAjouter(
+        Request $request,
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em,
+        int $page = 1
+    ): RedirectResponse {
         $page = max(1, $page);
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || $thread->getIsCommentable()) {
@@ -442,8 +493,17 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function commentModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, Comment $comment, EntityManagerInterface $em, $page): Response
-    {
+    public function commentModifier(
+        Request $request,
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        Comment $comment,
+        EntityManagerInterface $em,
+        int $page = 1
+    ): Response {
         $page = max(1, $page);
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || ($thread->getIsCommentable() && $comment->getAuthor() === $this->user)) {
@@ -493,8 +553,16 @@ class ForumController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function commentSupprimer(TranslatorInterface $translator, #[MapEntity(mapping: ['forum_nom' => 'slug'])] Forum $forum, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, Comment $comment, EntityManagerInterface $em, $page): RedirectResponse
-    {
+    public function commentSupprimer(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['forum_nom' => 'slug'])]
+        Forum $forum,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        Comment $comment,
+        EntityManagerInterface $em,
+        int $page = 1
+    ): RedirectResponse {
         $page = max(1, $page);
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($this->globalRight($forum) || ($thread->getIsCommentable() && $comment->getAuthor() === $this->user)) {
@@ -515,7 +583,7 @@ class ForumController extends AbstractController
         ]));
     }
 
-    public function recentComments(CommentRepository $commentRepository, $max = 10, #[MapEntity(mapping: ['forum_nom' => 'slug'])] ?Forum $forum = null): Response
+    public function recentComments(CommentRepository $commentRepository, int $max = 10, #[MapEntity(mapping: ['forum_nom' => 'slug'])] ?Forum $forum = null): Response
     {
         return $this->render('forum/comments/recentList.html.twig', [
             'comments' => $commentRepository->getRecentComments($forum, null, $max),
@@ -537,7 +605,7 @@ class ForumController extends AbstractController
         $results = $result->fetchAllAssociative();
         $data = [];
         foreach ($results as $result) {
-            if ('thread' == $result['type']) {
+            if ('thread' === $result['type']) {
                 $data[] = $threadRepo->findOneBy(['id' => $result['id']]);
             } else {
                 $data[] = $commentRepo->findOneBy(['id' => $result['id']]);

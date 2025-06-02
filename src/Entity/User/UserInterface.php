@@ -5,7 +5,7 @@ namespace App\Entity\User;
 use App\Entity\Clan\ClanUtilisateur;
 use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -36,13 +36,16 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function shouldGenerateUniqueSlugs(): bool;
 
-    public function generateSlugValue($values): string;
+    /**
+     * @param array<int, mixed> $values
+     */
+    public function generateSlugValue(array $values): string;
 
     public function addRole(string $role): User;
 
     public function serialize(): string;
 
-    public function unserialize($serialized);
+    public function unserialize(string $serialized): void;
 
     public function eraseCredentials();
 
@@ -75,7 +78,7 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function getRoles(): array;
 
-    public function hasRole($role): bool;
+    public function hasRole(string $role): bool;
 
     public function isAccountNonExpired(): bool;
 
@@ -116,10 +119,19 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function isPasswordRequestNonExpired(int $ttl): bool;
 
+    /**
+     * @param array<int, string> $roles
+     */
     public function setRoles(array $roles): User;
 
-    public function getGroups(): Collection;
+    /**
+     * @return ArrayCollection<int, Group>
+     */
+    public function getGroups(): ArrayCollection;
 
+    /**
+     * @return array<int, string>
+     */
     public function getGroupNames(): array;
 
     public function hasGroup(string $name): bool;
@@ -142,12 +154,12 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     #[ORM\PostPersist]
     #[ORM\PostUpdate]
-    public function upload();
+    public function upload(): void;
 
     /**
      * Sets file.
      */
-    public function setFile(?UploadedFile $file = null);
+    public function setFile(?UploadedFile $file = null): void;
 
     /**
      * Get file.
@@ -155,10 +167,10 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     public function getFile(): UploadedFile;
 
     #[ORM\PreRemove]
-    public function storeFilenameForRemove();
+    public function storeFilenameForRemove(): void;
 
     #[ORM\PostRemove]
-    public function removeUpload();
+    public function removeUpload(): void;
 
     /**
      * Set description.
@@ -183,12 +195,14 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     /**
      * Returns the old usernames.
      *
-     * @return array The usernames
+     * @return array<int, string> The usernames
      */
     public function getOldUsernames(): array;
 
     /**
      * Set oldUsername.
+     *
+     * @param array<int, string> $oldUsernames
      */
     public function setOldUsernames(array $oldUsernames): User;
 
@@ -300,17 +314,17 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     /**
      * Remove recruts.
      */
-    public function removeRecrut(ClanUtilisateur $recruts);
+    public function removeRecrut(ClanUtilisateur $recruts): void;
 
     /**
-     * Get recruts.
+     * @return ?ArrayCollection<int, ClanUtilisateur>
      */
-    public function getRecruts(): ?Collection;
+    public function getRecruts(): ?ArrayCollection;
 
     /**
-     * Set recruts collection.
+     * @param ArrayCollection<int, ClanUtilisateur> $recruts
      */
-    public function setRecruts(Collection $recruts): User;
+    public function setRecruts(ArrayCollection $recruts): User;
 
     /**
      * Add ips.
@@ -320,12 +334,14 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     /**
      * Remove ips.
      */
-    public function removeIp(Ip $ips);
+    public function removeIp(Ip $ips): void;
 
     /**
      * Get ips.
+     *
+     * @return ?ArrayCollection<int, Ip>
      */
-    public function getIps(): ?Collection;
+    public function getIps(): ?ArrayCollection;
 
     /**
      * Add messages.
@@ -335,12 +351,14 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     /**
      * Remove messages.
      */
-    public function removeMessage(Message $messages);
+    public function removeMessage(Message $messages): void;
 
     /**
      * Get messages.
+     *
+     * @return ?ArrayCollection<int, Message>
      */
-    public function getMessages(): ?Collection;
+    public function getMessages(): ?ArrayCollection;
 
     public function setCreatedAt(?\DateTime $createdAt = null): User;
 
@@ -373,9 +391,9 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
     public function setDateOfBirth(?\DateTimeInterface $dateOfBirth): User;
 
     /**
-     * @return Collection|Lobby[]
+     * @return ?ArrayCollection<int, Lobby>
      */
-    public function getLobbies(): ?Collection;
+    public function getLobbies(): ?ArrayCollection;
 
     public function addLobby(Lobby $lobby): User;
 

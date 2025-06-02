@@ -6,13 +6,11 @@ use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<User>
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
@@ -21,7 +19,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
-    public function findUserByOldPseudo($pseudo = '', $id = 0)
+    public function findUserByOldPseudo(string $pseudo = '', int $id = 0): ?User
     {
         $query = $this->createQueryBuilder('u')
             ->where('u.enabled = :enabled')
@@ -41,7 +39,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function searchUser($q = '', $num = 10, $allData = true)
+    /**
+     * @return array<int, User>
+     */
+    public function searchUser(string $q = '', int $num = 10, bool $allData = true): array
     {
         $query = $this->createQueryBuilder('u');
 
@@ -64,7 +65,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query->getQuery()->getResult();
     }
 
-    public function getMultiAccount($ip = '', $username = '')
+    /**
+     * @return array<int, User>
+     */
+    public function getMultiAccount(string $ip = '', string $username = ''): array
     {
         if (empty($ip) && empty($username)) {
             return [];
@@ -107,9 +111,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query->getQuery()->getResult();
     }
 
-    public function getMultiAccountByUser($user = null)
+    /**
+     * @return array<int, User>
+     */
+    public function getMultiAccountByUser(?User $user = null): array
     {
-        if (isset($user)) {
+        if ($user !== null) {
             $query = $this
                 ->createQueryBuilder('u')
                 ->select('ip.ip')
@@ -139,7 +146,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    public function upgradePassword(\Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
+    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
@@ -151,25 +158,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * Find user by his email.
+     * @return array<int, User>
      */
-    public function findUserByEmail($email): array
+    public function findUserByEmail(string $email): array
     {
         return $this->findBy(['emailCanonical' => User::canonicalize($email)]);
     }
 
     /**
-     * Find user by his username.
+     * @return array<int, User>
      */
-    public function findUserByUsername($username): array
+    public function findUserByUsername(string $username): array
     {
         return $this->findBy(['usernameCanonical' => User::canonicalize($username)]);
     }
 
     /**
-     * Find user by his email or username.
+     * @return array<int, User>
      */
-    public function findUserByUsernameOrEmail($usernameOrEmail): array
+    public function findUserByUsernameOrEmail(string $usernameOrEmail): array
     {
         if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
             return $this->findUserByEmail($usernameOrEmail);

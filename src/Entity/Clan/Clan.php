@@ -3,8 +3,10 @@
 namespace App\Entity\Clan;
 
 use App\Entity\Forum\Forum;
+use App\Repository\ClanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -18,71 +20,71 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table(name: 'nt_clan')]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\Entity(repositoryClass: \App\Repository\ClanRepository::class)]
+#[ORM\Entity(repositoryClass: ClanRepository::class)]
 class Clan implements SluggableInterface
 {
     use SluggableTrait;
 
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
 
     /**
-     * @var ?Collection<ClanUtilisateur>
+     * @var ArrayCollection<int, ClanUtilisateur>
      */
-    #[ORM\OneToMany(targetEntity: ClanUtilisateur::class, mappedBy: 'clan', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'clan', targetEntity: ClanUtilisateur::class, cascade: ['remove'])]
     #[ORM\OrderBy(['dateAjout' => 'ASC'])]
-    private ?Collection $membres;
+    private ArrayCollection $membres;
 
     /**
-     * @var ?Collection<Forum>
+     * @var ArrayCollection<int, Forum>
      */
-    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'clan', cascade: ['persist', 'remove'])]
-    private ?Collection $forums;
+    #[ORM\OneToMany(mappedBy: 'clan', targetEntity: Forum::class, cascade: ['persist', 'remove'])]
+    private ArrayCollection $forums;
 
-    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[ORM\Column(name: 'nom', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private string $nom;
 
-    #[ORM\Column(name: 'tag', type: 'string', length: 5, nullable: true)]
+    #[ORM\Column(name: 'tag', type: Types::STRING, length: 5, nullable: true)]
     #[Assert\Length(max: 5)]
     private ?string $tag = null;
 
-    #[ORM\Column(name: 'accroche', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'accroche', type: Types::STRING, length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     private ?string $accroche = null;
 
-    #[ORM\Column(name: 'description', type: 'text')]
+    #[ORM\Column(name: 'description', type: Types::TEXT)]
     #[Assert\NotBlank]
     private string $description;
 
-    #[ORM\Column(name: 'url', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'url', type: Types::STRING, length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     #[Assert\Url]
     private ?string $url = null;
 
-    #[ORM\Column(name: 'kamon', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'kamon', type: Types::STRING, length: 255, nullable: true)]
     #[Assert\Length(max: 255)]
     private ?string $kamon = '';
 
-    #[ORM\Column(name: 'kamon_upload', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'kamon_upload', type: Types::STRING, length: 255, nullable: true)]
     private ?string $kamonUpload = null;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
-    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $updatedAt = null;
 
-    #[ORM\Column(name: 'online', type: 'boolean')]
+    #[ORM\Column(name: 'online', type: Types::BOOLEAN)]
     private bool $online = true;
 
-    #[ORM\Column(name: 'is_recruting', type: 'boolean')]
+    #[ORM\Column(name: 'is_recruting', type: Types::BOOLEAN)]
     private bool $isRecruting = true;
 
     #[Ignore]
@@ -122,7 +124,7 @@ class Clan implements SluggableInterface
         ]);
     }
 
-    public function unserialize($data)
+    public function unserialize(string $data): void
     {
         [
             $this->nom,
@@ -131,7 +133,7 @@ class Clan implements SluggableInterface
             $this->description,
             $this->url,
             $this->id
-        ] = unserialize($data);
+        ] = unserialize($data, ['allowed_classes' => false]);
     }
 
     /**
@@ -147,7 +149,12 @@ class Clan implements SluggableInterface
         return true;
     }
 
-    public function generateSlugValue($values): ?string
+    /**
+     * @param array<int, string> $values
+     *
+     * @throws \Knp\DoctrineBehaviors\Exception\SluggableException
+     */
+    public function generateSlugValue(array $values): ?string
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {
@@ -193,7 +200,7 @@ class Clan implements SluggableInterface
     }
 
     #[ORM\PrePersist]
-    public function prePersist()
+    public function prePersist(): void
     {
         $this->dateAjout = new \DateTime();
         $this->updatedAt = new \DateTime();
@@ -204,7 +211,7 @@ class Clan implements SluggableInterface
     }
 
     #[ORM\PreUpdate]
-    public function preUpdate()
+    public function preUpdate(): void
     {
         $this->updatedAt = new \DateTime();
 
@@ -222,7 +229,7 @@ class Clan implements SluggableInterface
 
     #[ORM\PostPersist]
     #[ORM\PostUpdate]
-    public function upload()
+    public function upload(): void
     {
         if (null === $this->file) {
             return;
@@ -230,17 +237,17 @@ class Clan implements SluggableInterface
 
         $this->file->move($this->getUploadRootDir(), $this->getKamonUpload());
 
-        unset($this->file);
+        $this->file = null;
     }
 
     #[ORM\PreRemove]
-    public function storeFilenameForRemove()
+    public function storeFilenameForRemove(): void
     {
         $this->tempKamon = $this->getAbsoluteKamon();
     }
 
     #[ORM\PostRemove]
-    public function removeUpload()
+    public function removeUpload(): void
     {
         if ($this->tempKamon && file_exists($this->tempKamon)) {
             unlink($this->tempKamon);
@@ -250,7 +257,7 @@ class Clan implements SluggableInterface
     /**
      * Sets file.
      */
-    public function setFile(?UploadedFile $file = null)
+    public function setFile(?UploadedFile $file = null): void
     {
         $this->file = $file;
     }
@@ -438,7 +445,7 @@ class Clan implements SluggableInterface
      */
     public function addMembre(ClanUtilisateur $membre): self
     {
-        $this->membres[] = $membre;
+        $this->membres->add($membre);
         $membre->setClan($this);
 
         return $this;
@@ -447,13 +454,13 @@ class Clan implements SluggableInterface
     /**
      * Remove membres.
      */
-    public function removeMembre(ClanUtilisateur $membre)
+    public function removeMembre(ClanUtilisateur $membre): void
     {
         $this->membres->removeElement($membre);
     }
 
     /**
-     * Get membres.
+     * @return ?Collection<int, ClanUtilisateur>
      */
     public function getMembres(): ?Collection
     {
@@ -492,13 +499,13 @@ class Clan implements SluggableInterface
     /**
      * Remove forums.
      */
-    public function removeForum(Forum $forums)
+    public function removeForum(Forum $forums): void
     {
         $this->forums->removeElement($forums);
     }
 
     /**
-     * Get forums.
+     * @return ?Collection<int, Forum>
      */
     public function getForums(): ?Collection
     {

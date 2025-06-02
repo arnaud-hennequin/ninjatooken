@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Admin\DetectionAdmin;
 use App\Entity\User\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * @extends Controller<DetectionAdmin>
+ */
 class DetectionAdminController extends Controller
 {
     public function list(EntityManagerInterface $em, ?Request $request = null): Response
@@ -29,7 +33,7 @@ class DetectionAdminController extends Controller
             $users = $userRepository->getMultiAccountByUser($user);
             $showForm = false;
         } else {
-            if (Request::METHOD_POST == $request->getMethod()) {
+            if (Request::METHOD_POST === $request->getMethod()) {
                 $ip = $request->get('ip');
                 if (!empty($ip)) {
                     $ip = ip2long($ip);

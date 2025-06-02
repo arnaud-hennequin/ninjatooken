@@ -4,12 +4,10 @@ namespace App\Block;
 
 use App\Entity\Forum\Comment;
 use Doctrine\ORM\EntityManager;
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
@@ -44,22 +42,6 @@ class RecentCommentsBlockService extends AbstractBlockService
         ];
 
         return $this->renderResponse($blockContext->getTemplate(), $parameters, $response);
-    }
-
-    public function buildEditForm(FormMapper $formMapper)
-    {
-        $formMapper->add('settings', ImmutableArrayType::class, [
-            'keys' => [
-                ['number', 'integer', ['required' => true]],
-                ['title', 'text', ['required' => false]],
-                ['mode', 'choice', [
-                    'choices' => [
-                        'public' => 'public',
-                        'admin' => 'admin',
-                    ],
-                ]],
-            ],
-        ]);
     }
 
     public function configureSettings(OptionsResolver $resolver): void

@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Forum\Comment;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,13 +12,11 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+/**
+ * @extends AbstractAdmin<Comment>
+ */
 class CommentUserAdmin extends AbstractAdmin
 {
-    protected array $datagridValues = [
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'dateAjout',
-    ];
-
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $matches = ['ninjatooken', 'user', 'comment'];

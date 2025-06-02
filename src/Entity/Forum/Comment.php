@@ -4,15 +4,17 @@ namespace App\Entity\Forum;
 
 use App\Entity\User\User;
 use App\Entity\User\UserInterface;
+use App\Repository\CommentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'nt_comment')]
-#[ORM\Entity(repositoryClass: \App\Repository\CommentRepository::class)]
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
@@ -23,24 +25,24 @@ class Comment
     #[ORM\ManyToOne(targetEntity: Thread::class, fetch: 'LAZY')]
     private ?Thread $thread;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
     /**
      * Comment text.
      */
-    #[ORM\Column(name: 'body', type: 'text')]
+    #[ORM\Column(name: 'body', type: Types::TEXT)]
     #[Assert\NotBlank]
     private string $body;
 
     /**
      * Author of the comment.
      */
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: true)]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'LAZY')]
     private ?UserInterface $author;
 
-    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
 
     public function __construct()

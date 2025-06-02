@@ -7,6 +7,9 @@ use App\Entity\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<MessageUser>
+ */
 class MessageUserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -14,7 +17,10 @@ class MessageUserRepository extends ServiceEntityRepository
         parent::__construct($registry, MessageUser::class);
     }
 
-    public function getReceiveMessages(User $user, $nombreParPage = 5, $page = 1)
+    /**
+     * @return array<int, MessageUser>
+     */
+    public function getReceiveMessages(User $user, int $nombreParPage = 5, int $page = 1): array
     {
         $page = max(1, $page);
 
@@ -33,7 +39,10 @@ class MessageUserRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getFirstReceiveMessage(User $user)
+    /**
+     * @return array<int, MessageUser>
+     */
+    public function getFirstReceiveMessage(User $user): array
     {
         $query = $this->createQueryBuilder('mu')
             ->leftJoin('mu.message', 'm')
@@ -50,7 +59,7 @@ class MessageUserRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function getNumReceiveMessages(User $user)
+    public function getNumReceiveMessages(User $user): int
     {
         $query = $this->createQueryBuilder('mu')
             ->leftJoin('mu.message', 'm')

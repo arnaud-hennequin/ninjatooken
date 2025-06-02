@@ -4,35 +4,37 @@ namespace App\Entity\Clan;
 
 use App\Entity\User\User;
 use App\Entity\User\UserInterface;
+use App\Repository\ClanPostulationRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ClanPostulation.
  */
 #[ORM\Table(name: 'nt_clanpostulation')]
-#[ORM\Entity(repositoryClass: \App\Repository\ClanPostulationRepository::class)]
+#[ORM\Entity(repositoryClass: ClanPostulationRepository::class)]
 class ClanPostulation
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
     #[ORM\JoinColumn(name: 'postulant_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: User::class)]
-    private User|UserInterface|null $postulant;
+    private ?UserInterface $postulant;
 
     #[ORM\JoinColumn(name: 'clan_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: Clan::class, fetch: 'EAGER')]
     private ?Clan $clan;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
-    #[ORM\Column(name: 'date_changement_etat', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'date_changement_etat', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $dateChangementEtat;
 
-    #[ORM\Column(name: 'etat', type: 'smallint')]
+    #[ORM\Column(name: 'etat', type: Types::SMALLINT)]
     private int $etat = 0;
 
     /**

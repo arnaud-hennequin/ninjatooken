@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Clan\ClanUtilisateur;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,6 +12,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
+/**
+ * @extends AbstractAdmin<ClanUtilisateur>
+ */
 class ClanUtilisateurAdmin extends AbstractAdmin
 {
     protected function configureDatagridFilters(DatagridMapper $filter): void

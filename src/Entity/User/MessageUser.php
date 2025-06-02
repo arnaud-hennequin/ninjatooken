@@ -2,16 +2,18 @@
 
 namespace App\Entity\User;
 
+use App\Repository\MessageUserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MessageUser.
  */
 #[ORM\Table(name: 'nt_messageuser')]
-#[ORM\Entity(repositoryClass: \App\Repository\MessageUserRepository::class)]
+#[ORM\Entity(repositoryClass: MessageUserRepository::class)]
 class MessageUser
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -24,10 +26,10 @@ class MessageUser
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER')]
     private ?UserInterface $destinataire;
 
-    #[ORM\Column(name: 'date_read', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'date_read', type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTime $dateRead;
 
-    #[ORM\Column(name: 'has_deleted', type: 'boolean')]
+    #[ORM\Column(name: 'has_deleted', type: Types::BOOLEAN)]
     private bool $hasDeleted = false;
 
     public function __toString()

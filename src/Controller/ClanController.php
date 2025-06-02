@@ -51,7 +51,7 @@ class ClanController extends AbstractController
         $this->authorizationChecker = $authorizationChecker;
     }
 
-    public function liste(Request $request, EntityManagerInterface $em, $page = 1): Response
+    public function liste(Request $request, EntityManagerInterface $em, int $page = 1): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -84,28 +84,25 @@ class ClanController extends AbstractController
             /** @var ThreadRepository $threadRepository */
             $threadRepository = $em->getRepository(Thread::class);
             $threads = $threadRepository->getThreads($forum, 5, 1);
-            if (count($threads) > 0) {
-                $forum->threads = $threads;
-            } else {
-                $forum->threads = [];
-            }
+            $forum->setNumThreads(count($threads));
         }
 
         // l'arborescence des membres
         /** @var ClanUtilisateurRepository $clanUtilisateurRepository */
         $clanUtilisateurRepository = $em->getRepository(ClanUtilisateur::class);
         $shishou = $clanUtilisateurRepository->getMembres($clan, 0, null, 1, 1);
-        $membres = [];
         if ($shishou) {
             $shishou = current($shishou);
             $membres = [
                 'recruteur' => $shishou,
                 'recruts' => $this->getRecruts($shishou, $em),
             ];
+            // l'arborescence des membres mise à plat (listing simple)
+            $membresListe = $this->getAllMembers($membres);
+        } else {
+            $membres = [];
+            $membresListe = [];
         }
-
-        // l'arborescence des membres mise à plat (listing simple)
-        $membresListe = $this->getRecruteur($membres);
 
         return $this->render('clan/clan.html.twig', [
             'clan' => $clan,
@@ -733,19 +730,26 @@ class ClanController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function getRecruteur($list = []): array
+    /**
+     * @param array{'recruteur': ClanUtilisateur, 'recruts' : array<int, mixed>} $list
+     *
+     * @return array<int, ClanUtilisateur>
+     */
+    public function getAllMembers(array $list): array
     {
-        $membre = [];
-        if (isset($list['recruteur'])) {
-            $membre[] = $list['recruteur'];
-            foreach ($list['recruts'] as $recrut) {
-                $membre = array_merge($membre, $this->getRecruteur($recrut));
-            }
+        $membre = [
+            $list['recruteur'],
+        ];
+        foreach ($list['recruts'] as $recrut) {
+            $membre = array_merge($membre, $this->getAllMembers($recrut));
         }
 
         return $membre;
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getRecruts(ClanUtilisateur $recruteur, EntityManagerInterface $em): array
     {
         /** @var ClanUtilisateurRepository $repo */

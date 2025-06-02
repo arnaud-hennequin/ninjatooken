@@ -3,6 +3,8 @@
 namespace App\Entity\Forum;
 
 use App\Entity\Clan\Clan;
+use App\Repository\ForumRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
@@ -12,35 +14,35 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
  * Forum.
  */
 #[ORM\Table(name: 'nt_forum')]
-#[ORM\Entity(repositoryClass: \App\Repository\ForumRepository::class)]
+#[ORM\Entity(repositoryClass: ForumRepository::class)]
 class Forum implements SluggableInterface
 {
     use SluggableTrait;
 
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'old_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
 
-    #[ORM\Column(name: 'nom', type: 'string', length: 255)]
+    #[ORM\Column(name: 'nom', type: Types::STRING, length: 255)]
     private string $nom;
 
-    #[ORM\Column(name: 'ordre', type: 'smallint')]
+    #[ORM\Column(name: 'ordre', type: Types::SMALLINT)]
     private int $ordre = 0;
 
-    #[ORM\Column(name: 'can_user_create_thread', type: 'boolean')]
+    #[ORM\Column(name: 'can_user_create_thread', type: Types::BOOLEAN)]
     private bool $canUserCreateThread = true;
 
-    #[ORM\Column(name: 'num_threads', type: 'integer')]
+    #[ORM\Column(name: 'num_threads', type: Types::INTEGER)]
     private int $numThreads = 0;
 
-    #[ORM\Column(name: 'date_ajout', type: 'datetime')]
+    #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
 
-    #[ORM\ManyToOne(targetEntity: Clan::class, inversedBy: 'forums', fetch: 'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Clan::class, fetch: 'EAGER', inversedBy: 'forums')]
     private ?Clan $clan;
 
     /**
@@ -69,7 +71,12 @@ class Forum implements SluggableInterface
         return true;
     }
 
-    public function generateSlugValue($values): ?string
+    /**
+     * @param array<int, mixed> $values
+     *
+     * @throws \Knp\DoctrineBehaviors\Exception\SluggableException
+     */
+    public function generateSlugValue(array $values): ?string
     {
         $usableValues = [];
         foreach ($values as $fieldValue) {

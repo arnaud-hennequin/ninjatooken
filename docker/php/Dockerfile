@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.3-fpm
 
 # install all the dependencies and enable PHP modules
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
@@ -32,3 +32,5 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       opcache
 
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+
+WORKDIR /var/www/ninjatooken

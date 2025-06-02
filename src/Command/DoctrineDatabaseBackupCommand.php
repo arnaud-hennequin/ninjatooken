@@ -13,7 +13,7 @@ class DoctrineDatabaseBackupCommand extends Command
 {
     protected static $defaultName = 'doctrine:database:backup';
     protected static $defaultDescription = 'Make a backup of the database';
-    private $params;
+    private ParameterBagInterface $params;
 
     public function __construct(ParameterBagInterface $params)
     {

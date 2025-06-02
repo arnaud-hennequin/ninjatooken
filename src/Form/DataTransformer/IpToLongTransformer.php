@@ -4,6 +4,9 @@ namespace App\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * @implements DataTransformerInterface<int, string>
+ */
 class IpToLongTransformer implements DataTransformerInterface
 {
     /**

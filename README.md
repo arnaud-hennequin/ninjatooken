@@ -128,7 +128,7 @@ git clone https://github.com/arnaud-hennequin/ninjatooken.git
 ```shell
 sudo nano /etc/nginx/sites-available/ninjatooken
 ```
-And paste in the [following configuration](ninjatooken.nginx), and then...
+And paste in the [following configuration](docker/nginx/default.conf) (adapt `fastcgi_pass` to your need), and then...
 ```shell
 sudo ln -s /etc/nginx/sites-available/ninjatooken /etc/nginx/sites-enabled/
 sudo service nginx reload

@@ -337,7 +337,7 @@ class GameController extends AbstractController
         ]);
     }
 
-    public function classement(Request $request, NinjaRepository $ninjaRepository, $page): Response
+    public function classement(Request $request, NinjaRepository $ninjaRepository, int $page = 1): Response
     {
         $num = $this->getParameter('numReponse');
         $page = max(1, $page);
@@ -370,7 +370,7 @@ class GameController extends AbstractController
         ]);
     }
 
-    public function recentGames(LobbyRepository $lobbyRepository, $max = 3): Response
+    public function recentGames(LobbyRepository $lobbyRepository, int $max = 3): Response
     {
         return $this->render('game/games/recentList.html.twig', [
             'games' => $lobbyRepository->getRecent($max),

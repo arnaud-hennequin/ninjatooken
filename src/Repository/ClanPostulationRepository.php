@@ -8,6 +8,9 @@ use App\Entity\User\UserInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<ClanPostulation>
+ */
 class ClanPostulationRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -15,7 +18,7 @@ class ClanPostulationRepository extends ServiceEntityRepository
         parent::__construct($registry, ClanPostulation::class);
     }
 
-    public function getByClanUser(?Clan $clan = null, ?UserInterface $user = null)
+    public function getByClanUser(?Clan $clan = null, ?UserInterface $user = null): ?ClanPostulation
     {
         $query = $this->createQueryBuilder('cp');
 
@@ -32,7 +35,7 @@ class ClanPostulationRepository extends ServiceEntityRepository
         return $query->getQuery()->getOneOrNullResult();
     }
 
-    public function getByUser(?UserInterface $user = null)
+    public function getByUser(?UserInterface $user = null): ?ClanPostulation
     {
         if (isset($user)) {
             $query = $this->createQueryBuilder('cp');
@@ -45,7 +48,7 @@ class ClanPostulationRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function getByClan(?Clan $clan = null)
+    public function getByClan(?Clan $clan = null): ?ClanPostulation
     {
         if (isset($clan)) {
             $query = $this->createQueryBuilder('cp');

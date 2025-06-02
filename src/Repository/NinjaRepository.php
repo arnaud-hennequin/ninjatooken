@@ -6,6 +6,9 @@ use App\Entity\Game\Ninja;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Ninja>
+ */
 class NinjaRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -13,17 +16,20 @@ class NinjaRepository extends ServiceEntityRepository
         parent::__construct($registry, Ninja::class);
     }
 
-    public function getNinjas($order = 'experience', $filter = '', $nombreParPage = 5, $page = 1)
+    /**
+     * @return array<int, Ninja>
+     */
+    public function getNinjas(string $order = 'experience', string $filter = '', int $nombreParPage = 5, int $page = 1): array
     {
         $page = max(1, $page);
 
         $query = $this->createQueryBuilder('n');
 
-        if ('experience' == $order) {
+        if ('experience' === $order) {
             $query->orderBy('n.experience', 'DESC');
-        } elseif ('assassinnat' == $order) {
+        } elseif ('assassinnat' === $order) {
             $query->orderBy('n.missionAssassinnat', 'DESC');
-        } elseif ('course' == $order) {
+        } elseif ('course' === $order) {
             $query->orderBy('n.missionCourse', 'DESC');
         }
 
@@ -38,7 +44,7 @@ class NinjaRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getNumNinjas($classe = '')
+    public function getNumNinjas(string $classe = ''): int
     {
         $query = $this->createQueryBuilder('n')
             ->select('COUNT(n)')
@@ -58,7 +64,7 @@ class NinjaRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getSumExperience()
+    public function getSumExperience(): int
     {
         $query = $this->createQueryBuilder('n')
             ->select('SUM(n.experience)');

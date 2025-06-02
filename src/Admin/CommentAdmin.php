@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Forum\Comment;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -10,13 +11,11 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
+/**
+ * @extends AbstractAdmin<Comment>
+ */
 class CommentAdmin extends AbstractAdmin
 {
-    protected array $datagridValues = [
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'dateAjout',
-    ];
-
     // Fields to be shown on create/edit forms
     protected function configureFormFields(FormMapper $form): void
     {

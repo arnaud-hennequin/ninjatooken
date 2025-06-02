@@ -8,6 +8,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Friend>
+ */
 class FriendRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -15,7 +18,10 @@ class FriendRepository extends ServiceEntityRepository
         parent::__construct($registry, Friend::class);
     }
 
-    public function getFriends(UserInterface $user, $nombreParPage = 5, $page = 1)
+    /**
+     * @return array<int, Friend>
+     */
+    public function getFriends(UserInterface $user, int $nombreParPage = 5, int $page = 1): array
     {
         $page = max(1, $page);
 
@@ -32,7 +38,10 @@ class FriendRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function getDemandes(UserInterface $user, $nombreParPage = 5, $page = 1): Paginator
+    /**
+     * @return Paginator<Friend>
+     */
+    public function getDemandes(UserInterface $user, int $nombreParPage = 5, int $page = 1): Paginator
     {
         $page = max(1, $page);
 
@@ -48,7 +57,7 @@ class FriendRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-    public function getNumFriends(UserInterface $user)
+    public function getNumFriends(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('f')
             ->select('COUNT(f)')
@@ -61,7 +70,7 @@ class FriendRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getNumDemandes(UserInterface $user)
+    public function getNumDemandes(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('f')
             ->select('COUNT(f)')
@@ -74,7 +83,7 @@ class FriendRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getNumBlocked(UserInterface $user)
+    public function getNumBlocked(UserInterface $user): int
     {
         $query = $this->createQueryBuilder('f')
             ->select('COUNT(f)')
@@ -86,7 +95,10 @@ class FriendRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
-    public function getBlocked(UserInterface $user, $nombreParPage = 5, $page = 1): Paginator
+    /**
+     * @return Paginator<Friend>
+     */
+    public function getBlocked(UserInterface $user, int $nombreParPage = 5, int $page = 1): Paginator
     {
         $page = max(1, $page);
 

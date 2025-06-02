@@ -170,7 +170,7 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/logout', name: 'app_logout')]
-    public function logout()
+    public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
@@ -198,28 +198,33 @@ class UserController extends AbstractController
         return $this->render('user/connected.html.twig', ['user' => $user]);
     }
 
-    public function autologin(Request $request, TranslatorInterface $translator, TokenStorageInterface $tokenStorage, EventDispatcherInterface $eventDispatcher, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker, $autologin): RedirectResponse
-    {
-        if (!empty($autologin)) {
-            if (!$authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') && !$authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $user = $em->getRepository(User::class)->findOneBy(['autoLogin' => $autologin]);
-                if (null !== $user && $user->isAccountNonLocked()) {
-                    // si l'utilisateur a déjà été connecté avant le dernier garbage collector
-                    if (null === $user->getUpdatedAt() || (new \DateTime())->getTimestamp() - $user->getUpdatedAt()->getTimestamp() > ini_get('session.gc_maxlifetime')) {
-                        // lance la connexion
-                        $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
-                        $tokenStorage->setToken($token);
-                        $event = new InteractiveLoginEvent($request, $token);
-                        $eventDispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
-                    }
-                } else {
-                    $session = $request->getSession();
-                    if ($session instanceof FlashBagAwareSessionInterface) {
-                        $session->getFlashBag()->add(
-                            'notice',
-                            $translator->trans('notice.autologinKO')
-                        );
-                    }
+    public function autologin(
+        Request $request,
+        TranslatorInterface $translator,
+        TokenStorageInterface $tokenStorage,
+        EventDispatcherInterface $eventDispatcher,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+        string $autologin = '',
+    ): RedirectResponse {
+        if ($autologin !== '' && !$authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') && !$authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            $user = $em->getRepository(User::class)->findOneBy(['autoLogin' => $autologin]);
+            if (null !== $user && $user->isAccountNonLocked()) {
+                // si l'utilisateur a déjà été connecté avant le dernier garbage collector
+                if (null === $user->getUpdatedAt() || (new \DateTime())->getTimestamp() - $user->getUpdatedAt()->getTimestamp() > ini_get('session.gc_maxlifetime')) {
+                    // lance la connexion
+                    $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
+                    $tokenStorage->setToken($token);
+                    $event = new InteractiveLoginEvent($request, $token);
+                    $eventDispatcher->dispatch($event, SecurityEvents::INTERACTIVE_LOGIN);
+                }
+            } else {
+                $session = $request->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'notice',
+                        $translator->trans('notice.autologinKO')
+                    );
                 }
             }
         }
@@ -249,9 +254,9 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_homepage'));
     }
 
-    public function fiche(string $user_nom, EntityManagerInterface $em, $page = 1): Response
+    public function fiche(string $user_nom, EntityManagerInterface $em, int $page = 1): Response
     {
-        $user = $em->getRepository(User::class)->findOneBy(['slug' => $user_nom]);
+        $user = $em->getRepository(User::class)->findOneBy(['username' => $user_nom]);
 
         // amis
         $num = $this->getParameter('numReponse');
@@ -270,18 +275,37 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function messagerieEnvoi(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, UserRepository $userRepository, AuthorizationCheckerInterface $authorizationChecker, $page = 1): Response
-    {
+    public function messagerieEnvoi(
+        Request $request,
+        TranslatorInterface $translator,
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        AuthorizationCheckerInterface $authorizationChecker,
+        int $page = 1,
+    ): Response {
         return $this->getMessagerie($request, $translator, $em, $userRepository, $authorizationChecker, $page, false);
     }
 
-    public function messagerie(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, UserRepository $userRepository, AuthorizationCheckerInterface $authorizationChecker, $page = 1): Response
-    {
+    public function messagerie(
+        Request $request,
+        TranslatorInterface $translator,
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        AuthorizationCheckerInterface $authorizationChecker,
+        int $page = 1,
+    ): Response {
         return $this->getMessagerie($request, $translator, $em, $userRepository, $authorizationChecker, $page);
     }
 
-    public function getMessagerie(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, UserRepository $userRepository, AuthorizationCheckerInterface $authorizationChecker, $page = 1, $reception = true): Response
-    {
+    public function getMessagerie(
+        Request $request,
+        TranslatorInterface $translator,
+        EntityManagerInterface $em,
+        UserRepository $userRepository,
+        AuthorizationCheckerInterface $authorizationChecker,
+        int $page = 1,
+        bool $reception = true,
+    ): Response {
         if ($authorizationChecker->isGranted('ROLE_USER')) {
             $num = $this->getParameter('numReponse');
             $page = max(1, $page);
@@ -312,7 +336,7 @@ class UserController extends AbstractController
 
                     if ($form->isValid()) {
                         $destinataires = [];
-                        /** @var array $requestDestinataires */
+                        /** @var array<int, string> $requestDestinataires */
                         $requestDestinataires = $request->request->get('destinataires');
                         foreach ($requestDestinataires as $idDestinataire) {
                             $destinataire = $userRepository->find((int) $idDestinataire);
@@ -483,8 +507,12 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function parametresUpdate(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function parametresUpdate(
+        Request $request,
+        TranslatorInterface $translator,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // post request
             if ('POST' === $request->getMethod()) {
@@ -592,8 +620,13 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function parametresUpdateAvatar(Request $request, TranslatorInterface $translator, ParameterBagInterface $params, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function parametresUpdateAvatar(
+        Request $request,
+        TranslatorInterface $translator,
+        ParameterBagInterface $params,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // post request
             if ('POST' === $request->getMethod()) {
@@ -632,11 +665,16 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function parametresConfirmMail(Request $request, TranslatorInterface $translator, AuthorizationCheckerInterface $authorizationChecker, ParameterBagInterface $params, UrlGeneratorInterface $router): RedirectResponse
-    {
+    public function parametresConfirmMail(
+        Request $request,
+        TranslatorInterface $translator,
+        AuthorizationCheckerInterface $authorizationChecker,
+        ParameterBagInterface $params,
+        UrlGeneratorInterface $router,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $confirmation = $this->user->getConfirmationToken();
-            if (isset($confirmation) && !empty($confirmation)) {
+            if (!empty($confirmation)) {
                 $confirmationUrl = $router->generate('ninja_tooken_user_registration_confirm', ['token' => $this->user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 $subject = $translator->trans('registration.email.subject', ['%username%' => $this->user->getUsername(), '%confirmationUrl%' => $confirmationUrl]);
@@ -670,8 +708,12 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function confirm(Request $request, UserRepository $userRepository, EntityManagerInterface $em, UrlGeneratorInterface $router, $token): Response
-    {
+    public function confirm(
+        UserRepository $userRepository,
+        EntityManagerInterface $em,
+        UrlGeneratorInterface $router,
+        string $token,
+    ): Response {
         $user = $userRepository->findOneBy(['confirmationToken' => $token]);
 
         if (null === $user) {
@@ -688,7 +730,7 @@ class UserController extends AbstractController
         ));
     }
 
-    public function confirmed(Request $request): Response
+    public function confirmed(): Response
     {
         $user = $this->getUser();
         if (!is_object($user) || !$user instanceof UserInterface) {
@@ -700,8 +742,13 @@ class UserController extends AbstractController
         ]);
     }
 
-    public function parametresUpdatePassword(Request $request, TranslatorInterface $translator, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function parametresUpdatePassword(
+        Request $request,
+        TranslatorInterface $translator,
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $form = $this->createForm(ChangePasswordFormType::class);
             $form->handleRequest($request);
@@ -734,8 +781,13 @@ class UserController extends AbstractController
     /**
      * @throws \Doctrine\DBAL\Exception
      */
-    public function parametresDeleteAccount(ClanPropositionListener $clanPropositionListener, ThreadListener $threadListener, CommentListener $commentListener, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function parametresDeleteAccount(
+        ClanPropositionListener $clanPropositionListener,
+        ThreadListener $threadListener,
+        CommentListener $commentListener,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $conn = $em->getConnection();
             $evm = $em->getEventManager();
@@ -773,7 +825,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amis($page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
+    public function amis(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $num = $this->getParameter('numReponse');
@@ -796,7 +848,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisDemande($page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
+    public function amisDemande(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $num = $this->getParameter('numReponse');
@@ -819,7 +871,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisBlocked($page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
+    public function amisBlocked(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $num = $this->getParameter('numReponse');
@@ -842,8 +894,13 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisConfirmer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function amisConfirmer(
+        Request $request,
+        TranslatorInterface $translator,
+        Friend $friend,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($friend->getUser() === $this->user) {
                 $friend->setIsConfirmed(true);
@@ -865,8 +922,13 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisBloquer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function amisBloquer(
+        Request $request,
+        TranslatorInterface $translator,
+        Friend $friend,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($friend->getUser() === $this->user) {
                 $friend->setIsBlocked(true);
@@ -888,8 +950,13 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisDebloquer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function amisDebloquer(
+        Request $request,
+        TranslatorInterface $translator,
+        Friend $friend,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($friend->getUser() === $this->user) {
                 $friend->setIsBlocked(false);
@@ -911,8 +978,13 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisSupprimer(Request $request, TranslatorInterface $translator, Friend $friend, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function amisSupprimer(
+        Request $request,
+        TranslatorInterface $translator,
+        Friend $friend,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($friend->getUser() === $this->user) {
                 $em->remove($friend);
@@ -933,8 +1005,12 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisBlockedSupprimer(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function amisBlockedSupprimer(
+        Request $request,
+        TranslatorInterface $translator,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             /** @var FriendRepository $repo */
             $repo = $em->getRepository(Friend::class);
@@ -955,8 +1031,12 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function amisDemandeSupprimer(Request $request, TranslatorInterface $translator, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function amisDemandeSupprimer(
+        Request $request,
+        TranslatorInterface $translator,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             /** @var FriendRepository $repo */
             $repo = $em->getRepository(Friend::class);
@@ -977,7 +1057,7 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function captures($page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
+    public function captures(int $page, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): Response
     {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             $num = $this->getParameter('numReponse');
@@ -997,8 +1077,13 @@ class UserController extends AbstractController
         return $this->redirect($this->generateUrl('ninja_tooken_user_security_login'));
     }
 
-    public function capturesSupprimer(Request $request, TranslatorInterface $translator, Capture $capture, EntityManagerInterface $em, AuthorizationCheckerInterface $authorizationChecker): RedirectResponse
-    {
+    public function capturesSupprimer(
+        Request $request,
+        TranslatorInterface $translator,
+        Capture $capture,
+        EntityManagerInterface $em,
+        AuthorizationCheckerInterface $authorizationChecker,
+    ): RedirectResponse {
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($capture->getUser() === $this->user) {
                 // supprime d'imgur

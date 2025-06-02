@@ -8,7 +8,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 class ThreadListener
 {
     // supprime les commentaires associés
-    public function postRemove(LifecycleEventArgs $args)
+    public function postRemove(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
@@ -25,7 +25,7 @@ class ThreadListener
     }
 
     // met à jour le forum
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();

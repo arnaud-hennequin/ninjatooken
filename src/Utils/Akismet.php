@@ -73,13 +73,13 @@ class Akismet implements AkismetInterface
     /**
      * Marks message as ham (not-spam).
      *
-     * @param array $comment Message data. Required keys:<br />
-     *                       permalink - the permanent location of the entry the comment was submitted to<br />
-     *                       comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *                       comment_author - name submitted with the comment<br />
-     *                       comment_author_email - email address submitted with the comment<br />
-     *                       comment_author_url - URL submitted with comment<br />
-     *                       comment_content - the content that was submitted
+     * @param array<string, mixed> $comment Message data. Required keys:<br />
+     *                                      permalink - the permanent location of the entry the comment was submitted to<br />
+     *                                      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                                      comment_author - name submitted with the comment<br />
+     *                                      comment_author_email - email address submitted with the comment<br />
+     *                                      comment_author_url - URL submitted with comment<br />
+     *                                      comment_content - the content that was submitted
      *
      * @return bool True if messahe has been marked as ham
      */
@@ -91,13 +91,13 @@ class Akismet implements AkismetInterface
     /**
      * Marks message as spam.
      *
-     * @param array $comment Message data. Required keys:<br />
-     *                       permalink - the permanent location of the entry the comment was submitted to<br />
-     *                       comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *                       comment_author - name submitted with the comment<br />
-     *                       comment_author_email - email address submitted with the comment<br />
-     *                       comment_author_url - URL submitted with comment<br />
-     *                       comment_content - the content that was submitted
+     * @param array<string, mixed> $comment Message data. Required keys:<br />
+     *                                      permalink - the permanent location of the entry the comment was submitted to<br />
+     *                                      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                                      comment_author - name submitted with the comment<br />
+     *                                      comment_author_email - email address submitted with the comment<br />
+     *                                      comment_author_url - URL submitted with comment<br />
+     *                                      comment_content - the content that was submitted
      *
      * @return bool True if message has been marked as spam
      */
@@ -109,13 +109,13 @@ class Akismet implements AkismetInterface
     /**
      * Check if message is spam or not.
      *
-     * @param array $comment Message data. Required keys:<br />
-     *                       permalink - the permanent location of the entry the comment was submitted to<br />
-     *                       comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *                       comment_author - name submitted with the comment<br />
-     *                       comment_author_email - email address submitted with the comment<br />
-     *                       comment_author_url - URL submitted with comment<br />
-     *                       comment_content - the content that was submitted
+     * @param array<string, mixed> $comment Message data. Required keys:<br />
+     *                                      permalink - the permanent location of the entry the comment was submitted to<br />
+     *                                      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                                      comment_author - name submitted with the comment<br />
+     *                                      comment_author_email - email address submitted with the comment<br />
+     *                                      comment_author_url - URL submitted with comment<br />
+     *                                      comment_content - the content that was submitted
      *
      * @return bool True if message is spam, false otherwise
      */
@@ -127,15 +127,15 @@ class Akismet implements AkismetInterface
     /**
      * Makes query to Akismet API and checks the response.
      *
-     * @param array  $comment Message data. Required keys:<br />
-     *                        permalink - the permanent location of the entry the comment was submitted to<br />
-     *                        comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
-     *                        comment_author - name submitted with the comment<br />
-     *                        comment_author_email - email address submitted with the comment<br />
-     *                        comment_author_url - URL submitted with comment<br />
-     *                        comment_content - the content that was submitted
-     * @param string $path    API method to use self::PATH_*
-     * @param string $expect  Expected response self::RETURN_*
+     * @param array<string, mixed> $comment Message data. Required keys:<br />
+     *                                      permalink - the permanent location of the entry the comment was submitted to<br />
+     *                                      comment_type - may be blank, comment, trackback, pingback, or a made up value like "registration"<br />
+     *                                      comment_author - name submitted with the comment<br />
+     *                                      comment_author_email - email address submitted with the comment<br />
+     *                                      comment_author_url - URL submitted with comment<br />
+     *                                      comment_content - the content that was submitted
+     * @param string               $path    API method to use self::PATH_*
+     * @param string               $expect  Expected response self::RETURN_*
      *
      * @return bool True is response is same as expected
      */
@@ -173,7 +173,7 @@ class Akismet implements AkismetInterface
         curl_setopt_array($conn, $settings);
         $response = explode("\n", curl_exec($conn));
 
-        if (trim(end($response)) == $expect) {
+        if (trim(end($response)) === $expect) {
             return true;
         }
         foreach ($response as $header) {
@@ -189,7 +189,7 @@ class Akismet implements AkismetInterface
      * Sets User Agent string for connection
      * Akismet asks to set UA string like: AppName/Version | PluginName/Version.
      */
-    public function setUserAgent(string $userAgent)
+    public function setUserAgent(string $userAgent): void
     {
         $this->userAgent = $userAgent;
     }

@@ -1,5 +1,5 @@
 parameters:
-    level: 5
+    level: 6
     paths:
         - config
         - src
@@ -14,6 +14,7 @@ parameters:
     doctrine:
         allowNullablePropertyForRequiredField: true
     ignoreErrors:
+        - '/Property .* type mapping mismatch: property can contain .*Interface.* but database expects .*/'
 
     excludePaths:
         - src/Utils/Chat.php
