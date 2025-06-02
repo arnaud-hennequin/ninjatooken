@@ -6,31 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="660281c0-4689-4325-bd57-d8a83e1029a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/chat.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/clan.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/common.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/forum.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/game.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/unity.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/user.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes/user_resetting.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rector.php" beforeDir="false" afterPath="$PROJECT_DIR$/rector.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ChatController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ClanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/CommonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommonController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ForumController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ForumController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/GameController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GameController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ResetPasswordController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UnityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UnityController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ClanPropositionRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ClanPropositionRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ClanRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ClanRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/FriendRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/FriendRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/LobbyRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/LobbyRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MessageRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MessageRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/MessageUserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/MessageUserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/NinjaRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/NinjaRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -273,7 +249,7 @@
       <workItem from="1748442973831" duration="3358000" />
       <workItem from="1748854470215" duration="14543000" />
       <workItem from="1748878488920" duration="664000" />
-      <workItem from="1748881994506" duration="9007000" />
+      <workItem from="1748881994506" duration="9314000" />
     </task>
     <servers />
   </component>
