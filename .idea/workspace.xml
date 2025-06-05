@@ -6,7 +6,24 @@
   <component name="ChangeListManager">
     <list default="true" id="660281c0-4689-4325-bd57-d8a83e1029a6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/phpstan.neon" beforeDir="false" afterPath="$PROJECT_DIR$/phpstan.neon" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Command/NewsletterCommand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/NewsletterCommand.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ChatController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ChatController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ClanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/CommonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CommonController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/DetectionAdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DetectionAdminController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/GameController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GameController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ResetPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/UnityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UnityController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Forum/Thread.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Forum/Thread.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Game/Ninja.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Game/Ninja.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/ResetPasswordRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/ResetPasswordRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/DataTransformer/IpToLongTransformer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/DataTransformer/IpToLongTransformer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Listener/LoginListener.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Listener/LoginListener.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Twig/HTMLPurifierExtensionNT.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Twig/HTMLPurifierExtensionNT.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Utils/Akismet.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utils/Akismet.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,7 +266,8 @@
       <workItem from="1748442973831" duration="3358000" />
       <workItem from="1748854470215" duration="14543000" />
       <workItem from="1748878488920" duration="664000" />
-      <workItem from="1748881994506" duration="9314000" />
+      <workItem from="1748881994506" duration="9690000" />
+      <workItem from="1749120565394" duration="4450000" />
     </task>
     <servers />
   </component>

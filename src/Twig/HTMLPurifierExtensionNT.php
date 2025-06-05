@@ -10,7 +10,7 @@ class HTMLPurifierExtensionNT extends AbstractExtension
 {
     public HTMLPurifier $htmlPurifier;
     /**
-     * @var array<string, HTMLPurifier>
+     * @var array<string, \HTMLPurifier>
      */
     private array $purifiers = [];
 
@@ -43,60 +43,58 @@ class HTMLPurifierExtensionNT extends AbstractExtension
         $HTMLPurifier = $this->getHTMLPurifierForProfile($profile);
 
         // ajoute certaines définitions
-        if ('full' == $profile) {
-            if ($def = $HTMLPurifier->config->maybeGetRawHTMLDefinition()) {
-                $def->addAttribute('embed', 'allowfullscreen', 'Enum#true,false');
-                $def->addAttribute('object', 'classid', 'CDATA');
-                $def->addElement(
-                    'iframe',
-                    'Inline',
-                    'Flow',
-                    'Common',
-                    [
-                        'src' => 'URI#embedded',
-                        'width' => 'Length',
-                        'height' => 'Length',
-                        'name' => 'ID',
-                        'scrolling' => 'Enum#yes,no,auto',
-                        'frameborder' => 'Enum#0,1',
-                        'longdesc' => 'URI',
-                        'marginheight' => 'Pixels',
-                        'marginwidth' => 'Pixels',
-                    ]
-                );
-                $def->addElement(
-                    'span',
-                    'Inline',
-                    'Flow',
-                    'Common',
-                    [
-                        'align' => 'Enum#left,right,center,justify',
-                    ]
-                );
-                $def->addElement(
-                    'li',
-                    'Inline',
-                    'Flow',
-                    'Common',
-                    [
-                        'align' => 'Enum#left,right,center,justify',
-                    ]
-                );
-                $def->addElement(
-                    'fieldset',
-                    'Block',
-                    'Flow',
-                    'Common',
-                    []
-                );
-                $def->addElement(
-                    'legend',
-                    'Block',
-                    'Flow',
-                    'Common',
-                    []
-                );
-            }
+        if (('full' === $profile) && $def = $HTMLPurifier->config->maybeGetRawHTMLDefinition()) {
+            $def->addAttribute('embed', 'allowfullscreen', 'Enum#true,false');
+            $def->addAttribute('object', 'classid', 'CDATA');
+            $def->addElement(
+                'iframe',
+                'Inline',
+                'Flow',
+                'Common',
+                [
+                    'src' => 'URI#embedded',
+                    'width' => 'Length',
+                    'height' => 'Length',
+                    'name' => 'ID',
+                    'scrolling' => 'Enum#yes,no,auto',
+                    'frameborder' => 'Enum#0,1',
+                    'longdesc' => 'URI',
+                    'marginheight' => 'Pixels',
+                    'marginwidth' => 'Pixels',
+                ]
+            );
+            $def->addElement(
+                'span',
+                'Inline',
+                'Flow',
+                'Common',
+                [
+                    'align' => 'Enum#left,right,center,justify',
+                ]
+            );
+            $def->addElement(
+                'li',
+                'Inline',
+                'Flow',
+                'Common',
+                [
+                    'align' => 'Enum#left,right,center,justify',
+                ]
+            );
+            $def->addElement(
+                'fieldset',
+                'Block',
+                'Flow',
+                'Common',
+                []
+            );
+            $def->addElement(
+                'legend',
+                'Block',
+                'Flow',
+                'Common',
+                []
+            );
         }
 
         return $HTMLPurifier->purify($string);

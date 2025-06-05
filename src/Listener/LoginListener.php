@@ -34,6 +34,9 @@ class LoginListener
             $request = $event->getRequest();
 
             $currentIp = ip2long($request->getClientIp());
+            if ($currentIp === false) {
+                return;
+            }
 
             $ip = $this->em->getRepository(Ip::class)
                 ->findOneBy(['ip' => $currentIp, 'user' => $user]);

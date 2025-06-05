@@ -30,6 +30,11 @@ class IpToLongTransformer implements DataTransformerInterface
             return 0;
         }
 
-        return ip2long($value);
+        $value = ip2long($value);
+        if ($value === false) {
+            return 0;
+        }
+
+        return $value;
     }
 }

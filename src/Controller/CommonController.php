@@ -101,7 +101,7 @@ class CommonController extends AbstractController
     public function contact(Request $request, TranslatorInterface $translator, MailerInterface $mailer, CsrfTokenManagerInterface $csrfTokenManager, ParameterBagInterface $parameterBag): Response
     {
         if ('POST' === $request->getMethod()) {
-            if (!$csrfTokenManager->isTokenValid(new CsrfToken('contact'.$request->cookies->get('PHPSESSID'), $request->request->get('_token')))) {
+            if (!$csrfTokenManager->isTokenValid(new CsrfToken('contact'.$request->cookies->getString('PHPSESSID'), $request->request->getString('_token')))) {
                 throw new \RuntimeException('CSRF attack detected.');
             }
             $texte = trim($request->get('content'));

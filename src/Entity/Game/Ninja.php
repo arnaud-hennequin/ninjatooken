@@ -170,9 +170,9 @@ class Ninja
     /**
      * Get aptitudeForce.
      */
-    public function getAptitudeForce(): ?int
+    public function getAptitudeForce(): int
     {
-        return $this->aptitudeForce;
+        return $this->aptitudeForce ?? 0;
     }
 
     /**
@@ -188,9 +188,9 @@ class Ninja
     /**
      * Get aptitudeVitesse.
      */
-    public function getAptitudeVitesse(): ?int
+    public function getAptitudeVitesse(): int
     {
-        return $this->aptitudeVitesse;
+        return $this->aptitudeVitesse  ?? 0;
     }
 
     /**
@@ -206,9 +206,9 @@ class Ninja
     /**
      * Get aptitudeVie.
      */
-    public function getAptitudeVie(): ?int
+    public function getAptitudeVie(): int
     {
-        return $this->aptitudeVie;
+        return $this->aptitudeVie ?? 0;
     }
 
     /**
@@ -224,9 +224,9 @@ class Ninja
     /**
      * Get aptitudeChakra.
      */
-    public function getAptitudeChakra(): ?int
+    public function getAptitudeChakra(): int
     {
-        return $this->aptitudeChakra;
+        return $this->aptitudeChakra ?? 0;
     }
 
     /**

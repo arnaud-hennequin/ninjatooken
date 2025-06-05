@@ -67,21 +67,28 @@ class NewsletterCommand extends Command
 
         // boucle sur les différents utilisateurs
         if ($input->getOption('all')) {
-            $restrict = '';
+            $restrict = 'TRUE';
         } else {
-            $restrict = ' old_id=641 AND';
+            $restrict = 'old_id = 641';
         }
 
-        $request = 'SELECT id, username, email, auto_login, locale FROM nt_user WHERE'.$restrict.' enabled=1 AND locked=0 ORDER BY id ASC LIMIT ';
         $start = 0;
         $num = 100;
         $i = 1;
 
-        $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
-        $result = $stmt->executeQuery();
-        $users = $result->fetchAllAssociative();
+        do {
+            $stmt = $this->em->getConnection()->prepare(<<<SQL
+                SELECT id, username, email, auto_login, locale
+                FROM nt_user
+                WHERE 
+                    $restrict
+                    AND enabled = 1
+                    AND locked=0
+                ORDER BY id ASC LIMIT $start, $num
+                SQL);
+            $result = $stmt->executeQuery();
+            $users = $result->fetchAllAssociative();
 
-        while (count($users) > 0) {
             foreach ($users as $user) {
                 try {
                     $username = $user['username'];
@@ -131,11 +138,7 @@ class NewsletterCommand extends Command
             }
 
             $start += $num;
-
-            $stmt = $this->em->getConnection()->prepare($request.$start.','.$num);
-            $request = $stmt->executeQuery();
-            $users = $request->fetchAllAssociative();
-        }
+        } while (count($users) > 0);
 
         $io->writeln('---end');
 

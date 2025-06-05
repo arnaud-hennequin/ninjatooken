@@ -21,7 +21,6 @@ use App\Repository\ClanUtilisateurRepository;
 use App\Repository\ForumRepository;
 use App\Repository\ThreadRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -38,7 +37,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ClanController extends AbstractController
 {
     protected ?FlashBagInterface $flashBag;
-    protected UserInterface|SluggableInterface|null $user;
+    protected ?UserInterface $user;
     protected ?AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(TokenStorageInterface $tokenStorage, RequestStack $requestStack, AuthorizationCheckerInterface $authorizationChecker)
@@ -501,16 +500,16 @@ class ClanController extends AbstractController
                     $message->setNom($translator->trans('mail.recrutement.nouveau.sujet'));
                     $message->setContent($translator->trans('mail.recrutement.nouveau.contenu', [
                         '%userUrl%' => $this->generateUrl('ninja_tooken_user_fiche', [
-                            'user_nom' => $this->user->getSlug(),
+                            'user_nom' => $this->user->getUsername(),
                         ]),
                         '%userPseudo%' => $this->user->getUsername(),
                         '%urlRefuser%' => $this->generateUrl('ninja_tooken_clan_recruter_refuser', [
                             'user_nom' => $utilisateur->getSlug(),
-                            'recruteur_nom' => $this->user->getSlug(),
+                            'recruteur_nom' => $this->user->getUsername(),
                         ]),
                         '%urlAccepter%' => $this->generateUrl('ninja_tooken_clan_recruter_accepter', [
                             'user_nom' => $utilisateur->getSlug(),
-                            'recruteur_nom' => $this->user->getSlug(),
+                            'recruteur_nom' => $this->user->getUsername(),
                         ]),
                     ]));
 

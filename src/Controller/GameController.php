@@ -52,19 +52,19 @@ class GameController extends AbstractController
         $capacites = [
             'force' => [
                 'nom' => $translator->trans('game.force', [], 'common'),
-                'current' => $ninja ? $ninja->getAptitudeForce() : 0,
+                'current' => $ninja?->getAptitudeForce() ?? 0,
             ],
             'vitesse' => [
                 'nom' => $translator->trans('game.vitesse', [], 'common'),
-                'current' => $ninja ? $ninja->getAptitudeVitesse() : 0,
+                'current' => $ninja?->getAptitudeVitesse() ?? 0,
             ],
             'vie' => [
                 'nom' => $translator->trans('game.vie', [], 'common'),
-                'current' => $ninja ? $ninja->getAptitudeVie() : 0,
+                'current' => $ninja?->getAptitudeVie() ?? 0,
             ],
             'chakra' => [
                 'nom' => $translator->trans('game.chakra', [], 'common'),
-                'current' => $ninja ? $ninja->getAptitudeChakra() : 0,
+                'current' => $ninja?->getAptitudeChakra() ?? 0,
             ],
         ];
         $aptitudes = [
@@ -75,7 +75,7 @@ class GameController extends AbstractController
                     'rayon' => $translator->trans('game.bouleElementaire.rayon', [], 'common'),
                     'chakra' => $translator->trans('game.bouleElementaire.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuBoule() : 0,
+                'current' => $ninja?->getJutsuBoule() ?? 0,
             ],
             'doubleSaut' => [
                 'nom' => $translator->trans('game.doubleSaut.nom', [], 'common'),
@@ -83,7 +83,7 @@ class GameController extends AbstractController
                     'saut1' => $translator->trans('game.doubleSaut.saut1', [], 'common'),
                     'saut2' => $translator->trans('game.doubleSaut.saut2', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuDoubleSaut() : 0,
+                'current' => $ninja?->getJutsuDoubleSaut() ?? 0,
             ],
             'bouclierElementaire' => [
                 'nom' => $translator->trans('game.bouclierElementaire.nom', [], 'common'),
@@ -92,7 +92,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.bouclierElementaire.chakra', [], 'common'),
                     'last' => $translator->trans('game.bouclierElementaire.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuBouclier() : 0,
+                'current' => $ninja?->getJutsuBouclier() ?? 0,
             ],
             'marcherMur' => [
                 'nom' => $translator->trans('game.marcherMur.nom', [], 'common'),
@@ -100,7 +100,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.marcherMur.chakra', [], 'common'),
                     'last' => $translator->trans('game.marcherMur.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuMarcherMur() : 0,
+                'current' => $ninja?->getJutsuMarcherMur() ?? 0,
             ],
             'acierRenforce' => [
                 'nom' => $translator->trans('game.acierRenforce.nom', [], 'common'),
@@ -109,7 +109,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.acierRenforce.chakra', [], 'common'),
                     'last' => $translator->trans('game.acierRenforce.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuAcierRenforce() : 0,
+                'current' => $ninja?->getJutsuAcierRenforce() ?? 0,
             ],
             'deflagrationElementaire' => [
                 'nom' => $translator->trans('game.deflagrationElementaire.nom', [], 'common'),
@@ -118,7 +118,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.deflagrationElementaire.chakra', [], 'common'),
                     'rayon' => $translator->trans('game.deflagrationElementaire.rayon', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuDeflagration() : 0,
+                'current' => $ninja?->getJutsuDeflagration() ?? 0,
             ],
             'chakraVie' => [
                 'nom' => $translator->trans('game.chakraVie.nom', [], 'common'),
@@ -126,7 +126,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.chakraVie.chakra', [], 'common'),
                     'last' => $translator->trans('game.chakraVie.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuChakraVie() : 0,
+                'current' => $ninja?->getJutsuChakraVie() ?? 0,
             ],
             'resistanceExplosion' => [
                 'nom' => $translator->trans('game.resistanceExplosion.nom', [], 'common'),
@@ -134,7 +134,7 @@ class GameController extends AbstractController
                     'reduction' => $translator->trans('game.resistanceExplosion.reduction', [], 'common'),
                     'last' => $translator->trans('game.resistanceExplosion.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuResistanceExplosion() : 0,
+                'current' => $ninja?->getJutsuResistanceExplosion() ?? 0,
             ],
             'transformationAqueuse' => [
                 'nom' => $translator->trans('game.transformationAqueuse.nom', [], 'common'),
@@ -142,14 +142,14 @@ class GameController extends AbstractController
                     'reduction' => $translator->trans('game.transformationAqueuse.reduction', [], 'common'),
                     'last' => $translator->trans('game.transformationAqueuse.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuTransformationAqueuse() : 0,
+                'current' => $ninja?->getJutsuTransformationAqueuse() ?? 0,
             ],
             'changerObjet' => [
                 'nom' => $translator->trans('game.changerObjet.nom', [], 'common'),
                 'values' => [
                     'last' => $translator->trans('game.changerObjet.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuMetamorphose() : 0,
+                'current' => $ninja?->getJutsuMetamorphose() ?? 0,
             ],
             'multishoot' => [
                 'nom' => $translator->trans('game.multishoot.nom', [], 'common'),
@@ -158,7 +158,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.multishoot.chakra', [], 'common'),
                     'last' => $translator->trans('game.multishoot.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuMultishoot() : 0,
+                'current' => $ninja?->getJutsuMultishoot() ?? 0,
             ],
             'invisibleman' => [
                 'nom' => $translator->trans('game.invisibleman.nom', [], 'common'),
@@ -166,7 +166,7 @@ class GameController extends AbstractController
                     'opacity' => $translator->trans('game.invisibleman.opacity', [], 'common'),
                     'last' => $translator->trans('game.invisibleman.last', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuInvisibilite() : 0,
+                'current' => $ninja?->getJutsuInvisibilite() ?? 0,
             ],
             'phoenix' => [
                 'nom' => $translator->trans('game.phoenix.nom', [], 'common'),
@@ -176,7 +176,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.phoenix.chakra', [], 'common'),
                     'distance' => $translator->trans('game.phoenix.distance', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuPhoenix() : 0,
+                'current' => $ninja?->getJutsuPhoenix() ?? 0,
             ],
             'vague' => [
                 'nom' => $translator->trans('game.vague.nom', [], 'common'),
@@ -186,7 +186,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.vague.chakra', [], 'common'),
                     'distance' => $translator->trans('game.vague.distance', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuVague() : 0,
+                'current' => $ninja?->getJutsuVague() ?? 0,
             ],
             'pieux' => [
                 'nom' => $translator->trans('game.pieux.nom', [], 'common'),
@@ -197,7 +197,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.pieux.chakra', [], 'common'),
                     'distance' => $translator->trans('game.pieux.distance', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuPieux() : 0,
+                'current' => $ninja?->getJutsuPieux() ?? 0,
             ],
             'teleportation' => [
                 'nom' => $translator->trans('game.teleportation.nom', [], 'common'),
@@ -206,7 +206,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.teleportation.chakra', [], 'common'),
                     'distance' => $translator->trans('game.teleportation.distance', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuTeleportation() : 0,
+                'current' => $ninja?->getJutsuTeleportation() ?? 0,
             ],
             'tornade' => [
                 'nom' => $translator->trans('game.tornade.nom', [], 'common'),
@@ -216,7 +216,7 @@ class GameController extends AbstractController
                     'chakra' => $translator->trans('game.tornade.chakra', [], 'common'),
                     'distance' => $translator->trans('game.tornade.distance', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuTornade() : 0,
+                'current' => $ninja?->getJutsuTornade() ?? 0,
             ],
             'kusanagi' => [
                 'nom' => $translator->trans('game.kusanagi.nom', [], 'common'),
@@ -225,7 +225,7 @@ class GameController extends AbstractController
                     'last' => $translator->trans('game.kusanagi.last', [], 'common'),
                     'chakra' => $translator->trans('game.kusanagi.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuKusanagi() : 0,
+                'current' => $ninja?->getJutsuKusanagi() ?? 0,
             ],
             'kamiRaijin' => [
                 'nom' => $translator->trans('game.kamiRaijin.nom', [], 'common'),
@@ -236,7 +236,7 @@ class GameController extends AbstractController
                     'distance' => $translator->trans('game.kamiRaijin.distance', [], 'common'),
                     'chakra' => $translator->trans('game.kamiRaijin.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuRaijin() : 0,
+                'current' => $ninja?->getJutsuRaijin() ?? 0,
             ],
             'kamiSarutahiko' => [
                 'nom' => $translator->trans('game.kamiSarutahiko.nom', [], 'common'),
@@ -247,7 +247,7 @@ class GameController extends AbstractController
                     'distance' => $translator->trans('game.kamiSarutahiko.distance', [], 'common'),
                     'chakra' => $translator->trans('game.kamiSarutahiko.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuSarutahiko() : 0,
+                'current' => $ninja?->getJutsuSarutahiko() ?? 0,
             ],
             'kamiFujin' => [
                 'nom' => $translator->trans('game.kamiFujin.nom', [], 'common'),
@@ -257,7 +257,7 @@ class GameController extends AbstractController
                     'distance' => $translator->trans('game.kamiFujin.distance', [], 'common'),
                     'chakra' => $translator->trans('game.kamiFujin.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuFujin() : 0,
+                'current' => $ninja?->getJutsuFujin() ?? 0,
             ],
             'kamiSusanoo' => [
                 'nom' => $translator->trans('game.kamiSusanoo.nom', [], 'common'),
@@ -268,7 +268,7 @@ class GameController extends AbstractController
                     'distance' => $translator->trans('game.kamiSusanoo.distance', [], 'common'),
                     'chakra' => $translator->trans('game.kamiSusanoo.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuSusanoo() : 0,
+                'current' => $ninja?->getJutsuSusanoo() ?? 0,
             ],
             'kamiKagutsuchi' => [
                 'nom' => $translator->trans('game.kamiKagutsuchi.nom', [], 'common'),
@@ -279,7 +279,7 @@ class GameController extends AbstractController
                     'distance' => $translator->trans('game.kamiKagutsuchi.distance', [], 'common'),
                     'chakra' => $translator->trans('game.kamiKagutsuchi.chakra', [], 'common'),
                 ],
-                'current' => $ninja ? $ninja->getJutsuKagutsuchi() : 0,
+                'current' => $ninja?->getJutsuKagutsuchi() ?? 0,
             ],
         ];
         $dom = $gameData->getDocument();

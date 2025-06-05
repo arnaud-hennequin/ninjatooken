@@ -18,7 +18,7 @@ class DetectionAdminController extends Controller
 {
     public function list(EntityManagerInterface $em, ?Request $request = null): Response
     {
-        if (false === $this->admin->isGranted('LIST')) {
+        if (false === $this->admin->isGranted('LIST') || $request === null) {
             throw new AccessDeniedException();
         }
 
@@ -29,20 +29,26 @@ class DetectionAdminController extends Controller
 
         $users = [];
         if ($this->admin->isChild()) {
+            /** @var ?User $user */
             $user = $this->admin->getParent()->getObject($request->get($this->admin->getParent()->getIdParameter()));
             $users = $userRepository->getMultiAccountByUser($user);
             $showForm = false;
-        } else {
-            if (Request::METHOD_POST === $request->getMethod()) {
-                $ip = $request->get('ip');
-                if (!empty($ip)) {
-                    $ip = ip2long($ip);
+        } elseif (Request::METHOD_POST === $request->getMethod()) {
+            $ip = $request->get('ip');
+            if (!empty($ip)) {
+                $ip = ip2long((string) $ip);
+                if ($ip === false) {
+                    $ip = null;
+                } else {
+                    $ip = (string) $ip;
                 }
-
-                $username = $request->get('username');
-
-                $users = $userRepository->getMultiAccount($ip, $username);
+            } else {
+                $ip = null;
             }
+
+            $username = $request->get('username');
+
+            $users = $userRepository->getMultiAccount($ip, $username);
         }
 
         return $this->render('user/detectionAdmin/detection.html.twig', [

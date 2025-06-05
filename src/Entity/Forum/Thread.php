@@ -144,8 +144,12 @@ class Thread implements SluggableInterface
 
         $slug = strtolower($unicodeString->toString());
 
-        if (empty($slug)) {
-            $slug = md5($this->id ?? uniqid('thread'));
+        if ($slug === '') {
+            $slug = $this->id;
+            if ($slug === null) {
+                $slug = uniqid('thread', true);
+            }
+            $slug = md5((string) $slug);
         }
 
         return $slug;

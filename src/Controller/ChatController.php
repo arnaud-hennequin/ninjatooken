@@ -13,7 +13,11 @@ class ChatController extends AbstractController
     {
         $channelName = 'ninjatooken';
 
-        $json_array = json_decode(@file_get_contents('https://api.twitch.tv/kraken/streams/'.$channelName, true), true);
+        $content = file_get_contents('https://api.twitch.tv/kraken/streams/'.$channelName, true);
+        if ($content === false) {
+            $content = '';
+        }
+        $json_array = json_decode($content, true);
 
         $twitchOnline = false;
         $channelTitle = '';

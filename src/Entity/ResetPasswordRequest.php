@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use App\Entity\User\User;
+use App\Repository\ResetPasswordRequestRepository;
 use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 
-#[ORM\Entity(repositoryClass: \App\Repository\ResetPasswordRequestRepository::class)]
+#[ORM\Entity(repositoryClass: ResetPasswordRequestRepository::class)]
 class ResetPasswordRequest implements ResetPasswordRequestInterface
 {
     use ResetPasswordRequestTrait;
@@ -23,6 +24,9 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
 
     public function __construct(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken)
     {
+        if (!$user instanceof User) {
+            throw new \InvalidArgumentException('Must be an instance of User.');
+        }
         $this->user = $user;
         $this->initialize($expiresAt, $selector, $hashedToken);
     }

@@ -313,7 +313,11 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         $slug = strtolower($unicodeString->toString());
 
         if (empty($slug)) {
-            $slug = md5($this->id ?? uniqid('user'));
+            $slug = $this->id;
+            if ($slug === null) {
+                $slug = uniqid('user', true);
+            }
+            $slug = md5((string) $slug);
         }
 
         return $slug;

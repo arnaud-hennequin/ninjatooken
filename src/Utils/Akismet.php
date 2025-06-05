@@ -171,7 +171,11 @@ class Akismet implements AkismetInterface
         ];
 
         curl_setopt_array($conn, $settings);
-        $response = explode("\n", curl_exec($conn));
+        $returned = curl_exec($conn);
+        if (false === $returned) {
+            return false;
+        }
+        $response = explode("\n", (string) $returned);
 
         if (trim(end($response)) === $expect) {
             return true;
