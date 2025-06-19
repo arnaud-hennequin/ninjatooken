@@ -18,7 +18,12 @@ class IpToLongTransformer implements DataTransformerInterface
             return '';
         }
 
-        return long2ip($value);
+        $ip = long2ip($value);
+        if ($ip === false) {
+            return '';
+        }
+
+        return $ip;
     }
 
     /**

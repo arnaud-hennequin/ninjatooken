@@ -5,6 +5,7 @@ namespace App\Entity\Game;
 use App\Entity\User\User;
 use App\Repository\LobbyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,7 +28,7 @@ class Lobby
     #[ORM\JoinColumn(name: 'lobby_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\InverseJoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'lobbies')]
-    private ArrayCollection $users;
+    private Collection $users;
 
     #[ORM\Column(name: 'carte', type: Types::SMALLINT)]
     private int $carte = 0;

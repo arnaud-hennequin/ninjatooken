@@ -39,8 +39,11 @@ class UnityController extends AbstractController
         $session = $request->getSession();
 
         if ($authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
-            /** @var UserInterface $user */
-            $user = $tokenStorage->getToken()->getUser();
+            /** @var ?UserInterface $user */
+            $user = $tokenStorage->getToken()?->getUser();
+            if ($user === null) {
+                throw $this->createAccessDeniedException();
+            }
 
             $this->time = preg_replace('/[^0-9]/i', '', (string) $request->get('time'));
             $this->crypt = $request->headers->get('X-COMMON');

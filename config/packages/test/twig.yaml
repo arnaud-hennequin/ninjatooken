@@ -1,9 +1,9 @@
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
     globals:
-        class: %class%
-        version: %unity.version%
-        paypalDonate: %paypal.donate%
-        paypalCode: %paypal.code%
-        siteDomaine: www.ninjatooken.fr
+        class: '%class%'
+        version: '%unity.version%'
+        paypalDonate: '%paypal.donate%'
+        paypalCode: '%paypal.code%'
+        siteDomaine: 'www.ninjatooken.fr'

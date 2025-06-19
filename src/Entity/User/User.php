@@ -7,6 +7,7 @@ use App\Entity\Game\Lobby;
 use App\Entity\Game\Ninja;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
@@ -109,7 +110,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     #[ORM\OneToMany(mappedBy: 'recruteur', targetEntity: ClanUtilisateur::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
     #[ORM\OrderBy(['dateAjout' => 'ASC'])]
-    private ArrayCollection $recruts;
+    private Collection $recruts;
 
     #[ORM\Column(name: 'old_id', type: Types::INTEGER, nullable: true)]
     private ?int $old_id;
@@ -152,13 +153,13 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      * @var ArrayCollection<int, Ip>
      */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Ip::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
-    private ArrayCollection $ips;
+    private Collection $ips;
 
     /**
      * @var ArrayCollection<int, Message>
      */
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Message::class, fetch: 'LAZY')]
-    private ArrayCollection $messages;
+    private Collection $messages;
 
     protected string $twoStepVerificationCode;
 
@@ -193,7 +194,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\InverseJoinColumn(name: 'lobby_id', referencedColumnName: 'id', onDelete: 'cascade')]
     #[ORM\ManyToMany(targetEntity: Lobby::class, inversedBy: 'users')]
-    private ArrayCollection $lobbies;
+    private Collection $lobbies;
 
     private ?int $level = null;
 
@@ -1034,7 +1035,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
      */
     public function addRecrut(ClanUtilisateur $recruts): self
     {
-        $this->recruts[] = $recruts;
+        $this->recruts->add($recruts);
 
         return $this;
     }

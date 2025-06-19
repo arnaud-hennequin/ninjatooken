@@ -26,6 +26,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       iconv \
       xml \
       mysqli \
+      pdo \
       pdo_mysql \
       intl \
       gd \

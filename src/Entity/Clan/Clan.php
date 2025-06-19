@@ -38,13 +38,13 @@ class Clan implements SluggableInterface
      */
     #[ORM\OneToMany(mappedBy: 'clan', targetEntity: ClanUtilisateur::class, cascade: ['remove'])]
     #[ORM\OrderBy(['dateAjout' => 'ASC'])]
-    private ArrayCollection $membres;
+    private Collection $membres;
 
     /**
      * @var ArrayCollection<int, Forum>
      */
     #[ORM\OneToMany(mappedBy: 'clan', targetEntity: Forum::class, cascade: ['persist', 'remove'])]
-    private ArrayCollection $forums;
+    private Collection $forums;
 
     #[ORM\Column(name: 'nom', type: Types::STRING, length: 255)]
     #[Assert\Length(max: 255)]

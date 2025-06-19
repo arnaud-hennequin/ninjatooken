@@ -32,9 +32,8 @@ services:
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - 3306:3306
-    command: --init-file /data/application/init.sql
     volumes:
-      - ./docker/mariadb/init.sql:/data/application/init.sql
+      - ./docker/mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/mysql
 
   phpmyadmin:

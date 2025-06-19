@@ -44,7 +44,7 @@ class Message
     private bool $hasDeleted = false;
 
     /**
-     * @var Collection<int, MessageUser>
+     * @var ArrayCollection<int, MessageUser>
      */
     #[ORM\OneToMany(mappedBy: 'message', targetEntity: MessageUser::class, cascade: ['remove'], fetch: 'EAGER')]
     private Collection $receivers;

@@ -190,7 +190,7 @@ class Ninja
      */
     public function getAptitudeVitesse(): int
     {
-        return $this->aptitudeVitesse  ?? 0;
+        return $this->aptitudeVitesse ?? 0;
     }
 
     /**
