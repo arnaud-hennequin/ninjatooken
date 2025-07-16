@@ -96,7 +96,7 @@ class ForumController extends AbstractController
         $threads = $threadRepository->getEvents($num, $page);
         /** @var Thread $thread */
         $thread = $threads->getIterator()->current();
-        $forum = $thread->getForum();
+        $forum = $thread?->getForum();
 
         return $this->render('forum/event.html.twig', [
             'forum' => $forum,
@@ -151,8 +151,13 @@ class ForumController extends AbstractController
     }
 
     #[Route('/{_locale}/event/{thread_nom}/modifier/', name: 'ninja_tooken_event_modifier')]
-    public function eventModifier(Request $request, TranslatorInterface $translator, #[MapEntity(mapping: ['thread_nom' => 'slug'])] Thread $thread, EntityManagerInterface $em): Response
-    {
+    public function eventModifier(
+        Request $request,
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['thread_nom' => 'slug'])]
+        Thread $thread,
+        EntityManagerInterface $em
+    ): Response {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             if ($thread->getAuthor() === $this->user || false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
                 $form = $this->createForm(EventType::class, $thread);

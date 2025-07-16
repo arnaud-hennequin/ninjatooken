@@ -10,8 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -22,10 +20,8 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity(fields: 'usernameCanonical', message: 'ninja_tooken_user.username.already_used', errorPath: 'username', groups: ['Registration', 'Profile'])]
 #[UniqueEntity(fields: 'emailCanonical', message: 'ninja_tooken_user.email.already_used', errorPath: 'email', groups: ['Registration', 'Profile'])]
-class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    use SluggableTrait;
-
     public const string GENDER_FEMALE = 'f';
     public const string GENDER_MALE = 'm';
     public const string GENDER_UNKNOWN = 'u';
@@ -48,6 +44,9 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     protected string $username;
+
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 255, nullable: true)]
+    private ?string $slug = null;
 
     #[ORM\Column(name: 'username_canonical', type: Types::STRING, length: 255, unique: true)]
     protected string $usernameCanonical;
@@ -282,34 +281,20 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
         $this->numPropositionsRecrutement = $numPropositionsRecrutement;
     }
 
-    /**
-     * @return array<int, string>
-     */
-    public function getSluggableFields(): array
+    public function getSlug(): string
     {
-        return ['username'];
+        return $this->slug ?? '';
     }
 
-    public function shouldGenerateUniqueSlugs(): bool
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setSlug(): void
     {
-        return true;
-    }
-
-    public function generateSlugValue(array $values): string
-    {
-        $usableValues = [];
-        foreach ($values as $fieldValue) {
-            if (!empty($fieldValue)) {
-                $usableValues[] = $fieldValue;
-            }
+        if ($this->slug !== null) {
+            return;
         }
 
-        $this->ensureAtLeastOneUsableValue($values, $usableValues);
-
-        // generate the slug itself
-        $sluggableText = implode(' ', $usableValues);
-
-        $unicodeString = (new AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
+        $unicodeString = (new AsciiSlugger())->slug($this->username, '-');
 
         $slug = strtolower($unicodeString->toString());
 
@@ -321,7 +306,7 @@ class User implements UserInterface, SluggableInterface, PasswordAuthenticatedUs
             $slug = md5((string) $slug);
         }
 
-        return $slug;
+        $this->slug = $slug;
     }
 
     public static function canonicalize(?string $string = null): string

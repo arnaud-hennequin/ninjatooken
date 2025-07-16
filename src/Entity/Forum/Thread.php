@@ -4,19 +4,17 @@ namespace App\Entity\Forum;
 
 use App\Entity\User\User;
 use App\Entity\User\UserInterface;
+use App\Repository\ThreadRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'nt_thread')]
-#[ORM\Entity(repositoryClass: \App\Repository\ThreadRepository::class)]
-class Thread implements SluggableInterface
+#[ORM\Entity(repositoryClass: ThreadRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+class Thread
 {
-    use SluggableTrait;
-
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -57,6 +55,10 @@ class Thread implements SluggableInterface
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private string $nom;
+
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    private ?string $slug = null;
 
     #[ORM\Column(name: 'date_ajout', type: Types::DATETIME_MUTABLE)]
     private \DateTime $dateAjout;
@@ -109,53 +111,6 @@ class Thread implements SluggableInterface
     }
 
     /**
-     * @return string[]
-     */
-    public function getSluggableFields(): array
-    {
-        return ['id', 'nom'];
-    }
-
-    public function shouldGenerateUniqueSlugs(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @param array<int, mixed> $values
-     *
-     * @throws \Knp\DoctrineBehaviors\Exception\SluggableException
-     */
-    public function generateSlugValue(array $values): ?string
-    {
-        $usableValues = [];
-        foreach ($values as $fieldValue) {
-            if (!empty($fieldValue)) {
-                $usableValues[] = $fieldValue;
-            }
-        }
-
-        $this->ensureAtLeastOneUsableValue($values, $usableValues);
-
-        // generate the slug itself
-        $sluggableText = implode(' ', $usableValues);
-
-        $unicodeString = (new AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
-
-        $slug = strtolower($unicodeString->toString());
-
-        if ($slug === '') {
-            $slug = $this->id;
-            if ($slug === null) {
-                $slug = uniqid('thread', true);
-            }
-            $slug = md5((string) $slug);
-        }
-
-        return $slug;
-    }
-
-    /**
      * Get id.
      */
     public function getId(): ?int
@@ -179,6 +134,33 @@ class Thread implements SluggableInterface
     public function getNom(): ?string
     {
         return $this->nom;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug ?? '';
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setSlug(): void
+    {
+        if ($this->slug !== null) {
+            return;
+        }
+
+        $unicodeString = (new AsciiSlugger())->slug($this->id.'-'.$this->nom, '-');
+        $slug = strtolower($unicodeString->toString());
+
+        if ($slug === '') {
+            $slug = $this->id;
+            if ($slug === null) {
+                $slug = uniqid('thread', true);
+            }
+            $slug = md5((string) $slug);
+        }
+
+        $this->slug = $slug;
     }
 
     /**

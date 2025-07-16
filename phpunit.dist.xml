@@ -40,7 +40,4 @@
             <function>trigger_deprecation</function>
         </deprecationTrigger>
     </source>
-    <extensions>
-        <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
-    </extensions>
 </phpunit>

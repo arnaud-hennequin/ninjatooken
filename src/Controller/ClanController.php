@@ -21,6 +21,7 @@ use App\Repository\ClanUtilisateurRepository;
 use App\Repository\ForumRepository;
 use App\Repository\ThreadRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -74,9 +75,12 @@ class ClanController extends AbstractController
         ]);
     }
 
-    #[Route('/{_locale}/clan/{clan_nom}', name: 'ninja_tooken_clan')]
-    public function clan(Clan $clan, EntityManagerInterface $em): Response
-    {
+    #[Route('/{_locale}/clan/{clan_nom}', name: 'ninja_tooken_clan', methods: ['GET'])]
+    public function clan(
+        #[MapEntity(mapping: ['clan_nom' => 'slug'])]
+        Clan $clan,
+        EntityManagerInterface $em
+    ): Response {
         // le forum du clan
         /** @var ForumRepository $forumRepository */
         $forumRepository = $em->getRepository(Forum::class);
@@ -202,7 +206,7 @@ class ClanController extends AbstractController
             // vérification des droits utilisateurs
             $isShisho = false;
             if ($this->user->getClan()) {
-                if (0 == $this->user->getClan()->getDroit()) {
+                if (0 === $this->user->getClan()->getDroit()) {
                     $isShisho = true;
                 }
             }
@@ -210,7 +214,7 @@ class ClanController extends AbstractController
             if ($isShisho || false !== $this->authorizationChecker->isGranted('ROLE_ADMIN') || false !== $this->authorizationChecker->isGranted('ROLE_MODERATOR')) {
                 $clanutilisateur = $utilisateur->getClan();
                 $clan = $this->user->getClan()->getClan();
-                if ($clanutilisateur && $clanutilisateur->getClan() == $clan) {
+                if ($clanutilisateur && $clanutilisateur->getClan() === $clan) {
                     $clanutilisateur->setCanEditClan(!$clanutilisateur->getCanEditClan());
                     $em->persist($clanutilisateur);
 
@@ -234,14 +238,20 @@ class ClanController extends AbstractController
     }
 
     #[Route('/{_locale}/clan/{clan_nom}/modifier', name: 'ninja_tooken_clan_modifier')]
-    public function clanModifier(Request $request, TranslatorInterface $translator, ParameterBagInterface $params, Clan $clan, EntityManagerInterface $em): Response
-    {
+    public function clanModifier(
+        Request $request,
+        TranslatorInterface $translator,
+        ParameterBagInterface $params,
+        #[MapEntity(mapping: ['clan_nom' => 'slug'])]
+        Clan $clan,
+        EntityManagerInterface $em,
+    ): Response {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $canEdit = false;
             $clanutilisateur = $this->user->getClan();
             if ($clanutilisateur) {
-                if ($clanutilisateur->getClan() == $clan && ($clanutilisateur->getCanEditClan() || 0 == $clanutilisateur->getDroit())) {
+                if ($clanutilisateur->getClan() === $clan && ($clanutilisateur->getCanEditClan() || 0 === $clanutilisateur->getDroit())) {
                     $canEdit = true;
                 }
             }
@@ -302,8 +312,12 @@ class ClanController extends AbstractController
     }
 
     #[Route('/{_locale}/clan/{clan_nom}/supprimer', name: 'ninja_tooken_clan_supprimer')]
-    public function clanSupprimer(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
-    {
+    public function clanSupprimer(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['clan_nom' => 'slug'])]
+        Clan $clan,
+        EntityManagerInterface $em
+    ): RedirectResponse {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $clanutilisateur = $this->user->getClan();
@@ -647,8 +661,12 @@ class ClanController extends AbstractController
     }
 
     #[Route('/{_locale}/clan-postuler/{clan_nom}', name: 'ninja_tooken_clan_postuler')]
-    public function clanUtilisateurPostuler(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
-    {
+    public function clanUtilisateurPostuler(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['clan_nom' => 'slug'])]
+        Clan $clan,
+        EntityManagerInterface $em
+    ): RedirectResponse {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // vérification des droits utilisateurs
             $canPostule = true;
@@ -722,8 +740,12 @@ class ClanController extends AbstractController
     }
 
     #[Route('/{_locale}/clan-postuler-supprimer/{clan_nom}', name: 'ninja_tooken_clan_postuler_supprimer')]
-    public function clanUtilisateurPostulerSupprimer(TranslatorInterface $translator, Clan $clan, EntityManagerInterface $em): RedirectResponse
-    {
+    public function clanUtilisateurPostulerSupprimer(
+        TranslatorInterface $translator,
+        #[MapEntity(mapping: ['clan_nom' => 'slug'])]
+        Clan $clan,
+        EntityManagerInterface $em
+    ): RedirectResponse {
         if ($this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY') || $this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             /** @var ClanPostulationRepository $repo */
             $repo = $em->getRepository(ClanPostulation::class);

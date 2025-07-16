@@ -6,8 +6,6 @@ use App\Entity\Clan\Clan;
 use App\Repository\ForumRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
@@ -15,10 +13,9 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
  */
 #[ORM\Table(name: 'nt_forum')]
 #[ORM\Entity(repositoryClass: ForumRepository::class)]
-class Forum implements SluggableInterface
+#[ORM\HasLifecycleCallbacks]
+class Forum
 {
-    use SluggableTrait;
-
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -29,6 +26,9 @@ class Forum implements SluggableInterface
 
     #[ORM\Column(name: 'nom', type: Types::STRING, length: 255)]
     private string $nom;
+
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 255, nullable: true)]
+    private ?string $slug = null;
 
     #[ORM\Column(name: 'ordre', type: Types::SMALLINT)]
     private int $ordre = 0;
@@ -58,47 +58,27 @@ class Forum implements SluggableInterface
         return $this->nom;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getSluggableFields(): array
+    public function getSlug(): string
     {
-        return ['nom'];
+        return $this->slug ?? '';
     }
 
-    public function shouldGenerateUniqueSlugs(): bool
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setSlug(): void
     {
-        return true;
-    }
-
-    /**
-     * @param array<int, mixed> $values
-     *
-     * @throws \Knp\DoctrineBehaviors\Exception\SluggableException
-     */
-    public function generateSlugValue(array $values): ?string
-    {
-        $usableValues = [];
-        foreach ($values as $fieldValue) {
-            if (!empty($fieldValue)) {
-                $usableValues[] = $fieldValue;
-            }
+        if ($this->slug !== null) {
+            return;
         }
 
-        $this->ensureAtLeastOneUsableValue($values, $usableValues);
-
-        // generate the slug itself
-        $sluggableText = implode(' ', $usableValues);
-
-        $unicodeString = (new AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
-
+        $unicodeString = (new AsciiSlugger())->slug($this->id.'-'.$this->nom, '-');
         $slug = strtolower($unicodeString->toString());
 
-        if (empty($slug)) {
+        if ($slug === '') {
             $slug = md5((string) $this->id);
         }
 
-        return $slug;
+        $this->slug = $slug;
     }
 
     /**

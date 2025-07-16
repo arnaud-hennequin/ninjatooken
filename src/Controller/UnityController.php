@@ -735,7 +735,7 @@ class UnityController extends AbstractController
 
         // données récupérées
         $this->time = preg_replace('/[^0-9]/i', '', (string) $request->get('time'));
-        $this->crypt = $request->headers->get('X-COMMON');
+        $this->crypt = (string) $request->headers->get('X-COMMON');
 
         $session = $request->getSession();
         $this->phpsessid = $session->getName().'='.$session->getId();

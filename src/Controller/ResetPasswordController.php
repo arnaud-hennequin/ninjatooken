@@ -44,6 +44,7 @@ class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->processSendingPasswordResetEmail(
+                $request,
                 $form->get('email')->getData(),
                 $mailer,
                 $userRepository
@@ -59,11 +60,11 @@ class ResetPasswordController extends AbstractController
      * Confirmation page after a user has requested a password reset.
      */
     #[Route('/{_locale}/check-email', name: 'ninja_tooken_user_resetting_check_email', methods: ['GET'])]
-    public function checkEmail(): Response
+    public function checkEmail(Request $request): Response
     {
         // We prevent users from directly accessing this page
         if (null === ($resetToken = $this->getTokenObjectFromSession())) {
-            return $this->redirectToRoute('ninja_tooken_user_resetting_request');
+            return $this->redirectToRoute('ninja_tooken_user_resetting_request', ['locale' => $request->getLocale()]);
         }
 
         return $this->render('user/resetting/checkEmail.html.twig', [
@@ -82,7 +83,7 @@ class ResetPasswordController extends AbstractController
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
             $this->storeTokenInSession($token);
 
-            return $this->redirectToRoute('ninja_tooken_user_resetting_reset');
+            return $this->redirectToRoute('ninja_tooken_user_resetting_reset', ['locale' => $request->getLocale(), 'token' => $token]);
         }
 
         $token = $this->getTokenFromSession();
@@ -99,7 +100,7 @@ class ResetPasswordController extends AbstractController
                 $e->getReason()
             ));
 
-            return $this->redirectToRoute('ninja_tooken_user_resetting_request');
+            return $this->redirectToRoute('ninja_tooken_user_resetting_request', ['locale' => $request->getLocale()]);
         }
 
         // The token is valid; allow the user to change their password.
@@ -116,7 +117,7 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
-            return $this->redirectToRoute('ninja_tooken_user_profile_show');
+            return $this->redirectToRoute('ninja_tooken_user_profile_show', ['locale' => $request->getLocale()]);
         }
 
         return $this->render('user/resetting/reset.html.twig', [
@@ -124,7 +125,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, UserRepository $userRepository): RedirectResponse
+    private function processSendingPasswordResetEmail(Request $request, string $emailFormData, MailerInterface $mailer, UserRepository $userRepository): RedirectResponse
     {
         $user = $userRepository->findOneBy([
             'email' => $emailFormData,
@@ -139,7 +140,7 @@ class ResetPasswordController extends AbstractController
         if (!$user) {
             $this->addFlash('warning', 'Aucun utilisateur correspondant trouvé.');
 
-            return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
+            return $this->redirectToRoute('ninja_tooken_user_resetting_check_email', ['locale' => $request->getLocale()]);
         }
 
         try {
@@ -153,7 +154,7 @@ class ResetPasswordController extends AbstractController
                 $e->getReason()
             ));
 
-            return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
+            return $this->redirectToRoute('ninja_tooken_user_resetting_check_email', ['locale' => $request->getLocale()]);
         }
 
         try {
@@ -172,12 +173,12 @@ class ResetPasswordController extends AbstractController
         } catch (\Exception|TransportExceptionInterface $e) {
             $this->addFlash('warning', 'Une erreur est survenue lors de l\'envoi du mail : '.$e->getMessage());
 
-            return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
+            return $this->redirectToRoute('ninja_tooken_user_resetting_check_email', ['locale' => $request->getLocale()]);
         }
 
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 
-        return $this->redirectToRoute('ninja_tooken_user_resetting_check_email');
+        return $this->redirectToRoute('ninja_tooken_user_resetting_check_email', ['locale' => $request->getLocale()]);
     }
 }

@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -19,12 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Clan.
  */
 #[ORM\Table(name: 'nt_clan')]
-#[ORM\HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: ClanRepository::class)]
-class Clan implements SluggableInterface
+#[ORM\HasLifecycleCallbacks]
+class Clan
 {
-    use SluggableTrait;
-
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -50,6 +46,10 @@ class Clan implements SluggableInterface
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private string $nom;
+
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 255, nullable: true)]
+    #[Assert\Length(max: 255)]
+    private ?string $slug = null;
 
     #[ORM\Column(name: 'tag', type: Types::STRING, length: 5, nullable: true)]
     #[Assert\Length(max: 5)]
@@ -136,47 +136,27 @@ class Clan implements SluggableInterface
         ] = unserialize($data, ['allowed_classes' => false]);
     }
 
-    /**
-     * @return string[]
-     */
-    public function getSluggableFields(): array
+    public function getSlug(): string
     {
-        return ['nom'];
+        return $this->slug ?? '';
     }
 
-    public function shouldGenerateUniqueSlugs(): bool
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function setSlug(): void
     {
-        return true;
-    }
-
-    /**
-     * @param array<int, string> $values
-     *
-     * @throws \Knp\DoctrineBehaviors\Exception\SluggableException
-     */
-    public function generateSlugValue(array $values): ?string
-    {
-        $usableValues = [];
-        foreach ($values as $fieldValue) {
-            if (!empty($fieldValue)) {
-                $usableValues[] = $fieldValue;
-            }
+        if ($this->slug !== null) {
+            return;
         }
 
-        $this->ensureAtLeastOneUsableValue($values, $usableValues);
-
-        // generate the slug itself
-        $sluggableText = implode(' ', $usableValues);
-
-        $unicodeString = (new AsciiSlugger())->slug($sluggableText, $this->getSlugDelimiter());
-
+        $unicodeString = (new AsciiSlugger())->slug($this->id.'-'.$this->nom, '-');
         $slug = strtolower($unicodeString->toString());
 
-        if (empty($slug)) {
+        if ($slug === '') {
             $slug = md5((string) $this->id);
         }
 
-        return $slug;
+        $this->slug = $slug;
     }
 
     public function getAbsoluteKamon(): ?string

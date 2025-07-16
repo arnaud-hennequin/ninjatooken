@@ -2,15 +2,11 @@
 
 namespace App\Tests\Controller;
 
-use App\Tests\Utils\DataSeedTrait;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tests\BaseWebTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class CommonControllerTest extends WebTestCase
+class CommonControllerTest extends BaseWebTestCase
 {
-    use DataSeedTrait;
-
     /**
      * @return array<array<int, string>>
      */
@@ -26,10 +22,9 @@ class CommonControllerTest extends WebTestCase
     public function testHome(string $langue): void
     {
         // WITH
-        $client = static::createClient();
 
         // WHEN
-        $crawler = $client->request('GET', sprintf('/%s/', $langue));
+        $crawler = $this->client->request('GET', sprintf('/%s/', $langue));
 
         // THEN
         self::assertResponseIsSuccessful();
@@ -45,15 +40,134 @@ class CommonControllerTest extends WebTestCase
     public function testLoggedHome(string $langue): void
     {
         // WITH
-        $client = static::createClient();
-        $loggedUser = $this->createUser(static::getContainer()->get(EntityManagerInterface::class));
+        $loggedUser = $this->userDataSetup->addUser();
+        $this->client->loginUser($loggedUser);
 
         // WHEN
-        $client->loginUser($loggedUser);
-        $crawler = $client->request('GET', sprintf('/%s/', $langue));
+        $crawler = $this->client->request('GET', sprintf('/%s/', $langue));
 
         // THEN
         self::assertResponseIsSuccessful();
-        $this->assertCount(0, $crawler->filter('.account'));// accountLogged
+        $this->assertCount(0, $crawler->filter('.account')); // accountLogged
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testPlay(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/jouer', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testGuide(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/guide-du-ninja', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testRules(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/regles-respecter', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testChat(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/chat', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testMainFAQ(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/faq-generale', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testTechnicalFAQ(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/faq-technique', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testTeam(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/team', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testLegals(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/mentions-legales', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testContact(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/nous-contacter', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
+    }
+
+    #[DataProvider('languageProvider')]
+    public function testSearch(string $langue): void
+    {
+        // WITH
+
+        // WHEN
+        $crawler = $this->client->request('GET', sprintf('/%s/search', $langue));
+
+        // THEN
+        self::assertResponseIsSuccessful();
     }
 }

@@ -29,18 +29,6 @@ interface UserInterface extends \Symfony\Component\Security\Core\User\UserInterf
 
     public function setNumPropositionsRecrutement(int $numPropositionsRecrutement): void;
 
-    /**
-     * @return string[]
-     */
-    public function getSluggableFields(): array;
-
-    public function shouldGenerateUniqueSlugs(): bool;
-
-    /**
-     * @param array<int, mixed> $values
-     */
-    public function generateSlugValue(array $values): string;
-
     public function addRole(string $role): User;
 
     public function serialize(): string;

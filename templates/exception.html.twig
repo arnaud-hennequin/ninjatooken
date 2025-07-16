@@ -22,7 +22,7 @@
                 <section class="row-fluid">
                     <div class="span12 flagSocial clearfix">
                         {% for locale in ['fr', 'en'] %}
-                        <a href="{{ path('ninja_tooken_homepage', {'_locale' : locale}) }}" class="{{ locale }}{% if locale == app.request.locale %} active{% endif %}"></a>
+                        <a href="{{ path('ninja_tooken_homepage', {'_locale' : app.request.locale}) }}" class="{{ locale }}{% if locale == app.request.locale %} active{% endif %}"></a>
                         {% endfor %}
                         <a href="https://www.facebook.com/NinjaTooken" target="_blank" class="facebook"></a>
                         <a href="http://fr.twitch.tv/ninjatooken" target="_blank" class="twitch"></a>
@@ -37,43 +37,43 @@
             <div class="container">
                 <header class="row-fluid">
                     <div class="span4">
-                        <a href="{{ path('ninja_tooken_homepage') }}" rel="home"><img src="{{ asset('images/logo.png') }}"></a>
+                        <a href="{{ path('ninja_tooken_homepage', {'_locale' : 'fr'}) }}" rel="home"><img src="{{ asset('images/logo.png') }}"></a>
                     </div>
                     <nav class="span8" role="navigation" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
                         <a class="visible-phone" id="menuMobile" href="#">{{ 'menu.menu'|trans({}, 'menu') }}</a>
                         <ul class="hidden-phone menu">
                             <li class="hidden-phone">
-                                <a href="{{ path('ninja_tooken_jouer') }}" class="play">{{ 'menu.jouer'|trans({}, 'menu') }}</a>
+                                <a href="{{ path('ninja_tooken_jouer', {'_locale' : app.request.locale}) }}" class="play">{{ 'menu.jouer'|trans({}, 'menu') }}</a>
                             </li>
                             <li>
                                 <a>{{ 'menu.jeu'|trans({}, 'menu') }}</a>
                                 <ul>
-                                    <li><a href="{{ path('ninja_tooken_game_classement') }}">{{ 'menu.classement'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_game_parties') }}">{{ 'menu.partie'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_event') }}">{{ 'menu.evenement'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_game_classement', {'_locale' : app.request.locale}) }}">{{ 'menu.classement'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_game_parties', {'_locale' : app.request.locale}) }}">{{ 'menu.partie'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_event', {'_locale' : app.request.locale}) }}">{{ 'menu.evenement'|trans({}, 'menu') }}</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a>{{ 'menu.manuel'|trans({}, 'menu') }}</a>
                                 <ul>
-                                    <li><a href="{{ path('ninja_tooken_manuel') }}">{{ 'menu.guide'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_game_calculateur') }}">{{ 'menu.calculateur'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_reglement') }}">{{ 'menu.regle'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_manuel', {'_locale' : app.request.locale}) }}">{{ 'menu.guide'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_game_calculateur', {'_locale' : app.request.locale}) }}">{{ 'menu.calculateur'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_reglement', {'_locale' : app.request.locale}) }}">{{ 'menu.regle'|trans({}, 'menu') }}</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a>{{ 'menu.communaute'|trans({}, 'menu') }}</a>
                                 <ul>
-                                    <li><a href="{{ path('ninja_tooken_forum') }}">{{ 'menu.forum'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_clans') }}">{{ 'menu.clan'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_chat') }}">{{ 'menu.chat'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_forum', {'_locale' : app.request.locale}) }}">{{ 'menu.forum'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_clans', {'_locale' : app.request.locale}) }}">{{ 'menu.clan'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_chat', {'_locale' : app.request.locale}) }}">{{ 'menu.chat'|trans({}, 'menu') }}</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <a>{{ 'menu.faq'|trans({}, 'menu') }}</a>
                                 <ul>
-                                    <li><a href="{{ path('ninja_tooken_faq_generale') }}">{{ 'menu.generale'|trans({}, 'menu') }}</a></li>
-                                    <li><a href="{{ path('ninja_tooken_faq_technique') }}">{{ 'menu.technique'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_faq_generale', {'_locale' : app.request.locale}) }}">{{ 'menu.generale'|trans({}, 'menu') }}</a></li>
+                                    <li><a href="{{ path('ninja_tooken_faq_technique', {'_locale' : app.request.locale}) }}">{{ 'menu.technique'|trans({}, 'menu') }}</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -114,10 +114,10 @@
         <div class="footer">
             <footer class="container">
                 <ul>
-                    <li><a href="{{ path('ninja_tooken_team') }}">{{ 'menu.team'|trans({}, 'menu') }}</a></li>
-                    <li><a href="{{ path('ninja_tooken_reglement') }}">{{ 'menu.reglement'|trans({}, 'menu') }}</a></li>
-                    <li><a href="{{ path('ninja_tooken_mentions_legales') }}">{{ 'menu.mention'|trans({}, 'menu') }}</a></li>
-                    <li><a href="{{ path('ninja_tooken_contact') }}">{{ 'menu.contact'|trans({}, 'menu') }}</a></li>
+                    <li><a href="{{ path('ninja_tooken_team', {'_locale' : app.request.locale}) }}">{{ 'menu.team'|trans({}, 'menu') }}</a></li>
+                    <li><a href="{{ path('ninja_tooken_reglement', {'_locale' : app.request.locale}) }}">{{ 'menu.reglement'|trans({}, 'menu') }}</a></li>
+                    <li><a href="{{ path('ninja_tooken_mentions_legales', {'_locale' : app.request.locale}) }}">{{ 'menu.mention'|trans({}, 'menu') }}</a></li>
+                    <li><a href="{{ path('ninja_tooken_contact', {'_locale' : app.request.locale}) }}">{{ 'menu.contact'|trans({}, 'menu') }}</a></li>
                 </ul>
             </footer>
         </div>
